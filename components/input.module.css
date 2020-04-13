@@ -1,0 +1,6 @@
+.container {
+  padding: 8px;
+  margin: 0.3rem 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: var(--space-8);
+}

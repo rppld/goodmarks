@@ -1,0 +1,25 @@
+.container {
+  padding: 0.2rem;
+  color: #fff;
+  background-color: #333;
+}
+
+.list {
+  display: flex;
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.item {
+  margin-right: 1rem;
+}
+
+.item:first-child {
+  margin-left: auto;
+}
+
+.link {
+  color: #fff;
+  text-decoration: none;
+}

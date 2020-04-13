@@ -1,0 +1,5 @@
+.container {
+  color: white;
+  background-color: blue;
+  border-radius: var(--space-8);
+}
