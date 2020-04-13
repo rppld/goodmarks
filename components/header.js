@@ -3,35 +3,25 @@ import Link from 'next/link'
 import { logout } from '../lib/auth'
 import styles from './header.module.css'
 
+const links = [
+  { text: 'Tips', href: '/' },
+  { text: 'Login', href: '/login' },
+  { text: 'Signup', href: '/signup' },
+  { text: 'Profile', href: '/profile' },
+  { text: 'New', href: '/tips/new' },
+]
+
 const Header = () => (
   <header className={styles.container}>
     <nav>
       <ul className={styles.list}>
-        <li className={styles.item}>
-          <Link href="/">
-            <a className={styles.link}>Tips</a>
-          </Link>
-        </li>
-        <li className={styles.item}>
-          <Link href="/login">
-            <a className={styles.link}>Login</a>
-          </Link>
-        </li>
-        <li className={styles.item}>
-          <Link href="/signup">
-            <a className={styles.link}>Signup</a>
-          </Link>
-        </li>
-        <li className={styles.item}>
-          <Link href="/profile">
-            <a className={styles.link}>Profile</a>
-          </Link>
-        </li>
-        <li className={styles.item}>
-          <Link href="/tips/new">
-            <a className={styles.link}>New</a>
-          </Link>
-        </li>
+        {links.map((link) => (
+          <li className={styles.item} key={link.href}>
+            <Link href={link.href}>
+              <a className={styles.link}>{link.text}</a>
+            </Link>
+          </li>
+        ))}
         <li className={styles.item}>
           <button onClick={logout}>Logout</button>
         </li>
