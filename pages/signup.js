@@ -1,24 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Router from 'next/router'
 import Link from 'next/link'
 import Layout from '../components/layout'
 import Input from '../components/input'
 import Button from '../components/button'
 import { mutate } from 'swr'
+import { useFormik } from 'formik'
 
 function Signup() {
-  const [userData, setUserData] = useState({
-    email: '',
-    password: '',
-    error: '',
+  const [error, setError] = React.useState(null)
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    onSubmit: handleSubmit,
   })
 
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setUserData({ ...userData, error: '' })
-
-    const email = userData.email
-    const password = userData.password
+  async function handleSubmit({ email, password }) {
+    setError(null)
 
     try {
       const response = await fetch('/api/signup', {
@@ -35,40 +35,32 @@ function Signup() {
       Router.push('/profile')
     } catch (error) {
       console.error(error)
-      setUserData({ ...userData, error: error.message })
+      setError(error.message)
     }
   }
 
   return (
     <Layout>
       <div className="signup">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
           <Input
             name="email"
             labelText="Email"
-            value={userData.email}
-            onChange={(event) =>
-              setUserData(
-                Object.assign({}, userData, { email: event.target.value })
-              )
-            }
+            value={formik.values.email}
+            onChange={formik.handleChange}
           />
 
           <Input
             type="password"
             name="password"
             labelText="Password"
-            value={userData.password}
-            onChange={(event) =>
-              setUserData(
-                Object.assign({}, userData, { password: event.target.value })
-              )
-            }
+            value={formik.values.password}
+            onChange={formik.handleChange}
           />
 
           <Button type="submit">Sign up</Button>
 
-          {userData.error && <p className="error">Error: {userData.error}</p>}
+          {error && <p className="error">Error: {error}</p>}
         </form>
 
         <p>

@@ -61,7 +61,7 @@ Profile.getInitialProps = async (ctx) => {
 
   const data = await response.json()
 
-  // If userId is `null` most likely means the viewer is logged out.
+  // `null` means the viewer is logged out.
   if (data.userId === null) {
     Router.push('/login')
     return {}

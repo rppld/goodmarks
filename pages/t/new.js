@@ -7,56 +7,49 @@ import Layout from '../../components/layout'
 import Input from '../../components/input'
 import Button from '../../components/button'
 import { getViewerId } from '../api/profile'
-
-const createNewTip = async (title, link, userId) => {
-  const response = await fetch('/api/tips/new', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, link, userId }),
-  })
-
-  if (response.status !== 200) {
-    throw new Error(await response.text())
-  }
-
-  const json = await response.json()
-  Router.push(`/t/${json.id}`)
-}
+import { useFormik } from 'formik'
 
 const New = (props) => {
-  const [payload, setPayload] = React.useState({
-    title: '',
-    link: '',
-    error: '',
+  const [error, setError] = React.useState(null)
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      link: '',
+    },
+    onSubmit: handleSubmit,
   })
 
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setPayload({ ...payload, error: '' })
-    const title = payload.title
-    const link = payload.link
+  async function handleSubmit({ title, link }) {
+    setError(null)
 
     try {
-      await createNewTip(title, link, props.userId)
+      const response = await fetch('/api/tips/new', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, link, userId: props.userId }),
+      })
+
+      if (response.status !== 200) {
+        throw new Error(await response.text())
+      }
+
+      const data = await response.json()
+      Router.push(`/t/${data.id}`)
     } catch (error) {
       console.error(error)
-      setPayload({ ...payload, error: error.message })
+      setError(error.message)
     }
   }
 
   return (
     <Layout>
       <div className="new">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={formik.handleSubmit}>
           <Input
             name="title"
             labelText="Title"
-            value={payload.title}
-            onChange={(event) =>
-              setPayload(
-                Object.assign({}, payload, { title: event.target.value })
-              )
-            }
+            value={formik.values.title}
+            onChange={formik.handleChange}
           />
 
           <Input
@@ -64,17 +57,13 @@ const New = (props) => {
             rows="6"
             name="link"
             labelText="Link"
-            value={payload.link}
-            onChange={(event) =>
-              setPayload(
-                Object.assign({}, payload, { link: event.target.value })
-              )
-            }
+            value={formik.values.link}
+            onChange={formik.handleChange}
           />
 
           <Button type="submit">Add</Button>
 
-          {payload.error && <p className="error">Error: {payload.error}</p>}
+          {error && <p className="error">Error: {error}</p>}
         </form>
       </div>
 
