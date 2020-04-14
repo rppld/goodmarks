@@ -12,7 +12,7 @@ export default async (req, res) => {
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
   if (!faunaSecret) {
-    res.status(200).json({ userId: null })
+    return res.status(200).json({ userId: null })
     // return res.status(401).send('Auth cookie missing.')
   }
 
