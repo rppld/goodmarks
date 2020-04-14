@@ -1,18 +1,20 @@
 import React from 'react'
 import Head from 'next/head'
-import Header from './header'
 import styles from './layout.module.css'
 
-const Layout = (props) => (
+const Layout = ({ title, ...props }) => (
   <>
     <Head>
-      <title>Good Oatmeal</title>
+      <title>{title}</title>
     </Head>
-    <Header />
     <main>
       <div className={styles.container}>{props.children}</div>
     </main>
   </>
 )
+
+Layout.defaultProps = {
+  title: 'Good Oatmeal',
+}
 
 export default Layout

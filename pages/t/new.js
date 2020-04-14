@@ -6,7 +6,7 @@ import { withAuthSync } from '../../lib/auth'
 import Layout from '../../components/layout'
 import Input from '../../components/input'
 import Button from '../../components/button'
-import { profileApi } from '../api/profile'
+import { getViewerId } from '../api/profile'
 
 const createNewTip = async (title, link, userId) => {
   const response = await fetch('/api/tips/new', {
@@ -20,7 +20,7 @@ const createNewTip = async (title, link, userId) => {
   }
 
   const json = await response.json()
-  Router.push(`/tips/${json.id}`)
+  Router.push(`/t/${json.id}`)
 }
 
 const New = (props) => {
@@ -113,22 +113,22 @@ New.getInitialProps = async (ctx) => {
       return {}
     }
 
-    const profileInfo = await profileApi(faunaSecret)
-
-    return { userId: profileInfo }
+    const userId = await getViewerId(faunaSecret)
+    return { userId }
   }
 
   const response = await fetch('/api/profile')
 
-  if (response.status === 401) {
-    Router.push('/login')
-    return {}
-  }
   if (response.status !== 200) {
     throw new Error(await response.text())
   }
 
   const data = await response.json()
+
+  if (data.userId === null) {
+    Router.push('/login')
+    return {}
+  }
 
   return { userId: data.userId }
 }

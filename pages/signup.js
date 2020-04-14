@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import Router from 'next/router'
+import Link from 'next/link'
 import Layout from '../components/layout'
 import Input from '../components/input'
 import Button from '../components/button'
+import { mutate } from 'swr'
 
 function Signup() {
   const [userData, setUserData] = useState({
@@ -29,6 +31,7 @@ function Signup() {
         throw new Error(await response.text())
       }
 
+      mutate('/api/profile')
       Router.push('/profile')
     } catch (error) {
       console.error(error)
@@ -67,6 +70,13 @@ function Signup() {
 
           {userData.error && <p className="error">Error: {userData.error}</p>}
         </form>
+
+        <p>
+          Already have an account?{' '}
+          <Link href="/login">
+            <a>Login</a>
+          </Link>
+        </p>
       </div>
       <style jsx>{`
         .signup {

@@ -18,7 +18,7 @@ const Home = () => {
         <ol>
           {data.tips.map((tip) => (
             <li key={tip.id}>
-              <Link href={`/tips/${tip.id}`}>
+              <Link href="t/[id]" as={`/t/${tip.id}`}>
                 <a>{tip.title}</a>
               </Link>
             </li>

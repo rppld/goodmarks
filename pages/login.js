@@ -1,8 +1,10 @@
 import React from 'react'
 import Router from 'next/router'
+import Link from 'next/link'
 import Layout from '../components/layout'
 import Input from '../components/input'
 import Button from '../components/button'
+import { mutate } from 'swr'
 
 const signin = async (email, password) => {
   const response = await fetch('/api/login', {
@@ -15,6 +17,7 @@ const signin = async (email, password) => {
     throw new Error(await response.text())
   }
 
+  mutate('/api/profile')
   Router.push('/profile')
 }
 
@@ -71,6 +74,13 @@ function Login() {
 
           {userData.error && <p className="error">Error: {userData.error}</p>}
         </form>
+
+        <p>
+          No account yet?{' '}
+          <Link href="/signup">
+            <a>Signup</a>
+          </Link>
+        </p>
       </div>
       <style jsx>{`
         .login {

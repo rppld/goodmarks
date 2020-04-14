@@ -4,7 +4,7 @@ import Router from 'next/router'
 import Link from 'next/link'
 import { withAuthSync } from '../lib/auth'
 import { FAUNA_SECRET_COOKIE } from '../lib/fauna'
-import { profileApi } from './api/profile'
+import { getViewerId } from './api/profile'
 import Layout from '../components/layout'
 import useSWR from 'swr'
 
@@ -26,7 +26,7 @@ const Profile = (props) => {
         <ol>
           {data.tips.map((tip) => (
             <li key={tip.id}>
-              <Link href={`/tips/${tip.id}`}>
+              <Link href="t/[id]" as={`/t/${tip.id}`}>
                 <a>{tip.title}</a>
               </Link>
             </li>
@@ -49,21 +49,24 @@ Profile.getInitialProps = async (ctx) => {
       return {}
     }
 
-    const profileInfo = await profileApi(faunaSecret)
-    return { userId: profileInfo }
+    const userId = await getViewerId(faunaSecret)
+    return { userId }
   }
 
   const response = await fetch('/api/profile')
 
-  if (response.status === 401) {
-    Router.push('/login')
-    return {}
-  }
   if (response.status !== 200) {
     throw new Error(await response.text())
   }
 
   const data = await response.json()
+
+  // If userId is `null` most likely means the viewer is logged out.
+  if (data.userId === null) {
+    Router.push('/login')
+    return {}
+  }
+
   return { userId: data.userId }
 }
 
