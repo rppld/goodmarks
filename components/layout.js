@@ -6,7 +6,7 @@ import styles from './layout.module.css'
 const Layout = (props) => (
   <>
     <Head>
-      <title>Friendly Gems</title>
+      <title>Good Oatmeal</title>
     </Head>
     <Header />
     <main>
