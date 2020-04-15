@@ -1,6 +1,7 @@
 .container {
+  width: 100%;
   padding: 8px;
-  margin: 0.3rem 0 1rem;
-  border: 1px solid #ccc;
+  display: block;
+  box-shadow: 0 0 0 1px #ccc inset;
   border-radius: var(--space-8);
 }

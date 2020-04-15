@@ -988,6 +988,78 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@reach/auto-id@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@reach/auto-id/-/auto-id-0.10.0.tgz#72b70b9bb3f7d0f39b9fae0dcb412168ee139762"
+  integrity sha512-Uwsd4eNFa5YteZ7DKCVIbhE3c8x9DYVwtLy6ZCl1jo6bXAF6Di1dYm/XnkTmo+OYoKOZlVTu7umONDeezY33rQ==
+  dependencies:
+    "@reach/utils" "^0.10.0"
+    tslib "^1.10.0"
+
+"@reach/combobox@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@reach/combobox/-/combobox-0.10.0.tgz#5735a0f8c32019402dad7590562e5ccdb92e760a"
+  integrity sha512-UMgPPF3s8pcO+GQ8lT1qmyxZri2NuEX/HLPhNJlog7V7yBCdCRrFT5KdLDlIqg6I3jHy52n9Q4DrxMJiLp1ZJw==
+  dependencies:
+    "@reach/auto-id" "^0.10.0"
+    "@reach/descendants" "^0.10.0"
+    "@reach/popover" "^0.10.0"
+    "@reach/portal" "^0.10.0"
+    "@reach/utils" "^0.10.0"
+    highlight-words-core "1.2.2"
+    prop-types "^15.7.2"
+    tslib "^1.10.0"
+
+"@reach/descendants@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@reach/descendants/-/descendants-0.10.0.tgz#43eeba4aea10ffc62fe5144248c1455ab317964b"
+  integrity sha512-G7wm0poMVR+aT9W5O8C6cnrZBYskIAfgBfPwByOY7F6TwEj7HqHDs7tZ/3Paj6UIZZ9lkVfhHPEGGvfOpEXhlg==
+  dependencies:
+    "@reach/utils" "^0.10.0"
+    tslib "^1.10.0"
+
+"@reach/observe-rect@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.1.0.tgz#4e967a93852b6004c3895d9ed8d4e5b41895afde"
+  integrity sha512-kE+jvoj/OyJV24C03VvLt5zclb9ArJi04wWXMMFwQvdZjdHoBlN4g0ZQFjyy/ejPF1Z/dpUD5dhRdBiUmIGZTA==
+
+"@reach/popover@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@reach/popover/-/popover-0.10.0.tgz#054601f98ef1616a0d439be4dafd8cf7ac172da6"
+  integrity sha512-Iff9qHuJypxdG7a6IiAZFFgpbfQK9v3FH+GDsdZiKLbtmRDIMC3AM8ebkBTKUAnEsumHekBrk8cf9WAIJVz1jg==
+  dependencies:
+    "@reach/portal" "^0.10.0"
+    "@reach/rect" "^0.10.0"
+    "@reach/utils" "^0.10.0"
+    tabbable "^4.0.0"
+    tslib "^1.10.0"
+
+"@reach/portal@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@reach/portal/-/portal-0.10.0.tgz#ed119d796de1b5ea7c975007fa6b2e507bc7567e"
+  integrity sha512-soXCiLDWcyXMgs1pArjdt67d+IARu1rpkOmHWD3c7XDE2hanWVeQiGC4L8UVNrm51pWrCDtLH1R446tG6uNz2Q==
+  dependencies:
+    "@reach/utils" "^0.10.0"
+    tslib "^1.10.0"
+
+"@reach/rect@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@reach/rect/-/rect-0.10.0.tgz#5e9310592f1a9413382c4a8a80e96ca167d2f32d"
+  integrity sha512-fZLZiBDc/ZDSNnNFZCQFHOw4v8QLI/DjWbX+JecXVGIhgwBUl4+3cJVmlthk/FUrndO7cQ8vjFWzEhB4o2mOnw==
+  dependencies:
+    "@reach/observe-rect" "^1.1.0"
+    "@reach/utils" "^0.10.0"
+    prop-types "^15.7.2"
+    tslib "^1.10.0"
+
+"@reach/utils@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@reach/utils/-/utils-0.10.0.tgz#480332433f9d0232aff2c36374cf9a2fe559990b"
+  integrity sha512-qPiwjw8jcT7JYrVT+ZO7bLTVEdp9KyvY0RO1emyCxqpYVr4s9oSZ3XG6n7G+bvnKeyjpbpIfCVfxYvPF1Uq2DQ==
+  dependencies:
+    tslib "^1.10.0"
+    warning "^4.0.3"
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
@@ -3016,6 +3088,11 @@ hash.js@^1.0.0, hash.js@^1.0.3:
   dependencies:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
+
+highlight-words-core@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/highlight-words-core/-/highlight-words-core-1.2.2.tgz#1eff6d7d9f0a22f155042a00791237791b1eeaaa"
+  integrity sha512-BXUKIkUuh6cmmxzi5OIbUJxrG8OAk2MqoL1DtO3Wo9D2faJg2ph5ntyuQeLqaHJmzER6H5tllCDA9ZnNe9BVGg==
 
 hmac-drbg@^1.0.0:
   version "1.0.1"
@@ -5232,6 +5309,11 @@ swr@^0.2.0:
   dependencies:
     fast-deep-equal "2.0.1"
 
+tabbable@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/tabbable/-/tabbable-4.0.0.tgz#5bff1d1135df1482cf0f0206434f15eadbeb9261"
+  integrity sha512-H1XoH1URcBOa/rZZWxLxHCtOdVUEev+9vo5YdYhC9tCY4wnybX+VQrCYuy9ubkg69fCBxCONJOSLGfw0DWMffQ==
+
 table@^5.2.3:
   version "5.4.6"
   resolved "https://registry.yarnpkg.com/table/-/table-5.4.6.tgz#1292d19500ce3f86053b05f0e8e7e4a3bb21079e"
@@ -5562,6 +5644,13 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
+
+warning@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
+  integrity sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==
+  dependencies:
+    loose-envify "^1.0.0"
 
 watchpack@2.0.0-beta.13:
   version "2.0.0-beta.13"
