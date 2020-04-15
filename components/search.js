@@ -7,10 +7,11 @@ import {
   ComboboxOption,
 } from '@reach/combobox'
 import styles from './input.module.css'
+import algolia from '../lib/algolia'
 
 function Search(props) {
   const [searchTerm, setSearchTerm] = React.useState('')
-  const cities = useCitySearch(searchTerm)
+  const users = useAlgolia(searchTerm)
   const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value)
   }
@@ -21,14 +22,13 @@ function Search(props) {
         className={styles.container}
         onChange={handleSearchTermChange}
       />
-      {cities && (
+      {users && (
         <ComboboxPopover className="shadow-popup">
-          {cities.length > 0 ? (
+          {users.length > 0 ? (
             <ComboboxList>
-              {cities.map((city) => {
-                const str = `${city.city}, ${city.state}`
-                return <ComboboxOption key={str} value={str} />
-              })}
+              {users.map((user) => (
+                <ComboboxOption key={user.objectID} value={user.username} />
+              ))}
             </ComboboxList>
           ) : (
             <span style={{ display: 'block', margin: 8 }}>
@@ -41,34 +41,32 @@ function Search(props) {
   )
 }
 
-function useCitySearch(searchTerm) {
-  const [cities, setCities] = React.useState([])
+function useAlgolia(searchTerm) {
+  const [results, setResults] = React.useState([])
 
   React.useEffect(() => {
     if (searchTerm.trim() !== '') {
       let isFresh = true
-      fetchCities(searchTerm).then((cities) => {
-        if (isFresh) setCities(cities)
+      fetchUsers(searchTerm).then((results) => {
+        if (isFresh) setResults(results)
       })
       return () => (isFresh = false)
     }
   }, [searchTerm])
 
-  return cities
+  return results
 }
 
 const cache = {}
-function fetchCities(value) {
+function fetchUsers(value) {
   if (cache[value]) {
     return Promise.resolve(cache[value])
   }
 
-  return fetch('https://city-search.now.sh/?' + value)
-    .then((res) => res.json())
-    .then((result) => {
-      cache[value] = result
-      return result
-    })
+  return algolia.search(value).then(({ hits }) => {
+    cache[value] = hits
+    return hits
+  })
 }
 
 export default Search
