@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { logout } from '../lib/auth'
+import Search from './search'
 import styles from './header.module.css'
 
 const Header = () => {
@@ -15,6 +16,7 @@ const Header = () => {
 
   return (
     <header className={styles.container}>
+      <Search />
       <nav>
         <ul className={styles.list}>
           <li className={styles.item}>
