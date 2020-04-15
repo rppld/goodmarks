@@ -1,5 +1,5 @@
 {
-  "name": "good-oatmeal",
+  "name": "supertips",
   "scripts": {
     "dev": "next",
     "build": "next build",
