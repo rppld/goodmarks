@@ -14,7 +14,7 @@ const Layout = ({ title, ...props }) => (
 )
 
 Layout.defaultProps = {
-  title: 'Good Oatmeal',
+  title: 'Goodmarks',
 }
 
 export default Layout
