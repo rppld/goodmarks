@@ -1,3 +1,3 @@
-# SuperTips
+# Goodmarks
 
-Genuine recommendations, no algorithm.
+Human recommendations, no algorithm.
