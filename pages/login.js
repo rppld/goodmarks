@@ -42,6 +42,10 @@ function Login() {
   return (
     <Layout>
       <div className="login">
+        <Button as="a" href="/api/auth/google">
+          Continue with Google
+        </Button>
+
         <form onSubmit={formik.handleSubmit}>
           <Input
             name="email"

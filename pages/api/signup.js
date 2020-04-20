@@ -38,9 +38,9 @@ export default async (req, res) => {
       throw new Error('No secret present in login query response.')
     }
 
-    const cookieSerialized = serializeFaunaCookie(loginRes.secret)
+    const serializedCookie = serializeFaunaCookie(loginRes.secret)
 
-    res.setHeader('Set-Cookie', cookieSerialized)
+    res.setHeader('Set-Cookie', serializedCookie)
     res.status(200).end()
   } catch (error) {
     res.status(400).send(error.message)

@@ -12,13 +12,13 @@ export default async (req, res) => {
   // Invalidate secret (ie. logout from Fauna).
   await faunaClient(faunaSecret).query(q.Logout(false))
   // Clear cookie.
-  const cookieSerialized = cookie.serialize(FAUNA_SECRET_COOKIE, '', {
+  const serializedCookie = cookie.serialize(FAUNA_SECRET_COOKIE, '', {
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     maxAge: -1,
     httpOnly: true,
     path: '/',
   })
-  res.setHeader('Set-Cookie', cookieSerialized)
+  res.setHeader('Set-Cookie', serializedCookie)
   res.status(200).end()
 }
