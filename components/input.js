@@ -1,11 +1,12 @@
 import React from 'react'
 import styles from './input.module.css'
 
-function Input({ as: Component, children, labelText, name, type, ...props }) {
-  return (
+const Input = React.forwardRef(
+  ({ as: Component, children, labelText, name, type, ...props }, ref) => (
     <>
       <label htmlFor={name}>{labelText}</label>
       <Component
+        ref={ref}
         className={styles.container}
         type={Component === 'input' ? type : undefined}
         name={name}
@@ -16,7 +17,7 @@ function Input({ as: Component, children, labelText, name, type, ...props }) {
       </Component>
     </>
   )
-}
+)
 
 Input.defaultProps = {
   as: 'input',

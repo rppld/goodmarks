@@ -11,20 +11,21 @@ function Signup() {
   const [error, setError] = React.useState(null)
   const formik = useFormik({
     initialValues: {
+      username: '',
       email: '',
       password: '',
     },
     onSubmit: handleSubmit,
   })
 
-  async function handleSubmit({ email, password }) {
+  async function handleSubmit({ username, email, password }) {
     setError(null)
 
     try {
       const response = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, email, password }),
       })
 
       if (response.status !== 200) {
@@ -47,6 +48,13 @@ function Signup() {
         </Button>
 
         <form onSubmit={formik.handleSubmit}>
+          <Input
+            name="username"
+            labelText="Username"
+            value={formik.values.username}
+            onChange={formik.handleChange}
+          />
+
           <Input
             name="email"
             labelText="Email"

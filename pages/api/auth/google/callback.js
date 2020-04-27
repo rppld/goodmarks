@@ -16,6 +16,7 @@ export default async (req, res) => {
   }
 
   try {
+    const { Create, Let, Collection, Var, Select, Login, Match, Index } = q
     const result = await googleOauth2.authorizationCode.getToken(options)
     const { token } = googleOauth2.accessToken.create(result)
     const { access_token: accessToken } = token
@@ -28,35 +29,48 @@ export default async (req, res) => {
     // Get user details.
     const url = 'https://www.googleapis.com/oauth2/v3/userinfo'
     const response = await fetch(url, config)
-    const { name: fullName, email, picture } = await response.json()
+    const { name, email, picture } = await response.json()
 
-    const userInfo = {
-      email,
-      fullName,
-      picture,
-    }
-
-    let user
+    let signupRes
     let loginRes
 
     try {
-      user = await serverClient.query(
-        q.Create(q.Collection('Users'), {
-          credentials: { password: '' },
-          data: { ...userInfo },
-        })
+      signupRes = await serverClient.query(
+        Let(
+          {
+            user: Create(Collection('Users'), {
+              data: {
+                name,
+                picture,
+              },
+            }),
+            account: Select(
+              ['ref'],
+              Create(Collection('Accounts'), {
+                credentials: { password: '' },
+                data: {
+                  email,
+                  user: Select(['ref'], Var('user')),
+                },
+              })
+            ),
+          },
+          { user: Var('user'), account: Var('account') }
+        )
       )
 
-      if (!user.ref) {
+      if (!signupRes.account) {
         throw new Error('No ref present in create query response.')
       }
 
-      loginRes = await serverClient.query(q.Login(user.ref, { password: '' }))
+      loginRes = await serverClient.query(
+        Login(signupRes.account, { password: '' })
+      )
     } catch (error) {
-      // The `q.Create()` call will error when a user already exists,
+      // The `Create()` call will error when a user already exists,
       // so if we end up in here we can log the user in.
       loginRes = await serverClient.query(
-        q.Login(q.Match(q.Index('users_by_email'), email), {
+        Login(Match(Index('accounts_by_email'), email), {
           password: '',
         })
       )
@@ -67,7 +81,6 @@ export default async (req, res) => {
     }
 
     const serializedCookie = serializeFaunaCookie(loginRes.secret)
-
     res.setHeader('Set-Cookie', serializedCookie)
     res.writeHead(302, { Location: referrer })
     res.end()

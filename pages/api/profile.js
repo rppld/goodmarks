@@ -3,7 +3,10 @@ import cookie from 'cookie'
 import { faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
 
 export const getViewerId = async (faunaSecret) => {
-  const ref = await faunaClient(faunaSecret).query(q.Identity())
+  const { Identity, Select, Get } = q
+  const ref = await faunaClient(faunaSecret).query(
+    Select(['data', 'user'], Get(Identity()))
+  )
   return ref.id
 }
 
