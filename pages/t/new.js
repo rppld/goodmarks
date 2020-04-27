@@ -9,7 +9,7 @@ import Button from '../../components/button'
 import { getViewerId } from '../api/profile'
 import { useFormik } from 'formik'
 
-const New = (props) => {
+const New = () => {
   const [error, setError] = React.useState(null)
   const formik = useFormik({
     initialValues: {
@@ -23,10 +23,10 @@ const New = (props) => {
     setError(null)
 
     try {
-      const response = await fetch('/api/tips/new', {
+      const response = await fetch('/api/tips/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, link, userId: props.userId }),
+        body: JSON.stringify({ title, link }),
       })
 
       if (response.status !== 200) {

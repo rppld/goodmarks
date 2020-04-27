@@ -2,7 +2,8 @@ import { query as q } from 'faunadb'
 import { serverClient, serializeFaunaCookie } from '../../lib/fauna'
 
 export default async (req, res) => {
-  const { email, password } = await req.body
+  const { Create, Let, Collection, Var, Select } = q
+  const { username, email, password } = await req.body
 
   try {
     if (!email || !password) {
@@ -10,26 +11,42 @@ export default async (req, res) => {
     }
     console.log(`email: ${email} trying to create user.`)
 
-    let user
+    let signupRes
 
     try {
-      user = await serverClient.query(
-        q.Create(q.Collection('Users'), {
-          credentials: { password },
-          data: { email },
-        })
+      signupRes = await serverClient.query(
+        Let(
+          {
+            user: Create(Collection('Users'), {
+              data: {
+                username,
+              },
+            }),
+            account: Select(
+              ['ref'],
+              Create(Collection('Accounts'), {
+                credentials: { password },
+                data: {
+                  email,
+                  user: Select(['ref'], Var('user')),
+                },
+              })
+            ),
+          },
+          { user: Var('user'), account: Var('account') }
+        )
       )
     } catch (error) {
       console.error('Fauna create user error:', error)
       throw new Error('User already exists.')
     }
 
-    if (!user.ref) {
+    if (!signupRes.account) {
       throw new Error('No ref present in create query response.')
     }
 
     const loginRes = await serverClient.query(
-      q.Login(user.ref, {
+      q.Login(signupRes.account, {
         password,
       })
     )
@@ -39,7 +56,6 @@ export default async (req, res) => {
     }
 
     const serializedCookie = serializeFaunaCookie(loginRes.secret)
-
     res.setHeader('Set-Cookie', serializedCookie)
     res.status(200).end()
   } catch (error) {
