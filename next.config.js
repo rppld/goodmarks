@@ -1,4 +1,7 @@
 module.exports = {
+  experimental: {
+    reactRefresh: true,
+  },
   env: {
     // Set the fauna server key in the .env file and make it available
     // at Build Time.
