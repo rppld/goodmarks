@@ -7,11 +7,10 @@ import {
   ComboboxOption,
 } from '@reach/combobox'
 import styles from './input.module.css'
-import algolia from '../lib/algolia'
 
 function Search(props) {
   const [searchTerm, setSearchTerm] = React.useState('')
-  const users = useAlgolia(searchTerm)
+  const users = useSearch(searchTerm)
   const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value)
   }
@@ -27,7 +26,7 @@ function Search(props) {
           {users.length > 0 ? (
             <ComboboxList>
               {users.map((user) => (
-                <ComboboxOption key={user.objectID} value={user.username} />
+                <ComboboxOption key={user.ref['@ref'].id} value={user.name} />
               ))}
             </ComboboxList>
           ) : (
@@ -41,7 +40,7 @@ function Search(props) {
   )
 }
 
-function useAlgolia(searchTerm) {
+function useSearch(searchTerm) {
   const [results, setResults] = React.useState([])
 
   React.useEffect(() => {
@@ -58,15 +57,17 @@ function useAlgolia(searchTerm) {
 }
 
 const cache = {}
-function fetchUsers(value) {
+async function fetchUsers(value) {
   if (cache[value]) {
     return Promise.resolve(cache[value])
   }
 
-  return algolia.search(value).then(({ hits }) => {
-    cache[value] = hits
-    return hits
-  })
+  return fetch(`/api/search?term=${value}`)
+    .then((res) => res.json())
+    .then((data) => {
+      cache[value] = data
+      return data
+    })
 }
 
 export default Search
