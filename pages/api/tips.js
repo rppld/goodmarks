@@ -2,8 +2,9 @@ import { query as q } from 'faunadb'
 import { serverClient } from '../../lib/fauna'
 import { flattenDataKeys } from '../../lib/fauna/utils'
 
+const { Get, Let, Paginate, Match, Index, Ref, Lambda, Collection, Var } = q
+
 async function getIndividualTip(tipId) {
-  const { Get, Let, Paginate, Match, Index, Ref, Lambda, Collection, Var } = q
   const res = await serverClient.query(
     Let(
       {
@@ -30,10 +31,10 @@ async function getIndividualTip(tipId) {
 async function getTipsByUser(userId) {
   const res = await serverClient.query(
     q.Map(
-      q.Paginate(
-        q.Match(q.Index('tips_by_author'), q.Ref(q.Collection('Users'), userId))
+      Paginate(
+        Match(Index('tips_by_author'), Ref(Collection('Users'), userId))
       ),
-      q.Lambda('nextRef', q.Get(q.Var('nextRef')))
+      Lambda('nextRef', Get(Var('nextRef')))
     )
   )
   return {
@@ -47,8 +48,8 @@ async function getTipsByUser(userId) {
 async function getAllTips() {
   const res = await serverClient.query(
     q.Map(
-      q.Paginate(q.Match(q.Index('all_tips'))),
-      q.Lambda('nextRef', q.Get(q.Var('nextRef')))
+      Paginate(Match(Index('all_tips'))),
+      Lambda('nextRef', Get(Var('nextRef')))
     )
   )
   return {
