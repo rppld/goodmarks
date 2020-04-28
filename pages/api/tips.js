@@ -67,7 +67,7 @@ export default async (req, res) => {
     return res.status(200).json(await getIndividualTip(id))
   } else if (userId) {
     return res.status(200).json(await getTipsByUser(userId))
-  } else {
-    return res.status(200).json(await getAllTips())
   }
+
+  return res.status(200).json(await getAllTips())
 }

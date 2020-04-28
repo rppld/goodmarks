@@ -1,6 +1,23 @@
 import { query as q } from 'faunadb'
 import { serverClient } from '../../lib/fauna'
 import { flattenDataKeys } from '../../lib/fauna/utils'
+import fetch from 'isomorphic-unfetch'
+
+function transform(data) {
+  return data.results
+}
+
+async function searchMovies(query, page = 1) {
+  return fetch(
+    `https://api.themoviedb.org/3/search/movie?api_key=${process.env.TMDB_API_KEY}&query=${query}&page=${page}&include_adult=false`
+  )
+    .then((res) => res.json())
+    .then(transform)
+    .catch((err) => {
+      console.log(err)
+      throw err
+    })
+}
 
 async function searchHashtagsAndUsers(keyword) {
   const { Match, Paginate, Index, Lambda, Let, Var, Get } = q
@@ -38,6 +55,11 @@ async function searchHashtagsAndUsers(keyword) {
 }
 
 export default async (req, res) => {
-  const { term } = req.query
+  const { term, context } = req.query
+
+  if (context === 'movies') {
+    return res.status(200).json(await searchMovies(term))
+  }
+
   return res.status(200).json(await searchHashtagsAndUsers(term))
 }
