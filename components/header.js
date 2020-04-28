@@ -2,7 +2,8 @@ import React from 'react'
 import Link from 'next/link'
 import useSWR from 'swr'
 import { logout } from '../lib/auth'
-import Search from './search'
+import SiteSearch from './site-search'
+import Button from './button'
 import styles from './header.module.css'
 
 const Header = () => {
@@ -16,18 +17,12 @@ const Header = () => {
 
   return (
     <header className={styles.container}>
-      <Search />
+      <SiteSearch />
       <nav>
         <ul className={styles.list}>
           <li className={styles.item}>
             <Link href="/">
-              <a className={styles.link}>Tips</a>
-            </Link>
-          </li>
-
-          <li className={styles.item}>
-            <Link href="/t/new">
-              <a className={styles.link}>New</a>
+              <a className={styles.link}>Home</a>
             </Link>
           </li>
 
@@ -50,6 +45,12 @@ const Header = () => {
               </Link>
             </li>
           )}
+
+          <li className={styles.item}>
+            <Link href="/t/new" passHref>
+              <Button as="a">New</Button>
+            </Link>
+          </li>
         </ul>
       </nav>
     </header>
