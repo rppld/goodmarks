@@ -80,7 +80,7 @@ async function fetchResults(value) {
     return Promise.resolve(cache[value])
   }
 
-  return fetch(`/api/movies/search?term=${value}`)
+  return fetch(`/api/search?context=movies&term=${value}`)
     .then((res) => res.json())
     .then((data) => {
       cache[value] = data
