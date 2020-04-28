@@ -6,10 +6,13 @@ import { withAuthSync } from '../../lib/auth'
 import Layout from '../../components/layout'
 import Input from '../../components/input'
 import Button from '../../components/button'
+import MovieSearch from '../../components/movie-search'
 import { getViewerId } from '../api/profile'
 import { useFormik } from 'formik'
+import { Listbox, ListboxOption } from '@reach/listbox'
 
 const New = () => {
+  const [category, setCategory] = React.useState('link')
   const [error, setError] = React.useState(null)
   const formik = useFormik({
     initialValues: {
@@ -44,6 +47,13 @@ const New = () => {
   return (
     <Layout>
       <div className="new">
+        <Listbox value={category} onChange={setCategory}>
+          <ListboxOption value="link">Link</ListboxOption>
+          <ListboxOption value="movie">Movie</ListboxOption>
+        </Listbox>
+
+        {category === 'movie' && <MovieSearch />}
+
         <form onSubmit={formik.handleSubmit}>
           <Input
             name="title"
@@ -55,9 +65,17 @@ const New = () => {
           <Input
             as="textarea"
             rows="6"
-            name="link"
-            labelText="Link"
-            value={formik.values.link}
+            name="description"
+            labelText="Description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+          />
+
+          <Input
+            name="url"
+            labelText="URL"
+            placeholder="https://"
+            value={formik.values.url}
             onChange={formik.handleChange}
           />
 

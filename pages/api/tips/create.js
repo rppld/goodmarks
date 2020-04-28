@@ -4,12 +4,12 @@ import { faunaClient, FAUNA_SECRET_COOKIE } from '../../../lib/fauna'
 
 export default async (req, res) => {
   const { Create, Collection, Select, Get, Identity, Now } = q
-  const { title, link } = await req.body
+  const { title, description, url } = await req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
   try {
-    if (!title || !link) {
+    if (!title || !url) {
       throw new Error('Title and link must be provided.')
     }
 
@@ -17,7 +17,8 @@ export default async (req, res) => {
       Create(Collection('Tips'), {
         data: {
           title,
-          link,
+          description,
+          url,
           author: Select(['data', 'user'], Get(Identity())),
           created: Now(),
         },

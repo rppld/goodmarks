@@ -6,20 +6,30 @@ import {
   ComboboxList,
   ComboboxOption,
 } from '@reach/combobox'
+import debounce from 'lodash/debounce'
 import styles from './input.module.css'
 
-function Search(props) {
+function SiteSearch() {
   const [searchTerm, setSearchTerm] = React.useState('')
   const users = useSearch(searchTerm)
-  const handleSearchTermChange = (event) => {
-    setSearchTerm(event.target.value)
-  }
+  const handleChange = debounce((value) => {
+    setSearchTerm(value)
+  }, 250)
+
+  React.useEffect(() => {
+    return function cleanup() {
+      // Cancel any leftover calls before unmounting
+      handleChange.cancel()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Combobox aria-label="Cities">
       <ComboboxInput
         className={styles.container}
-        onChange={handleSearchTermChange}
+        onChange={(e) => handleChange(e.target.value)}
+        placeholder="Search hashtags and users"
       />
       {users && (
         <ComboboxPopover className="shadow-popup">
@@ -46,7 +56,7 @@ function useSearch(searchTerm) {
   React.useEffect(() => {
     if (searchTerm.trim() !== '') {
       let isFresh = true
-      fetchUsers(searchTerm).then((results) => {
+      fetchResults(searchTerm).then((results) => {
         if (isFresh) setResults(results)
       })
       return () => (isFresh = false)
@@ -57,7 +67,7 @@ function useSearch(searchTerm) {
 }
 
 const cache = {}
-async function fetchUsers(value) {
+async function fetchResults(value) {
   if (cache[value]) {
     return Promise.resolve(cache[value])
   }
@@ -70,4 +80,4 @@ async function fetchUsers(value) {
     })
 }
 
-export default Search
+export default SiteSearch
