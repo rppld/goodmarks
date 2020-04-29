@@ -2,7 +2,6 @@ import React from 'react'
 import cookie from 'cookie'
 import Router from 'next/router'
 import { FAUNA_SECRET_COOKIE } from '../../lib/fauna'
-import createBookmark from '../../lib/fauna/queries/create-bookmark'
 import { withAuthSync } from '../../lib/auth'
 import Layout from '../../components/layout'
 import Input from '../../components/input'
@@ -28,8 +27,18 @@ const New = ({ viewer }) => {
     setError(null)
 
     try {
-      const data = await createBookmark(viewer.faunaSecret, values)
-      Router.push(`/t/${data.id}`)
+      const response = await fetch('/api/bookmarks/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      })
+
+      if (response.status !== 200) {
+        throw new Error(await response.text())
+      }
+
+      const data = await response.json()
+      Router.push(`/b/${data.id}`)
     } catch (error) {
       console.error(error)
       setError(error.message)
