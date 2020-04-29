@@ -2,7 +2,7 @@ import React from 'react'
 import cookie from 'cookie'
 import Router from 'next/router'
 import { FAUNA_SECRET_COOKIE } from '../../lib/fauna'
-import createTip from '../../lib/fauna/queries/create-tip'
+import createBookmark from '../../lib/fauna/queries/create-bookmark'
 import { withAuthSync } from '../../lib/auth'
 import Layout from '../../components/layout'
 import Input from '../../components/input'
@@ -28,7 +28,7 @@ const New = ({ viewer }) => {
     setError(null)
 
     try {
-      const data = await createTip(viewer.faunaSecret, values)
+      const data = await createBookmark(viewer.faunaSecret, values)
       Router.push(`/t/${data.id}`)
     } catch (error) {
       console.error(error)

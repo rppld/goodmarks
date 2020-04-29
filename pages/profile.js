@@ -10,24 +10,24 @@ import useSWR from 'swr'
 
 const Profile = (props) => {
   const { viewer } = props
-  const { data, error } = useSWR(`/api/tips?user_id=${viewer.id}`)
+  const { data, error } = useSWR(`/api/bookmarks?user_id=${viewer.id}`)
 
   return (
     <Layout>
       <h1>Your profile</h1>
       <p>Your user id is: {viewer.id}</p>
 
-      <h2>Your tips</h2>
+      <h2>Your bookmarks</h2>
       {error && <div>failed to load</div>}
 
       {!data ? (
         <div>loading...</div>
       ) : (
         <ol>
-          {data.tips.map((tip) => (
-            <li key={tip.id}>
-              <Link href="t/[id]" as={`/t/${tip.id}`}>
-                <a>{tip.title}</a>
+          {data.bookmarks.map((bookmark) => (
+            <li key={bookmark.id}>
+              <Link href="/b/[id]" as={`/b/${bookmark.id}`}>
+                <a>{bookmark.title}</a>
               </Link>
             </li>
           ))}

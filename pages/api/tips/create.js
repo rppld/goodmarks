@@ -14,7 +14,7 @@ export default async (req, res) => {
     }
 
     const data = await faunaClient(faunaSecret).query(
-      Create(Collection('Tips'), {
+      Create(Collection('Bookmarks'), {
         data: {
           title,
           description,

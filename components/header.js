@@ -47,7 +47,7 @@ const Header = () => {
           )}
 
           <li className={styles.item}>
-            <Link href="/t/new" passHref>
+            <Link href="/b/new" passHref>
               <Button as="a">New</Button>
             </Link>
           </li>

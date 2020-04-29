@@ -5,13 +5,13 @@ import { useRouter } from 'next/router'
 import Input from '../../components/input'
 import Button from '../../components/button'
 
-const Tip = () => {
+const Bookmark = () => {
   const inputRef = React.useRef(null)
   const router = useRouter()
   const { id } = router.query
   // Need to pass a function to see when `id` is ready. Check is
   // required because `useRouter` needs a few ms to be initialized.
-  const { data, error } = useSWR(() => id && `/api/tips?id=${id}`)
+  const { data, error } = useSWR(() => id && `/api/bookmarks?id=${id}`)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -30,11 +30,11 @@ const Tip = () => {
       })
 
       // Optimistic store update
-      mutate(`/api/tips?id=${id}`, {
-        tips: {
-          ...data.tips,
+      mutate(`/api/bookmarks?id=${id}`, {
+        bookmarks: {
+          ...data.bookmarks,
           comments: [
-            ...data.tips[0].comments,
+            ...data.bookmarks[0].comments,
             {
               '@ref': { id: '12345 ' },
               text: inputRef.current.value,
@@ -52,13 +52,13 @@ const Tip = () => {
 
   return (
     <Layout>
-      <h1>Tip</h1>
+      <h1>Bookmark</h1>
       {error && <div>failed to load</div>}
-      {!data ? <div>loading...</div> : <div>{data.tips[0].title}</div>}
+      {!data ? <div>loading...</div> : <div>{data.bookmarks[0].title}</div>}
 
       <h2>Comments</h2>
       <ul>
-        {data?.tips[0]?.comments.map((comment) => (
+        {data?.bookmarks[0]?.comments.map((comment) => (
           <li key={comment.ref['@ref'].id}>{comment.text}</li>
         ))}
       </ul>
@@ -78,4 +78,4 @@ const Tip = () => {
   )
 }
 
-export default Tip
+export default Bookmark
