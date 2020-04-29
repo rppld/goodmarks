@@ -21,7 +21,7 @@ function Login() {
     setError(null)
 
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('/api/auth?action=login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -42,7 +42,7 @@ function Login() {
   return (
     <Layout>
       <div className="login">
-        <Button as="a" href="/api/auth/google">
+        <Button as="a" href="/api/auth?action=oauth2&provider=google">
           Continue with Google
         </Button>
 
