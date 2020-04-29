@@ -10,7 +10,6 @@ export const getViewer = async (faunaSecret) => {
   const viewer = {
     id: ref.id,
     ...data,
-    faunaSecret,
   }
   return {
     viewer,
