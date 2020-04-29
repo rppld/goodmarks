@@ -7,12 +7,12 @@ import Button from './button'
 import styles from './header.module.css'
 
 const Header = () => {
-  const { data, mutate } = useSWR('/api/profile')
-  const isLoggedIn = data?.userId
+  const { data = {}, mutate } = useSWR('/api/me')
+  const { viewer } = data
 
   async function handleLogout() {
     await logout()
-    mutate({ userId: null })
+    mutate({ viewer: null })
   }
 
   return (
@@ -26,7 +26,7 @@ const Header = () => {
             </Link>
           </li>
 
-          {isLoggedIn ? (
+          {viewer ? (
             <>
               <li className={styles.item}>
                 <Link href="/profile">
