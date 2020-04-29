@@ -2,41 +2,33 @@ import React from 'react'
 import cookie from 'cookie'
 import Router from 'next/router'
 import { FAUNA_SECRET_COOKIE } from '../../lib/fauna'
+import createTip from '../../lib/fauna/queries/create-tip'
 import { withAuthSync } from '../../lib/auth'
 import Layout from '../../components/layout'
 import Input from '../../components/input'
 import Button from '../../components/button'
 import MovieSearch from '../../components/movie-search'
-import { getViewerId } from '../api/profile'
+import { getViewer } from '../api/me'
 import { useFormik } from 'formik'
 import { Listbox, ListboxOption } from '@reach/listbox'
 
-const New = () => {
+const New = ({ viewer }) => {
   const [category, setCategory] = React.useState('link')
   const [error, setError] = React.useState(null)
   const formik = useFormik({
     initialValues: {
       title: '',
-      link: '',
+      description: '',
+      url: '',
     },
     onSubmit: handleSubmit,
   })
 
-  async function handleSubmit({ title, link }) {
+  async function handleSubmit(values) {
     setError(null)
 
     try {
-      const response = await fetch('/api/tips/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, link }),
-      })
-
-      if (response.status !== 200) {
-        throw new Error(await response.text())
-      }
-
-      const data = await response.json()
+      const data = await createTip(viewer.faunaSecret, values)
       Router.push(`/t/${data.id}`)
     } catch (error) {
       console.error(error)
@@ -120,24 +112,23 @@ New.getInitialProps = async (ctx) => {
       return {}
     }
 
-    const userId = await getViewerId(faunaSecret)
-    return { userId }
+    const { viewer } = await getViewer(faunaSecret)
+    return { viewer }
   }
 
-  const response = await fetch('/api/profile')
+  const response = await fetch('/api/me')
 
   if (response.status !== 200) {
     throw new Error(await response.text())
   }
 
-  const data = await response.json()
+  const { viewer } = await response.json()
 
-  if (data.userId === null) {
+  if (viewer === null) {
     Router.push('/login')
-    return {}
   }
 
-  return { userId: data.userId }
+  return { viewer }
 }
 
 export default withAuthSync(New)

@@ -32,16 +32,18 @@ function MovieSearch() {
               {movies.map((movie) => (
                 <ComboboxOption key={movie.id} value={movie.title}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img
-                      src={`https://image.tmdb.org/t/p/w220_and_h330_face/${movie.poster_path}`}
-                      alt={`Poster for ${movie.title}`}
-                      style={{
-                        width: 24,
-                        height: 36,
-                        borderRadius: 4,
-                        marginRight: 4,
-                      }}
-                    />
+                    {movie.poster_path ? (
+                      <img
+                        src={`https://image.tmdb.org/t/p/w220_and_h330_face/${movie.poster_path}`}
+                        alt={`Poster for ${movie.title}`}
+                        style={{
+                          width: 24,
+                          height: 36,
+                          borderRadius: 4,
+                          marginRight: 4,
+                        }}
+                      />
+                    ) : null}
                     <ComboboxOptionText />
                   </div>
                 </ComboboxOption>
