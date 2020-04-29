@@ -22,7 +22,7 @@ function Signup() {
     setError(null)
 
     try {
-      const response = await fetch('/api/signup', {
+      const response = await fetch('/api/auth?action=signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),
@@ -43,7 +43,7 @@ function Signup() {
   return (
     <Layout>
       <div className="signup">
-        <Button as="a" href="/api/auth/google">
+        <Button as="a" href="/api/auth?action=oauth2&provider=google">
           Continue with Google
         </Button>
 

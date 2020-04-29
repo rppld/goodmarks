@@ -10,7 +10,7 @@ import useSWR from 'swr'
 
 const Profile = (props) => {
   const { viewer } = props
-  const { data, error } = useSWR(`/api/bookmarks?user_id=${viewer.id}`)
+  const { data, error } = useSWR(`/api/bookmarks?user=${viewer.id}`)
 
   return (
     <Layout>

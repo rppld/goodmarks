@@ -17,7 +17,7 @@ const Bookmark = () => {
     e.preventDefault()
 
     try {
-      await fetch('/api/comments/create', {
+      await fetch('/api/comments?action=create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

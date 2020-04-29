@@ -1,8 +1,16 @@
 import { query as q } from 'faunadb'
 import cookie from 'cookie'
-import { faunaClient, FAUNA_SECRET_COOKIE } from '../../../lib/fauna'
+import { faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
 
-export default async (req, res) => {
+export default async (...args) => {
+  const { action } = args[0].query
+
+  if (action === 'create') {
+    return createComment(...args)
+  }
+}
+
+async function createComment(req, res) {
   const { Create, Ref, Collection, Select, Get, Identity, Now } = q
   const { text, entity } = await req.body
   const collection = entity.type === 'COLLECTION' ? 'Collections' : 'Bookmarks'
