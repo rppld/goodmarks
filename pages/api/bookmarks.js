@@ -11,7 +11,7 @@ export default async (...args) => {
   }
 
   if (id) {
-    return getIndividualBookmark(...args)
+    return getBookmarkById(...args)
   }
 
   if (user) {
@@ -54,7 +54,7 @@ async function createBookmark(req, res) {
   }
 }
 
-async function getIndividualBookmark(req, res) {
+async function getBookmarkById(req, res) {
   const { id } = req.query
   const { Get, Let, Paginate, Match, Index, Ref, Lambda, Collection, Var } = q
 
