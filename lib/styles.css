@@ -3,8 +3,10 @@
   --space-0: 0;
   --space-4: 0.25rem;
   --space-8: 0.5rem;
+  --space-12: 0.75rem;
   --space-16: 1rem;
   --space-32: 2rem;
+  --space-40: 2.5rem;
   --space-64: 4rem;
   --space-96: 6rem;
   --space-128: 8rem;
@@ -16,7 +18,9 @@
   --fs-16: 1rem;
   --fs-18: 1.125rem;
   --fs-20: 1.25rem;
+  --fs-22: 1.375rem;
   --fs-24: 1.5rem;
+  --fs-28: 1.75rem;
   --fs-32: 2rem;
   --fs-48: 3rem;
   --fs-64: 4rem;
@@ -35,8 +39,60 @@
 
   /* Font weights */
   --fw-regular: 400;
+  --fw-medium: 500;
   --fw-bold: 700;
   --fw-black: 900;
+
+  /* Colors */
+  --blue-lightest: hsl(230, 92%, 73%);
+  --blue-lighter: hsl(230, 92%, 68%);
+  --blue-light: hsl(230, 92%, 63%);
+  --blue: hsl(230, 92%, 58%);
+  --blue-dark: hsl(230, 92%, 53%);
+  --blue-darker: hsl(230, 92%, 48%);
+  --blue-darkest: hsl(230, 92%, 43%);
+
+  --green-lightest: hsl(115, 65%, 60%);
+  --green-lighter: hsl(115, 65%, 55%);
+  --green-light: hsl(115, 65%, 50%);
+  --green: hsl(115, 65%, 45%);
+  --green-dark: hsl(115, 65%, 40%);
+  --green-darker: hsl(115, 65%, 35%);
+  --green-darkest: hsl(115, 65%, 30%);
+
+  --yellow-lightest: hsl(43, 90%, 63%);
+  --yellow-lighter: hsl(43, 90%, 58%);
+  --yellow-light: hsl(43, 90%, 53%);
+  --yellow: hsl(43, 90%, 48%);
+  --yellow-dark: hsl(43, 90%, 43%);
+  --yellow-darker: hsl(43, 90%, 38%);
+  --yellow-darkest: hsl(43, 90%, 33%);
+
+  --red-lightest: hsl(2, 85%, 62%);
+  --red-lighter: hsl(2, 85%, 57%);
+  --red-light: hsl(2, 85%, 52%);
+  --red: hsl(2, 85%, 47%);
+  --red-dark: hsl(2, 85%, 42%);
+  --red-darker: hsl(2, 85%, 38%);
+  --red-darkest: hsl(2, 85%, 33%);
+
+  --grey: #686253;
+  --black: #0c1212;
+  --white: #fcfaf2;
+
+  --color-primary: var(--blue);
+  --color-success: var(--green);
+  --color-warning: var(--yellow);
+  --color-danger: var(--red);
+  --body-background-color: var(--white);
+  --text-color: var(--black);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background-color: var(--black);
+    --text-color: var(--white);
+  }
 }
 
 *,
@@ -54,7 +110,7 @@
 }
 
 a {
-  color: blue;
+  color: var(--color-primary);
   text-decoration: none;
 }
 
@@ -100,12 +156,7 @@ body {
   font-weight: var(--fw-regular);
   line-height: var(--lh-copy);
   font-size: var(--fs-18);
-  color: #333;
+  background-color: var(--body-background-color);
+  color: var(--text-color);
   hyphens: auto;
-}
-
-@media (min-width: 48em) {
-  body {
-    font-size: var(--fs-20);
-  }
 }

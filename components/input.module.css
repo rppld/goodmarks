@@ -1,7 +1,8 @@
-.container {
+.base {
   width: 100%;
-  padding: 8px;
   display: block;
-  box-shadow: 0 0 0 1px #ccc inset;
-  border-radius: var(--space-8);
+  box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.05) inset;
+  font-size: inherit;
+  border-radius: var(--space-12);
+  padding: var(--space-12);
 }

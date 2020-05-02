@@ -8,6 +8,7 @@
   "dependencies": {
     "@reach/combobox": "^0.10.1",
     "@reach/listbox": "^0.10.1",
+    "@reach/menu-button": "^0.10.1",
     "cookie": "^0.4.1",
     "faunadb": "2.13.1",
     "formik": "^2.1.4",

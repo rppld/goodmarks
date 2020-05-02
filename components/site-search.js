@@ -7,9 +7,12 @@ import {
   ComboboxOption,
 } from '@reach/combobox'
 import debounce from 'lodash/debounce'
-import styles from './input.module.css'
+import Button from './button'
+import { MagnifyingGlass } from './icon'
+import styles from './button.module.css'
 
 function SiteSearch() {
+  const [on, setOn] = React.useState(false)
   const [searchTerm, setSearchTerm] = React.useState('')
   const users = useSearch(searchTerm)
   const handleChange = debounce((value) => {
@@ -25,28 +28,43 @@ function SiteSearch() {
   }, [])
 
   return (
-    <Combobox aria-label="Cities">
-      <ComboboxInput
-        className={styles.container}
-        onChange={(e) => handleChange(e.target.value)}
-        placeholder="Search hashtags and users"
-      />
-      {users && (
-        <ComboboxPopover className="shadow-popup">
-          {users.length > 0 ? (
-            <ComboboxList>
-              {users.map((user) => (
-                <ComboboxOption key={user.ref['@ref'].id} value={user.name} />
-              ))}
-            </ComboboxList>
-          ) : (
-            <span style={{ display: 'block', margin: 8 }}>
-              No results found
-            </span>
+    <>
+      {on ? (
+        <Combobox aria-label="Cities">
+          <ComboboxInput
+            className={styles.base}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder="Search hashtags and users"
+          />
+          {users && (
+            <ComboboxPopover className="shadow-popup">
+              {users.length > 0 ? (
+                <ComboboxList>
+                  {users.map((user) => (
+                    <ComboboxOption
+                      key={user.ref['@ref'].id}
+                      value={user.name}
+                    />
+                  ))}
+                </ComboboxList>
+              ) : (
+                <span style={{ display: 'block', margin: 8 }}>
+                  No results found
+                </span>
+              )}
+            </ComboboxPopover>
           )}
-        </ComboboxPopover>
+        </Combobox>
+      ) : (
+        <Button
+          leftAdornment={<MagnifyingGlass />}
+          onClick={() => setOn(!on)}
+          variant="primary"
+        >
+          Search
+        </Button>
       )}
-    </Combobox>
+    </>
   )
 }
 

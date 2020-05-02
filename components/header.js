@@ -1,60 +1,16 @@
 import React from 'react'
-import Link from 'next/link'
-import useSWR from 'swr'
-import { logout } from '../lib/auth'
-import SiteSearch from './site-search'
-import Button from './button'
 import styles from './header.module.css'
 
-const Header = () => {
-  const { data = {}, mutate } = useSWR('/api/me')
-  const { viewer } = data
+export const Header = (props) => (
+  <header className={styles.container}>{props.children}</header>
+)
 
-  async function handleLogout() {
-    await logout()
-    mutate({ viewer: null })
-  }
+export const HeaderNav = (props) => (
+  <nav>
+    <ul className={styles.list}>{props.children}</ul>
+  </nav>
+)
 
-  return (
-    <header className={styles.container}>
-      <SiteSearch />
-      <nav>
-        <ul className={styles.list}>
-          <li className={styles.item}>
-            <Link href="/">
-              <a className={styles.link}>Home</a>
-            </Link>
-          </li>
-
-          {viewer ? (
-            <>
-              <li className={styles.item}>
-                <Link href="/profile">
-                  <a className={styles.link}>Profile</a>
-                </Link>
-              </li>
-
-              <li className={styles.item}>
-                <button onClick={handleLogout}>Logout</button>
-              </li>
-            </>
-          ) : (
-            <li className={styles.item}>
-              <Link href="/login">
-                <a className={styles.link}>Login</a>
-              </Link>
-            </li>
-          )}
-
-          <li className={styles.item}>
-            <Link href="/b/new" passHref>
-              <Button as="a">New</Button>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </header>
-  )
-}
-
-export default Header
+export const HeaderNavItem = (props) => (
+  <li className={styles.item}>{props.children}</li>
+)

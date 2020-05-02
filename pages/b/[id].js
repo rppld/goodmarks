@@ -4,6 +4,7 @@ import Layout from '../../components/layout'
 import { useRouter } from 'next/router'
 import Input from '../../components/input'
 import Button from '../../components/button'
+import { H2 } from '../../components/heading'
 
 const Bookmark = () => {
   const inputRef = React.useRef(null)
@@ -12,6 +13,7 @@ const Bookmark = () => {
   // Need to pass a function to see when `id` is ready. Check is
   // required because `useRouter` needs a few ms to be initialized.
   const { data, error } = useSWR(() => id && `/api/bookmarks?id=${id}`)
+  const bookmark = data?.bookmarks[0]
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -52,13 +54,14 @@ const Bookmark = () => {
 
   return (
     <Layout>
-      <h1>Bookmark</h1>
       {error && <div>failed to load</div>}
-      {!data ? <div>loading...</div> : <div>{data.bookmarks[0].title}</div>}
+      {!data ? <H2 as="h1">loading...</H2> : <H2 as="h1">{bookmark.title}</H2>}
+
+      {bookmark && <div>{bookmark.description}</div>}
 
       <h2>Comments</h2>
       <ul>
-        {data?.bookmarks[0]?.comments.map((comment) => (
+        {bookmark?.comments.map((comment) => (
           <li key={comment.ref['@ref'].id}>{comment.text}</li>
         ))}
       </ul>
