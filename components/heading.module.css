@@ -1,0 +1,31 @@
+.level-1 {
+  font-size: var(--fs-48);
+  line-height: var(--lh-title);
+}
+
+.level-2 {
+  font-size: var(--fs-32);
+  line-height: var(--lh-title);
+}
+
+.level-3 {
+  font-size: var(--fs-28);
+  line-height: var(--lh-title);
+}
+
+.level-4 {
+  font-size: var(--fs-22);
+  line-height: var(--lh-copy);
+}
+
+.level-5 {
+  font-size: var(--fs-18);
+  line-height: var(--lh-copy);
+}
+
+.level-6 {
+  font-size: var(--fs-14);
+  line-height: var(--lh-copy);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

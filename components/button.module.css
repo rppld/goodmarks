@@ -1,7 +1,49 @@
-.container {
-  color: white;
-  background-color: blue;
-  border-radius: var(--space-8);
-  display: inline-block;
-  padding: 0 0.5rem;
+.base {
+  background-color: hsla(0, 0%, 0%, 0.05);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--space-12);
+  height: var(--space-40);
+  padding-left: var(--space-12);
+  padding-right: var(--space-12);
+  color: var(--text-color);
+  font-weight: var(--fw-medium);
+  font-size: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+  .base {
+    background-color: hsla(100, 100%, 100%, 0.1);
+  }
+}
+
+.primary {
+  background-color: var(--color-primary);
+  color: var(--white);
+}
+
+.success {
+  background-color: var(--color-success);
+  color: var(--white);
+}
+
+.warning {
+  background-color: var(--color-warning);
+  color: var(--white);
+}
+
+.danger {
+  background-color: var(--color-danger);
+  color: var(--white);
+}
+
+.adornment {
+  position: relative;
+  width: var(--space-40);
+  height: var(--space-40);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: calc(var(--space-12) * -1);
 }

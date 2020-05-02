@@ -6,6 +6,7 @@ import { withAuthSync } from '../lib/auth'
 import { FAUNA_SECRET_COOKIE } from '../lib/fauna'
 import { getViewer } from './api/me'
 import Layout from '../components/layout'
+import { H2 } from '../components/heading'
 import useSWR from 'swr'
 
 const Profile = (props) => {
@@ -14,7 +15,7 @@ const Profile = (props) => {
 
   return (
     <Layout>
-      <h1>Your profile</h1>
+      <H2 as="h1">Your profile</H2>
       <p>Your user id is: {viewer.id}</p>
 
       <h2>Your bookmarks</h2>

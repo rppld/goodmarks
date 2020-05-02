@@ -19,9 +19,9 @@ function MovieSearch() {
   }, 250)
 
   return (
-    <Combobox aria-label="Cities">
+    <Combobox aria-label="Movies">
       <ComboboxInput
-        className={styles.container}
+        className={styles.base}
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Search movies"
       />

@@ -1,0 +1,14 @@
+.text {
+  font-size: var(--fs-18);
+  line-height: var(--lh-copy);
+}
+
+.meta {
+  color: hsla(0, 0%, 0%, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  .meta {
+    color: hsla(100, 100%, 100%, 0.5);
+  }
+}

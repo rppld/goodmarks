@@ -42,65 +42,44 @@ function Signup() {
 
   return (
     <Layout>
-      <div className="signup">
-        <Button as="a" href="/api/auth?action=oauth2&provider=google">
-          Continue with Google
-        </Button>
+      <Button as="a" href="/api/auth?action=oauth2&provider=google">
+        Continue with Google
+      </Button>
 
-        <form onSubmit={formik.handleSubmit}>
-          <Input
-            name="username"
-            labelText="Username"
-            value={formik.values.username}
-            onChange={formik.handleChange}
-          />
+      <form onSubmit={formik.handleSubmit}>
+        <Input
+          name="username"
+          labelText="Username"
+          value={formik.values.username}
+          onChange={formik.handleChange}
+        />
 
-          <Input
-            name="email"
-            labelText="Email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-          />
+        <Input
+          name="email"
+          labelText="Email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+        />
 
-          <Input
-            type="password"
-            name="password"
-            labelText="Password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-          />
+        <Input
+          type="password"
+          name="password"
+          labelText="Password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+        />
 
-          <Button type="submit">Sign up</Button>
+        <Button type="submit">Sign up</Button>
 
-          {error && <p className="error">Error: {error}</p>}
-        </form>
+        {error && <p>Error: {error}</p>}
+      </form>
 
-        <p>
-          Already have an account?{' '}
-          <Link href="/login">
-            <a>Login</a>
-          </Link>
-        </p>
-      </div>
-      <style jsx>{`
-        .signup {
-          max-width: 340px;
-          margin: 0 auto;
-          padding: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-
-        form {
-          display: flex;
-          flex-flow: column;
-        }
-
-        .error {
-          margin: 0.5rem 0 0;
-          color: brown;
-        }
-      `}</style>
+      <p>
+        Already have an account?{' '}
+        <Link href="/login">
+          <a>Login</a>
+        </Link>
+      </p>
     </Layout>
   )
 }

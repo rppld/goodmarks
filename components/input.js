@@ -7,7 +7,7 @@ const Input = React.forwardRef(
       <label htmlFor={name}>{labelText}</label>
       <Component
         ref={ref}
-        className={styles.container}
+        className={styles.base}
         type={Component === 'input' ? type : undefined}
         name={name}
         id={name}
