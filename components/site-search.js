@@ -7,7 +7,7 @@ import {
   ComboboxOption,
 } from '@reach/combobox'
 import debounce from 'lodash/debounce'
-import styles from './input.module.css'
+import Input from './input'
 
 function SiteSearch() {
   const [searchTerm, setSearchTerm] = React.useState('')
@@ -26,10 +26,10 @@ function SiteSearch() {
 
   return (
     <Combobox aria-label="Cities">
-      <ComboboxInput
-        className={styles.base}
+      <Input
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Search hashtags and users"
+        as={ComboboxInput}
       />
       {users && (
         <ComboboxPopover>

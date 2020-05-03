@@ -1,6 +1,7 @@
 import React from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
+import PageTitle from '../components/page-title'
 import Layout from '../components/layout'
 import { H2 } from '../components/heading'
 
@@ -9,7 +10,9 @@ const Home = () => {
 
   return (
     <Layout>
-      <H2 as="h1">Latest bookmarks</H2>
+      <PageTitle>
+        <H2 as="h1">Latest bookmarks</H2>
+      </PageTitle>
 
       {error && <div>failed to load</div>}
 

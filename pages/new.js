@@ -2,10 +2,11 @@ import React from 'react'
 import Link from 'next/link'
 import { withAuthSync } from '../lib/auth'
 import profileOrRedirect from '../lib/profile-or-redirect'
-import { Header, HeaderNav, HeaderNavItem } from '../components/header'
+import { MenuBar, MenuBarNav, MenuBarNavItem } from '../components/menu-bar'
 import Layout from '../components/layout'
 import CategorySelection from '../components/category-selection'
 import Button from '../components/button'
+import Header from '../components/header'
 import PageTitle from '../components/page-title'
 import { H2 } from '../components/heading'
 import Text from '../components/text'
@@ -15,16 +16,18 @@ const New = ({ viewer }) => {
     <Layout
       header={
         <Header>
-          <HeaderNav />
-          <HeaderNav>
-            <HeaderNavItem>
-              <Link href="/" passHref>
-                <Button as="a" variant="danger">
-                  Cancel
-                </Button>
-              </Link>
-            </HeaderNavItem>
-          </HeaderNav>
+          <MenuBar>
+            <MenuBarNav />
+            <MenuBarNav>
+              <MenuBarNavItem>
+                <Link href="/" passHref>
+                  <Button as="a" variant="danger">
+                    Cancel
+                  </Button>
+                </Link>
+              </MenuBarNavItem>
+            </MenuBarNav>
+          </MenuBar>
         </Header>
       }
     >

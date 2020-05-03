@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+}
+
+.single {
+  justify-content: flex-end;
+}
+
+.multiple {
+  justify-content: space-between;
+}
+
+.list {
+  display: flex;
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.item + .item {
+  margin-left: var(--space-8);
+}

@@ -36,3 +36,15 @@ export const H3 = ({ as: Component, children, ...props }) => {
 H3.defaultProps = {
   as: 'h3',
 }
+
+export const H4 = ({ as: Component, children, ...props }) => {
+  return (
+    <Component className={styles['level-4']} {...props}>
+      {children}
+    </Component>
+  )
+}
+
+H4.defaultProps = {
+  as: 'h4',
+}

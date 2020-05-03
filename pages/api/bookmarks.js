@@ -22,13 +22,23 @@ export default async (...args) => {
 }
 
 async function createBookmark(req, res) {
-  const { title, description, url } = req.body
+  const { title, description, details, category } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
-  const { Create, Select, Identity, Now, Get, Collection } = q
+  const {
+    Create,
+    Select,
+    Paginate,
+    Identity,
+    Now,
+    Get,
+    Collection,
+    Match,
+    Index,
+  } = q
 
   try {
-    if (!title || !url) {
+    if (!title) {
       throw new Error('Title and link must be provided.')
     }
 
@@ -37,7 +47,11 @@ async function createBookmark(req, res) {
         data: {
           title,
           description,
-          url,
+          category: Select(
+            0,
+            Paginate(Match(Index('categories_by_slug'), category))
+          ),
+          details,
           author: Select(['data', 'user'], Get(Identity())),
           created: Now(),
         },

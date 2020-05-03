@@ -1,9 +1,10 @@
 import React from 'react'
 import styles from './avatar.module.css'
+import Image from './image'
 
 const Avatar = ({ size, src, alt, ...props }) => (
   <span className={styles.wrapper} {...props}>
-    <img
+    <Image
       className={styles.image}
       src={src}
       alt={alt}

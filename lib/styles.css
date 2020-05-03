@@ -162,3 +162,31 @@ body {
   color: var(--text-color);
   hyphens: auto;
 }
+
+[data-reach-menu-list],
+[data-reach-combobox-popover] {
+  overflow: hidden;
+  border-radius: var(--space-12);
+  box-shadow: rgba(101, 119, 134, 0.2) 0px 0px 15px,
+    rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+  border: 0;
+  padding: 0;
+}
+
+[data-reach-combobox-popover] > span, /* No results item */
+[data-reach-combobox-option],
+[data-reach-menu-item] {
+  margin: 0 !important;
+  padding: var(--space-12);
+}
+
+[data-reach-combobox-option]:not(:first-child),
+[data-reach-menu-item]:not(:first-child) {
+  border-top: 1px solid hsl(0, 0%, 90%);
+}
+
+[data-reach-menu-item][data-selected],
+[data-reach-combobox-option]:hover {
+  background: hsl(0, 0%, 95%);
+  color: inherit;
+}

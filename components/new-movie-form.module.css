@@ -1,0 +1,14 @@
+.movie {
+  display: flex;
+  align-items: center;
+  padding: var(--space-8);
+  border-radius: var(--space-12);
+  background-color: hsla(0, 0%, 0%, 0.05);
+}
+
+.image {
+  margin-right: var(--space-12);
+  border-radius: var(--space-4);
+  width: 48px;
+  height: 72px;
+}

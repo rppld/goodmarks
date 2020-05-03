@@ -4,8 +4,14 @@ import { H2 } from './heading'
 import Text from './text'
 import { useFormik } from 'formik'
 import Router from 'next/router'
-import Input from '../components/input'
-import Button from '../components/button'
+import Input from './input'
+import Button from './button'
+import Form from './form'
+import Link from 'next/link'
+import Layout from './layout'
+import Header from './header'
+import { MenuBar, MenuBarNav, MenuBarNavItem } from './menu-bar'
+import { ChevronLeft } from './icon'
 
 const NewLinkForm = () => {
   const [error, setError] = React.useState(null)
@@ -41,13 +47,38 @@ const NewLinkForm = () => {
   }
 
   return (
-    <>
+    <Layout
+      header={
+        <Header>
+          <MenuBar>
+            <MenuBarNav>
+              <MenuBarNavItem>
+                <Link href="/new" passHref>
+                  <Button as="a" leftAdornment={<ChevronLeft />}>
+                    New bookmark
+                  </Button>
+                </Link>
+              </MenuBarNavItem>
+            </MenuBarNav>
+            <MenuBarNav>
+              <MenuBarNavItem>
+                <Link href="/" passHref>
+                  <Button as="a" variant="danger">
+                    Cancel
+                  </Button>
+                </Link>
+              </MenuBarNavItem>
+            </MenuBarNav>
+          </MenuBar>
+        </Header>
+      }
+    >
       <PageTitle>
         <H2 as="h1">Link</H2>
         <Text meta>Provide the link details.</Text>
       </PageTitle>
 
-      <form onSubmit={formik.handleSubmit}>
+      <Form onSubmit={formik.handleSubmit}>
         <Input
           name="title"
           labelText="Title"
@@ -72,11 +103,15 @@ const NewLinkForm = () => {
           onChange={formik.handleChange}
         />
 
-        <Button type="submit">Add</Button>
+        <MenuBar>
+          <Button type="submit" variant="primary">
+            Add bookmark
+          </Button>
+        </MenuBar>
 
         {error && <p>Error: {error}</p>}
-      </form>
-    </>
+      </Form>
+    </Layout>
   )
 }
 
