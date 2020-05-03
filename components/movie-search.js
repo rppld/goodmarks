@@ -7,10 +7,22 @@ import {
   ComboboxOption,
   ComboboxOptionText,
 } from '@reach/combobox'
+import Image from './image'
+import Input from './input'
+import { Star } from './icon'
 import debounce from 'lodash/debounce'
-import styles from './input.module.css'
+import styles from './movie-search.module.css'
+import findIndex from 'lodash/findIndex'
 
-function MovieSearch() {
+function PlaceholderImage() {
+  return (
+    <span className={styles.placeholder}>
+      <Star />
+    </span>
+  )
+}
+
+function MovieSearch(props) {
   const [searchTerm, setSearchTerm] = React.useState('')
   const movies = useSearch(searchTerm)
 
@@ -19,31 +31,41 @@ function MovieSearch() {
   }, 250)
 
   return (
-    <Combobox aria-label="Movies">
-      <ComboboxInput
-        className={styles.base}
+    <Combobox
+      aria-label="Movies"
+      onSelect={(val) => {
+        const selectedIndex = findIndex(movies, (movie) => movie.title === val)
+        props.onSelect(movies[selectedIndex])
+      }}
+    >
+      <Input
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Search movies"
+        as={ComboboxInput}
+        help="Search powered by TMDB"
       />
       {movies && (
         <ComboboxPopover className="shadow-popup">
           {movies.length > 0 ? (
             <ComboboxList>
-              {movies.map((movie) => (
-                <ComboboxOption key={movie.id} value={movie.title}>
+              {movies.map((movie, index) => (
+                <ComboboxOption
+                  key={movie.id}
+                  value={movie.title}
+                  data-index={index}
+                >
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    {movie.poster_path ? (
-                      <img
-                        src={`https://image.tmdb.org/t/p/w220_and_h330_face/${movie.poster_path}`}
-                        alt={`Poster for ${movie.title}`}
-                        style={{
-                          width: 24,
-                          height: 36,
-                          borderRadius: 4,
-                          marginRight: 4,
-                        }}
-                      />
-                    ) : null}
+                    <div className={styles.media}>
+                      {movie.poster_path ? (
+                        <Image
+                          src={`https://image.tmdb.org/t/p/w220_and_h330_face/${movie['poster_path']}`}
+                          alt={`Poster for ${movie.title}`}
+                          className={styles.image}
+                        />
+                      ) : (
+                        <PlaceholderImage />
+                      )}
+                    </div>
                     <ComboboxOptionText />
                   </div>
                 </ComboboxOption>

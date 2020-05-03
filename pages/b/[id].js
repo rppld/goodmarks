@@ -1,9 +1,11 @@
 import React from 'react'
 import useSWR, { mutate } from 'swr'
+import PageTitle from '../../components/page-title'
 import Layout from '../../components/layout'
 import { useRouter } from 'next/router'
 import Input from '../../components/input'
 import Button from '../../components/button'
+import Text from '../../components/text'
 import { H2 } from '../../components/heading'
 
 const Bookmark = () => {
@@ -55,9 +57,15 @@ const Bookmark = () => {
   return (
     <Layout>
       {error && <div>failed to load</div>}
-      {!data ? <H2 as="h1">loading...</H2> : <H2 as="h1">{bookmark.title}</H2>}
 
-      {bookmark && <div>{bookmark.description}</div>}
+      {!data ? (
+        <div>loading...</div>
+      ) : (
+        <PageTitle>
+          <H2 as="h1">{bookmark.title}</H2>
+          <Text meta>{bookmark.description}</Text>
+        </PageTitle>
+      )}
 
       <h2>Comments</h2>
       <ul>

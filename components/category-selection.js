@@ -7,7 +7,7 @@ import { Movie, Link as LinkIcon, TV } from './icon'
 const CategorySelection = () => (
   <ul className={styles.list}>
     <li>
-      <Link href="/new/movie">
+      <Link href="/new/[category]" as="/new/movie">
         <a>
           <div className={styles.category}>
             <Movie size="md" />
@@ -19,7 +19,7 @@ const CategorySelection = () => (
       </Link>
     </li>
     <li>
-      <Link href="/new/tv-show">
+      <Link href="/new/[category]" as="/new/tv-show">
         <a>
           <div className={styles.category}>
             <TV size="md" />
@@ -31,7 +31,7 @@ const CategorySelection = () => (
       </Link>
     </li>
     <li>
-      <Link href="/new/link">
+      <Link href="/new/[category]" as="/new/link">
         <a>
           <div className={styles.category}>
             <LinkIcon size="md" />

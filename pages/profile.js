@@ -2,7 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import { withAuthSync } from '../lib/auth'
 import profileOrRedirect from '../lib/profile-or-redirect'
+import PageTitle from '../components/page-title'
 import Layout from '../components/layout'
+import Text from '../components/text'
 import { H2 } from '../components/heading'
 import useSWR from 'swr'
 
@@ -12,8 +14,10 @@ const Profile = (props) => {
 
   return (
     <Layout>
-      <H2 as="h1">Your profile</H2>
-      <p>Your user id is: {viewer.id}</p>
+      <PageTitle>
+        <H2 as="h1">Your profile</H2>
+        <Text meta>Your user ID is: {viewer.id}</Text>
+      </PageTitle>
 
       <h2>Your bookmarks</h2>
       {error && <div>failed to load</div>}
