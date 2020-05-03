@@ -1,8 +1,8 @@
-.base {
+.field {
   width: 100%;
   display: block;
   box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.05) inset;
   font-size: inherit;
   border-radius: var(--space-12);
-  padding: var(--space-12);
+  padding: var(--space-16) var(--space-12);
 }

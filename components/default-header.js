@@ -6,8 +6,7 @@ import { logout } from '../lib/auth'
 import Button from './button'
 import Avatar from './avatar'
 import { Header, HeaderNav, HeaderNavItem } from './header'
-import SiteSearch from './site-search'
-import { Plus } from './icon'
+import { Plus, MagnifyingGlass } from './icon'
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
 
 const DefaultHeader = () => {
@@ -33,7 +32,15 @@ const DefaultHeader = () => {
 
       <HeaderNav>
         <HeaderNavItem>
-          <SiteSearch />
+          <Link href="/search" passHref>
+            <Button
+              as="a"
+              variant="primary"
+              leftAdornment={<MagnifyingGlass />}
+            >
+              Search
+            </Button>
+          </Link>
         </HeaderNavItem>
 
         <HeaderNavItem>

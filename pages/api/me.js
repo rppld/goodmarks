@@ -10,10 +10,10 @@ export default async (req, res) => {
     return res.status(200).json({ viewer: null })
   }
 
-  res.status(200).json(await getViewer(faunaSecret))
+  res.status(200).json(await profileApi(faunaSecret))
 }
 
-export const getViewer = async (faunaSecret) => {
+export const profileApi = async (faunaSecret) => {
   const { Identity, Select, Get } = q
   const { ref, data } = await faunaClient(faunaSecret).query(
     Get(Select(['data', 'user'], Get(Identity())))

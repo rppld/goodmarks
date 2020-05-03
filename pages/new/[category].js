@@ -1,6 +1,8 @@
 import React from 'react'
 import Layout from '../../components/layout'
 import { useRouter } from 'next/router'
+import { withAuthSync } from '../../lib/auth'
+import profileOrRedirect from '../../lib/profile-or-redirect'
 import NewMovieForm from '../../components/new-movie-form'
 import NewTVShowForm from '../../components/new-tv-show-form'
 import NewLinkForm from '../../components/new-link-form'
@@ -55,4 +57,9 @@ const Category = () => {
   )
 }
 
-export default Category
+Category.getInitialProps = async (ctx) => {
+  const viewer = await profileOrRedirect(ctx)
+  return { viewer }
+}
+
+export default withAuthSync(Category)

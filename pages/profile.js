@@ -1,10 +1,7 @@
 import React from 'react'
-import cookie from 'cookie'
-import Router from 'next/router'
 import Link from 'next/link'
 import { withAuthSync } from '../lib/auth'
-import { FAUNA_SECRET_COOKIE } from '../lib/fauna'
-import { getViewer } from './api/me'
+import profileOrRedirect from '../lib/profile-or-redirect'
 import Layout from '../components/layout'
 import { H2 } from '../components/heading'
 import useSWR from 'swr'
@@ -39,33 +36,7 @@ const Profile = (props) => {
 }
 
 Profile.getInitialProps = async (ctx) => {
-  if (typeof window === 'undefined') {
-    const { req, res } = ctx
-    const cookies = cookie.parse(req.headers.cookie ?? '')
-    const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
-
-    if (!faunaSecret) {
-      res.writeHead(302, { Location: '/login' })
-      res.end()
-      return {}
-    }
-
-    const { viewer } = await getViewer(faunaSecret)
-    return { viewer }
-  }
-
-  const response = await fetch('/api/me')
-
-  if (response.status !== 200) {
-    throw new Error(await response.text())
-  }
-
-  const { viewer } = await response.json()
-
-  if (viewer === null) {
-    Router.push('/login')
-  }
-
+  const viewer = await profileOrRedirect(ctx)
   return { viewer }
 }
 
