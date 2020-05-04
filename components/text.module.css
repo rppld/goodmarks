@@ -4,11 +4,5 @@
 }
 
 .meta {
-  color: hsla(0, 0%, 0%, 0.5);
-}
-
-@media (prefers-color-scheme: dark) {
-  .meta {
-    color: hsla(100, 100%, 100%, 0.5);
-  }
+  color: var(--text-color-meta);
 }

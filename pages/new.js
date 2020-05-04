@@ -17,7 +17,13 @@ const New = ({ viewer }) => {
       header={
         <Header>
           <MenuBar>
-            <MenuBarNav />
+            <MenuBarNav>
+              <MenuBarNavItem>
+                <Link href="/" passHref>
+                  <Button as="a">Home</Button>
+                </Link>
+              </MenuBarNavItem>
+            </MenuBarNav>
             <MenuBarNav>
               <MenuBarNavItem>
                 <Link href="/" passHref>
