@@ -3,6 +3,27 @@ import { serverClient, faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
 import { flattenDataKeys } from '../../lib/fauna/utils'
 import cookie from 'cookie'
 
+const {
+  Create,
+  Ref,
+  Collection,
+  Select,
+  Get,
+  Identity,
+  Now,
+  Paginate,
+  Let,
+  Lambda,
+  Var,
+  Exists,
+  Match,
+  Index,
+  If,
+  Delete,
+  Equals,
+  Abort,
+} = q
+
 export default async (...args) => {
   const { id, user, action } = args[0].query
 
@@ -12,6 +33,10 @@ export default async (...args) => {
 
   if (action === 'delete') {
     return deleteBookmark(...args)
+  }
+
+  if (action === 'comment') {
+    return createComment(...args)
   }
 
   if (id) {
@@ -25,26 +50,71 @@ export default async (...args) => {
   return getAllBookmarks(...args)
 }
 
+async function createComment(req, res) {
+  const { text, entity } = await req.body
+  const collection = entity.type === 'COLLECTION' ? 'Collections' : 'Bookmarks'
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  try {
+    if (!text) {
+      throw new Error('Text must be provided.')
+    }
+
+    const data = await faunaClient(faunaSecret).query(
+      Create(Collection('Comments'), {
+        data: {
+          text,
+          author: Select(['data', 'user'], Get(Identity())),
+          created: Now(),
+          entity: Ref(Collection(collection), entity.id),
+        },
+      })
+    )
+
+    res.status(200).json({
+      ...data.data,
+      id: data.ref.id,
+    })
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
+}
+
+async function createHashtags(tags) {
+  // tags is an array that looks like:
+  // [{ name: 'hash' }, { name: 'tag' }]
+  return q.Map(
+    tags,
+    Lambda(
+      ['hashtag'],
+      Let(
+        {
+          match: Match(Index('hashtags_by_name'), Var('hashtag')),
+        },
+        If(
+          Exists(Var('match')),
+          // Paginate returns a { data: [ <references> ]} object. We
+          // validated that there is one element with exists already.
+          // We can fetch it with Select(['data', 0], ...)
+          Select(['data', 0], Paginate(Var('match'))),
+          // If it doesn't exist we create it and return the reference.
+          Select(
+            ['ref'],
+            Create(Collection('Hashtags'), {
+              data: { name: Var('hashtag') },
+            })
+          )
+        )
+      )
+    )
+  )
+}
+
 async function deleteBookmark(req, res) {
   const { id } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
-  const {
-    Delete,
-    Lambda,
-    Paginate,
-    Collection,
-    Match,
-    Index,
-    Var,
-    Ref,
-    Equals,
-    Select,
-    Get,
-    Let,
-    Identity,
-    Abort,
-  } = q
 
   try {
     if (!id) {
@@ -86,7 +156,7 @@ async function deleteBookmark(req, res) {
 }
 
 async function createBookmark(req, res) {
-  const { title, description, details, category } = req.body
+  const { title, description, details, category, tags } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
   const {
@@ -99,6 +169,8 @@ async function createBookmark(req, res) {
     Collection,
     Match,
     Index,
+    Let,
+    Var,
   } = q
 
   try {
@@ -107,19 +179,29 @@ async function createBookmark(req, res) {
     }
 
     const data = await faunaClient(faunaSecret).query(
-      Create(Collection('Bookmarks'), {
-        data: {
-          title,
-          description,
+      Let(
+        {
+          hashtagRefs: await createHashtags(tags),
           category: Select(
             0,
             Paginate(Match(Index('categories_by_slug'), category))
           ),
-          details,
           author: Select(['data', 'user'], Get(Identity())),
-          created: Now(),
         },
-      })
+        Create(Collection('Bookmarks'), {
+          data: {
+            title,
+            description,
+            likes: 0,
+            comments: 0,
+            hashtags: Var('hashtagRefs'),
+            category: Var('category'),
+            details,
+            author: Var('author'),
+            created: Now(),
+          },
+        })
+      )
     )
 
     return res.status(200).json(flattenDataKeys(data))
@@ -131,18 +213,6 @@ async function createBookmark(req, res) {
 
 async function getBookmarkById(req, res) {
   const { id } = req.query
-  const {
-    Get,
-    Let,
-    Paginate,
-    Match,
-    Select,
-    Index,
-    Ref,
-    Lambda,
-    Collection,
-    Var,
-  } = q
 
   const data = await serverClient.query(
     Let(
@@ -175,7 +245,6 @@ async function getBookmarkById(req, res) {
 
 async function getBookmarksByUser(req, res) {
   const { user: userId } = req.query
-  const { Get, Paginate, Match, Index, Ref, Lambda, Collection, Var } = q
 
   const response = await serverClient.query(
     q.Map(
@@ -192,8 +261,6 @@ async function getBookmarksByUser(req, res) {
 }
 
 async function getAllBookmarks(req, res) {
-  const { Get, Paginate, Match, Index, Lambda, Var } = q
-
   const response = await serverClient.query(
     q.Map(
       Paginate(Match(Index('all_bookmarks'))),

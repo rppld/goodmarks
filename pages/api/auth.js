@@ -10,6 +10,8 @@ import {
   serializeFaunaCookie,
 } from '../../lib/fauna'
 
+const { Create, Let, Collection, Var, Select, Login, Match, Index, Get } = q
+
 export default async (...args) => {
   const { action } = args[0].query // args[0] is the `req` object
 
@@ -52,7 +54,6 @@ async function handleOauth2(req, res) {
   }
 
   try {
-    const { Create, Let, Collection, Var, Select, Login, Match, Index } = q
     const result = await googleOauth2.authorizationCode.getToken(options)
     const { token } = googleOauth2.accessToken.create(result)
     const { access_token: accessToken } = token
@@ -126,7 +127,6 @@ async function handleOauth2(req, res) {
 }
 
 async function handleSignup(req, res) {
-  const { Create, Let, Collection, Var, Select } = q
   const { username, email, password } = await req.body
 
   try {
@@ -188,7 +188,6 @@ async function handleSignup(req, res) {
 }
 
 async function handleLogin(req, res) {
-  const { Let, Get, Select, Var, Login, Match, Index } = q
   const { email, password } = await req.body
 
   try {

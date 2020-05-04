@@ -3,6 +3,8 @@ import { serverClient } from '../../lib/fauna'
 import { flattenDataKeys } from '../../lib/fauna/utils'
 import fetch from 'isomorphic-unfetch'
 
+const { Match, Paginate, Index, Lambda, Let, Var, Get } = q
+
 export default async (...args) => {
   const { context } = args[0].query
 
@@ -33,7 +35,6 @@ async function searchTMDb(req, res, context) {
 
 async function searchHashtagsAndUsers(req, res) {
   const { term } = req.query
-  const { Match, Paginate, Index, Lambda, Let, Var, Get } = q
 
   const data = await serverClient.query(
     // for the sake of explanation, let's go step by step.

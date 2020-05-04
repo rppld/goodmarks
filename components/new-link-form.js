@@ -20,11 +20,12 @@ const NewLinkForm = () => {
       title: '',
       description: '',
       url: '',
+      tags: '',
     },
     onSubmit: handleSubmit,
   })
 
-  async function handleSubmit(values) {
+  async function handleSubmit({ tags, ...values }) {
     setError(null)
 
     try {
@@ -33,6 +34,7 @@ const NewLinkForm = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...values,
+          tags: tags.replace(/\s+/g, '').split(','),
           category: 'links',
         }),
       })
@@ -103,6 +105,14 @@ const NewLinkForm = () => {
           labelText="URL"
           placeholder="https://"
           value={formik.values.url}
+          onChange={formik.handleChange}
+        />
+
+        <Input
+          name="tags"
+          labelText="Tags"
+          placeholder="#covid19"
+          value={formik.values.tags}
           onChange={formik.handleChange}
         />
 
