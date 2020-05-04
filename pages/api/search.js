@@ -6,14 +6,18 @@ import fetch from 'isomorphic-unfetch'
 export default async (...args) => {
   const { context } = args[0].query
 
-  if (context === 'movies') {
-    return searchMovies(...args)
+  if (context === 'movie' || context === 'tv') {
+    return searchTMDb(...args, context)
   }
 
-  return searchHashtagsAndUsers(...args)
+  if (context === 'hashtags_and_users') {
+    return searchHashtagsAndUsers(...args)
+  }
+
+  return args[1].status(400).send('No context defined')
 }
 
-async function searchMovies(req, res) {
+async function searchTMDb(req, res, context) {
   const { term } = req.query
   const params = new URLSearchParams({
     api_key: process.env.TMDB_API_KEY,
@@ -21,7 +25,7 @@ async function searchMovies(req, res) {
     page: '1',
     include_adult: false,
   })
-  const url = `https://api.themoviedb.org/3/search/movie?${params.toString()}`
+  const url = `https://api.themoviedb.org/3/search/${context}?${params.toString()}`
   const data = await fetch(url)
   const json = await data.json()
   return res.status(200).json(json.results)

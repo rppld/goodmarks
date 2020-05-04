@@ -134,7 +134,12 @@ const NewMovieForm = () => {
           </MenuBar>
         </Form>
       ) : (
-        <MovieSearch onSelect={setSelection} />
+        <MovieSearch
+          onSelect={setSelection}
+          label="Movies"
+          placeholder="Jackie Brown"
+          searchContext="movie"
+        />
       )}
     </Layout>
   )

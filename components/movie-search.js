@@ -13,6 +13,7 @@ import { Star } from './icon'
 import debounce from 'lodash/debounce'
 import styles from './movie-search.module.css'
 import findIndex from 'lodash/findIndex'
+import autocompleteSearch from '../lib/autocomplete-search'
 
 function PlaceholderImage() {
   return (
@@ -24,7 +25,9 @@ function PlaceholderImage() {
 
 function MovieSearch(props) {
   const [searchTerm, setSearchTerm] = React.useState('')
-  const movies = useSearch(searchTerm)
+  const useAutocompleteSearch = autocompleteSearch(props.searchContext)
+  const results = useAutocompleteSearch(searchTerm)
+  const titleKey = props.searchContext === 'movie' ? 'title' : 'name'
 
   const handleChange = debounce((value) => {
     setSearchTerm(value)
@@ -32,15 +35,15 @@ function MovieSearch(props) {
 
   return (
     <Combobox
-      aria-label="Movies"
+      aria-label={props.label}
       onSelect={(val) => {
-        const selectedIndex = findIndex(movies, (movie) => movie.title === val)
-        props.onSelect(movies[selectedIndex])
+        const selectedIndex = findIndex(results, (res) => res[titleKey] === val)
+        props.onSelect(results[selectedIndex])
       }}
     >
       <Input
         onChange={(e) => handleChange(e.target.value)}
-        placeholder="Search movies"
+        placeholder={props.placeholder}
         as={ComboboxInput}
         help={
           <span
@@ -51,22 +54,18 @@ function MovieSearch(props) {
           />
         }
       />
-      {movies && (
-        <ComboboxPopover className="shadow-popup">
-          {movies.length > 0 ? (
+      {results && (
+        <ComboboxPopover>
+          {results.length > 0 ? (
             <ComboboxList>
-              {movies.map((movie, index) => (
-                <ComboboxOption
-                  key={movie.id}
-                  value={movie.title}
-                  data-index={index}
-                >
+              {results.map((result) => (
+                <ComboboxOption key={result.id} value={result[titleKey]}>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div className={styles.media}>
-                      {movie.poster_path ? (
+                      {result.poster_path ? (
                         <Image
-                          src={`https://image.tmdb.org/t/p/w220_and_h330_face/${movie['poster_path']}`}
-                          alt={`Poster for ${movie.title}`}
+                          src={`https://image.tmdb.org/t/p/w220_and_h330_face/${result['poster_path']}`}
+                          alt={`Poster for ${result[titleKey]}`}
                           className={styles.image}
                         />
                       ) : (
@@ -87,36 +86,6 @@ function MovieSearch(props) {
       )}
     </Combobox>
   )
-}
-
-function useSearch(searchTerm) {
-  const [results, setResults] = React.useState([])
-
-  React.useEffect(() => {
-    if (searchTerm.trim() !== '') {
-      let isFresh = true
-      fetchResults(searchTerm).then((results) => {
-        if (isFresh) setResults(results)
-      })
-      return () => (isFresh = false)
-    }
-  }, [searchTerm])
-
-  return results
-}
-
-const cache = {}
-async function fetchResults(value) {
-  if (cache[value]) {
-    return Promise.resolve(cache[value])
-  }
-
-  return fetch(`/api/search?context=movies&term=${value}`)
-    .then((res) => res.json())
-    .then((data) => {
-      cache[value] = data
-      return data
-    })
 }
 
 export default MovieSearch

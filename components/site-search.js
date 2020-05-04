@@ -8,10 +8,13 @@ import {
 } from '@reach/combobox'
 import debounce from 'lodash/debounce'
 import Input from './input'
+import autocompleteSearch from '../lib/autocomplete-search'
 
 function SiteSearch() {
   const [searchTerm, setSearchTerm] = React.useState('')
-  const users = useSearch(searchTerm)
+  const useAutocompleteSearch = autocompleteSearch('hashtags_and_users')
+  const users = useAutocompleteSearch(searchTerm)
+
   const handleChange = debounce((value) => {
     setSearchTerm(value)
   }, 250)
@@ -48,36 +51,6 @@ function SiteSearch() {
       )}
     </Combobox>
   )
-}
-
-function useSearch(searchTerm) {
-  const [results, setResults] = React.useState([])
-
-  React.useEffect(() => {
-    if (searchTerm.trim() !== '') {
-      let isFresh = true
-      fetchResults(searchTerm).then((results) => {
-        if (isFresh) setResults(results)
-      })
-      return () => (isFresh = false)
-    }
-  }, [searchTerm])
-
-  return results
-}
-
-const cache = {}
-async function fetchResults(value) {
-  if (cache[value]) {
-    return Promise.resolve(cache[value])
-  }
-
-  return fetch(`/api/search?term=${value}`)
-    .then((res) => res.json())
-    .then((data) => {
-      cache[value] = data
-      return data
-    })
 }
 
 export default SiteSearch
