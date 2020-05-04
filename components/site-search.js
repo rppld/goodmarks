@@ -28,7 +28,7 @@ function SiteSearch() {
     <Combobox aria-label="Cities">
       <Input
         onChange={(e) => handleChange(e.target.value)}
-        placeholder="Search hashtags and users"
+        placeholder="#covid19"
         as={ComboboxInput}
       />
       {users && (
@@ -36,7 +36,7 @@ function SiteSearch() {
           {users.length > 0 ? (
             <ComboboxList>
               {users.map((user) => (
-                <ComboboxOption key={user.ref['@ref'].id} value={user.name} />
+                <ComboboxOption key={user.id} value={user.name} />
               ))}
             </ComboboxList>
           ) : (

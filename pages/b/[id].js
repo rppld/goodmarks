@@ -1,11 +1,14 @@
 import React from 'react'
 import useSWR, { mutate } from 'swr'
+import Router from 'next/router'
 import PageTitle from '../../components/page-title'
 import Layout from '../../components/layout'
 import { useRouter } from 'next/router'
 import Input from '../../components/input'
 import Button from '../../components/button'
 import Text from '../../components/text'
+import Form from '../../components/form'
+import { MenuBar } from '../../components/menu-bar'
 import { H2 } from '../../components/heading'
 
 const Bookmark = () => {
@@ -16,6 +19,23 @@ const Bookmark = () => {
   // required because `useRouter` needs a few ms to be initialized.
   const { data, error } = useSWR(() => id && `/api/bookmarks?id=${id}`)
   const bookmark = data?.bookmarks[0]
+  const { data: viewerData = {} } = useSWR('/api/me')
+  const showDeleteOption =
+    data && viewerData && bookmark?.author?.id === viewerData.viewer?.id
+
+  async function handleDelete() {
+    try {
+      const response = await fetch(`/api/bookmarks?action=delete&id=${id}`, {
+        method: 'POST',
+      })
+
+      if (response.ok) {
+        Router.push('/')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -67,15 +87,19 @@ const Bookmark = () => {
         </PageTitle>
       )}
 
-      <h2>Comments</h2>
-      <ul>
-        {bookmark?.comments.map((comment) => (
-          <li key={comment.ref['@ref'].id}>{comment.text}</li>
-        ))}
-      </ul>
+      {bookmark?.comments.length > 0 && (
+        <>
+          <h2>Comments</h2>
+          <ul>
+            {bookmark.comments.map((comment) => (
+              <li key={comment.id}>{comment.text}</li>
+            ))}
+          </ul>
+        </>
+      )}
 
       <h2>Post a comment</h2>
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Input
           as="textarea"
           rows="6"
@@ -83,8 +107,22 @@ const Bookmark = () => {
           name="comment"
           ref={inputRef}
         />
-        <Button type="submit">Post</Button>
-      </form>
+
+        <MenuBar>
+          <Button type="submit" variant="primary">
+            Post
+          </Button>
+        </MenuBar>
+      </Form>
+
+      {showDeleteOption && (
+        <>
+          <h2>Danger zone</h2>
+          <Button variant="danger" onClick={handleDelete}>
+            Delete bookmark
+          </Button>
+        </>
+      )}
     </Layout>
   )
 }

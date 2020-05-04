@@ -4,6 +4,11 @@ import Link from 'next/link'
 import Layout from '../components/layout'
 import Input from '../components/input'
 import Button from '../components/button'
+import Form from '../components/form'
+import { H2 } from '../components/heading'
+import Text from '../components/text'
+import PageTitle from '../components/page-title'
+import { MenuBar } from '../components/menu-bar'
 import { mutate } from 'swr'
 import { useFormik } from 'formik'
 
@@ -41,11 +46,18 @@ function Login() {
 
   return (
     <Layout>
-      <Button as="a" href="/api/auth?action=oauth2&provider=google">
-        Continue with Google
-      </Button>
+      <PageTitle>
+        <H2 as="h1">Login</H2>
+        <Text meta>
+          Or{' '}
+          <Link href="/signup">
+            <a>create an account</a>
+          </Link>{' '}
+          if you don’t have one yet.
+        </Text>
+      </PageTitle>
 
-      <form onSubmit={formik.handleSubmit}>
+      <Form onSubmit={formik.handleSubmit}>
         <Input
           name="email"
           labelText="Email"
@@ -61,17 +73,15 @@ function Login() {
           onChange={formik.handleChange}
         />
 
-        <Button type="submit">Login</Button>
+        <MenuBar>
+          <Button as="a" href="/api/auth?action=oauth2&provider=google">
+            Continue with Google
+          </Button>
+          <Button type="submit">Login</Button>
+        </MenuBar>
 
         {error && <p>Error: {error}</p>}
-      </form>
-
-      <p>
-        No account yet?{' '}
-        <Link href="/signup">
-          <a>Signup</a>
-        </Link>
-      </p>
+      </Form>
     </Layout>
   )
 }

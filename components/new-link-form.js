@@ -31,7 +31,10 @@ const NewLinkForm = () => {
       const response = await fetch('/api/bookmarks?action=create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          category: 'links',
+        }),
       })
 
       if (response.status !== 200) {
