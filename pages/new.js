@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { withAuthSync } from '../lib/auth'
-import profileOrRedirect from '../lib/profile-or-redirect'
+import getViewerOrRedirect from '../lib/get-viewer-or-redirect'
 import { MenuBar, MenuBarNav, MenuBarNavItem } from '../components/menu-bar'
 import Layout from '../components/layout'
 import CategorySelection from '../components/category-selection'
@@ -48,7 +48,7 @@ const New = ({ viewer }) => {
 }
 
 New.getInitialProps = async (ctx) => {
-  const viewer = await profileOrRedirect(ctx)
+  const viewer = await getViewerOrRedirect(ctx)
   return { viewer }
 }
 
