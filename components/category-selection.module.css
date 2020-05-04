@@ -7,21 +7,14 @@
 
 .category {
   position: relative;
-  color: var(--black);
-  background-color: hsla(0, 0%, 0%, 0.05);
+  color: var(--button-label-color);
+  background-color: var(--button-background-color);
   display: flex;
   padding: var(--space-16);
   border-radius: var(--space-12);
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-@media (prefers-color-scheme: dark) {
-  .category {
-    color: var(--white);
-    background-color: hsla(100, 100%, 100%, 0.1);
-  }
 }
 
 .label {

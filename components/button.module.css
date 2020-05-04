@@ -1,5 +1,6 @@
 .base {
-  background-color: hsla(0, 0%, 0%, 0.05);
+  background-color: var(--button-background-color);
+  color: var(--button-label-color);
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -7,15 +8,8 @@
   height: var(--space-40);
   padding-left: var(--space-12);
   padding-right: var(--space-12);
-  color: var(--text-color);
   font-weight: var(--fw-medium);
   font-size: inherit;
-}
-
-@media (prefers-color-scheme: dark) {
-  .base {
-    background-color: hsla(100, 100%, 100%, 0.1);
-  }
 }
 
 .primary {

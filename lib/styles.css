@@ -78,9 +78,26 @@
   --red-darker: hsl(2, 85%, 38%);
   --red-darkest: hsl(2, 85%, 33%);
 
-  --grey: #686253;
-  --black: #0c1212;
-  --white: #fcfaf2;
+  --grey: hsla(43, 11%, 37%, 1);
+
+  --black: hsla(180, 20%, 6%, 1);
+  --black-5: hsla(180, 20%, 6%, 0.05);
+  --black-10: hsla(180, 20%, 6%, 0.1);
+  --black-20: hsla(180, 20%, 6%, 0.2);
+  --black-30: hsla(180, 20%, 6%, 0.3);
+  --black-40: hsla(180, 20%, 6%, 0.4);
+  --black-50: hsla(180, 20%, 6%, 0.5);
+  --black-90: hsla(180, 20%, 6%, 0.9);
+
+  --white: hsla(60, 100%, 99%, 1);
+  --white-5: hsla(60, 100%, 99%, 0.05);
+  --white-10: hsla(60, 100%, 99%, 0.1);
+  --white-20: hsla(60, 100%, 99%, 0.2);
+  --white-25: hsla(60, 100%, 99%, 0.25);
+  --white-30: hsla(60, 100%, 99%, 0.3);
+  --white-40: hsla(60, 100%, 99%, 0.4);
+  --white-50: hsla(60, 100%, 99%, 0.5);
+  --white-90: hsla(60, 100%, 99%, 0.9);
 
   --color-primary: var(--blue);
   --color-success: var(--green);
@@ -88,12 +105,24 @@
   --color-danger: var(--red);
   --body-background-color: var(--white);
   --text-color: var(--black);
+  --text-color-meta: var(--black-50);
+  --button-label-color: var(--black);
+  --button-background-color: var(--black-5);
+  --input-border-color: var(--black-10);
+  --input-background-color: #fff;
+  --input-highlight-color: var(--black-5);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --body-background-color: var(--black);
     --text-color: var(--white);
+    --text-color-meta: var(--white-50);
+    --button-label-color: var(--white);
+    --button-background-color: var(--white-10);
+    --input-border-color: var(--white-20);
+    --input-background-color: hsla(180, 20%, 3%, 1);
+    --input-highlight-color: var(--white-10);
   }
 }
 
@@ -167,10 +196,17 @@ body {
 [data-reach-combobox-popover] {
   overflow: hidden;
   border-radius: var(--space-12);
-  box-shadow: rgba(101, 119, 134, 0.2) 0px 0px 15px,
-    rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+  box-shadow: var(--black-20) 0 0 15px, var(--black-10) 0 0 3px 1px;
   border: 0;
   padding: 0;
+  background-color: var(--input-background-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-reach-menu-list],
+  [data-reach-combobox-popover] {
+    box-shadow: var(--white-20) 0 0 15px, var(--white-10) 0 0 3px 1px;
+  }
 }
 
 [data-reach-combobox-popover] > span, /* No results item */
@@ -182,11 +218,13 @@ body {
 
 [data-reach-combobox-option]:not(:first-child),
 [data-reach-menu-item]:not(:first-child) {
-  border-top: 1px solid hsl(0, 0%, 90%);
+  border-top: 1px solid var(--input-border-color);
 }
 
 [data-reach-menu-item][data-selected],
+[data-reach-combobox-option][data-highlighted],
+[data-reach-combobox-option][data-highlighted]:hover,
 [data-reach-combobox-option]:hover {
-  background: hsl(0, 0%, 95%);
+  background-color: var(--input-highlight-color);
   color: inherit;
 }

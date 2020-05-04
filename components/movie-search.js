@@ -42,7 +42,14 @@ function MovieSearch(props) {
         onChange={(e) => handleChange(e.target.value)}
         placeholder="Search movies"
         as={ComboboxInput}
-        help="Search powered by TMDB"
+        help={
+          <span
+            dangerouslySetInnerHTML={{
+              __html:
+                "Powered by <a href='https://www.themoviedb.org'>The Movie Database (TMDb)</a>",
+            }}
+          />
+        }
       />
       {movies && (
         <ComboboxPopover className="shadow-popup">
