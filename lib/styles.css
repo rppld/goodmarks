@@ -214,6 +214,7 @@ body {
 [data-reach-menu-item] {
   margin: 0 !important;
   padding: var(--space-12);
+  white-space: pre; /* Otherwise spaces aren’t rendered */
 }
 
 [data-reach-combobox-option]:not(:first-child),
