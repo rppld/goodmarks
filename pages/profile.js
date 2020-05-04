@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { withAuthSync } from '../lib/auth'
-import profileOrRedirect from '../lib/profile-or-redirect'
+import getViewerOrRedirect from '../lib/get-viewer-or-redirect'
 import PageTitle from '../components/page-title'
 import Layout from '../components/layout'
 import Text from '../components/text'
@@ -40,7 +40,7 @@ const Profile = (props) => {
 }
 
 Profile.getInitialProps = async (ctx) => {
-  const viewer = await profileOrRedirect(ctx)
+  const viewer = await getViewerOrRedirect(ctx)
   return { viewer }
 }
 

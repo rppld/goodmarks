@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { withAuthSync } from '../../lib/auth'
-import profileOrRedirect from '../../lib/profile-or-redirect'
+import getViewerOrRedirect from '../../lib/get-viewer-or-redirect'
 import NewMovieForm from '../../components/new-movie-form'
 import NewTVShowForm from '../../components/new-tv-show-form'
 import NewLinkForm from '../../components/new-link-form'
@@ -26,7 +26,7 @@ const Category = () => {
 }
 
 Category.getInitialProps = async (ctx) => {
-  const viewer = await profileOrRedirect(ctx)
+  const viewer = await getViewerOrRedirect(ctx)
   return { viewer }
 }
 
