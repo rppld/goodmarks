@@ -3,13 +3,28 @@ import { serverClient } from '../../lib/fauna'
 import { flattenDataKeys } from '../../lib/fauna/utils'
 import fetch from 'isomorphic-unfetch'
 
-const { Match, Paginate, Index, Lambda, Let, Var, Get } = q
+const {
+  Match,
+  Paginate,
+  Index,
+  Lambda,
+  Let,
+  Var,
+  Get,
+  Select,
+  Ref,
+  Collection,
+} = q
 
 export default async (...args) => {
   const { context } = args[0].query
 
   if (context === 'movie' || context === 'tv') {
     return searchTMDb(...args, context)
+  }
+
+  if (context === 'user') {
+    return searchUser(...args)
   }
 
   if (context === 'hashtags_and_users') {
@@ -31,6 +46,30 @@ async function searchTMDb(req, res, context) {
   const data = await fetch(url)
   const json = await data.json()
   return res.status(200).json(json.results)
+}
+
+async function searchUser(req, res) {
+  const { name } = req.query
+
+  const data = await serverClient.query(
+    Let(
+      {
+        setRef: Match(Index('users_by_name'), name.toLowerCase()),
+        userRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
+        user: Get(Var('userRef')),
+        bookmarks: q.Map(
+          Paginate(Match(Index('bookmarks_by_author'), Var('userRef'))),
+          Lambda('nextRef', Get(Var('nextRef')))
+        ),
+      },
+      {
+        user: Var('user'),
+        bookmarks: Var('bookmarks'),
+      }
+    )
+  )
+
+  return res.status(200).json(flattenDataKeys(data))
 }
 
 async function searchHashtagsAndUsers(req, res) {

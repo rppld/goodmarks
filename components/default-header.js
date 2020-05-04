@@ -60,7 +60,9 @@ const DefaultMenuBar = () => {
                   <Avatar src={viewer.picture} />
                 </MenuButton>
                 <MenuList>
-                  <MenuItem onSelect={() => Router.push('/profile')}>
+                  <MenuItem
+                    onSelect={() => Router.push('/[user]', `/${viewer.name}`)}
+                  >
                     Profile
                   </MenuItem>
                   <MenuItem onSelect={handleLogout}>Logout</MenuItem>

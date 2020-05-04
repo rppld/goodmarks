@@ -15,8 +15,6 @@ const Bookmark = () => {
   const inputRef = React.useRef(null)
   const router = useRouter()
   const { id } = router.query
-  // Need to pass a function to see when `id` is ready. Check is
-  // required because `useRouter` needs a few ms to be initialized.
   const { data, error } = useSWR(() => id && `/api/bookmarks?id=${id}`)
   const bookmark = data?.bookmarks[0]
   const { data: viewerData = {} } = useSWR('/api/me')

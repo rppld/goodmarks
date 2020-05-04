@@ -28,6 +28,8 @@ const NewTVShowForm = () => {
     onSubmit: handleSubmit,
   })
 
+  console.log(selection)
+
   function resetSelection() {
     return setSelection(null)
   }
@@ -107,12 +109,12 @@ const NewTVShowForm = () => {
           <span className={styles.movie}>
             <Image
               src={`https://image.tmdb.org/t/p/w220_and_h330_face/${selection['poster_path']}`}
-              alt={`Poster for ${selection.title}`}
+              alt={`Poster for ${selection.name}`}
               className={styles.image}
             />
             <span>
-              <H4>{selection.title}</H4>
-              <Text meta>{getYear(parseISO(selection['release_date']))}</Text>
+              <H4>{selection.name}</H4>
+              <Text meta>{getYear(parseISO(selection['first_air_date']))}</Text>
             </span>
           </span>
 

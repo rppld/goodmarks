@@ -25,7 +25,7 @@ const {
 } = q
 
 export default async (...args) => {
-  const { id, user, action } = args[0].query
+  const { id, action } = args[0].query
 
   if (action === 'create') {
     return createBookmark(...args)
@@ -41,10 +41,6 @@ export default async (...args) => {
 
   if (id) {
     return getBookmarkById(...args)
-  }
-
-  if (user) {
-    return getBookmarksByUser(...args)
   }
 
   return getAllBookmarks(...args)
@@ -240,23 +236,6 @@ async function getBookmarkById(req, res) {
         author: flattenDataKeys(data.author),
       },
     ],
-  })
-}
-
-async function getBookmarksByUser(req, res) {
-  const { user: userId } = req.query
-
-  const response = await serverClient.query(
-    q.Map(
-      Paginate(
-        Match(Index('bookmarks_by_author'), Ref(Collection('Users'), userId))
-      ),
-      Lambda('nextRef', Get(Var('nextRef')))
-    )
-  )
-
-  return res.status(200).json({
-    bookmarks: response.data.map(flattenDataKeys),
   })
 }
 

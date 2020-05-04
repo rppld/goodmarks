@@ -8,12 +8,13 @@ import {
 } from '@reach/combobox'
 import debounce from 'lodash/debounce'
 import Input from './input'
+import findIndex from 'lodash/findIndex'
 import autocompleteSearch from '../lib/autocomplete-search'
 
 function SiteSearch() {
   const [searchTerm, setSearchTerm] = React.useState('')
   const useAutocompleteSearch = autocompleteSearch('hashtags_and_users')
-  const users = useAutocompleteSearch(searchTerm)
+  const results = useAutocompleteSearch(searchTerm)
 
   const handleChange = debounce((value) => {
     setSearchTerm(value)
@@ -28,17 +29,23 @@ function SiteSearch() {
   }, [])
 
   return (
-    <Combobox aria-label="Cities">
+    <Combobox
+      aria-label="Cities"
+      onSelect={(val) => {
+        const selectedIndex = findIndex(results, (res) => res.name === val)
+        console.log(results[selectedIndex])
+      }}
+    >
       <Input
         onChange={(e) => handleChange(e.target.value)}
         placeholder="#covid19"
         as={ComboboxInput}
       />
-      {users && (
+      {results && (
         <ComboboxPopover>
-          {users.length > 0 ? (
+          {results.length > 0 ? (
             <ComboboxList>
-              {users.map((user) => (
+              {results.map((user) => (
                 <ComboboxOption key={user.id} value={user.name} />
               ))}
             </ComboboxList>

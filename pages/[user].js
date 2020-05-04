@@ -1,25 +1,27 @@
 import React from 'react'
 import Link from 'next/link'
-import { withAuthSync } from '../lib/auth'
-import getViewerOrRedirect from '../lib/get-viewer-or-redirect'
 import PageTitle from '../components/page-title'
 import Layout from '../components/layout'
 import Text from '../components/text'
 import { H2 } from '../components/heading'
 import useSWR from 'swr'
+import { useRouter } from 'next/router'
 
-const Profile = (props) => {
-  const { viewer } = props
-  const { data, error } = useSWR(`/api/bookmarks?user=${viewer.id}`)
+const User = () => {
+  const router = useRouter()
+  const { user: name } = router.query
+  const { data, error } = useSWR(
+    () => name && `/api/search?context=user&name=${name}`
+  )
 
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Your profile</H2>
-        <Text meta>Your user ID is: {viewer.id}</Text>
+        <H2 as="h1">@{data?.user?.name}</H2>
+        <Text meta>User ID: {data?.user?.id}</Text>
       </PageTitle>
 
-      <h2>Your bookmarks</h2>
+      <h2>Bookmarks</h2>
       {error && <div>failed to load</div>}
 
       {!data ? (
@@ -39,9 +41,4 @@ const Profile = (props) => {
   )
 }
 
-Profile.getInitialProps = async (ctx) => {
-  const viewer = await getViewerOrRedirect(ctx)
-  return { viewer }
-}
-
-export default withAuthSync(Profile)
+export default User
