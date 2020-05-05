@@ -22,7 +22,6 @@ function SiteSearch() {
   }, 250)
 
   function handleSelect(result = {}) {
-    return console.log(result)
     if (typeof result.handle !== 'undefined') {
       return Router.push('/[user]', `/${result.handle}`)
     }
