@@ -24,11 +24,10 @@ const NewTVShowForm = () => {
   const formik = useFormik({
     initialValues: {
       description: '',
+      tags: '',
     },
     onSubmit: handleSubmit,
   })
-
-  console.log(selection)
 
   function resetSelection() {
     return setSelection(null)
@@ -36,7 +35,7 @@ const NewTVShowForm = () => {
 
   async function handleSubmit(values) {
     try {
-      const { title, ...details } = selection
+      const { name: title, ...details } = selection
       const response = await fetch('/api/bookmarks?action=create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -44,6 +43,7 @@ const NewTVShowForm = () => {
           title,
           category: 'tv-shows',
           description: values.description,
+          tags: values.tags.replace(/\s+/g, '').split(','),
           details,
         }),
       })
@@ -126,6 +126,14 @@ const NewTVShowForm = () => {
             as="textarea"
             rows="6"
             value={formik.values.description}
+            onChange={formik.handleChange}
+          />
+
+          <Input
+            name="tags"
+            labelText="Tags"
+            placeholder="#covid19"
+            value={formik.values.tags}
             onChange={formik.handleChange}
           />
 

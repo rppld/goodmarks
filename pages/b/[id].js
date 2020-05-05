@@ -16,10 +16,11 @@ const Bookmark = () => {
   const router = useRouter()
   const { id } = router.query
   const { data, error } = useSWR(() => id && `/api/bookmarks?id=${id}`)
-  const bookmark = data?.bookmarks[0]
+  const { bookmark = {}, user = {} } =
+    data?.bookmarks?.length > 0 ? data?.bookmarks[0] : {}
   const { data: viewerData = {} } = useSWR('/api/me')
   const showDeleteOption =
-    data && viewerData && bookmark?.author?.id === viewerData.viewer?.id
+    data && viewerData && user?.id === viewerData.viewer?.id
 
   async function handleDelete() {
     try {
@@ -85,7 +86,7 @@ const Bookmark = () => {
         </PageTitle>
       )}
 
-      {bookmark?.comments.length > 0 && (
+      {bookmark?.comments?.length > 0 && (
         <>
           <h2>Comments</h2>
           <ul>

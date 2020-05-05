@@ -24,6 +24,7 @@ const NewMovieForm = () => {
   const formik = useFormik({
     initialValues: {
       description: '',
+      tags: '',
     },
     onSubmit: handleSubmit,
   })
@@ -42,6 +43,7 @@ const NewMovieForm = () => {
           title,
           category: 'movies',
           description: values.description,
+          tags: values.tags.replace(/\s+/g, '').split(','),
           details,
         }),
       })
@@ -124,6 +126,14 @@ const NewMovieForm = () => {
             as="textarea"
             rows="6"
             value={formik.values.description}
+            onChange={formik.handleChange}
+          />
+
+          <Input
+            name="tags"
+            labelText="Tags"
+            placeholder="#covid19"
+            value={formik.values.tags}
             onChange={formik.handleChange}
           />
 

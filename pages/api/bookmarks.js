@@ -1,5 +1,5 @@
 import { query as q } from 'faunadb'
-import { serverClient, faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
+import { faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
 import { flattenDataKeys } from '../../lib/fauna/utils'
 import cookie from 'cookie'
 
@@ -10,6 +10,7 @@ const {
   Select,
   Get,
   Identity,
+  Contains,
   Now,
   Paginate,
   Let,
@@ -25,7 +26,7 @@ const {
 } = q
 
 export default async (...args) => {
-  const { id, action } = args[0].query
+  const { id, username, action } = args[0].query
 
   if (action === 'create') {
     return createBookmark(...args)
@@ -40,10 +41,130 @@ export default async (...args) => {
   }
 
   if (id) {
-    return getBookmarkById(...args)
+    return getBookmarksByReference(...args)
+  }
+
+  if (username) {
+    return getBookmarksByUsername(...args)
   }
 
   return getAllBookmarks(...args)
+}
+
+async function getBookmarksByUsername(req, res) {
+  const { username } = req.query
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  const data = await faunaClient(faunaSecret).query(
+    Let(
+      {
+        setRef: Match(Index('users_by_name'), username.toLowerCase()),
+        authorRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
+        author: Get(Var('authorRef')),
+        bookmarks: getBookmarksWithUsersMapGetGeneric(
+          q.Map(
+            Paginate(Match(Index('bookmarks_by_author'), Var('authorRef'))),
+            // The index contains two values so our lambda also takes two values.
+            Lambda(['createdTime', 'ref'], Var('ref'))
+          )
+        ),
+      },
+      {
+        author: Var('author'),
+        bookmarks: Var('bookmarks'),
+      }
+    )
+  )
+
+  return res.status(200).json(flattenDataKeys(data))
+}
+
+function getBookmarksWithUsersMapGetGeneric(BookmarksSetRefOrArray, depth = 1) {
+  // Let's do this with a let to clearly show the separate steps.
+  return q.Map(
+    // For all bookmarks this is just
+    // Paginate(Documents(Collection('Bookmarks'))), else it's a match
+    // on an index.
+    BookmarksSetRefOrArray,
+    Lambda((ref) =>
+      Let(
+        {
+          bookmark: Get(Var('ref')),
+          original: If(
+            Contains(['data', 'original'], Var('bookmark')),
+            // Repost bookmark, get original bookmark's data. We want to
+            // get the original as well in the same structure, let's
+            // just use recursion to construct that query, we could
+            // get the whole rebookmark chain like this, it looks a
+            // bit like traversing a graph. We are only interested in
+            // the first rebookmark so we pas depth 1 as default,
+            // depth is meant to make sure sure we don't loop
+            // endelessly in javascript.
+            depth > 0
+              ? Select(
+                  [0],
+                  getBookmarksWithUsersMapGetGeneric(
+                    [Select(['data', 'original'], Var('bookmark'))],
+                    depth - 1
+                  )
+                )
+              : false,
+            // normal bookmark, there is no original
+            false
+          ),
+          // Get the user that wrote the bookmark.
+          user: Get(Select(['data', 'author'], Var('bookmark'))),
+          // Get the account via identity
+          account: Get(Identity()),
+          // Get the user that is currently logged in.
+          currentUserRef: Select(['data', 'user'], Var('account')),
+          // Get the original bookmark
+          // Get the statistics for the bookmark
+          bookmarkStatsMatch: Match(
+            Index('bookmarkstats_by_user_and_bookmark'),
+            Var('currentUserRef'),
+            Select(['ref'], Var('bookmark'))
+          ),
+          followerStatsMatch: Match(
+            Index('followerstats_by_author_and_follower'),
+            Var('currentUserRef'),
+            Select(['ref'], Var('bookmark'))
+          ),
+          bookmarkStats: If(
+            Exists(Var('bookmarkStatsMatch')),
+            Get(Var('bookmarkStatsMatch')),
+            {}
+          ),
+          // Get comments, index has two values so lambda has two values
+          comments: q.Map(
+            Paginate(Match(Index('comments_by_bookmark_ordered'), Var('ref'))),
+            Lambda(
+              ['ts', 'commentRef'],
+              Let(
+                {
+                  comment: Get(Var('commentRef')),
+                  author: Get(Select(['data', 'author'], Var('comment'))),
+                },
+                {
+                  comment: Var('comment'),
+                  author: Var('author'),
+                }
+              )
+            )
+          ),
+        },
+        // Return our elements
+        {
+          user: Var('user'),
+          original: Var('original'),
+          bookmark: Var('bookmark'),
+          bookmarkStats: Var('bookmarkStats'),
+          comments: Var('comments'),
+        }
+      )
+    )
+  )
 }
 
 async function createComment(req, res) {
@@ -131,9 +252,15 @@ async function deleteBookmark(req, res) {
           q.Do(
             // 2. Remove all the comments on the bookmark.
             q.Map(
-              Paginate(Match(Index('comments_by_entity'), Var('bookmarkRef')), {
-                size: 100000,
-              }),
+              Paginate(
+                Match(
+                  Index('comments_by_bookmark_ordered'),
+                  Var('bookmarkRef')
+                ),
+                {
+                  size: 100000,
+                }
+              ),
               Lambda('x', Delete(Var('x')))
             ),
             // 3. Remove bookmark itself.
@@ -153,6 +280,7 @@ async function deleteBookmark(req, res) {
 
 async function createBookmark(req, res) {
   const { title, description, details, category, tags } = req.body
+  console.log(tags)
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
   const {
@@ -190,6 +318,7 @@ async function createBookmark(req, res) {
             description,
             likes: 0,
             comments: 0,
+            reposts: 0,
             hashtags: Var('hashtagRefs'),
             category: Var('category'),
             details,
@@ -207,43 +336,42 @@ async function createBookmark(req, res) {
   }
 }
 
-async function getBookmarkById(req, res) {
+async function getBookmarksByReference(req, res) {
   const { id } = req.query
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
-  const data = await serverClient.query(
+  const data = await faunaClient(faunaSecret).query(
     Let(
       {
         bookmarkRef: Ref(Collection('Bookmarks'), id),
-        bookmark: Get(Var('bookmarkRef')),
-        author: Get(Select(['data', 'author'], Var('bookmark'))),
-        comments: q.Map(
-          Paginate(Match(Index('comments_by_entity'), Var('bookmarkRef'))),
-          Lambda('nextRef', Get(Var('nextRef')))
+        bookmarks: getBookmarksWithUsersMapGetGeneric(
+          q.Map(
+            Paginate(
+              Match(Index('bookmarks_by_reference'), Var('bookmarkRef'))
+            ),
+            Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
+          )
         ),
       },
       {
-        bookmark: Var('bookmark'),
-        author: Var('author'),
-        comments: Var('comments'),
+        bookmarks: Var('bookmarks'),
       }
     )
   )
-  return res.status(200).json({
-    bookmarks: [
-      {
-        ...flattenDataKeys(data.bookmark),
-        comments: flattenDataKeys(data.comments),
-        author: flattenDataKeys(data.author),
-      },
-    ],
-  })
+  return res.status(200).json(flattenDataKeys(data))
 }
 
 async function getAllBookmarks(req, res) {
-  const response = await serverClient.query(
-    q.Map(
-      Paginate(Match(Index('all_bookmarks'))),
-      Lambda('nextRef', Get(Var('nextRef')))
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  const response = await faunaClient(faunaSecret).query(
+    getBookmarksWithUsersMapGetGeneric(
+      q.Map(
+        Paginate(Match(Index('all_bookmarks'))),
+        Lambda(['createdTime', 'ref'], Var('ref'))
+      )
     )
   )
 

@@ -20,7 +20,7 @@ const Home = () => {
         <div>loading...</div>
       ) : (
         <ol>
-          {data.bookmarks.map((bookmark) => (
+          {data.bookmarks.map(({ bookmark }) => (
             <li key={bookmark.id}>
               <Link href="/b/[id]" as={`/b/${bookmark.id}`}>
                 <a>{bookmark.title}</a>

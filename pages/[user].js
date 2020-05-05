@@ -11,14 +11,14 @@ const User = () => {
   const router = useRouter()
   const { user: name } = router.query
   const { data, error } = useSWR(
-    () => name && `/api/search?context=user&name=${name}`
+    () => name && `/api/bookmarks?username=${name}`
   )
 
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">@{data?.user?.name}</H2>
-        <Text meta>User ID: {data?.user?.id}</Text>
+        <H2 as="h1">@{name}</H2>
+        <Text meta>User ID: {data?.author?.id}</Text>
       </PageTitle>
 
       <h2>Bookmarks</h2>
@@ -27,15 +27,19 @@ const User = () => {
       {!data ? (
         <div>loading...</div>
       ) : (
-        <ol>
-          {data.bookmarks.map((bookmark) => (
-            <li key={bookmark.id}>
-              <Link href="/b/[id]" as={`/b/${bookmark.id}`}>
-                <a>{bookmark.title}</a>
-              </Link>
-            </li>
-          ))}
-        </ol>
+        <>
+          {data.bookmarks.length > 0 && (
+            <ol>
+              {data.bookmarks.map(({ bookmark }) => (
+                <li key={bookmark.id}>
+                  <Link href="/b/[id]" as={`/b/${bookmark.id}`}>
+                    <a>{bookmark.title}</a>
+                  </Link>
+                </li>
+              ))}
+            </ol>
+          )}
+        </>
       )}
     </Layout>
   )
