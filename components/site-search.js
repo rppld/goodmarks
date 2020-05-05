@@ -6,6 +6,7 @@ import {
   ComboboxList,
   ComboboxOption,
 } from '@reach/combobox'
+import Router from 'next/router'
 import debounce from 'lodash/debounce'
 import Input from './input'
 import findIndex from 'lodash/findIndex'
@@ -20,6 +21,15 @@ function SiteSearch() {
     setSearchTerm(value)
   }, 250)
 
+  function handleSelect(result = {}) {
+    return console.log(result)
+    if (typeof result.handle !== 'undefined') {
+      return Router.push('/[user]', `/${result.handle}`)
+    }
+
+    return Router.push('/tags/[tag]', `/tags/${result.name}`)
+  }
+
   React.useEffect(() => {
     return function cleanup() {
       // Cancel any leftover calls before unmounting
@@ -33,7 +43,7 @@ function SiteSearch() {
       aria-label="Cities"
       onSelect={(val) => {
         const selectedIndex = findIndex(results, (res) => res.name === val)
-        console.log(results[selectedIndex])
+        handleSelect(results[selectedIndex])
       }}
     >
       <Input

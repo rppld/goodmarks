@@ -61,7 +61,7 @@ const DefaultMenuBar = () => {
                 </MenuButton>
                 <MenuList>
                   <MenuItem
-                    onSelect={() => Router.push('/[user]', `/${viewer.name}`)}
+                    onSelect={() => Router.push('/[user]', `/${viewer.handle}`)}
                   >
                     Profile
                   </MenuItem>

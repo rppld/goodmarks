@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "fauna": "node ./scripts/fauna/index.js"
   },
   "dependencies": {
     "@reach/combobox": "^0.10.1",

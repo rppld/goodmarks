@@ -1,4 +1,5 @@
-import { query as q } from 'faunadb'
+const faunadb = require('faunadb')
+const q = faunadb.query
 
 const {
   CreateIndex,
@@ -19,10 +20,9 @@ const {
   Filter,
   GT,
   Union,
-  Distinct,
 } = q
 
-function WordPartGenerator(WordVar) {
+function getWordParts(wordVar) {
   return Let(
     {
       indexes: q.Map(
@@ -31,7 +31,7 @@ function WordPartGenerator(WordVar) {
         // [0, 1] would result in the word itself and all ngrams that
         // are one character shorter, etc.
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-        Lambda('index', Subtract(Length(WordVar), Var('index')))
+        Lambda('index', Subtract(Length(wordVar), Var('index')))
       ),
       indexesFiltered: Filter(
         Var('indexes'),
@@ -40,38 +40,48 @@ function WordPartGenerator(WordVar) {
       ),
       ngramsArray: q.Map(
         Var('indexesFiltered'),
-        Lambda('l', NGram(LowerCase(WordVar), Var('l'), Var('l')))
+        Lambda('l', NGram(LowerCase(wordVar), Var('l'), Var('l')))
       ),
     },
     Var('ngramsArray')
   )
 }
 
-const CreateHashtagsAndUsersByWordpartsWithBinding = CreateIndex({
+const createHashtagsAndUsersByWordpartsWithBinding = CreateIndex({
   name: 'hashtags_and_users_by_wordparts',
   // we actually want to sort to get the shortest word that matches
   // first.
   source: [
     {
-      // If your hashtags have the same property that you want to
-      // access you can pass a list to the collection.
-      collection: [Collection('Hashtags'), Collection('Users')],
+      collection: Collection('Hashtags'),
       fields: {
         length: Query(
-          Lambda(
-            'hashtagOrUser',
-            Length(Select(['data', 'name'], Var('hashtagOrUser')))
-          )
+          Lambda('hashtag', Length(Select(['data', 'name'], Var('hashtag'))))
         ),
         wordparts: Query(
           Lambda(
-            'hashtagOrUser',
-            Distinct(
-              Union(
-                WordPartGenerator(
-                  Select(['data', 'name'], Var('hashtagOrUser'))
-                )
-              )
+            'hashtag',
+            Union(getWordParts(Select(['data', 'name'], Var('hashtag'))))
+          )
+        ),
+      },
+    },
+    {
+      collection: Collection('Users'),
+      fields: {
+        length: Query(
+          Lambda('user', Length(Select(['data', 'name'], Var('user'))))
+        ),
+        wordparts: Query(
+          Lambda(
+            'user',
+            Union(
+              // We'll search both on the name and the handle.
+              // TODO: This is currently broken for users that don’t
+              // have a name. For this to work, both `name` and
+              // `handle` need to be defined.
+              Union(getWordParts(Select(['data', 'handle'], Var('user')))),
+              Union(getWordParts(Select(['data', 'name'], Var('user'))))
             )
           )
         ),
@@ -103,7 +113,7 @@ async function createSearchIndexes(client) {
     If(
       Exists(Index('hashtags_and_users_by_wordparts')),
       true,
-      CreateHashtagsAndUsersByWordpartsWithBinding
+      createHashtagsAndUsersByWordpartsWithBinding
     )
   )
 }
@@ -112,10 +122,10 @@ async function deleteSearchIndexes(client) {
   await client.query(
     If(
       Exists(Index('hashtags_and_users_by_wordparts')),
-      true,
-      Delete(Index('hashtags_and_users_by_wordparts'))
+      Delete(Index('hashtags_and_users_by_wordparts')),
+      true
     )
   )
 }
 
-export { createSearchIndexes, deleteSearchIndexes }
+module.exports = { createSearchIndexes, deleteSearchIndexes }

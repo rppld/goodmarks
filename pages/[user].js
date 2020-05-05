@@ -9,15 +9,16 @@ import { useRouter } from 'next/router'
 
 const User = () => {
   const router = useRouter()
-  const { user: name } = router.query
+  const { user: handle } = router.query
+  console.log(handle)
   const { data, error } = useSWR(
-    () => name && `/api/bookmarks?username=${name}`
+    () => handle && `/api/bookmarks?handle=${handle}`
   )
 
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">@{name}</H2>
+        <H2 as="h1">@{handle}</H2>
         <Text meta>User ID: {data?.author?.id}</Text>
       </PageTitle>
 

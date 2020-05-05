@@ -26,7 +26,7 @@ const {
 } = q
 
 export default async (...args) => {
-  const { id, username, action } = args[0].query
+  const { id, handle, action } = args[0].query
 
   if (action === 'create') {
     return createBookmark(...args)
@@ -44,22 +44,22 @@ export default async (...args) => {
     return getBookmarksByReference(...args)
   }
 
-  if (username) {
-    return getBookmarksByUsername(...args)
+  if (handle) {
+    return getBookmarksByUserHandle(...args)
   }
 
   return getAllBookmarks(...args)
 }
 
-async function getBookmarksByUsername(req, res) {
-  const { username } = req.query
+async function getBookmarksByUserHandle(req, res) {
+  const { handle } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
   const data = await faunaClient(faunaSecret).query(
     Let(
       {
-        setRef: Match(Index('users_by_name'), username.toLowerCase()),
+        setRef: Match(Index('users_by_handle'), handle.toLowerCase()),
         authorRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
         author: Get(Var('authorRef')),
         bookmarks: getBookmarksWithUsersMapGetGeneric(

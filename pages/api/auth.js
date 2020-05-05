@@ -77,7 +77,7 @@ async function handleOauth2(req, res) {
           {
             user: Create(Collection('Users'), {
               data: {
-                name,
+                firstName: name,
                 picture,
               },
             }),
@@ -127,11 +127,11 @@ async function handleOauth2(req, res) {
 }
 
 async function handleSignup(req, res) {
-  const { name, email, password } = await req.body
+  const { username, email, password } = await req.body
 
   try {
-    if (!name || !email || !password) {
-      throw new Error('Email and password must be provided.')
+    if (!username || !email || !password) {
+      throw new Error('Username, email and password must be provided.')
     }
     console.log(`email: ${email} trying to create user.`)
 
@@ -143,7 +143,7 @@ async function handleSignup(req, res) {
           {
             user: Create(Collection('Users'), {
               data: {
-                name,
+                handle: username,
               },
             }),
             account: Select(
