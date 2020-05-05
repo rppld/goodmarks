@@ -2,27 +2,12 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { withAuthSync } from '../../lib/auth'
 import getViewerOrRedirect from '../../lib/get-viewer-or-redirect'
-import NewMovieForm from '../../components/new-movie-form'
-import NewTVShowForm from '../../components/new-tv-show-form'
-import NewLinkForm from '../../components/new-link-form'
-
-function getCategoryUI(handle) {
-  switch (handle) {
-    case 'movie':
-      return <NewMovieForm />
-    case 'tv-show':
-      return <NewTVShowForm />
-    case 'link':
-      return <NewLinkForm />
-    default:
-      return <NewLinkForm />
-  }
-}
+import NewBookmarkForm from '../../components/new-bookmark-form'
 
 const Category = () => {
   const router = useRouter()
   const { category } = router.query || {}
-  return getCategoryUI(category)
+  return <NewBookmarkForm category={category} />
 }
 
 Category.getInitialProps = async (ctx) => {

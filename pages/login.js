@@ -58,18 +58,12 @@ function Login() {
       </PageTitle>
 
       <Form onSubmit={formik.handleSubmit}>
-        <Input
-          name="email"
-          labelText="Email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-        />
+        <Input name="email" labelText="Email" onChange={formik.handleChange} />
 
         <Input
           type="password"
           name="password"
           labelText="Password"
-          value={formik.values.password}
           onChange={formik.handleChange}
         />
 

@@ -1,4 +1,4 @@
-.movie {
+.selection {
   display: flex;
   align-items: center;
   padding: var(--space-8);
@@ -6,7 +6,7 @@
   background-color: var(--button-background-color);
 }
 
-.image {
+.poster {
   margin-right: var(--space-12);
   border-radius: var(--space-4);
   width: 48px;
