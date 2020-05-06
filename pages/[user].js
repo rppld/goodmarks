@@ -10,7 +10,6 @@ import { useRouter } from 'next/router'
 const User = () => {
   const router = useRouter()
   const { user: handle } = router.query
-  console.log(handle)
   const { data, error } = useSWR(
     () => handle && `/api/bookmarks?handle=${handle}`
   )

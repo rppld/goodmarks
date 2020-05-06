@@ -8,6 +8,8 @@ import { H2 } from '../components/heading'
 const Home = () => {
   const { data, error } = useSWR('/api/bookmarks')
 
+  console.log(data)
+
   return (
     <Layout>
       <PageTitle>
