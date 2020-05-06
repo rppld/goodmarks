@@ -14,7 +14,7 @@ import autocompleteSearch from '../lib/autocomplete-search'
 
 function SiteSearch() {
   const [searchTerm, setSearchTerm] = React.useState('')
-  const useAutocompleteSearch = autocompleteSearch('hashtags_and_users')
+  const useAutocompleteSearch = autocompleteSearch('tags_and_users')
   const results = useAutocompleteSearch(searchTerm)
 
   const handleChange = debounce((value) => {

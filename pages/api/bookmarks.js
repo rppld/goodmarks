@@ -113,16 +113,16 @@ async function createComment(req, res) {
   }
 }
 
-async function createHashtags(tags) {
+async function createTags(tags) {
   // tags is an array that looks like:
   // [{ name: 'hash' }, { name: 'tag' }]
   return q.Map(
     tags,
     Lambda(
-      ['hashtag'],
+      ['tag'],
       Let(
         {
-          match: Match(Index('hashtags_by_name'), Var('hashtag')),
+          match: Match(Index('tags_by_name'), Var('tag')),
         },
         If(
           Exists(Var('match')),
@@ -133,8 +133,8 @@ async function createHashtags(tags) {
           // If it doesn't exist we create it and return the reference.
           Select(
             ['ref'],
-            Create(Collection('Hashtags'), {
-              data: { name: Var('hashtag') },
+            Create(Collection('Tags'), {
+              data: { name: Var('tag') },
             })
           )
         )
@@ -219,7 +219,7 @@ async function createBookmark(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          hashtagRefs: await createHashtags(tags),
+          tagRefs: await createTags(tags),
           category: Select(
             0,
             Paginate(Match(Index('categories_by_slug'), category))
@@ -233,7 +233,7 @@ async function createBookmark(req, res) {
             likes: 0,
             comments: 0,
             reposts: 0,
-            hashtags: Var('hashtagRefs'),
+            tags: Var('tagRefs'),
             category: Var('category'),
             details,
             author: Var('author'),

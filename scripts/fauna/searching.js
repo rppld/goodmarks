@@ -8,8 +8,13 @@ const {
   If,
   Index,
   Delete,
-  Lambda,
+  Now,
+  Time,
+  TimeDiff,
   Var,
+  Add,
+  Multiply,
+  Lambda,
   Query,
   Length,
   Select,
@@ -47,21 +52,21 @@ function getWordParts(wordVar) {
   )
 }
 
-const createHashtagsAndUsersByWordpartsWithBinding = CreateIndex({
-  name: 'hashtags_and_users_by_wordparts',
+const createTagsAndUsersByWordparts = CreateIndex({
+  name: 'tags_and_users_by_wordparts',
   // we actually want to sort to get the shortest word that matches
   // first.
   source: [
     {
-      collection: Collection('Hashtags'),
+      collection: Collection('Tags'),
       fields: {
         length: Query(
-          Lambda('hashtag', Length(Select(['data', 'name'], Var('hashtag'))))
+          Lambda('tag', Length(Select(['data', 'name'], Var('tag'))))
         ),
         wordparts: Query(
           Lambda(
-            'hashtag',
-            Union(getWordParts(Select(['data', 'name'], Var('hashtag'))))
+            'tag',
+            Union(getWordParts(Select(['data', 'name'], Var('tag'))))
           )
         ),
       },
@@ -111,9 +116,9 @@ const createHashtagsAndUsersByWordpartsWithBinding = CreateIndex({
 async function createSearchIndexes(client) {
   await client.query(
     If(
-      Exists(Index('hashtags_and_users_by_wordparts')),
+      Exists(Index('tags_and_users_by_wordparts')),
       true,
-      createHashtagsAndUsersByWordpartsWithBinding
+      createTagsAndUsersByWordparts
     )
   )
 }
@@ -121,11 +126,31 @@ async function createSearchIndexes(client) {
 async function deleteSearchIndexes(client) {
   await client.query(
     If(
-      Exists(Index('hashtags_and_users_by_wordparts')),
-      Delete(Index('hashtags_and_users_by_wordparts')),
+      Exists(Index('tags_and_users_by_wordparts')),
+      Delete(Index('tags_and_users_by_wordparts')),
       true
     )
   )
 }
 
-module.exports = { createSearchIndexes, deleteSearchIndexes }
+const createCool = CreateIndex({
+  name: 'bookmarks_by_tag_ref',
+  source: Collection('Bookmarks'),
+  terms: [
+    {
+      field: ['data', 'tags'],
+    },
+  ],
+  values: [
+    {
+      field: ['ref'], // return the fweet reference
+    },
+  ],
+  serialized: true,
+})
+
+async function cool(client) {
+  await client.query(createCool)
+}
+
+module.exports = { createSearchIndexes, deleteSearchIndexes, cool }

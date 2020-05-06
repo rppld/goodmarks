@@ -12,8 +12,8 @@ export default async (...args) => {
     return searchTMDb(...args, context)
   }
 
-  if (context === 'hashtags_and_users') {
-    return searchHashtagsAndUsers(...args)
+  if (context === 'tags_and_users') {
+    return searchTagsAndUsers(...args)
   }
 
   return args[1].status(400).send('No context defined')
@@ -33,7 +33,7 @@ async function searchTMDb(req, res, context) {
   return res.status(200).json(json.results)
 }
 
-async function searchHashtagsAndUsers(req, res) {
+async function searchTagsAndUsers(req, res) {
   const { term } = req.query
 
   const data = await serverClient.query(
@@ -41,10 +41,7 @@ async function searchHashtagsAndUsers(req, res) {
     Let(
       {
         // Matching an index returns a setRef.
-        setRef: Match(
-          Index('hashtags_and_users_by_wordparts'),
-          term.toLowerCase()
-        ),
+        setRef: Match(Index('tags_and_users_by_wordparts'), term.toLowerCase()),
         // We materialize this setRef (get the actual index values)
         // to be able to map over it. We only consider the first
         // page which we'll set to 10 elements, this should be
