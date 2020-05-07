@@ -7,6 +7,7 @@ const {
   Create,
   HasIdentity,
   Ref,
+  Join,
   Collection,
   Select,
   Get,
@@ -27,7 +28,8 @@ const {
 } = q
 
 export default async (...args) => {
-  const { id, handle, action } = args[0].query
+  const req = args[0]
+  const { id, handle, action } = req.query
 
   if (action === 'create') {
     return createBookmark(...args)
@@ -49,7 +51,54 @@ export default async (...args) => {
     return getBookmarksByUserHandle(...args)
   }
 
-  return getAllBookmarks(...args)
+  return getBookmarks(...args)
+}
+
+async function getBookmarks(req, res) {
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  if (!faunaSecret) {
+    // TODO: This is only temporary to have content on the homepage.
+    // Should eventually be removed because we won’t need to render
+    // all bookmarks anywhere.
+    return getAllBookmarks(req, res)
+  }
+
+  const response = await faunaClient(faunaSecret).query(
+    getBookmarksWithUsersMapGetGeneric(
+      // Since we start of here with followerstats index (a ref we don't need afterwards, we can use join here!)
+      q.Map(
+        Paginate(
+          Join(
+            // the index takes one term, the user that is browsing our app
+            Match(
+              Index('followerstats_by_user_popularity'),
+              Select(['data', 'user'], Get(Identity()))
+            ),
+            // Join can also take a lambda, and we have to use a
+            // lambda since our index returns more than one variable.
+            // Our index again contains two values (the score and the
+            // author ref), so takes an array of two values We only
+            // care about the author ref which we will feed into the
+            // fweets_by_author index, to get fweet references. Added
+            // advantage, because we use a join here we can let the
+            // index sort as well ;).
+            Lambda(
+              ['bookmarkScore', 'authorRef'],
+              Match(Index('bookmarks_by_author'), Var('authorRef'))
+            )
+          )
+        ),
+        // the created time has served its purpose for sorting.
+        Lambda(['createdTime', 'ref'], Var('ref'))
+      )
+    )
+  )
+
+  return res.status(200).json({
+    bookmarks: response.data.map(flattenDataKeys),
+  })
 }
 
 async function getBookmarksByUserHandle(req, res) {
@@ -71,10 +120,21 @@ async function getBookmarksByUserHandle(req, res) {
             Lambda(['createdTime', 'ref'], Var('ref'))
           )
         ),
+        followerStatsMatch: If(
+          HasIdentity(),
+          Match(
+            Index('followerstats_by_author_and_follower'),
+            Var('authorRef'),
+            Select(['data', 'user'], Get(Identity()))
+          ),
+          false
+        ),
+        following: If(HasIdentity(), Exists(Var('followerStatsMatch')), false),
       },
       {
         author: Var('author'),
         bookmarks: Var('bookmarks'),
+        following: Var('following'),
       }
     )
   )
