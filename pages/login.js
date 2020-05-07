@@ -37,7 +37,7 @@ function Login() {
       }
 
       mutate('/api/me')
-      Router.push('/profile')
+      Router.push('/')
     } catch (error) {
       console.error(error)
       setError(error.message)

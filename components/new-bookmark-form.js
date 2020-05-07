@@ -103,7 +103,7 @@ const NewBookmarkForm = ({ category }) => {
           category: `${category}s`, // Plural, e.g. "links" or "tv-shows".
           description: values.description,
           details: selection ? selection : values.details,
-          hashtags: parseHashtags(values.description),
+          hashtags: parseHashtags(values.description) || [],
         }),
       })
 

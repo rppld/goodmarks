@@ -235,8 +235,69 @@ const commentsByListOrdered = CreateIndex({
   serialized: true,
 })
 
+const nice = CreateIndex({
+  name: 'followerstats_by_user_popularity',
+  source: [
+    {
+      collection: Collection('FollowerStats'),
+      fields: {
+        bookmarkScore: Query(
+          Lambda(
+            'stats',
+            Let(
+              {
+                // The popularityfactor determines how much popularity
+                // weighs up against age, setting both to one means that one like or
+                // one refweet is worth aging minute.
+                likesFactor: 1,
+                repostsFactor: 1,
+                bookmarkLikes: Select(['data', 'bookmarkLikes'], Var('stats')),
+                bookmarkReposts: Select(
+                  ['data', 'bookmarkReposts'],
+                  Var('stats')
+                ),
+                txTime: Now(),
+                unixStarttime: Time('1970-01-01T00:00:00+00:00'),
+                ageInSecsSinceUnix: TimeDiff(
+                  Var('unixStarttime'),
+                  Var('txTime'),
+                  'minutes'
+                ),
+              },
+              // Adding the time since the unix timestamps
+              // together with bookmarkLikes and bookmarkReposts provides us with
+              // decaying popularity or a mixture of popularity and
+              Add(
+                Multiply(Var('likesFactor'), Var('bookmarkLikes')),
+                Multiply(Var('repostsFactor'), Var('bookmarkReposts')),
+                Var('ageInSecsSinceUnix')
+              )
+            )
+          )
+        ),
+      },
+    },
+  ],
+  terms: [
+    {
+      // We search by follower first since
+      // the follower is the current user who wants to retrieve his feed of fweet.
+      field: ['data', 'follower'],
+    },
+  ],
+  values: [
+    {
+      binding: 'bookmarkScore',
+      reverse: true,
+    },
+    {
+      field: ['data', 'author'],
+    },
+  ],
+})
+
 async function cool(client) {
-  await client.query(commentsByListOrdered)
+  await client.query(nice)
 }
 
 module.exports = { createSearchIndexes, deleteSearchIndexes, cool }
