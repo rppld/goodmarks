@@ -1,6 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 import PageTitle from './page-title'
+import parseHashtags from '../lib/parse-hashtags'
 import { H2 } from './heading'
 import Text from './text'
 import MovieSearch from './movie-search'
@@ -27,7 +28,6 @@ const NewBookmarkForm = ({ category }) => {
       title: '',
       description: '',
       details: {},
-      tags: '',
     },
     onSubmit: handleSubmit,
   })
@@ -102,8 +102,8 @@ const NewBookmarkForm = ({ category }) => {
           title: selection ? selection[getTitleKey()] : values.title,
           category: `${category}s`, // Plural, e.g. "links" or "tv-shows".
           description: values.description,
-          tags: values.tags.replace(/\s+/g, '').split(','),
           details: selection ? selection : values.details,
+          hashtags: parseHashtags(values.description),
         }),
       })
 
@@ -185,14 +185,6 @@ const NewBookmarkForm = ({ category }) => {
             onChange={formik.handleChange}
           />
 
-          <Input
-            name="tags"
-            labelText="Tags"
-            placeholder="#covid19"
-            value={formik.values.tags}
-            onChange={formik.handleChange}
-          />
-
           <MenuBar>
             <Button variant="primary" type="submit">
               {formik.values.description.length > 0 ? 'Save' : 'Skip for now'}
@@ -219,13 +211,6 @@ const NewBookmarkForm = ({ category }) => {
             name="details.url"
             labelText="URL"
             placeholder="https://"
-            onChange={formik.handleChange}
-          />
-
-          <Input
-            name="tags"
-            labelText="Tags"
-            placeholder="#covid19"
             onChange={formik.handleChange}
           />
 

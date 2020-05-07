@@ -10,7 +10,7 @@ const Search = () => {
     <Layout>
       <PageTitle>
         <H2 as="h1">Search</H2>
-        <Text meta>Search tags or users.</Text>
+        <Text meta>Search hashtags or users.</Text>
       </PageTitle>
       <SiteSearch />
     </Layout>

@@ -6,12 +6,12 @@ import { useRouter } from 'next/router'
 
 const User = () => {
   const router = useRouter()
-  const { tag } = router.query
+  const { hashtag } = router.query
 
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">#{tag}</H2>
+        <H2 as="h1">#{hashtag}</H2>
       </PageTitle>
     </Layout>
   )

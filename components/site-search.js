@@ -14,7 +14,7 @@ import autocompleteSearch from '../lib/autocomplete-search'
 
 function SiteSearch() {
   const [searchTerm, setSearchTerm] = React.useState('')
-  const useAutocompleteSearch = autocompleteSearch('tags_and_users')
+  const useAutocompleteSearch = autocompleteSearch('hashtags_and_users')
   const results = useAutocompleteSearch(searchTerm)
 
   const handleChange = debounce((value) => {
@@ -22,11 +22,20 @@ function SiteSearch() {
   }, 250)
 
   function handleSelect(result = {}) {
-    if (typeof result.handle !== 'undefined') {
+    const isUser = typeof result.handle !== 'undefined'
+    const isHashtag = !isUser
+
+    if (isUser) {
       return Router.push('/[user]', `/${result.handle}`)
     }
 
-    return Router.push('/tags/[tag]', `/tags/${result.name}`)
+    if (isHashtag) {
+      // For proper routing we need to remove the leading hash.
+      const tag = result.name.substr(1)
+      return Router.push('/hashtags/[hashtag]', `/hashtags/${tag}`)
+    }
+
+    return false
   }
 
   React.useEffect(() => {

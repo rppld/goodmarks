@@ -53,20 +53,20 @@ function getWordParts(wordVar) {
 }
 
 const createTagsAndUsersByWordparts = CreateIndex({
-  name: 'tags_and_users_by_wordparts',
+  name: 'hashtags_and_users_by_wordparts',
   // we actually want to sort to get the shortest word that matches
   // first.
   source: [
     {
-      collection: Collection('Tags'),
+      collection: Collection('Hashtags'),
       fields: {
         length: Query(
-          Lambda('tag', Length(Select(['data', 'name'], Var('tag'))))
+          Lambda('hashtag', Length(Select(['data', 'name'], Var('hashtag'))))
         ),
         wordparts: Query(
           Lambda(
-            'tag',
-            Union(getWordParts(Select(['data', 'name'], Var('tag'))))
+            'hashtag',
+            Union(getWordParts(Select(['data', 'name'], Var('hashtag'))))
           )
         ),
       },
@@ -116,7 +116,7 @@ const createTagsAndUsersByWordparts = CreateIndex({
 async function createSearchIndexes(client) {
   await client.query(
     If(
-      Exists(Index('tags_and_users_by_wordparts')),
+      Exists(Index('hashtags_and_users_by_wordparts')),
       true,
       createTagsAndUsersByWordparts
     )
@@ -126,19 +126,19 @@ async function createSearchIndexes(client) {
 async function deleteSearchIndexes(client) {
   await client.query(
     If(
-      Exists(Index('tags_and_users_by_wordparts')),
-      Delete(Index('tags_and_users_by_wordparts')),
+      Exists(Index('hashtags_and_users_by_wordparts')),
+      Delete(Index('hashtags_and_users_by_wordparts')),
       true
     )
   )
 }
 
 const createCool = CreateIndex({
-  name: 'bookmarks_by_tag_ref',
+  name: 'bookmarks_by_hashtag_ref',
   source: Collection('Bookmarks'),
   terms: [
     {
-      field: ['data', 'tags'],
+      field: ['data', 'hashtags'],
     },
   ],
   values: [
@@ -149,8 +149,94 @@ const createCool = CreateIndex({
   serialized: true,
 })
 
+const createCoolio = CreateIndex({
+  name: 'bookmarks_by_hashtag',
+  source: {
+    collection: Collection('Bookmarks'),
+    fields: {
+      bookmarkScore: Query(
+        Lambda(
+          'bookmark',
+          Let(
+            {
+              // The popularityfactor determines how much popularity
+              // weighs up against age, setting both to one means that one like or
+              // one refweet is worth aging minute.
+              likesFactor: 5,
+              repostsFactor: 5,
+              // Let's add comments as well for the sake of completeness, didn't
+              // add it in the general fweet index since comments does not mean you like it,
+              // they might be out of anger :), in this case it makes sense since they are not necessarily your comments
+              // The ones that are interacted with are higher up.
+              commentsFactor: 5,
+              likes: Select(['data', 'likes'], Var('bookmark')),
+              comments: Select(['data', 'comments'], Var('bookmark')),
+              reposts: Select(['data', 'reposts'], Var('bookmark')),
+              txTime: Now(),
+              unixStartTime: Time('1970-01-01T00:00:00+00:00'),
+              ageInSecsSinceUnix: TimeDiff(
+                Var('unixStartTime'),
+                Var('txTime'),
+                'minutes'
+              ),
+            },
+            // Adding the time since the unix timestamps
+            // together with postlikes and postrefweets provides us with
+            // decaying popularity or a mixture of popularity and
+            Add(
+              Multiply(Var('likesFactor'), Var('likes')),
+              Multiply(Var('repostsFactor'), Var('reposts')),
+              Multiply(Var('commentsFactor'), Var('comments')),
+              Var('ageInSecsSinceUnix')
+            )
+          )
+        )
+      ),
+    },
+  },
+  terms: [
+    {
+      field: ['data', 'hashtags'],
+    },
+  ],
+  values: [
+    {
+      binding: 'bookmarkScore',
+      reverse: true,
+    },
+    {
+      field: ['ref'],
+    },
+  ],
+  serialized: true,
+})
+
+const commentsByListOrdered = CreateIndex({
+  name: 'comments_by_list_ordered',
+  source: Collection('Comments'),
+  terms: [
+    {
+      field: ['data', 'list'],
+    },
+  ],
+  values: [
+    // By including the 'ts' we order them by time.
+    {
+      // In contrary to hte fweets index where we used reverse: true,
+      // comments need to go in the regular order.
+      field: ['ts'],
+    },
+    {
+      field: ['ref'],
+    },
+  ],
+  // We'll be using these indexes in the logic of our application so it's safer to set serialized to true
+  // That way reads will always reflect the previous writes.
+  serialized: true,
+})
+
 async function cool(client) {
-  await client.query(createCool)
+  await client.query(commentsByListOrdered)
 }
 
 module.exports = { createSearchIndexes, deleteSearchIndexes, cool }

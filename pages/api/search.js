@@ -12,7 +12,7 @@ export default async (...args) => {
     return searchTMDb(...args, context)
   }
 
-  if (context === 'tags_and_users') {
+  if (context === 'hashtags_and_users') {
     return searchTagsAndUsers(...args)
   }
 
@@ -41,7 +41,10 @@ async function searchTagsAndUsers(req, res) {
     Let(
       {
         // Matching an index returns a setRef.
-        setRef: Match(Index('tags_and_users_by_wordparts'), term.toLowerCase()),
+        setRef: Match(
+          Index('hashtags_and_users_by_wordparts'),
+          term.toLowerCase()
+        ),
         // We materialize this setRef (get the actual index values)
         // to be able to map over it. We only consider the first
         // page which we'll set to 10 elements, this should be

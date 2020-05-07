@@ -83,8 +83,7 @@ async function getBookmarksByUserHandle(req, res) {
 }
 
 async function createComment(req, res) {
-  const { text, entity } = await req.body
-  const collection = entity.type === 'COLLECTION' ? 'Collections' : 'Bookmarks'
+  const { text, bookmarkId } = await req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -99,7 +98,7 @@ async function createComment(req, res) {
           text,
           author: Select(['data', 'user'], Get(Identity())),
           created: Now(),
-          entity: Ref(Collection(collection), entity.id),
+          bookmark: Ref(Collection('Bookmarks'), bookmarkId),
         },
       })
     )
@@ -113,16 +112,16 @@ async function createComment(req, res) {
   }
 }
 
-async function createTags(tags) {
-  // tags is an array that looks like:
+async function createHashtags(items) {
+  // items is an array that looks like:
   // [{ name: 'hash' }, { name: 'tag' }]
   return q.Map(
-    tags,
+    items,
     Lambda(
-      ['tag'],
+      ['hashtag'],
       Let(
         {
-          match: Match(Index('tags_by_name'), Var('tag')),
+          match: Match(Index('hashtags_by_name'), Var('hashtag')),
         },
         If(
           Exists(Var('match')),
@@ -133,8 +132,8 @@ async function createTags(tags) {
           // If it doesn't exist we create it and return the reference.
           Select(
             ['ref'],
-            Create(Collection('Tags'), {
-              data: { name: Var('tag') },
+            Create(Collection('Hashtags'), {
+              data: { name: Var('hashtag') },
             })
           )
         )
@@ -194,7 +193,7 @@ async function deleteBookmark(req, res) {
 }
 
 async function createBookmark(req, res) {
-  const { title, description, details, category, tags } = req.body
+  const { title, description, details, category, hashtags } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
   const {
@@ -219,7 +218,7 @@ async function createBookmark(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          tagRefs: await createTags(tags),
+          hashtagRefs: await createHashtags(hashtags),
           category: Select(
             0,
             Paginate(Match(Index('categories_by_slug'), category))
@@ -233,7 +232,7 @@ async function createBookmark(req, res) {
             likes: 0,
             comments: 0,
             reposts: 0,
-            tags: Var('tagRefs'),
+            hashtags: Var('hashtagRefs'),
             category: Var('category'),
             details,
             author: Var('author'),

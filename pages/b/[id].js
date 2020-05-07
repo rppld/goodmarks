@@ -16,7 +16,7 @@ const Bookmark = () => {
   const router = useRouter()
   const { id } = router.query
   const { data, error } = useSWR(() => id && `/api/bookmarks?id=${id}`)
-  const { bookmark = {}, user = {} } =
+  const { bookmark = {}, user = {}, comments = [] } =
     data?.bookmarks?.length > 0 ? data?.bookmarks[0] : {}
   const { data: viewerData = {} } = useSWR('/api/me')
   const showDeleteOption =
@@ -45,10 +45,7 @@ const Bookmark = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           text: inputRef.current.value,
-          entity: {
-            id,
-            type: 'TIP',
-          },
+          bookmarkId: id,
         }),
       })
 
@@ -86,11 +83,11 @@ const Bookmark = () => {
         </PageTitle>
       )}
 
-      {bookmark?.comments?.length > 0 && (
+      {comments?.length > 0 && (
         <>
           <h2>Comments</h2>
           <ul>
-            {bookmark.comments.map((comment) => (
+            {comments.map(({ comment }) => (
               <li key={comment.id}>{comment.text}</li>
             ))}
           </ul>
