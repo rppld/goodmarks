@@ -63,20 +63,10 @@ const User = () => {
     }),
   }
 
-  const handleUnfollowUser = async () => {
-    setLoading(true)
-    console.log('unfollow user')
-    fetch('/api/users?action=unfollow', fetchOptions)
-      .then(handleSuccess)
-      .catch(handleError)
-  }
-
-  const handleFollowUser = () => {
+  const toggleFollowUser = () => {
     setLoading(true)
     console.log('follow user')
-    fetch('/api/users?action=follow', fetchOptions)
-      .then(handleSuccess)
-      .catch(handleError)
+    fetch('/api/users', fetchOptions).then(handleSuccess).catch(handleError)
   }
 
   return (
@@ -87,21 +77,13 @@ const User = () => {
       </PageTitle>
 
       {viewer && (
-        <>
-          {data?.following ? (
-            <Button onClick={handleUnfollowUser} disabled={loading}>
-              Unfollow
-            </Button>
-          ) : (
-            <Button
-              onClick={handleFollowUser}
-              disabled={loading}
-              variant="primary"
-            >
-              Follow
-            </Button>
-          )}
-        </>
+        <Button
+          onClick={toggleFollowUser}
+          disabled={loading}
+          variant={data?.following ? undefined : 'primary'}
+        >
+          {data?.following ? 'Unfollow' : 'Follow'}
+        </Button>
       )}
 
       <h2>Bookmarks</h2>
