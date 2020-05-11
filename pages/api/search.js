@@ -1,7 +1,6 @@
 import { query as q } from 'faunadb'
 import { serverClient } from '../../lib/fauna'
 import { flattenDataKeys } from '../../lib/fauna/utils'
-import fetch from 'isomorphic-unfetch'
 
 const { Match, Paginate, Index, Lambda, Let, Var, Get } = q
 
