@@ -1,6 +1,5 @@
 import { query as q } from 'faunadb'
 import cookie from 'cookie'
-import fetch from 'isomorphic-unfetch'
 import { parse } from 'url'
 import absoluteUrl from '../../lib/absolute-url'
 import { googleOauth2 } from '../../lib/auth'
