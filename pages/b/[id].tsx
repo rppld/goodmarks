@@ -10,8 +10,9 @@ import Button from 'components/button'
 import Text from 'components/text'
 import Form from 'components/form'
 import { MenuBar } from 'components/menu-bar'
+import { useViewer } from 'components/viewer-context'
 import { H2 } from 'components/heading'
-import { BookmarksData, ViewerData } from 'lib/types'
+import { BookmarksData } from 'lib/types'
 
 const Bookmark: NextPage = () => {
   const inputRef = React.useRef(null)
@@ -22,9 +23,8 @@ const Bookmark: NextPage = () => {
   )
   const { bookmark = {}, user = {}, comments = [] } =
     data?.bookmarks?.length > 0 ? data?.bookmarks[0] : {}
-  const { data: viewerData } = useSWR<ViewerData>('/api/me')
-  const showDeleteOption =
-    data && viewerData && user?.id === viewerData?.viewer?.id
+  const { viewer } = useViewer()
+  const showDeleteOption = data && viewer && user?.id === viewer.id
 
   async function handleDelete() {
     try {

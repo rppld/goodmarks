@@ -1,11 +1,16 @@
-// Response when fetching the '/api/bookmarks' endpoint
 export interface BookmarksData {
   bookmarks: any
   user: any
   comments: any
 }
 
-// Response when fetching the '/api/me' endpoint
+export interface Viewer {
+  id: string
+  handle: string
+  name: string
+  picture: string
+}
+
 export interface ViewerData {
-  viewer: any
+  viewer: Viewer
 }

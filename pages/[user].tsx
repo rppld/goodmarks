@@ -8,7 +8,7 @@ import Button from 'components/button'
 import { H2 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
-import { ViewerData } from 'lib/types'
+import { useViewer } from 'components/viewer-context'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -17,8 +17,7 @@ const User: NextPage = () => {
   const { data, error, mutate } = useSWR(
     () => handle && `/api/bookmarks?handle=${handle}`
   )
-  const { data: viewerData } = useSWR<ViewerData>('/api/me')
-  const { viewer } = viewerData || {}
+  const { viewer } = useViewer()
 
   const safeVerifyError = (error, keys) => {
     if (keys.length > 0) {

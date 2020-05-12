@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
-import useSWR from 'swr'
 import { logout } from 'lib/auth'
 import Button from './button'
 import Avatar from './avatar'
@@ -9,15 +8,14 @@ import Header from './header'
 import { MenuBar, MenuBarNav, MenuBarNavItem } from './menu-bar'
 import { Plus, MagnifyingGlass } from './icon'
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
-import { ViewerData } from 'lib/types'
+import { useViewer } from 'components/viewer-context'
 
 const DefaultMenuBar: React.FC = () => {
-  const { data, mutate } = useSWR<ViewerData>('/api/me')
-  const { viewer } = data || {}
+  const { viewer, resetViewer } = useViewer()
 
   async function handleLogout() {
     await logout()
-    mutate({ viewer: null })
+    resetViewer()
   }
 
   return (
