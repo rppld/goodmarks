@@ -21,8 +21,8 @@ const Bookmark: NextPage = () => {
   const { data, error } = useSWR<BookmarksData>(
     () => id && `/api/bookmarks?id=${id}`
   )
-  const { bookmark = {}, user = {}, comments = [] } =
-    data?.bookmarks?.length > 0 ? data?.bookmarks[0] : {}
+  const { bookmark, user, comments } =
+    data?.bookmarks?.length > 0 && data.bookmarks[0]
   const { viewer } = useViewer()
   const showDeleteOption = data && viewer && user?.id === viewer.id
 
@@ -55,16 +55,18 @@ const Bookmark: NextPage = () => {
 
       // Optimistic store update
       mutate(`/api/bookmarks?id=${id}`, {
-        bookmarks: {
-          ...data.bookmarks,
-          comments: [
-            ...data.bookmarks[0].comments,
-            {
-              '@ref': { id: '12345 ' },
-              text: inputRef.current.value,
-            },
-          ],
-        },
+        bookmarks: [
+          {
+            ...data.bookmarks[0],
+            comments: [
+              ...data.bookmarks[0].comments,
+              {
+                '@ref': { id: '12345 ' },
+                text: inputRef.current.value,
+              },
+            ],
+          },
+        ],
       })
 
       // Reset input value
@@ -82,8 +84,8 @@ const Bookmark: NextPage = () => {
         <div>loading...</div>
       ) : (
         <PageTitle>
-          <H2 as="h1">{bookmark.title}</H2>
-          <Text meta>{bookmark.description}</Text>
+          <H2 as="h1">{bookmark?.title}</H2>
+          <Text meta>{bookmark?.description}</Text>
         </PageTitle>
       )}
 
@@ -92,7 +94,7 @@ const Bookmark: NextPage = () => {
           <h2>Comments</h2>
           <ul>
             {comments.map(({ comment }) => (
-              <li key={comment.id}>{comment.text}</li>
+              <li key={comment?.id}>{comment?.text}</li>
             ))}
           </ul>
         </>
