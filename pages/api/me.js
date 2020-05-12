@@ -1,6 +1,6 @@
 import { query as q } from 'faunadb'
 import cookie from 'cookie'
-import { faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
+import { faunaClient, FAUNA_SECRET_COOKIE } from 'lib/fauna'
 
 const { Identity, Select, Get } = q
 

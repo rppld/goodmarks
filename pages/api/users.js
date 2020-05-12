@@ -1,7 +1,7 @@
 import { query as q } from 'faunadb'
 import cookie from 'cookie'
-import { faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
-import { flattenDataKeys } from '../../lib/fauna/utils'
+import { faunaClient, FAUNA_SECRET_COOKIE } from 'lib/fauna'
+import { flattenDataKeys } from 'lib/fauna/utils'
 
 const {
   Let,

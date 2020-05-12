@@ -1,8 +1,8 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { withAuthSync } from '../../lib/auth'
-import getViewerOrRedirect from '../../lib/get-viewer-or-redirect'
-import NewBookmarkForm from '../../components/new-bookmark-form'
+import { withAuthSync } from 'lib/auth'
+import getViewerOrRedirect from 'lib/get-viewer-or-redirect'
+import NewBookmarkForm from 'components/new-bookmark-form'
 
 const Category = () => {
   const router = useRouter()

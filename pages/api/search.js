@@ -1,6 +1,6 @@
 import { query as q } from 'faunadb'
-import { serverClient } from '../../lib/fauna'
-import { flattenDataKeys } from '../../lib/fauna/utils'
+import { serverClient } from 'lib/fauna'
+import { flattenDataKeys } from 'lib/fauna/utils'
 
 const { Match, Paginate, Index, Lambda, Let, Var, Get } = q
 

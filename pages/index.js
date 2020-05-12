@@ -1,9 +1,9 @@
 import React from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
-import PageTitle from '../components/page-title'
-import Layout from '../components/layout'
-import { H2 } from '../components/heading'
+import PageTitle from 'components/page-title'
+import Layout from 'components/layout'
+import { H2 } from 'components/heading'
 
 const Home = () => {
   const { data, error } = useSWR('/api/bookmarks')
