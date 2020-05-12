@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 import PageTitle from './page-title'
-import parseHashtags from '../lib/parse-hashtags'
+import parseHashtags from 'lib/parse-hashtags'
 import { H2 } from './heading'
 import Text from './text'
 import MovieSearch from './movie-search'

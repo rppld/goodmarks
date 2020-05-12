@@ -1,15 +1,15 @@
 import React from 'react'
 import useSWR, { mutate } from 'swr'
 import Router from 'next/router'
-import PageTitle from '../../components/page-title'
-import Layout from '../../components/layout'
+import PageTitle from 'components/page-title'
+import Layout from 'components/layout'
 import { useRouter } from 'next/router'
-import Input from '../../components/input'
-import Button from '../../components/button'
-import Text from '../../components/text'
-import Form from '../../components/form'
-import { MenuBar } from '../../components/menu-bar'
-import { H2 } from '../../components/heading'
+import Input from 'components/input'
+import Button from 'components/button'
+import Text from 'components/text'
+import Form from 'components/form'
+import { MenuBar } from 'components/menu-bar'
+import { H2 } from 'components/heading'
 
 const Bookmark = () => {
   const inputRef = React.useRef(null)

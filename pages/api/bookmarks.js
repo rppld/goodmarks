@@ -1,6 +1,6 @@
 import { query as q } from 'faunadb'
-import { serverClient, faunaClient, FAUNA_SECRET_COOKIE } from '../../lib/fauna'
-import { flattenDataKeys } from '../../lib/fauna/utils'
+import { serverClient, faunaClient, FAUNA_SECRET_COOKIE } from 'lib/fauna'
+import { flattenDataKeys } from 'lib/fauna/utils'
 import cookie from 'cookie'
 
 const {

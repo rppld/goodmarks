@@ -1,14 +1,14 @@
 import { query as q } from 'faunadb'
 import cookie from 'cookie'
 import { parse } from 'url'
-import absoluteUrl from '../../lib/absolute-url'
-import { googleOauth2 } from '../../lib/auth'
+import absoluteUrl from 'lib/absolute-url'
+import { googleOauth2 } from 'lib/auth'
 import {
   serverClient,
   faunaClient,
   FAUNA_SECRET_COOKIE,
   serializeFaunaCookie,
-} from '../../lib/fauna'
+} from 'lib/fauna'
 
 const { Create, Let, Collection, Var, Select, Login, Match, Index, Get } = q
 

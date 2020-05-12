@@ -10,7 +10,7 @@ import Router from 'next/router'
 import debounce from 'lodash/debounce'
 import Input from './input'
 import findIndex from 'lodash/findIndex'
-import autocompleteSearch from '../lib/autocomplete-search'
+import autocompleteSearch from 'lib/autocomplete-search'
 
 function SiteSearch() {
   const [searchTerm, setSearchTerm] = React.useState('')

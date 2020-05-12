@@ -1,7 +1,7 @@
 import React from 'react'
-import PageTitle from '../../components/page-title'
-import Layout from '../../components/layout'
-import { H2 } from '../../components/heading'
+import PageTitle from 'components/page-title'
+import Layout from 'components/layout'
+import { H2 } from 'components/heading'
 import { useRouter } from 'next/router'
 
 const User = () => {
