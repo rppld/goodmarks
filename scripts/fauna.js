@@ -4,10 +4,6 @@ const q = faunadb.query
 const {
   CreateIndex,
   Collection,
-  Exists,
-  If,
-  Index,
-  Delete,
   Now,
   Time,
   TimeDiff,
@@ -52,7 +48,7 @@ function getWordParts(wordVar) {
   )
 }
 
-const createTagsAndUsersByWordparts = CreateIndex({
+const createHashTagsAndUsersByWordpartsIndex = CreateIndex({
   name: 'hashtags_and_users_by_wordparts',
   // we actually want to sort to get the shortest word that matches
   // first.
@@ -113,27 +109,7 @@ const createTagsAndUsersByWordparts = CreateIndex({
   serialized: false,
 })
 
-async function createSearchIndexes(client) {
-  await client.query(
-    If(
-      Exists(Index('hashtags_and_users_by_wordparts')),
-      true,
-      createTagsAndUsersByWordparts
-    )
-  )
-}
-
-async function deleteSearchIndexes(client) {
-  await client.query(
-    If(
-      Exists(Index('hashtags_and_users_by_wordparts')),
-      Delete(Index('hashtags_and_users_by_wordparts')),
-      true
-    )
-  )
-}
-
-const createCool = CreateIndex({
+const createBookmarksByHashtagRefIndex = CreateIndex({
   name: 'bookmarks_by_hashtag_ref',
   source: Collection('Bookmarks'),
   terms: [
@@ -149,7 +125,7 @@ const createCool = CreateIndex({
   serialized: true,
 })
 
-const createCoolio = CreateIndex({
+const createBookmarksByHashtagIndex = CreateIndex({
   name: 'bookmarks_by_hashtag',
   source: {
     collection: Collection('Bookmarks'),
@@ -211,7 +187,7 @@ const createCoolio = CreateIndex({
   serialized: true,
 })
 
-const commentsByListOrdered = CreateIndex({
+const createCommentsByListOrderedIndex = CreateIndex({
   name: 'comments_by_list_ordered',
   source: Collection('Comments'),
   terms: [
@@ -235,8 +211,8 @@ const commentsByListOrdered = CreateIndex({
   serialized: true,
 })
 
-const nice = CreateIndex({
-  name: 'followerstats_by_user_popularity',
+const createFollowerStatsByUserPopularityIndex = CreateIndex({
+  name: 'follower_stats_by_user_popularity',
   source: [
     {
       collection: Collection('FollowerStats'),
@@ -296,8 +272,8 @@ const nice = CreateIndex({
   ],
 })
 
-async function cool(client) {
-  await client.query(nice)
+async function query(client) {
+  await client.query(createFollowerStatsByUserPopularityIndex)
 }
 
-module.exports = { createSearchIndexes, deleteSearchIndexes, cool }
+module.exports = { query }

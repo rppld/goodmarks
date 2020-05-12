@@ -67,13 +67,13 @@ async function getBookmarks(req, res) {
 
   const { data } = await faunaClient(faunaSecret).query(
     getBookmarksWithUsersMapGetGeneric(
-      // Since we start of here with followerstats index (a ref we don't need afterwards, we can use join here!)
+      // Since we start of here with follower_stats index (a ref we don't need afterwards, we can use join here!)
       q.Map(
         Paginate(
           Join(
             // the index takes one term, the user that is browsing our app
             Match(
-              Index('followerstats_by_user_popularity'),
+              Index('follower_stats_by_user_popularity'),
               Select(['data', 'user'], Get(Identity()))
             ),
             // Join can also take a lambda, and we have to use a
@@ -123,7 +123,7 @@ async function getBookmarksByUserHandle(req, res) {
         followerStatsMatch: If(
           HasIdentity(),
           Match(
-            Index('followerstats_by_author_and_follower'),
+            Index('follower_stats_by_author_and_follower'),
             Var('authorRef'),
             Select(['data', 'user'], Get(Identity()))
           ),
@@ -401,12 +401,12 @@ function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
           // Get the original bookmark
           // Get the statistics for the bookmark
           bookmarkStatsMatch: Match(
-            Index('bookmarkstats_by_user_and_bookmark'),
+            Index('bookmark_stats_by_user_and_bookmark'),
             Var('currentUserRef'),
             Select(['ref'], Var('bookmark'))
           ),
           followerStatsMatch: Match(
-            Index('followerstats_by_author_and_follower'),
+            Index('follower_stats_by_author_and_follower'),
             Var('currentUserRef'),
             Select(['ref'], Var('bookmark'))
           ),

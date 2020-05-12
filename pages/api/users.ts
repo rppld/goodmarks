@@ -32,7 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         followerStatsMatch: If(
           HasIdentity(),
           Match(
-            Index('followerstats_by_author_and_follower'),
+            Index('follower_stats_by_author_and_follower'),
             Ref(Collection('Users'), authorId),
             Select(['data', 'user'], Get(Identity()))
           ),
