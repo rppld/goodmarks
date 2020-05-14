@@ -9,7 +9,7 @@ import Form from 'components/form'
 import { H2 } from 'components/heading'
 import Text from 'components/text'
 import PageTitle from 'components/page-title'
-import { MenuBar } from 'components/menu-bar'
+import { HStack } from 'components/stack'
 import { mutate } from 'swr'
 import { useFormik } from 'formik'
 
@@ -68,12 +68,12 @@ const Login: NextPage = () => {
           onChange={formik.handleChange}
         />
 
-        <MenuBar>
+        <HStack alignment="space-between">
           <Button as="a" href="/api/auth?action=oauth2&provider=google">
             Continue with Google
           </Button>
           <Button type="submit">Login</Button>
-        </MenuBar>
+        </HStack>
 
         {error && <p>Error: {error}</p>}
       </Form>

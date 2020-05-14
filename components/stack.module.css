@@ -1,0 +1,37 @@
+.hstack,
+.vstack {
+  display: flex;
+  align-items: center;
+}
+
+.hstack {
+  flex-direction: row;
+}
+
+.vstack {
+  flex-direction: column;
+}
+
+.hstack > * + * {
+  margin-left: var(--space-8);
+}
+
+.vstack > * + * {
+  margin-top: var(--space-8);
+}
+
+.leading {
+  justify-content: flex-start;
+}
+
+.center {
+  justify-content: center;
+}
+
+.trailing {
+  justify-content: flex-end;
+}
+
+.space-between {
+  justify-content: space-between;
+}

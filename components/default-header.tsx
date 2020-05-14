@@ -5,12 +5,12 @@ import { logout } from 'lib/auth'
 import Button from './button'
 import Avatar from './avatar'
 import Header from './header'
-import { MenuBar, MenuBarNav, MenuBarNavItem } from './menu-bar'
+import { HStack } from './stack'
 import { Plus, MagnifyingGlass } from './icon'
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
 import { useViewer } from 'components/viewer-context'
 
-const DefaultMenuBar: React.FC = () => {
+const DefaultHeader: React.FC = () => {
   const { viewer, resetViewer } = useViewer()
 
   async function handleLogout() {
@@ -20,65 +20,53 @@ const DefaultMenuBar: React.FC = () => {
 
   return (
     <Header>
-      <MenuBar>
-        <MenuBarNav>
-          <MenuBarNavItem>
-            <Link href="/" passHref>
-              <Button as="a" variant="generic">
-                Home
-              </Button>
-            </Link>
-          </MenuBarNavItem>
-        </MenuBarNav>
+      <HStack alignment="space-between">
+        <Link href="/" passHref>
+          <Button as="a" variant="generic">
+            Home
+          </Button>
+        </Link>
 
-        <MenuBarNav>
-          <MenuBarNavItem>
-            <Link href="/search" passHref>
-              <Button
-                as="a"
-                variant="primary"
-                leftAdornment={<MagnifyingGlass />}
-              >
-                Search
-              </Button>
-            </Link>
-          </MenuBarNavItem>
+        <HStack>
+          <Link href="/search" passHref>
+            <Button
+              as="a"
+              variant="primary"
+              leftAdornment={<MagnifyingGlass />}
+            >
+              Search
+            </Button>
+          </Link>
 
-          <MenuBarNavItem>
-            <Link href="/new" passHref>
-              <Button as="a" variant="primary" leftAdornment={<Plus />}>
-                New
-              </Button>
-            </Link>
-          </MenuBarNavItem>
+          <Link href="/new" passHref>
+            <Button as="a" variant="primary" leftAdornment={<Plus />}>
+              New
+            </Button>
+          </Link>
 
           {viewer ? (
-            <MenuBarNavItem>
-              <Menu>
-                <MenuButton>
-                  <Avatar src={viewer.picture} />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem
-                    onSelect={() => Router.push('/[user]', `/${viewer.handle}`)}
-                  >
-                    Profile
-                  </MenuItem>
-                  <MenuItem onSelect={handleLogout}>Logout</MenuItem>
-                </MenuList>
-              </Menu>
-            </MenuBarNavItem>
+            <Menu>
+              <MenuButton>
+                <Avatar src={viewer.picture} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onSelect={() => Router.push('/[user]', `/${viewer.handle}`)}
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem onSelect={handleLogout}>Logout</MenuItem>
+              </MenuList>
+            </Menu>
           ) : (
-            <MenuBarNavItem>
-              <Link href="/login" passHref>
-                <Button as="a">Login</Button>
-              </Link>
-            </MenuBarNavItem>
+            <Link href="/login" passHref>
+              <Button as="a">Login</Button>
+            </Link>
           )}
-        </MenuBarNav>
-      </MenuBar>
+        </HStack>
+      </HStack>
     </Header>
   )
 }
 
-export default DefaultMenuBar
+export default DefaultHeader

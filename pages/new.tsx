@@ -3,13 +3,13 @@ import Link from 'next/link'
 import { NextPage } from 'next'
 import { withAuthSync } from 'lib/auth'
 import getViewerOrRedirect from 'lib/get-viewer-or-redirect'
-import { MenuBar, MenuBarNav, MenuBarNavItem } from 'components/menu-bar'
 import Layout from 'components/layout'
 import CategorySelection from 'components/category-selection'
 import Button from 'components/button'
 import Header from 'components/header'
 import PageTitle from 'components/page-title'
 import { H2 } from 'components/heading'
+import { HStack } from 'components/stack'
 import Text from 'components/text'
 
 const New: NextPage = () => {
@@ -17,24 +17,16 @@ const New: NextPage = () => {
     <Layout
       header={
         <Header>
-          <MenuBar>
-            <MenuBarNav>
-              <MenuBarNavItem>
-                <Link href="/" passHref>
-                  <Button as="a">Home</Button>
-                </Link>
-              </MenuBarNavItem>
-            </MenuBarNav>
-            <MenuBarNav>
-              <MenuBarNavItem>
-                <Link href="/" passHref>
-                  <Button as="a" variant="danger">
-                    Cancel
-                  </Button>
-                </Link>
-              </MenuBarNavItem>
-            </MenuBarNav>
-          </MenuBar>
+          <HStack alignment="space-between">
+            <Link href="/" passHref>
+              <Button as="a">Home</Button>
+            </Link>
+            <Link href="/" passHref>
+              <Button as="a" variant="danger">
+                Cancel
+              </Button>
+            </Link>
+          </HStack>
         </Header>
       }
     >

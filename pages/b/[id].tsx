@@ -9,7 +9,7 @@ import Input from 'components/input'
 import Button from 'components/button'
 import Text from 'components/text'
 import Form from 'components/form'
-import { MenuBar } from 'components/menu-bar'
+import { HStack } from 'components/stack'
 import { useViewer } from 'components/viewer-context'
 import { H2 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
@@ -110,11 +110,11 @@ const Bookmark: NextPage = () => {
           ref={inputRef}
         />
 
-        <MenuBar>
+        <HStack alignment="trailing">
           <Button type="submit" variant="primary">
             Post
           </Button>
-        </MenuBar>
+        </HStack>
       </Form>
 
       {showDeleteOption && (

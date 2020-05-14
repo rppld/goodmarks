@@ -17,7 +17,7 @@ import Button from './button'
 import Layout from './layout'
 import Header from './header'
 import Form from './form'
-import { MenuBar, MenuBarNav, MenuBarNavItem } from './menu-bar'
+import { HStack } from './stack'
 import { ChevronLeft } from './icon'
 
 interface Props {
@@ -127,35 +127,24 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     <Layout
       header={
         <Header>
-          <MenuBar>
-            <MenuBarNav>
-              <MenuBarNavItem>
-                {selection ? (
-                  <Button
-                    onClick={resetSelection}
-                    leftAdornment={<ChevronLeft />}
-                  >
-                    {getBackButtonLabel()}
-                  </Button>
-                ) : (
-                  <Link href="/new" passHref>
-                    <Button as="a" leftAdornment={<ChevronLeft />}>
-                      New bookmark
-                    </Button>
-                  </Link>
-                )}
-              </MenuBarNavItem>
-            </MenuBarNav>
-            <MenuBarNav>
-              <MenuBarNavItem>
-                <Link href="/" passHref>
-                  <Button as="a" variant="danger">
-                    Cancel
-                  </Button>
-                </Link>
-              </MenuBarNavItem>
-            </MenuBarNav>
-          </MenuBar>
+          <HStack alignment="space-between">
+            {selection ? (
+              <Button onClick={resetSelection} leftAdornment={<ChevronLeft />}>
+                {getBackButtonLabel()}
+              </Button>
+            ) : (
+              <Link href="/new" passHref>
+                <Button as="a" leftAdornment={<ChevronLeft />}>
+                  New bookmark
+                </Button>
+              </Link>
+            )}
+            <Link href="/" passHref>
+              <Button as="a" variant="danger">
+                Cancel
+              </Button>
+            </Link>
+          </HStack>
         </Header>
       }
     >
@@ -189,11 +178,11 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             onChange={formik.handleChange}
           />
 
-          <MenuBar>
+          <HStack alignment="trailing">
             <Button variant="primary" type="submit">
               {formik.values.description.length > 0 ? 'Save' : 'Skip for now'}
             </Button>
-          </MenuBar>
+          </HStack>
         </Form>
       ) : category === 'link' ? (
         <Form onSubmit={formik.handleSubmit}>
@@ -218,11 +207,11 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             onChange={formik.handleChange}
           />
 
-          <MenuBar>
+          <HStack alignment="trailing">
             <Button type="submit" variant="primary">
               Add bookmark
             </Button>
-          </MenuBar>
+          </HStack>
 
           {error && <p>Error: {error}</p>}
         </Form>
