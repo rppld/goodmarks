@@ -35,15 +35,12 @@
   --lh-copy: 1.5;
 
   /* Font families */
-  --ff-default: -apple-system, BlinkMacSystemFont, 'avenir next', avenir,
-    'helvetica neue', helvetica, ubuntu, roboto, noto, 'segoe ui', arial,
-    sans-serif;
+  --ff-default: 'Roboto', sans-serif;
 
   /* Font weights */
   --fw-regular: 400;
   --fw-medium: 500;
   --fw-bold: 700;
-  --fw-black: 900;
 
   /* Colors */
   --blue-lightest: hsl(230, 92%, 73%);
