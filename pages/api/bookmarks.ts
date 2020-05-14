@@ -15,6 +15,7 @@ const {
   Identity,
   Contains,
   Now,
+  Union,
   Paginate,
   Let,
   Lambda,
@@ -67,26 +68,38 @@ async function getBookmarks(req, res) {
 
   const { data } = await faunaClient(faunaSecret).query(
     getBookmarksWithUsersMapGetGeneric(
-      // Since we start of here with follower_stats index (a ref we don't need afterwards, we can use join here!)
+      // Since we start of here with follower_stats index (a ref we
+      // don't need afterwards, we can use join here!)
       q.Map(
         Paginate(
-          Join(
-            // the index takes one term, the user that is browsing our app
-            Match(
-              Index('follower_stats_by_user_popularity'),
-              Select(['data', 'user'], Get(Identity()))
+          // Merge my own bookmarks with those of the people I’m
+          // following.
+          Union(
+            // Fetch the bookmarks of the people I’m following.
+            Join(
+              // the index takes one term, the user that is browsing
+              // our app
+              Match(
+                Index('follower_stats_by_user_popularity'),
+                Select(['data', 'user'], Get(Identity()))
+              ),
+              // Join can also take a lambda, and we have to use a
+              // lambda since our index returns more than one
+              // variable. Our index again contains two values (the
+              // score and the author ref), so takes an array of two
+              // values We only care about the author ref which we
+              // will feed into the fweets_by_author index, to get
+              // fweet references. Added advantage, because we use a
+              // join here we can let the index sort as well ;).
+              Lambda(
+                ['bookmarkScore', 'authorRef'],
+                Match(Index('bookmarks_by_author'), Var('authorRef'))
+              )
             ),
-            // Join can also take a lambda, and we have to use a
-            // lambda since our index returns more than one variable.
-            // Our index again contains two values (the score and the
-            // author ref), so takes an array of two values We only
-            // care about the author ref which we will feed into the
-            // fweets_by_author index, to get fweet references. Added
-            // advantage, because we use a join here we can let the
-            // index sort as well ;).
-            Lambda(
-              ['bookmarkScore', 'authorRef'],
-              Match(Index('bookmarks_by_author'), Var('authorRef'))
+            // Fetch my own bookmarks.
+            Match(
+              Index('bookmarks_by_author'),
+              Select(['data', 'user'], Get(Identity()))
             )
           )
         ),
@@ -116,7 +129,8 @@ async function getBookmarksByUserHandle(req, res) {
         bookmarks: getBookmarksWithUsersMapGetGeneric(
           q.Map(
             Paginate(Match(Index('bookmarks_by_author'), Var('authorRef'))),
-            // The index contains two values so our lambda also takes two values.
+            // The index contains two values so our lambda also takes
+            // two values.
             Lambda(['createdTime', 'ref'], Var('ref'))
           )
         ),
@@ -256,19 +270,6 @@ async function createBookmark(req, res) {
   const { title, description, details, category, hashtags } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
-  const {
-    Create,
-    Select,
-    Paginate,
-    Identity,
-    Now,
-    Get,
-    Collection,
-    Match,
-    Index,
-    Let,
-    Var,
-  } = q
 
   try {
     if (!title) {
@@ -366,6 +367,7 @@ function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
       Let(
         {
           bookmark: Get(Var('ref')),
+          // Get the original bookmark
           original: If(
             Contains(['data', 'original'], Var('bookmark')),
             // Reposted bookmark. Get original bookmark's data. We
@@ -390,7 +392,7 @@ function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
           ),
           // Get the user that wrote the bookmark.
           user: Get(Select(['data', 'author'], Var('bookmark'))),
-          // Get the account via identity
+          // Get the account via identity.
           account: If(HasIdentity(), Get(Identity()), false),
           // Get the user that is currently logged in.
           currentUserRef: If(
@@ -398,7 +400,6 @@ function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
             Select(['data', 'user'], Var('account')),
             false
           ),
-          // Get the original bookmark
           // Get the statistics for the bookmark
           bookmarkStatsMatch: Match(
             Index('bookmark_stats_by_user_and_bookmark'),
