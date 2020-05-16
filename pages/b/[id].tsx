@@ -1,7 +1,6 @@
 import React from 'react'
 import { NextPage } from 'next'
 import useSWR, { mutate } from 'swr'
-import Router from 'next/router'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import { useRouter } from 'next/router'
@@ -13,9 +12,13 @@ import { HStack } from 'components/stack'
 import { useViewer } from 'components/viewer-context'
 import { H2 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
+import { useFormik } from 'formik'
+import useDeleteBookmark from 'utils/use-delete-bookmark'
+import useLikeBookmark from 'utils/use-like-bookmark'
+import useDeleteComment from 'utils/use-delete-comment'
+import useCreateComment from 'utils/use-create-comment'
 
 const Bookmark: NextPage = () => {
-  const inputRef = React.useRef(null)
   const router = useRouter()
   const { id } = router.query
   const { data, error } = useSWR<BookmarksData>(
@@ -24,33 +27,16 @@ const Bookmark: NextPage = () => {
   const { bookmark, bookmarkStats, user, comments } =
     data?.bookmarks?.length > 0 && data.bookmarks[0]
   const { viewer } = useViewer()
-  const showDeleteOption = data && viewer && user?.id === viewer.id
-
-  async function handleDelete() {
-    try {
-      const response = await fetch(`/api/bookmarks?action=delete&id=${id}`, {
-        method: 'POST',
-      })
-
-      if (response.ok) {
-        Router.push('/')
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  async function handleLike() {
-    try {
-      await fetch('/api/bookmarks?action=like', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bookmarkId: id,
-        }),
-      })
-
-      // Optimistic store update
+  const isOwnedByViewer = data && viewer && user?.id === viewer.id
+  const formik = useFormik({
+    initialValues: {
+      comment: '',
+    },
+    onSubmit: handleSubmit,
+  })
+  const [deleteBookmark, { loading: deleting }] = useDeleteBookmark()
+  const [likeBookmark, { loading: liking }] = useLikeBookmark({
+    onSuccess: () =>
       mutate(`/api/bookmarks?id=${id}`, {
         bookmarks: [
           {
@@ -61,26 +47,10 @@ const Bookmark: NextPage = () => {
             },
           },
         ],
-      })
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault()
-
-    try {
-      await fetch('/api/bookmarks?action=comment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: inputRef.current.value,
-          bookmarkId: id,
-        }),
-      })
-
-      // Optimistic store update
+      }),
+  })
+  const [createComment] = useCreateComment({
+    onSuccess: (res) => {
       mutate(`/api/bookmarks?id=${id}`, {
         bookmarks: [
           {
@@ -88,16 +58,39 @@ const Bookmark: NextPage = () => {
             comments: [
               ...data.bookmarks[0].comments,
               {
-                '@ref': { id: '12345 ' },
-                text: inputRef.current.value,
+                comment: {
+                  id: res.id,
+                  text: res.text,
+                },
+                author: {
+                  // Using viewer here because author isn’t returned.
+                  id: viewer.id,
+                },
               },
             ],
           },
         ],
       })
+    },
+  })
+  const [deleteComment] = useDeleteComment({
+    onSuccess: (res) =>
+      mutate(`/api/bookmarks?id=${id}`, {
+        bookmarks: [
+          {
+            ...data.bookmarks[0],
+            comments: data.bookmarks[0].comments.filter(
+              ({ comment }) => comment.id !== res.id
+            ),
+          },
+        ],
+      }),
+  })
 
-      // Reset input value
-      inputRef.current.value = ''
+  async function handleSubmit(values, { resetForm }) {
+    try {
+      await createComment(values.comment, String(id))
+      resetForm()
     } catch (error) {
       console.error(error)
     }
@@ -117,45 +110,61 @@ const Bookmark: NextPage = () => {
       )}
 
       <Button
-        onClick={handleLike}
-        variant={bookmarkStats?.like ? 'primary' : undefined}
+        onClick={() => likeBookmark(String(id))}
+        variant={bookmarkStats?.like ? 'success' : undefined}
+        disabled={liking}
       >
-        {bookmarkStats?.like ? 'Liked' : 'Like'}
+        {liking ? 'Loading' : bookmarkStats?.like ? 'Liked' : 'Like'}
       </Button>
 
       {comments?.length > 0 && (
         <>
           <h2>Comments</h2>
           <ul>
-            {comments.map(({ comment }) => (
-              <li key={comment?.id}>{comment?.text}</li>
+            {comments.map(({ comment, author }) => (
+              <li key={comment.id}>
+                {comment.text}{' '}
+                {author.id === viewer?.id ? (
+                  <button onClick={() => deleteComment(comment.id)}>[×]</button>
+                ) : null}
+              </li>
             ))}
           </ul>
         </>
       )}
 
       <h2>Post a comment</h2>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={formik.handleSubmit}>
         <Input
           as="textarea"
           rows="6"
           labelText="Comment"
+          hideLabel
           name="comment"
-          ref={inputRef}
+          value={formik.values.comment}
+          onChange={formik.handleChange}
         />
 
         <HStack alignment="trailing">
-          <Button type="submit" variant="primary">
-            Post
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={formik.isSubmitting}
+          >
+            {formik.isSubmitting ? 'Posting' : 'Post'}
           </Button>
         </HStack>
       </Form>
 
-      {showDeleteOption && (
+      {isOwnedByViewer && (
         <>
           <h2>Danger zone</h2>
-          <Button variant="danger" onClick={handleDelete}>
-            Delete bookmark
+          <Button
+            variant="danger"
+            onClick={() => deleteBookmark(String(id))}
+            disabled={deleting}
+          >
+            {deleting ? 'Deleting' : 'Delete bookmark'}
           </Button>
         </>
       )}

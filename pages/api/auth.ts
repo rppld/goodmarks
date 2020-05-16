@@ -2,7 +2,7 @@ import { query as q } from 'faunadb'
 import cookie from 'cookie'
 import { parse } from 'url'
 import { NextApiRequest, NextApiResponse } from 'next'
-import absoluteUrl from 'lib/absolute-url'
+import absoluteUrl from 'utils/absolute-url'
 import { googleOauth2 } from 'lib/auth'
 import {
   serverClient,

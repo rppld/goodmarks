@@ -206,8 +206,22 @@ const createCommentsByListOrderedIndex = CreateIndex({
       field: ['ref'],
     },
   ],
-  // We'll be using these indexes in the logic of our application so it's safer to set serialized to true
-  // That way reads will always reflect the previous writes.
+  // We'll be using these indexes in the logic of our application so
+  // it's safer to set serialized to true That way reads will always
+  // reflect the previous writes.
+  serialized: true,
+})
+
+// Used to find related bookmark stats when deleting a bookmark, in
+// order to delete the stats as well.
+const createBookmarkStatsByBookmarkIndex = CreateIndex({
+  name: 'bookmark_stats_by_bookmark',
+  source: Collection('BookmarkStats'),
+  terms: [
+    {
+      field: ['data', 'bookmark'],
+    },
+  ],
   serialized: true,
 })
 
@@ -272,8 +286,38 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
   ],
 })
 
+// Used when deleting an individual comment to find out how many
+// comments a user made on a particular entity.
+const createCommentsByBookmarkAndAuthorOrderedIndex = CreateIndex({
+  name: 'comments_by_bookmark_and_author_ordered',
+  source: Collection('Comments'),
+  terms: [
+    {
+      field: ['data', 'bookmark'],
+    },
+    {
+      field: ['data', 'author'],
+    },
+  ],
+  values: [
+    // By including the 'ts' we order them by time.
+    {
+      // In contrary to hte fweets index where we used reverse: true,
+      // comments need to go in the regular order.
+      field: ['ts'],
+    },
+    {
+      field: ['ref'],
+    },
+  ],
+  // We'll be using these indexes in the logic of our application so
+  // it's safer to set serialized to true That way reads will always
+  // reflect the previous writes.
+  serialized: true,
+})
+
 async function query(client) {
-  await client.query(createFollowerStatsByUserPopularityIndex)
+  await client.query(createCommentsByBookmarkAndAuthorOrderedIndex)
 }
 
 module.exports = { query }

@@ -2,7 +2,7 @@ import React from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { withAuthSync } from 'lib/auth'
-import getViewerOrRedirect from 'lib/get-viewer-or-redirect'
+import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
 import NewBookmarkForm from 'components/new-bookmark-form'
 
 const Category: NextPage = () => {

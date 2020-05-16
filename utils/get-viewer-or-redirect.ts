@@ -1,7 +1,7 @@
 import cookie from 'cookie'
 import Router from 'next/router'
 import { profileApi } from 'pages/api/me'
-import { FAUNA_SECRET_COOKIE } from './fauna'
+import { FAUNA_SECRET_COOKIE } from 'lib/fauna'
 
 const getViewerOrRedirect = async (ctx: any) => {
   if (typeof window === 'undefined') {

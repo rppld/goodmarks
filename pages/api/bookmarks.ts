@@ -1,6 +1,10 @@
 import { query as q } from 'faunadb'
-import { serverClient, faunaClient, FAUNA_SECRET_COOKIE } from 'lib/fauna'
-import { flattenDataKeys } from 'lib/fauna/utils'
+import {
+  serverClient,
+  faunaClient,
+  FAUNA_SECRET_COOKIE,
+  flattenDataKeys,
+} from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
 
@@ -9,6 +13,7 @@ const {
   HasIdentity,
   Ref,
   Join,
+  Count,
   Update,
   Add,
   Not,
@@ -47,6 +52,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (action === 'comment') {
     return createComment(req, res)
+  }
+
+  if (action === 'delete-comment') {
+    return deleteComment(req, res)
   }
 
   if (action === 'like') {
@@ -267,6 +276,69 @@ async function likeBookmark(req, res) {
   }
 }
 
+async function deleteComment(req, res) {
+  const { commentId } = await req.body
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  const data = await faunaClient(faunaSecret).query(
+    Let(
+      {
+        account: Get(Identity()),
+        userRef: Select(['data', 'user'], Var('account')),
+        commentRef: Ref(Collection('Comments'), commentId),
+        comment: Get(Var('commentRef')),
+        bookmarkRef: Select(['data', 'bookmark'], Var('comment')),
+        bookmarkStatsRef: Match(
+          Index('bookmark_stats_by_user_and_bookmark'),
+          Var('userRef'),
+          Var('bookmarkRef')
+        ),
+        // Check if bookmark has only this one comment of mine or if there
+        // are others.
+        commentCount: Count(
+          Match(
+            Index('comments_by_bookmark_and_author_ordered'),
+            Var('bookmarkRef'),
+            Var('userRef')
+          )
+        ),
+        bookmarkStats: If(
+          Equals(Var('commentCount'), 1),
+          // If only this one comment, update bookmarkStats to `{ comment: false }`.
+          Update(Select(['ref'], Get(Var('bookmarkStatsRef'))), {
+            data: {
+              comment: false,
+            },
+          }),
+          // If there are more comments leave bookmarkStats untouched.
+          true
+        ),
+        bookmark: Get(Var('bookmarkRef')),
+        // Subtract 1 from comment-count on bookmark.
+        updateOriginal: Update(Var('bookmarkRef'), {
+          data: {
+            comments: Subtract(
+              1,
+              Select(['data', 'comments'], Var('bookmark'))
+            ),
+          },
+        }),
+        // Remove comment itself.
+        delete: Delete(Var('commentRef')),
+        // We then get the bookmark in the same format as when we normally get them.
+        // Since FQL is composable we can easily do this.
+        bookmarkWithUserAndAccount: getBookmarksWithUsersMapGetGeneric([
+          Var('bookmarkRef'),
+        ]),
+      },
+      Var('comment')
+    )
+  )
+
+  return res.status(200).json(flattenDataKeys(data))
+}
+
 async function createComment(req, res) {
   const { text, bookmarkId } = await req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
@@ -324,8 +396,7 @@ async function createComment(req, res) {
             Var('bookmarkRef'),
           ]),
         },
-        // We get a list of 1 element, so let's take the bookmark out of the list.
-        Select([0], Var('bookmarkWithUserAndAccount'))
+        Var('comment')
       )
     )
 
@@ -385,10 +456,10 @@ async function deleteBookmark(req, res) {
           author: Select(['data', 'author'], Var('bookmark')),
         },
         q.If(
-          // 1. Check if user is allowed to delete this bookmark.
+          // Check if user is allowed to delete this bookmark.
           Equals(Var('viewer'), Var('author')),
           q.Do(
-            // 2. Remove all the comments on the bookmark.
+            // Remove all the comments on the bookmark.
             q.Map(
               Paginate(
                 Match(
@@ -399,9 +470,19 @@ async function deleteBookmark(req, res) {
                   size: 100000,
                 }
               ),
-              Lambda('x', Delete(Var('x')))
+              Lambda(['ts', 'commentRef'], Delete(Var('commentRef')))
             ),
-            // 3. Remove bookmark itself.
+            // Remove all stats related to the bookmar.
+            q.Map(
+              Paginate(
+                Match(Index('bookmark_stats_by_bookmark'), Var('bookmarkRef')),
+                {
+                  size: 100000,
+                }
+              ),
+              Lambda(['bookmarkStatsRef'], Delete(Var('bookmarkStatsRef')))
+            ),
+            // Remove bookmark itself.
             Delete(Var('bookmarkRef'))
           ),
           Abort('Not allowed')

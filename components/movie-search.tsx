@@ -13,7 +13,7 @@ import { Star } from './icon'
 import debounce from 'lodash/debounce'
 import styles from './movie-search.module.css'
 import findIndex from 'lodash/findIndex'
-import autocompleteSearch from 'lib/autocomplete-search'
+import autocompleteSearch from 'utils/autocomplete-search'
 
 const PlaceholderImage: React.FC = () => {
   return (

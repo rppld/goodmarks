@@ -1,8 +1,7 @@
 import { query as q } from 'faunadb'
 import cookie from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { faunaClient, FAUNA_SECRET_COOKIE } from 'lib/fauna'
-import { flattenDataKeys } from 'lib/fauna/utils'
+import { faunaClient, FAUNA_SECRET_COOKIE, flattenDataKeys } from 'lib/fauna'
 
 const {
   Let,

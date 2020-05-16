@@ -1,7 +1,6 @@
 import { query as q } from 'faunadb'
-import { serverClient } from 'lib/fauna'
+import { serverClient, flattenDataKeys } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { flattenDataKeys } from 'lib/fauna/utils'
 import qs from 'querystringify'
 
 const { Match, Paginate, Index, Lambda, Let, Var, Get } = q

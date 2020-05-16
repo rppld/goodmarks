@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 import PageTitle from './page-title'
-import parseHashtags from 'lib/parse-hashtags'
+import parseHashtags from 'utils/parse-hashtags'
 import { H2 } from './heading'
 import Text from './text'
 import MovieSearch from './movie-search'
@@ -174,7 +174,6 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             placeholder="Lives up to the hype"
             as="textarea"
             rows="6"
-            value={formik.values.description}
             onChange={formik.handleChange}
           />
 
