@@ -119,7 +119,7 @@ const createBookmarksByHashtagRefIndex = CreateIndex({
   ],
   values: [
     {
-      field: ['ref'], // return the fweet reference
+      field: ['ref'], // return the bookmark reference
     },
   ],
   serialized: true,
@@ -137,11 +137,11 @@ const createBookmarksByHashtagIndex = CreateIndex({
             {
               // The popularityfactor determines how much popularity
               // weighs up against age, setting both to one means that one like or
-              // one refweet is worth aging minute.
+              // one repost is worth aging minute.
               likesFactor: 5,
               repostsFactor: 5,
               // Let's add comments as well for the sake of completeness, didn't
-              // add it in the general fweet index since comments does not mean you like it,
+              // add it in the general bookmark index since comments does not mean you like it,
               // they might be out of anger :), in this case it makes sense since they are not necessarily your comments
               // The ones that are interacted with are higher up.
               commentsFactor: 5,
@@ -157,7 +157,7 @@ const createBookmarksByHashtagIndex = CreateIndex({
               ),
             },
             // Adding the time since the unix timestamps
-            // together with postlikes and postrefweets provides us with
+            // together with postlikes and postReposts provides us with
             // decaying popularity or a mixture of popularity and
             Add(
               Multiply(Var('likesFactor'), Var('likes')),
@@ -198,7 +198,7 @@ const createCommentsByListOrderedIndex = CreateIndex({
   values: [
     // By including the 'ts' we order them by time.
     {
-      // In contrary to hte fweets index where we used reverse: true,
+      // In contrary to hte bookmarks index where we used reverse: true,
       // comments need to go in the regular order.
       field: ['ts'],
     },
@@ -224,7 +224,7 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
               {
                 // The popularityfactor determines how much popularity
                 // weighs up against age, setting both to one means that one like or
-                // one refweet is worth aging minute.
+                // one repost is worth aging minute.
                 likesFactor: 1,
                 repostsFactor: 1,
                 bookmarkLikes: Select(['data', 'bookmarkLikes'], Var('stats')),
@@ -256,8 +256,8 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
   ],
   terms: [
     {
-      // We search by follower first since
-      // the follower is the current user who wants to retrieve his feed of fweet.
+      // We search by follower first since the follower is the current
+      // user who wants to retrieve his feed of bookmark.
       field: ['data', 'follower'],
     },
   ],

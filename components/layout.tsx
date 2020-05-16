@@ -8,11 +8,7 @@ interface Props {
   header?: React.ReactElement
 }
 
-const Layout: React.FC<Props> = ({
-  title = 'Goodmarks',
-  header = <DefaultHeader />,
-  ...props
-}) => (
+const Layout: React.FC<Props> = ({ title, header, ...props }) => (
   <div className={styles.container} {...props}>
     <Head>
       <title>{title}</title>
@@ -25,5 +21,10 @@ const Layout: React.FC<Props> = ({
     <main className={styles.main}>{props.children}</main>
   </div>
 )
+
+Layout.defaultProps = {
+  title: 'Goodmarks',
+  header: <DefaultHeader />,
+}
 
 export default Layout

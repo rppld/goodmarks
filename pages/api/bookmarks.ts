@@ -9,6 +9,11 @@ const {
   HasIdentity,
   Ref,
   Join,
+  Update,
+  Add,
+  Not,
+  Do,
+  Subtract,
   Collection,
   Select,
   Get,
@@ -42,6 +47,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (action === 'comment') {
     return createComment(req, res)
+  }
+
+  if (action === 'like') {
+    return likeBookmark(req, res)
   }
 
   if (id) {
@@ -88,8 +97,8 @@ async function getBookmarks(req, res) {
               // variable. Our index again contains two values (the
               // score and the author ref), so takes an array of two
               // values We only care about the author ref which we
-              // will feed into the fweets_by_author index, to get
-              // fweet references. Added advantage, because we use a
+              // will feed into the bookmarks_by_author index, to get
+              // bookmark references. Added advantage, because we use a
               // join here we can let the index sort as well ;).
               Lambda(
                 ['bookmarkScore', 'authorRef'],
@@ -156,6 +165,108 @@ async function getBookmarksByUserHandle(req, res) {
   return res.status(200).json(flattenDataKeys(data))
 }
 
+async function likeBookmark(req, res) {
+  const { bookmarkId } = await req.body
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  try {
+    if (!bookmarkId) {
+      throw new Error('Bookmark ID must be provided.')
+    }
+
+    const data = await faunaClient(faunaSecret).query(
+      Let(
+        {
+          account: Get(Identity()),
+          userRef: Select(['data', 'user'], Var('account')),
+          bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
+          bookmarkStatsRef: Match(
+            Index('bookmark_stats_by_user_and_bookmark'),
+            Var('userRef'),
+            Var('bookmarkRef')
+          ),
+          bookmark: Get(Var('bookmarkRef')),
+          authorRef: Select(['data', 'author'], Var('bookmark')),
+          followerStatsRef: Match(
+            Index('follower_stats_by_author_and_follower'),
+            Var('authorRef'),
+            Var('userRef')
+          ),
+          newLikeStatus: If(
+            Exists(Var('bookmarkStatsRef')),
+            Not(Select(['data', 'like'], Get(Var('bookmarkStatsRef')))),
+            true
+          ),
+          popularityGain: If(Var('newLikeStatus'), 1, -1),
+        },
+        Do(
+          // Update the bookmark so we have an idea of the total likes
+          If(
+            Var('newLikeStatus'),
+            Update(Var('bookmarkRef'), {
+              data: {
+                likes: Add(Select(['data', 'likes'], Var('bookmark')), 1),
+              },
+            }),
+            Update(Var('bookmarkRef'), {
+              data: {
+                likes: Subtract(Select(['data', 'likes'], Var('bookmark')), 1),
+              },
+            })
+          ),
+          // Update bookmark stats so we know who liked what
+          If(
+            Exists(Var('bookmarkStatsRef')),
+            // Getting the same element twice has no impact on reads,
+            // the query will only get it once.
+            Update(Select(['ref'], Get(Var('bookmarkStatsRef'))), {
+              data: {
+                like: Var('newLikeStatus'),
+              },
+            }),
+            Create(Collection('BookmarkStats'), {
+              data: {
+                user: Var('userRef'),
+                bookmark: Var('bookmarkRef'),
+                like: Var('newLikeStatus'),
+                repost: false,
+                comment: false,
+              },
+            })
+          ),
+          // Update the follower stats so we can raise his popularity,
+          // this has an impact on the feed that the user will see,
+          // every post he likes or retweets from an author he follows
+          // will raise the popularity of the author for this
+          // particular user (this is kept in the followerstats
+          // collection) return the new bookmark with its stats.
+          If(
+            Exists(Var('followerStatsRef')),
+            Update(Select(['ref'], Get(Var('followerStatsRef'))), {
+              data: {
+                postLikes: Add(
+                  Select(['data', 'postLikes'], Get(Var('followerStatsRef'))),
+                  Var('popularityGain')
+                ),
+              },
+            }),
+            // We don't keep stats for people we don't follow (we
+            // could but opted not to).
+            true
+          ),
+          getBookmarksWithUsersMapGetGeneric([Var('bookmarkRef')])
+        )
+      )
+    )
+
+    return res.status(200).json(flattenDataKeys(data))
+  } catch (error) {
+    console.log(error)
+    res.status(400).send(error.message)
+  }
+}
+
 async function createComment(req, res) {
   const { text, bookmarkId } = await req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
@@ -166,22 +277,61 @@ async function createComment(req, res) {
       throw new Error('Text must be provided.')
     }
 
-    const { ref, data } = await faunaClient(faunaSecret).query(
-      Create(Collection('Comments'), {
-        data: {
-          text,
-          author: Select(['data', 'user'], Get(Identity())),
-          created: Now(),
-          bookmark: Ref(Collection('Bookmarks'), bookmarkId),
+    const data = await faunaClient(faunaSecret).query(
+      Let(
+        {
+          account: Get(Identity()),
+          userRef: Select(['data', 'user'], Var('account')),
+          bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
+          bookmarkStatsRef: Match(
+            Index('bookmark_stats_by_user_and_bookmark'),
+            Var('userRef'),
+            Var('bookmarkRef')
+          ),
+          bookmarkStats: If(
+            Exists(Var('bookmarkStatsRef')),
+            Update(Select(['ref'], Get(Var('bookmarkStatsRef'))), {
+              data: {
+                comment: true,
+              },
+            }),
+            Create(Collection('BookmarkStats'), {
+              data: {
+                user: Var('userRef'),
+                bookmark: Var('bookmarkRef'),
+                like: false,
+                repost: false,
+                comment: true,
+              },
+            })
+          ),
+          comment: Create(Collection('Comments'), {
+            data: {
+              text: text,
+              author: Select(['data', 'user'], Get(Identity())),
+              bookmark: Var('bookmarkRef'),
+            },
+          }),
+          bookmark: Get(Var('bookmarkRef')),
+          updateOriginal: Update(Var('bookmarkRef'), {
+            data: {
+              comments: Add(1, Select(['data', 'comments'], Var('bookmark'))),
+            },
+          }),
+          // We then get the bookmark in the same format as when we normally get them.
+          // Since FQL is composable we can easily do this.
+          bookmarkWithUserAndAccount: getBookmarksWithUsersMapGetGeneric([
+            Var('bookmarkRef'),
+          ]),
         },
-      })
+        // We get a list of 1 element, so let's take the bookmark out of the list.
+        Select([0], Var('bookmarkWithUserAndAccount'))
+      )
     )
 
-    res.status(200).json({
-      ...data,
-      id: ref.id,
-    })
+    return res.status(200).json(flattenDataKeys(data))
   } catch (error) {
+    console.log(error)
     res.status(400).send(error.message)
   }
 }
