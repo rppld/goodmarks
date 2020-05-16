@@ -264,7 +264,9 @@ async function likeBookmark(req, res) {
             // could but opted not to).
             true
           ),
-          getBookmarksWithUsersMapGetGeneric([Var('bookmarkRef')])
+          {
+            bookmarks: getBookmarksWithUsersMapGetGeneric([Var('bookmarkRef')]),
+          }
         )
       )
     )
@@ -332,7 +334,9 @@ async function deleteComment(req, res) {
           Var('bookmarkRef'),
         ]),
       },
-      Var('comment')
+      {
+        comment: Var('comment'),
+      }
     )
   )
 
@@ -396,7 +400,9 @@ async function createComment(req, res) {
             Var('bookmarkRef'),
           ]),
         },
-        Var('comment')
+        {
+          comment: Var('comment'),
+        }
       )
     )
 
