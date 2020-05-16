@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface Options {
-  onSuccess: () => void
+  onSuccess: (response) => void
 }
 
 const useLikeBookmark = (
@@ -21,7 +21,7 @@ const useLikeBookmark = (
       setLoading(true)
       setError(null)
 
-      await fetch('/api/bookmarks?action=like', {
+      const res = await fetch('/api/bookmarks?action=like', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -30,7 +30,7 @@ const useLikeBookmark = (
       })
 
       if (typeof options.onSuccess !== 'undefined') {
-        options.onSuccess()
+        options.onSuccess(await res.json())
       }
 
       setLoading(false)

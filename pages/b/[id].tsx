@@ -36,21 +36,23 @@ const Bookmark: NextPage = () => {
   })
   const [deleteBookmark, { loading: deleting }] = useDeleteBookmark()
   const [likeBookmark, { loading: liking }] = useLikeBookmark({
-    onSuccess: () =>
+    onSuccess: ({ bookmarks }) => {
+      // The updated bookmark is returned in the `bookmarks` array.
       mutate(`/api/bookmarks?id=${id}`, {
         bookmarks: [
           {
-            ...data.bookmarks[0],
+            ...bookmarks[0],
             bookmarkStats: {
-              ...data.bookmarks[0].bookmarkStats,
-              like: !data.bookmarks[0].bookmarkStats.like,
+              ...bookmarks[0].bookmarkStats,
+              like: bookmarks[0].bookmarkStats.like,
             },
           },
         ],
-      }),
+      })
+    },
   })
   const [createComment] = useCreateComment({
-    onSuccess: (res) => {
+    onSuccess: ({ comment }) => {
       mutate(`/api/bookmarks?id=${id}`, {
         bookmarks: [
           {
@@ -59,8 +61,8 @@ const Bookmark: NextPage = () => {
               ...data.bookmarks[0].comments,
               {
                 comment: {
-                  id: res.id,
-                  text: res.text,
+                  id: comment.id,
+                  text: comment.text,
                 },
                 author: {
                   // Using viewer here because author isn’t returned.
@@ -80,7 +82,7 @@ const Bookmark: NextPage = () => {
           {
             ...data.bookmarks[0],
             comments: data.bookmarks[0].comments.filter(
-              ({ comment }) => comment.id !== res.id
+              ({ comment }) => comment.id !== res.comment.id
             ),
           },
         ],
@@ -109,13 +111,15 @@ const Bookmark: NextPage = () => {
         </PageTitle>
       )}
 
-      <Button
-        onClick={() => likeBookmark(String(id))}
-        variant={bookmarkStats?.like ? 'success' : undefined}
-        disabled={liking}
-      >
-        {liking ? 'Loading' : bookmarkStats?.like ? 'Liked' : 'Like'}
-      </Button>
+      {viewer && (
+        <Button
+          onClick={() => likeBookmark(String(id))}
+          variant={bookmarkStats?.like ? 'success' : undefined}
+          disabled={liking}
+        >
+          {liking ? 'Loading' : bookmarkStats?.like ? 'Liked' : 'Like'}
+        </Button>
+      )}
 
       {comments?.length > 0 && (
         <>
@@ -133,28 +137,32 @@ const Bookmark: NextPage = () => {
         </>
       )}
 
-      <h2>Post a comment</h2>
-      <Form onSubmit={formik.handleSubmit}>
-        <Input
-          as="textarea"
-          rows="6"
-          labelText="Comment"
-          hideLabel
-          name="comment"
-          value={formik.values.comment}
-          onChange={formik.handleChange}
-        />
+      {viewer && (
+        <>
+          <h2>Post a comment</h2>
+          <Form onSubmit={formik.handleSubmit}>
+            <Input
+              as="textarea"
+              rows="6"
+              labelText="Comment"
+              hideLabel
+              name="comment"
+              value={formik.values.comment}
+              onChange={formik.handleChange}
+            />
 
-        <HStack alignment="trailing">
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={formik.isSubmitting}
-          >
-            {formik.isSubmitting ? 'Posting' : 'Post'}
-          </Button>
-        </HStack>
-      </Form>
+            <HStack alignment="trailing">
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={formik.isSubmitting}
+              >
+                {formik.isSubmitting ? 'Posting' : 'Post'}
+              </Button>
+            </HStack>
+          </Form>
+        </>
+      )}
 
       {isOwnedByViewer && (
         <>
