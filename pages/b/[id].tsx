@@ -21,7 +21,7 @@ const Bookmark: NextPage = () => {
   const { data, error } = useSWR<BookmarksData>(
     () => id && `/api/bookmarks?id=${id}`
   )
-  const { bookmark, user, comments } =
+  const { bookmark, bookmarkStats, user, comments } =
     data?.bookmarks?.length > 0 && data.bookmarks[0]
   const { viewer } = useViewer()
   const showDeleteOption = data && viewer && user?.id === viewer.id
@@ -37,6 +37,33 @@ const Bookmark: NextPage = () => {
       }
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  async function handleLike() {
+    try {
+      await fetch('/api/bookmarks?action=like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bookmarkId: id,
+        }),
+      })
+
+      // Optimistic store update
+      mutate(`/api/bookmarks?id=${id}`, {
+        bookmarks: [
+          {
+            ...data.bookmarks[0],
+            bookmarkStats: {
+              ...data.bookmarks[0].bookmarkStats,
+              like: !data.bookmarks[0].bookmarkStats.like,
+            },
+          },
+        ],
+      })
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -88,6 +115,13 @@ const Bookmark: NextPage = () => {
           <Text meta>{bookmark?.description}</Text>
         </PageTitle>
       )}
+
+      <Button
+        onClick={handleLike}
+        variant={bookmarkStats?.like ? 'primary' : undefined}
+      >
+        {bookmarkStats?.like ? 'Liked' : 'Like'}
+      </Button>
 
       {comments?.length > 0 && (
         <>
