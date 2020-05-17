@@ -6,10 +6,8 @@ import { H2 } from './heading'
 import Text from './text'
 import MovieSearch from './movie-search'
 import Input from './input'
-import Image from './image'
+import Item from './item'
 import { useFormik } from 'formik'
-import { H4 } from './heading'
-import styles from './new-bookmark-form.module.css'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
 import Link from 'next/link'
@@ -38,16 +36,6 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
   function resetSelection() {
     return setSelection(null)
-  }
-
-  function getTitleKey() {
-    if (category === 'tv-show') return 'name'
-    return 'title'
-  }
-
-  function getDateKey() {
-    if (category === 'tv-show') return 'first_air_date'
-    return 'release_date'
   }
 
   function getHeading() {
@@ -103,7 +91,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: selection ? selection[getTitleKey()] : values.title,
+          title: selection ? selection.name || selection.title : values.title,
           category: `${category}s`, // Plural, e.g. "links" or "tv-shows".
           description: values.description,
           details: selection ? selection : values.details,
@@ -155,17 +143,14 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
       {selection ? (
         <Form onSubmit={formik.handleSubmit}>
-          <span className={styles.selection}>
-            <Image
-              src={`https://image.tmdb.org/t/p/w220_and_h330_face/${selection['poster_path']}`}
-              alt={`Poster for ${selection[getTitleKey()]}`}
-              className={styles.poster}
-            />
-            <span>
-              <H4>{selection[getTitleKey()]}</H4>
-              <Text meta>{getYear(parseISO(selection[getDateKey()]))}</Text>
-            </span>
-          </span>
+          <Item
+            title={selection.name || selection.title}
+            image={`https://image.tmdb.org/t/p/w220_and_h330_face/${selection['poster_path']}`}
+            alt={`Poster for ${selection.name || selection.title}`}
+            text={getYear(
+              parseISO(selection['first_air_date'] || selection['release_date'])
+            )}
+          />
 
           <Input
             labelText="Description"

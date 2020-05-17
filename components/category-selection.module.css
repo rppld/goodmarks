@@ -17,6 +17,11 @@
   align-items: center;
 }
 
+.category:focus,
+.category:hover {
+  background-color: var(--button-background-color-hover);
+}
+
 .label {
   font-weight: var(--fw-medium);
   margin-top: var(--space-8);

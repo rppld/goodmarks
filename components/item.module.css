@@ -1,13 +1,17 @@
-.selection {
-  display: flex;
-  align-items: center;
+.container {
   padding: var(--space-8);
   border-radius: var(--space-12);
   background-color: var(--button-background-color);
+  color: var(--button-label-color);
+}
+
+a:focus .container,
+a:hover .container {
+  background-color: var(--button-background-color-hover);
 }
 
 .poster {
-  margin-right: var(--space-12);
+  margin-right: var(--space-4);
   border-radius: var(--space-4);
   width: 48px;
   height: 72px;

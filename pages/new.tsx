@@ -10,6 +10,7 @@ import Header from 'components/header'
 import PageTitle from 'components/page-title'
 import { H2 } from 'components/heading'
 import { HStack } from 'components/stack'
+import { Home } from 'components/icon'
 import Text from 'components/text'
 
 const New: NextPage = () => {
@@ -19,7 +20,7 @@ const New: NextPage = () => {
         <Header>
           <HStack alignment="space-between">
             <Link href="/" passHref>
-              <Button as="a">Home</Button>
+              <Button as="a" variant="generic" leftAdornment={<Home />} />
             </Link>
             <Link href="/" passHref>
               <Button as="a" variant="danger">

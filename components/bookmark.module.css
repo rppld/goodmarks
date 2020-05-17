@@ -1,0 +1,26 @@
+.container {
+  position: relative;
+  border-top: 1px solid var(--button-background-color);
+  padding-top: var(--space-32);
+  padding-bottom: var(--space-32);
+}
+
+.time-ago {
+  display: block;
+  font-size: var(--fs-14);
+  color: var(--text-color-meta);
+}
+
+.action {
+  color: var(--input-border-color);
+  font-size: var(--fs-14);
+  font-weight: var(--fw-medium);
+}
+
+.adornment {
+  margin-right: var(--space-4);
+}
+
+.active {
+  color: var(--color-primary);
+}

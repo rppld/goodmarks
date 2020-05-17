@@ -4,11 +4,13 @@ import Link from 'next/link'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import Text from 'components/text'
+import Bookmark from 'components/bookmark'
 import Button from 'components/button'
 import { H2 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
+import { VStack } from 'components/stack'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -87,7 +89,6 @@ const User: NextPage = () => {
         </Button>
       ) : null}
 
-      <h2>Bookmarks</h2>
       {error && <div>failed to load</div>}
 
       {!data ? (
@@ -95,15 +96,11 @@ const User: NextPage = () => {
       ) : (
         <>
           {data.bookmarks.length > 0 && (
-            <ol>
-              {data.bookmarks.map(({ bookmark }) => (
-                <li key={bookmark.id}>
-                  <Link href="/b/[id]" as={`/b/${bookmark.id}`}>
-                    <a>{bookmark.title}</a>
-                  </Link>
-                </li>
+            <>
+              {data.bookmarks.map((item) => (
+                <Bookmark {...item} key={item.bookmark.id} />
               ))}
-            </ol>
+            </>
           )}
         </>
       )}

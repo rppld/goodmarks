@@ -12,9 +12,19 @@
   font-size: inherit;
 }
 
+.base:focus,
+.base:hover {
+  background-color: var(--button-background-color-hover);
+}
+
 .primary {
   background-color: var(--color-primary);
   color: var(--white);
+}
+
+.primary:focus,
+.primary:hover {
+  background-color: var(--color-primary-hover);
 }
 
 .success {
@@ -22,14 +32,29 @@
   color: var(--white);
 }
 
+.success:focus,
+.success:hover {
+  background-color: var(--color-success-hover);
+}
+
 .warning {
   background-color: var(--color-warning);
   color: var(--white);
 }
 
+.warning:focus,
+.warning:hover {
+  background-color: var(--color-warning-hover);
+}
+
 .danger {
   background-color: var(--color-danger);
   color: var(--white);
+}
+
+.danger:focus,
+.danger:hover {
+  background-color: var(--color-danger-hover);
 }
 
 .adornment {
@@ -40,4 +65,8 @@
   justify-content: center;
   align-items: center;
   margin-left: calc(var(--space-12) * -1);
+}
+
+.no-children .adornment {
+  margin-right: calc(var(--space-12) * -1);
 }
