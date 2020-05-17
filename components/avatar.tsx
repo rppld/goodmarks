@@ -15,13 +15,15 @@ const Avatar: React.FC<Props> = ({
   ...props
 }) => (
   <span className={styles.wrapper} {...props}>
-    <Image
-      className={styles.image}
-      src={src}
-      alt={alt}
-      width={size}
-      height={size}
-    />
+    {src && (
+      <Image
+        className={styles.image}
+        src={src}
+        alt={alt}
+        width={size}
+        height={size}
+      />
+    )}
   </span>
 )
 

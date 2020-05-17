@@ -1,5 +1,4 @@
-.hstack,
-.vstack {
+.hstack {
   display: flex;
   align-items: center;
 }
@@ -8,15 +7,12 @@
   flex-direction: row;
 }
 
-.vstack {
-  flex-direction: column;
-}
-
 .hstack > * + * {
   margin-left: var(--space-8);
 }
 
 .vstack > * + * {
+  display: block;
   margin-top: var(--space-8);
 }
 

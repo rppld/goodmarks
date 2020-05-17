@@ -25,6 +25,10 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
       classList.push(styles[variant])
     }
 
+    if (React.Children.count(children) === 0) {
+      classList.push(styles['no-children'])
+    }
+
     return (
       <Component ref={ref} className={classList.join(' ')} {...props}>
         {leftAdornment ? (

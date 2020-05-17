@@ -84,52 +84,57 @@ async function getBookmarks(req, res) {
     return getAllBookmarks(req, res)
   }
 
-  const { data } = await faunaClient(faunaSecret).query(
-    getBookmarksWithUsersMapGetGeneric(
-      // Since we start of here with follower_stats index (a ref we
-      // don't need afterwards, we can use join here!)
-      q.Map(
-        Paginate(
-          // Merge my own bookmarks with those of the people I’m
-          // following.
-          Union(
-            // Fetch the bookmarks of the people I’m following.
-            Join(
-              // the index takes one term, the user that is browsing
-              // our app
-              Match(
-                Index('follower_stats_by_user_popularity'),
-                Select(['data', 'user'], Get(Identity()))
-              ),
-              // Join can also take a lambda, and we have to use a
-              // lambda since our index returns more than one
-              // variable. Our index again contains two values (the
-              // score and the author ref), so takes an array of two
-              // values We only care about the author ref which we
-              // will feed into the bookmarks_by_author index, to get
-              // bookmark references. Added advantage, because we use a
-              // join here we can let the index sort as well ;).
-              Lambda(
-                ['bookmarkScore', 'authorRef'],
-                Match(Index('bookmarks_by_author'), Var('authorRef'))
+  const data = await faunaClient(faunaSecret).query(
+    Let(
+      {
+        bookmarks: getBookmarksWithUsersMapGetGeneric(
+          // Since we start of here with follower_stats index (a ref we
+          // don't need afterwards, we can use join here!)
+          q.Map(
+            Paginate(
+              // Merge my own bookmarks with those of the people I’m
+              // following.
+              Union(
+                // Fetch the bookmarks of the people I’m following.
+                Join(
+                  // the index takes one term, the user that is browsing
+                  // our app
+                  Match(
+                    Index('follower_stats_by_user_popularity'),
+                    Select(['data', 'user'], Get(Identity()))
+                  ),
+                  // Join can also take a lambda, and we have to use a
+                  // lambda since our index returns more than one
+                  // variable. Our index again contains two values (the
+                  // score and the author ref), so takes an array of two
+                  // values We only care about the author ref which we
+                  // will feed into the bookmarks_by_author index, to get
+                  // bookmark references. Added advantage, because we use a
+                  // join here we can let the index sort as well ;).
+                  Lambda(
+                    ['bookmarkScore', 'authorRef'],
+                    Match(Index('bookmarks_by_author'), Var('authorRef'))
+                  )
+                ),
+                // Fetch my own bookmarks.
+                Match(
+                  Index('bookmarks_by_author'),
+                  Select(['data', 'user'], Get(Identity()))
+                )
               )
             ),
-            // Fetch my own bookmarks.
-            Match(
-              Index('bookmarks_by_author'),
-              Select(['data', 'user'], Get(Identity()))
-            )
+            // the created time has served its purpose for sorting.
+            Lambda(['createdTime', 'ref'], Var('ref'))
           )
         ),
-        // the created time has served its purpose for sorting.
-        Lambda(['createdTime', 'ref'], Var('ref'))
-      )
+      },
+      {
+        bookmarks: Var('bookmarks'),
+      }
     )
   )
 
-  return res.status(200).json({
-    bookmarks: data.map(flattenDataKeys),
-  })
+  return res.status(200).json(flattenDataKeys(data))
 }
 
 async function getBookmarksByUserHandle(req, res) {
@@ -321,8 +326,8 @@ async function deleteComment(req, res) {
         updateOriginal: Update(Var('bookmarkRef'), {
           data: {
             comments: Subtract(
-              1,
-              Select(['data', 'comments'], Var('bookmark'))
+              Select(['data', 'comments'], Var('bookmark')),
+              1
             ),
           },
         }),

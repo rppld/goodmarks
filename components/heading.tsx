@@ -52,3 +52,27 @@ export const H4: React.FC<Props> = ({
     </Component>
   )
 }
+
+export const H5: React.FC<Props> = ({
+  as: Component = 'h5',
+  children,
+  ...props
+}) => {
+  return (
+    <Component className={styles['level-5']} {...props}>
+      {children}
+    </Component>
+  )
+}
+
+export const H6: React.FC<Props> = ({
+  as: Component = 'h6',
+  children,
+  ...props
+}) => {
+  return (
+    <Component className={styles['level-6']} {...props}>
+      {children}
+    </Component>
+  )
+}

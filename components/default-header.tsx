@@ -6,7 +6,7 @@ import Button from './button'
 import Avatar from './avatar'
 import Header from './header'
 import { HStack } from './stack'
-import { Plus, MagnifyingGlass } from './icon'
+import { Plus, MagnifyingGlass, Home } from './icon'
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
 import { useViewer } from 'components/viewer-context'
 
@@ -22,20 +22,12 @@ const DefaultHeader: React.FC = () => {
     <Header>
       <HStack alignment="space-between">
         <Link href="/" passHref>
-          <Button as="a" variant="generic">
-            Home
-          </Button>
+          <Button as="a" variant="generic" leftAdornment={<Home />} />
         </Link>
 
         <HStack>
           <Link href="/search" passHref>
-            <Button
-              as="a"
-              variant="primary"
-              leftAdornment={<MagnifyingGlass />}
-            >
-              Search
-            </Button>
+            <Button as="a" leftAdornment={<MagnifyingGlass />} />
           </Link>
 
           <Link href="/new" passHref>
