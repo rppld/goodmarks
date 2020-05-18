@@ -3,8 +3,9 @@
   overflow: hidden;
   border-radius: var(--space-8);
   background-color: var(--button-background-color);
-  width: 100%;
-  padding-bottom: 100%;
+  width: 256px;
+  height: 256px;
+  border-radius: 128px;
   cursor: pointer;
 }
 

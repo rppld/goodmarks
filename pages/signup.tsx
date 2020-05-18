@@ -8,12 +8,12 @@ import Form from 'components/form'
 import { H2 } from 'components/heading'
 import Text from 'components/text'
 import PageTitle from 'components/page-title'
-import { HStack } from 'components/stack'
 import Button from 'components/button'
 import debounce from 'lodash/debounce'
 import { mutate } from 'swr'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import GoogleG from 'components/google-g'
 
 const Signup: NextPage = () => {
   const [hasValidUsername, setHasValidUsername] = React.useState(undefined)
@@ -31,10 +31,20 @@ const Signup: NextPage = () => {
     }
   }
 
+  const checkWhitespace = (value) => {
+    if (/\s/.test(value)) return false
+    return true
+  }
+
   const validationSchema = Yup.object({
     username: Yup.string()
       .min(5, 'Must be 5 characters or more')
       .max(15, 'Must be 15 characters or less')
+      .test(
+        'whitespace',
+        'The username can’t contain any spaces',
+        checkWhitespace
+      )
       .test('unique-username', 'This username is already taken', checkUsername)
       .required('Required'),
     email: Yup.string().email('Invalid email address').required('Required'),
@@ -74,7 +84,7 @@ const Signup: NextPage = () => {
       }
 
       mutate('/api/me')
-      Router.push('/')
+      Router.push('/signup/picture')
     } catch (error) {
       console.error(error)
       setError(error.message)
@@ -84,20 +94,33 @@ const Signup: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Signup</H2>
+        <H2 as="h1">Create an account</H2>
         <Text meta>
           Or{' '}
           <Link href="/login">
-            <a>login</a>
+            <a>log in</a>
           </Link>{' '}
           if you already have an account.
         </Text>
       </PageTitle>
 
       <Form onSubmit={formik.handleSubmit}>
+        <Button
+          as="a"
+          href="/api/auth?action=oauth2&provider=google"
+          size="lg"
+          leftAdornment={<GoogleG />}
+        >
+          Continue with Google
+        </Button>
+
+        <span>or sign up using your email address</span>
+
         <Input
           name="username"
-          labelText="Username"
+          labelText="Display name"
+          hideLabel
+          placeholder="Display name"
           value={formik.values.username}
           onChange={handleChange}
           onBlur={formik.handleBlur}
@@ -107,7 +130,7 @@ const Signup: NextPage = () => {
               ? formik.errors.username
                 ? String(formik.errors.username)
                 : 'This username is available'
-              : undefined
+              : 'A unique username that will be used throughout the platform'
           }
           validate={
             formik.values.username.length > 0 &&
@@ -123,6 +146,8 @@ const Signup: NextPage = () => {
           name="email"
           type="email"
           labelText="Email"
+          hideLabel
+          placeholder="Email"
           value={formik.values.email}
           onChange={handleChange}
           onBlur={formik.handleBlur}
@@ -137,6 +162,8 @@ const Signup: NextPage = () => {
           type="password"
           name="password"
           labelText="Password"
+          hideLabel
+          placeholder="Password"
           value={formik.values.password}
           onChange={handleChange}
           onBlur={formik.handleBlur}
@@ -147,12 +174,9 @@ const Signup: NextPage = () => {
           }
         />
 
-        <HStack alignment="space-between">
-          <Button as="a" href="/api/auth?action=oauth2&provider=google">
-            Continue with Google
-          </Button>
-          <Button type="submit">Sign up</Button>
-        </HStack>
+        <Button type="submit" size="lg" variant="primary">
+          Sign up
+        </Button>
 
         {error && <p>Error: {error}</p>}
       </Form>

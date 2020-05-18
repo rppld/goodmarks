@@ -10,6 +10,7 @@ interface Props extends React.ComponentPropsWithoutRef<'input'> {
   help?: React.ReactElement | string
   labelText?: string
   name: string
+  placeholder?: string
   type?: string
   rows?: string
   validate?: () => boolean
@@ -23,6 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       help,
       labelText,
       name,
+      placeholder,
       type = 'text',
       validate,
       ...props
@@ -57,6 +59,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           type={Component === 'input' ? type : undefined}
           name={name}
           id={name}
+          placeholder={placeholder}
           {...props}
         />
 

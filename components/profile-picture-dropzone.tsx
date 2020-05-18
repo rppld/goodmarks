@@ -6,11 +6,16 @@ import { useDropzone } from 'react-dropzone'
 import { useViewer } from 'components/viewer-context'
 import useS3 from 'utils/use-s3'
 
-const ProfilePictureDropzone: React.FC = () => {
+interface Props {
+  onDrop?: () => void
+}
+
+const ProfilePictureDropzone: React.FC<Props> = (props) => {
   const { viewer, setViewer } = useViewer()
   const [uploadFile, { loading }] = useS3()
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async (acceptedFiles) => {
+      props.onDrop()
       const fileName = await uploadFile(acceptedFiles[0])
       // Save new picture in database.
       handleUpdateUser(viewer.id, {
@@ -42,6 +47,10 @@ const ProfilePictureDropzone: React.FC = () => {
       <span className={styles.button}>{loading ? 'Loading' : 'Edit'}</span>
     </div>
   )
+}
+
+ProfilePictureDropzone.defaultProps = {
+  onDrop: () => {},
 }
 
 export default ProfilePictureDropzone
