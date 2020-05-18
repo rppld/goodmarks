@@ -12,9 +12,37 @@
   font-size: inherit;
 }
 
+.base.lg {
+  height: var(--space-56);
+}
+
 .base:focus,
 .base:hover {
   background-color: var(--button-background-color-hover);
+}
+
+.base.disabled {
+  color: var(--black-50);
+}
+
+.disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.primary,
+.success,
+.warning,
+.danger {
+  text-shadow: 1px 1px 0 var(--black-20);
+}
+
+.primary svg,
+.success svg,
+.warning svg,
+.danger svg {
+  -webkit-filter: drop-shadow(1px 1px 0 var(--black-20));
+  filter: drop-shadow(1px 1px 0 var(--black-20));
 }
 
 .primary {
@@ -27,6 +55,14 @@
   background-color: var(--color-primary-hover);
 }
 
+.primary.disabled {
+  color: var(--white-50);
+}
+
+.primary.disabled:hover {
+  background-color: var(--color-primary);
+}
+
 .success {
   background-color: var(--color-success);
   color: var(--white);
@@ -35,6 +71,14 @@
 .success:focus,
 .success:hover {
   background-color: var(--color-success-hover);
+}
+
+.success.disabled {
+  color: var(--white-50);
+}
+
+.success.disabled:hover {
+  background-color: var(--color-success);
 }
 
 .warning {
@@ -47,6 +91,14 @@
   background-color: var(--color-warning-hover);
 }
 
+.warning.disabled {
+  color: var(--white-50);
+}
+
+.warning.disabled:hover {
+  background-color: var(--color-warning);
+}
+
 .danger {
   background-color: var(--color-danger);
   color: var(--white);
@@ -55,6 +107,14 @@
 .danger:focus,
 .danger:hover {
   background-color: var(--color-danger-hover);
+}
+
+.danger.disabled {
+  color: var(--white-50);
+}
+
+.danger.disabled:hover {
+  background-color: var(--color-danger);
 }
 
 .adornment {
@@ -69,4 +129,8 @@
 
 .no-children .adornment {
   margin-right: calc(var(--space-12) * -1);
+}
+
+.fullWidth {
+  width: 100%;
 }

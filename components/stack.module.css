@@ -11,9 +11,25 @@
   margin-left: var(--space-8);
 }
 
+.hstack.spacing-md > * + * {
+  margin-left: var(--space-16);
+}
+
+.hstack.spacing-lg > * + * {
+  margin-left: var(--space-32);
+}
+
 .vstack > * + * {
   display: block;
   margin-top: var(--space-8);
+}
+
+.vstack.spacing-md > * + * {
+  margin-top: var(--space-16);
+}
+
+.vstack.spacing-lg > * + * {
+  margin-top: var(--space-32);
 }
 
 .leading {

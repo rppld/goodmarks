@@ -1,6 +1,8 @@
 import React from 'react'
 import Router from 'next/router'
 import PageTitle from './page-title'
+import { useRouter } from 'next/router'
+import qs from 'querystringify'
 import parseHashtags from 'utils/parse-hashtags'
 import { H2 } from './heading'
 import Text from './text'
@@ -23,6 +25,11 @@ interface Props {
 }
 
 const NewBookmarkForm: React.FC<Props> = ({ category }) => {
+  const router = useRouter()
+  const queryString = router && router.asPath.split('?')[1]
+  const query = queryString && qs.parse(queryString)
+  const onboarding = query?.onboarding === 'true'
+
   const [error, setError] = React.useState(null)
   const [selection, setSelection] = React.useState(null)
   const formik = useFormik({
@@ -115,18 +122,21 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     <Layout
       header={
         <Header>
-          <HStack alignment="space-between">
+          <HStack
+            alignment={onboarding && !selection ? 'trailing' : 'space-between'}
+          >
             {selection ? (
               <Button onClick={resetSelection} leftAdornment={<ChevronLeft />}>
                 {getBackButtonLabel()}
               </Button>
-            ) : (
+            ) : onboarding ? null : (
               <Link href="/new" passHref>
                 <Button as="a" leftAdornment={<ChevronLeft />}>
                   New bookmark
                 </Button>
               </Link>
             )}
+
             <Link href="/" passHref>
               <Button as="a" variant="danger">
                 Cancel

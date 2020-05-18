@@ -5,6 +5,7 @@
   --space-8: 0.5rem;
   --space-12: 0.75rem;
   --space-16: 1rem;
+  --space-24: 1.5rem;
   --space-32: 2rem;
   --space-40: 2.5rem;
   --space-48: 3rem;
@@ -77,14 +78,15 @@
 
   --grey: hsla(43, 11%, 37%, 1);
 
-  --black: hsla(180, 20%, 6%, 1);
-  --black-5: hsla(180, 20%, 6%, 0.05);
-  --black-10: hsla(180, 20%, 6%, 0.1);
-  --black-20: hsla(180, 20%, 6%, 0.2);
-  --black-30: hsla(180, 20%, 6%, 0.3);
-  --black-40: hsla(180, 20%, 6%, 0.4);
-  --black-50: hsla(180, 20%, 6%, 0.5);
-  --black-90: hsla(180, 20%, 6%, 0.9);
+  --black: hsla(0, 0%, 0%, 1);
+  --black-5: hsla(0, 0%, 0%, 0.05);
+  --black-10: hsla(0, 0%, 0%, 0.1);
+  --black-15: hsla(0, 0%, 0%, 0.15);
+  --black-20: hsla(0, 0%, 0%, 0.2);
+  --black-30: hsla(0, 0%, 0%, 0.3);
+  --black-40: hsla(0, 0%, 0%, 0.4);
+  --black-50: hsla(0, 0%, 0%, 0.5);
+  --black-90: hsla(0, 0%, 0%, 0.9);
 
   --white: hsla(60, 100%, 99%, 1);
   --white-5: hsla(60, 100%, 99%, 0.05);
@@ -112,6 +114,8 @@
   --button-background-color: var(--black-5);
   --button-background-color-hover: var(--black-10);
   --input-border-color: var(--black-10);
+  --input-border-color-hover: var(--black-15);
+  --input-outline-color: var(--black-20);
   --input-background-color: #fff;
   --input-highlight-color: var(--black-5);
 }
@@ -124,8 +128,10 @@
     --button-label-color: var(--white);
     --button-background-color: var(--white-10);
     --button-background-color-hover: var(--white-15);
-    --input-border-color: var(--white-20);
-    --input-background-color: hsla(180, 20%, 3%, 1);
+    --input-background-color: var(--white-5);
+    --input-outline-color: var(--white-50);
+    --input-border-color: var(--white-10);
+    --input-border-color-hover: var(--white-15);
     --input-highlight-color: var(--white-10);
     --color-primary-hover: var(--blue-light);
     --color-success-hover: var(--green-light);

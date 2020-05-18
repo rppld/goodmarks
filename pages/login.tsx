@@ -9,7 +9,7 @@ import Form from 'components/form'
 import { H2 } from 'components/heading'
 import Text from 'components/text'
 import PageTitle from 'components/page-title'
-import { HStack } from 'components/stack'
+import GoogleG from 'components/google-g'
 import { mutate } from 'swr'
 import { useFormik } from 'formik'
 
@@ -48,7 +48,7 @@ const Login: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Login</H2>
+        <H2 as="h1">Log in</H2>
         <Text meta>
           Or{' '}
           <Link href="/signup">
@@ -59,27 +59,34 @@ const Login: NextPage = () => {
       </PageTitle>
 
       <Form onSubmit={formik.handleSubmit}>
+        <Button
+          as="a"
+          href="/api/auth?action=oauth2&provider=google"
+          size="lg"
+          leftAdornment={<GoogleG />}
+        >
+          Continue with Google
+        </Button>
+        <span>or log in using your email address</span>
         <Input
           type="email"
           name="email"
           labelText="Email"
+          hideLabel
+          placeholder="Email"
           onChange={formik.handleChange}
         />
-
         <Input
           type="password"
           name="password"
           labelText="Password"
+          hideLabel
+          placeholder="Password"
           onChange={formik.handleChange}
         />
-
-        <HStack alignment="space-between">
-          <Button as="a" href="/api/auth?action=oauth2&provider=google">
-            Continue with Google
-          </Button>
-          <Button type="submit">Login</Button>
-        </HStack>
-
+        <Button type="submit" variant="primary" size="lg">
+          Log in
+        </Button>
         {error && <p>Error: {error}</p>}
       </Form>
     </Layout>

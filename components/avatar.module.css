@@ -1,16 +1,33 @@
 .wrapper {
   vertical-align: middle;
   display: inline-block;
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  min-height: 40px;
   border-radius: 50%;
   position: relative;
   overflow: hidden;
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
   background-color: var(--button-background-color);
+}
+
+.wrapper.sm {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+}
+
+.wrapper.md {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.wrapper.lg {
+  width: 256px;
+  height: 256px;
+  min-width: 256px;
+  min-height: 256px;
 }
 
 .image {

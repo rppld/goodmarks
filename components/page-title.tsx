@@ -1,9 +1,17 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './page-title.module.css'
 
-const PageTitle: React.FC = ({ children, ...props }) => {
+interface Props {
+  as?: React.ElementType | string
+  center?: boolean
+}
+
+const PageTitle: React.FC<Props> = ({ children, center = false, ...props }) => {
+  const className = classNames(styles.container, center && styles.center)
+
   return (
-    <header className={styles.container} {...props}>
+    <header className={className} {...props}>
       {children}
     </header>
   )

@@ -13,7 +13,9 @@ const Settings: NextPage = () => {
         <H2 as="h1">Settings</H2>
         <Text meta>Update your profile.</Text>
       </PageTitle>
-      <ProfilePictureDropzone />
+      <div>
+        <ProfilePictureDropzone />
+      </div>
     </Layout>
   )
 }
