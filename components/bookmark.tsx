@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './bookmark.module.css'
 import { HStack, VStack } from './stack'
 import Avatar from './avatar'
@@ -16,14 +17,10 @@ interface ActionProps {
 }
 
 const Action: React.FC<ActionProps> = ({ active, leftAdornment, children }) => {
-  const classList = [styles.action]
-
-  if (active) {
-    classList.push(styles.active)
-  }
+  const className = classNames(styles.action, active && styles.active)
 
   return (
-    <button className={classList.join(' ')}>
+    <button className={className}>
       {leftAdornment && (
         <span className={styles.adornment}>{leftAdornment}</span>
       )}

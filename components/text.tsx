@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './text.module.css'
 
 interface Props {
@@ -12,14 +13,10 @@ const Text: React.FC<Props> = ({
   children,
   ...props
 }) => {
-  const classList = [styles.text]
-
-  if (meta) {
-    classList.push(styles.meta)
-  }
+  const className = classNames(styles.hstack, meta && styles.meta)
 
   return (
-    <Component className={classList.join(' ')} {...props}>
+    <Component className={className} {...props}>
       {children}
     </Component>
   )

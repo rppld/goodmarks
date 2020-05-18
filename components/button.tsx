@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './button.module.css'
 
 interface Props extends React.ComponentPropsWithoutRef<'button'> {
@@ -19,18 +20,14 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
     }: Props,
     ref: React.Ref<HTMLButtonElement>
   ) => {
-    const classList = [styles.base]
-
-    if (variant) {
-      classList.push(styles[variant])
-    }
-
-    if (React.Children.count(children) === 0) {
-      classList.push(styles['no-children'])
-    }
+    const className = classNames(
+      styles.base,
+      variant && styles[variant],
+      React.Children.count(children) === 0 && styles['no-children']
+    )
 
     return (
-      <Component ref={ref} className={classList.join(' ')} {...props}>
+      <Component ref={ref} className={className} {...props}>
         {leftAdornment ? (
           <span className={styles.adornment}>{leftAdornment}</span>
         ) : null}

@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './icon.module.css'
 
 export interface IconProps {
@@ -15,10 +16,10 @@ const Icon: React.FC<Props> = ({
   a11yTitle,
   ...props
 }) => {
-  const classList = ['icon', styles.wrapper, styles[size]]
+  const className = classNames('icon', styles.wrapper, styles[size])
 
   return (
-    <span className={classList.join(' ')} {...props}>
+    <span className={className} {...props}>
       <svg
         className={styles.svg}
         aria-label={a11yTitle}
