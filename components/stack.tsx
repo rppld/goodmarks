@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './stack.module.css'
 
 interface Props {
@@ -9,26 +10,18 @@ export const HStack: React.FC<Props> = ({
   children,
   alignment = 'center',
   ...props
-}) => {
-  const classList = [styles.hstack, styles[alignment]]
-
-  return (
-    <div className={classList.join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+}) => (
+  <div className={classNames(styles.hstack, styles[alignment])} {...props}>
+    {children}
+  </div>
+)
 
 export const VStack: React.FC<Props> = ({
   children,
   alignment = 'center',
   ...props
-}) => {
-  const classList = [styles.vstack, styles[alignment]]
-
-  return (
-    <div className={classList.join(' ')} {...props}>
-      {children}
-    </div>
-  )
-}
+}) => (
+  <div className={classNames(styles.vstack, styles[alignment])} {...props}>
+    {children}
+  </div>
+)
