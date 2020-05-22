@@ -1,13 +1,8 @@
 import React from 'react'
+import { Comment } from 'lib/types'
 
-interface Options {
-  onSuccess: (response) => void
-}
-
-const useCreateComment = (
-  options: Options
-): [
-  (text: string, bookmarkId: string) => Promise<void>,
+const useCreateComment = (): [
+  (text: string, bookmarkId: string) => Promise<{ comment: Comment }>,
   {
     loading: boolean
     error: string | null
@@ -30,11 +25,8 @@ const useCreateComment = (
         }),
       })
 
-      if (typeof options.onSuccess !== 'undefined') {
-        options.onSuccess(await res.json())
-      }
-
       setLoading(false)
+      return await res.json()
     } catch (error) {
       console.log(error)
       setError(error.message)

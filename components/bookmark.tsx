@@ -2,6 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import styles from './bookmark.module.css'
 import { HStack, VStack } from './stack'
+import { BookmarksData } from 'lib/types'
 import Avatar from './avatar'
 import Item from './item'
 import Link from 'next/link'
@@ -10,22 +11,30 @@ import { Heart, SpeechBubble } from './icon'
 import TimeAgo from 'timeago-react'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
+import useLikeBookmark from 'utils/use-like-bookmark'
 
-interface ActionProps {
+interface ActionProps extends React.ComponentProps<'button'> {
+  as?: React.ElementType | string
   active?: boolean
   leftAdornment?: any
 }
 
-const Action: React.FC<ActionProps> = ({ active, leftAdornment, children }) => {
+const Action: React.FC<ActionProps> = ({
+  as: Component = 'button',
+  active,
+  leftAdornment,
+  children,
+  ...props
+}) => {
   const className = classNames(styles.action, active && styles.active)
 
   return (
-    <button className={className}>
+    <Component className={className} {...props}>
       {leftAdornment && (
         <span className={styles.adornment}>{leftAdornment}</span>
       )}
       {children}
-    </button>
+    </Component>
   )
 }
 
@@ -36,6 +45,7 @@ interface Props {
   comments: any
   original?: any
   user: any
+  onLike?: (newData: BookmarksData) => void
 }
 
 const Bookmark: React.FC<Props> = ({
@@ -44,8 +54,14 @@ const Bookmark: React.FC<Props> = ({
   comments,
   original,
   user,
+  ...props
 }) => {
-  console.log(bookmark.created['@ts'])
+  const [likeBookmark, { loading: liking }] = useLikeBookmark()
+
+  const handleLike = async () => {
+    props.onLike(await likeBookmark(bookmark.id))
+  }
+
   return (
     <div className={styles.container}>
       <VStack>
@@ -60,10 +76,16 @@ const Bookmark: React.FC<Props> = ({
             </div>
           </HStack>
           <HStack>
-            <Action active={bookmarkStats.like} leftAdornment={<Heart />}>
+            <Action
+              active={bookmarkStats.like}
+              leftAdornment={<Heart />}
+              onClick={handleLike}
+              disabled={liking}
+            >
               {bookmark.likes}
             </Action>
             <Action
+              as="span"
               active={bookmarkStats.comment}
               leftAdornment={<SpeechBubble />}
             >

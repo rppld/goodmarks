@@ -8,7 +8,20 @@ import { H2 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
 
 const Home: NextPage = () => {
-  const { data, error } = useSWR<BookmarksData>('/api/bookmarks')
+  const { data, error, mutate } = useSWR<BookmarksData>('/api/bookmarks')
+
+  function handleLike(newData) {
+    const newBookmarks = data.bookmarks.map((item) => {
+      if (item.bookmark.id === newData.bookmarks[0].bookmark.id) {
+        return newData.bookmarks[0]
+      }
+      return item
+    })
+
+    mutate({
+      bookmarks: newBookmarks,
+    })
+  }
 
   return (
     <Layout>
@@ -23,7 +36,7 @@ const Home: NextPage = () => {
       ) : (
         <>
           {data.bookmarks.map((item) => (
-            <Bookmark {...item} key={item.bookmark.id} />
+            <Bookmark {...item} key={item.bookmark.id} onLike={handleLike} />
           ))}
         </>
       )}

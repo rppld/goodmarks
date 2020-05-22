@@ -1,13 +1,8 @@
 import React from 'react'
+import { Comment } from 'lib/types'
 
-interface Options {
-  onSuccess: (response) => void
-}
-
-const useDeleteComment = (
-  options: Options
-): [
-  (id: string) => Promise<void>,
+const useDeleteComment = (): [
+  (id: string) => Promise<{ comment: Comment }>,
   {
     loading: boolean
     error: string | null
@@ -29,11 +24,8 @@ const useDeleteComment = (
         }),
       })
 
-      if (typeof options.onSuccess !== 'undefined') {
-        options.onSuccess(await res.json())
-      }
-
       setLoading(false)
+      return await res.json()
     } catch (error) {
       console.log(error)
       setError(error.message)
