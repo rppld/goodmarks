@@ -32,27 +32,31 @@ const Bookmark: NextPage = () => {
     initialValues: {
       comment: '',
     },
-    onSubmit: handleSubmit,
+    onSubmit: handleCreateComment,
   })
   const [deleteBookmark, { loading: deleting }] = useDeleteBookmark()
-  const [likeBookmark, { loading: liking }] = useLikeBookmark({
-    onSuccess: ({ bookmarks }) => {
-      // The updated bookmark is returned in the `bookmarks` array.
-      mutate(`/api/bookmarks?id=${id}`, {
-        bookmarks: [
-          {
-            ...bookmarks[0],
-            bookmarkStats: {
-              ...bookmarks[0].bookmarkStats,
-              like: bookmarks[0].bookmarkStats.like,
-            },
+  const [likeBookmark, { loading: liking }] = useLikeBookmark()
+  const [createComment] = useCreateComment()
+  const [deleteComment] = useDeleteComment()
+
+  async function handleLike() {
+    const { bookmarks } = await likeBookmark(String(id))
+    mutate(`/api/bookmarks?id=${id}`, {
+      bookmarks: [
+        {
+          ...bookmarks[0],
+          bookmarkStats: {
+            ...bookmarks[0].bookmarkStats,
+            like: bookmarks[0].bookmarkStats.like,
           },
-        ],
-      })
-    },
-  })
-  const [createComment] = useCreateComment({
-    onSuccess: ({ comment }) => {
+        },
+      ],
+    })
+  }
+
+  async function handleCreateComment(values, { resetForm }) {
+    try {
+      const { comment } = await createComment(values.comment, String(id))
       mutate(`/api/bookmarks?id=${id}`, {
         bookmarks: [
           {
@@ -73,29 +77,24 @@ const Bookmark: NextPage = () => {
           },
         ],
       })
-    },
-  })
-  const [deleteComment] = useDeleteComment({
-    onSuccess: (res) =>
-      mutate(`/api/bookmarks?id=${id}`, {
-        bookmarks: [
-          {
-            ...data.bookmarks[0],
-            comments: data.bookmarks[0].comments.filter(
-              ({ comment }) => comment.id !== res.comment.id
-            ),
-          },
-        ],
-      }),
-  })
-
-  async function handleSubmit(values, { resetForm }) {
-    try {
-      await createComment(values.comment, String(id))
       resetForm()
     } catch (error) {
       console.error(error)
     }
+  }
+
+  async function handleDeleteComment(commentId) {
+    const res = await deleteComment(commentId)
+    mutate(`/api/bookmarks?id=${id}`, {
+      bookmarks: [
+        {
+          ...data.bookmarks[0],
+          comments: data.bookmarks[0].comments.filter(
+            ({ comment }) => comment.id !== res.comment.id
+          ),
+        },
+      ],
+    })
   }
 
   return (
@@ -113,7 +112,7 @@ const Bookmark: NextPage = () => {
 
       {viewer && (
         <Button
-          onClick={() => likeBookmark(String(id))}
+          onClick={handleLike}
           variant={bookmarkStats?.like ? 'success' : undefined}
           disabled={liking}
         >
@@ -129,7 +128,9 @@ const Bookmark: NextPage = () => {
               <li key={comment.id}>
                 {comment.text}{' '}
                 {author.id === viewer?.id ? (
-                  <button onClick={() => deleteComment(comment.id)}>[×]</button>
+                  <button onClick={() => handleDeleteComment(comment.id)}>
+                    [×]
+                  </button>
                 ) : null}
               </li>
             ))}

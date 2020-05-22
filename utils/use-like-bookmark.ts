@@ -1,13 +1,8 @@
 import React from 'react'
+import { BookmarksData } from 'lib/types'
 
-interface Options {
-  onSuccess: (response) => void
-}
-
-const useLikeBookmark = (
-  options: Options
-): [
-  (id: string) => Promise<void>,
+const useLikeBookmark = (): [
+  (id: string) => Promise<BookmarksData>,
   {
     loading: boolean
     error: string | null
@@ -29,11 +24,8 @@ const useLikeBookmark = (
         }),
       })
 
-      if (typeof options.onSuccess !== 'undefined') {
-        options.onSuccess(await res.json())
-      }
-
       setLoading(false)
+      return await res.json()
     } catch (error) {
       console.log(error)
       setError(error.message)

@@ -21,14 +21,12 @@ export interface User {
 }
 
 export interface BookmarksData {
-  bookmarks: [
-    {
-      bookmark: Bookmark
-      bookmarkStats: any
-      user: User
-      comments: [{ comment: Comment; author: User }]
-    }
-  ]
+  bookmarks: {
+    bookmark: Bookmark
+    bookmarkStats: any
+    user: User
+    comments: [{ comment: Comment; author: User }]
+  }[]
 }
 
 export interface ViewerData {

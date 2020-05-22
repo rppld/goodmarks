@@ -10,7 +10,6 @@ import { H2 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
-import { VStack } from 'components/stack'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -20,6 +19,19 @@ const User: NextPage = () => {
     () => handle && `/api/bookmarks?handle=${handle}`
   )
   const { viewer } = useViewer()
+
+  function handleLike(newData) {
+    const newBookmarks = data.bookmarks.map((item) => {
+      if (item.bookmark.id === newData.bookmarks[0].bookmark.id) {
+        return newData.bookmarks[0]
+      }
+      return item
+    })
+
+    mutate({
+      bookmarks: newBookmarks,
+    })
+  }
 
   const safeVerifyError = (error, keys) => {
     if (keys.length > 0) {
@@ -98,7 +110,11 @@ const User: NextPage = () => {
           {data.bookmarks.length > 0 && (
             <>
               {data.bookmarks.map((item) => (
-                <Bookmark {...item} key={item.bookmark.id} />
+                <Bookmark
+                  {...item}
+                  key={item.bookmark.id}
+                  onLike={handleLike}
+                />
               ))}
             </>
           )}
