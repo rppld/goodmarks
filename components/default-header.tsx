@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import { logout } from 'lib/auth'
+import getImageUrl from 'utils/get-image-url'
 import Button from './button'
 import Avatar from './avatar'
 import Header from './header'
@@ -39,13 +40,16 @@ const DefaultHeader: React.FC = () => {
           {viewer ? (
             <Menu>
               <MenuButton>
-                <Avatar src={viewer.picture} />
+                <Avatar src={getImageUrl(viewer.picture, 'avatarLg')} />
               </MenuButton>
               <MenuList>
                 <MenuItem
                   onSelect={() => Router.push('/[user]', `/${viewer.handle}`)}
                 >
                   Profile
+                </MenuItem>
+                <MenuItem onSelect={() => Router.push('/settings')}>
+                  Settings
                 </MenuItem>
                 <MenuItem onSelect={handleLogout}>Logout</MenuItem>
               </MenuList>

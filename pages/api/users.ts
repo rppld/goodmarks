@@ -1,7 +1,13 @@
 import { query as q } from 'faunadb'
 import cookie from 'cookie'
+import { deleteObject } from 'lib/s3'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { faunaClient, FAUNA_SECRET_COOKIE, flattenDataKeys } from 'lib/fauna'
+import {
+  faunaClient,
+  serverClient,
+  FAUNA_SECRET_COOKIE,
+  flattenDataKeys,
+} from 'lib/fauna'
 
 const {
   Let,
@@ -16,11 +22,54 @@ const {
   Select,
   Get,
   Identity,
+  Update,
   Delete,
   Exists,
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const { action } = req.query
+
+  switch (action) {
+    case 'follow':
+      return handleFollow(req, res)
+    case 'update':
+    default:
+      return handleUpdate(req, res)
+  }
+}
+
+async function handleUpdate(req, res) {
+  const { userId, updates } = req.body
+
+  const { oldUser, newUser } = await serverClient.query(
+    Let(
+      {
+        userRef: Ref(Collection('Users'), userId),
+        user: Get(Var('userRef')),
+        updateUser: Update(Var('userRef'), {
+          data: {
+            ...Var('user'),
+            ...updates,
+          },
+        }),
+      },
+      {
+        oldUser: Var('user'),
+        newUser: Var('updateUser'),
+      }
+    )
+  )
+
+  // Delete old picture from S3 if updates contained a new one.
+  if (oldUser.data.picture !== newUser.data.picture) {
+    deleteObject(oldUser.data.picture)
+  }
+
+  res.status(200).json(flattenDataKeys(newUser))
+}
+
+async function handleFollow(req, res) {
   const { authorId } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]

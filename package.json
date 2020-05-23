@@ -11,6 +11,8 @@
     "@reach/listbox": "^0.10.3",
     "@reach/menu-button": "^0.10.3",
     "@reach/visually-hidden": "^0.10.2",
+    "aws-sdk": "^2.683.0",
+    "btoa": "^1.2.1",
     "classnames": "^2.2.6",
     "cookie": "^0.4.1",
     "date-fns": "^2.14.0",
@@ -22,6 +24,7 @@
     "querystringify": "^2.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-dropzone": "^11.0.1",
     "simple-oauth2": "^3.4.0",
     "swr": "^0.2.1",
     "timeago-react": "^3.0.0"

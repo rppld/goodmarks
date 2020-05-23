@@ -80,8 +80,9 @@ const User: NextPage = () => {
 
   const toggleFollowUser = () => {
     setLoading(true)
-    console.log('follow user')
-    fetch('/api/users', fetchOptions).then(handleSuccess).catch(handleError)
+    fetch('/api/users?action=follow', fetchOptions)
+      .then(handleSuccess)
+      .catch(handleError)
   }
 
   return (

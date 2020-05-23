@@ -14,7 +14,7 @@ import {
 const { Create, Let, Collection, Var, Select, Login, Match, Index, Get } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { action } = req.query // args[0] is the `req` object
+  const { action } = req.query
 
   switch (action) {
     case 'login':
