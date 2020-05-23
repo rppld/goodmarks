@@ -15,7 +15,6 @@ import parseISO from 'date-fns/parseISO'
 import Link from 'next/link'
 import Button from './button'
 import Layout from './layout'
-import Header from './header'
 import Form from './form'
 import { HStack } from './stack'
 import { ChevronLeft } from './icon'
@@ -119,33 +118,29 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   }
 
   return (
-    <Layout
-      header={
-        <Header>
-          <HStack
-            alignment={onboarding && !selection ? 'trailing' : 'space-between'}
-          >
-            {selection ? (
-              <Button onClick={resetSelection} leftAdornment={<ChevronLeft />}>
-                {getBackButtonLabel()}
-              </Button>
-            ) : onboarding ? null : (
-              <Link href="/new" passHref>
-                <Button as="a" leftAdornment={<ChevronLeft />}>
-                  New bookmark
-                </Button>
-              </Link>
-            )}
+    <Layout>
+      <HStack
+        alignment={onboarding && !selection ? 'trailing' : 'space-between'}
+      >
+        {selection ? (
+          <Button onClick={resetSelection} leftAdornment={<ChevronLeft />}>
+            {getBackButtonLabel()}
+          </Button>
+        ) : onboarding ? null : (
+          <Link href="/new" passHref>
+            <Button as="a" leftAdornment={<ChevronLeft />}>
+              New bookmark
+            </Button>
+          </Link>
+        )}
 
-            <Link href="/" passHref>
-              <Button as="a" variant="danger">
-                Cancel
-              </Button>
-            </Link>
-          </HStack>
-        </Header>
-      }
-    >
+        <Link href="/" passHref>
+          <Button as="a" variant="danger">
+            Cancel
+          </Button>
+        </Link>
+      </HStack>
+
       <PageTitle>
         <H2 as="h1">{getHeading()}</H2>
         <Text meta>{getSubheading()}</Text>

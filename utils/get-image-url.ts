@@ -2,7 +2,7 @@ import btoa from 'btoa'
 
 type Size = 'avatarSm' | 'avatarMd' | 'avatarLg'
 
-function getImageUrl(key: string, size: Size) {
+function getImageUrl(key: string, size: Size = 'avatarMd') {
   if (!key) return ''
 
   if (key.includes('http')) {
@@ -13,6 +13,8 @@ function getImageUrl(key: string, size: Size) {
   }
 
   const sizes = {
+    avatarSm: [48, 48],
+    avatarMd: [96, 96],
     avatarLg: [512, 512],
   }
   const [width, height] = sizes[size]
