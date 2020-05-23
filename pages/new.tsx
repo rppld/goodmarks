@@ -8,11 +8,9 @@ import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
 import Layout from 'components/layout'
 import CategorySelection from 'components/category-selection'
 import Button from 'components/button'
-import Header from 'components/header'
 import PageTitle from 'components/page-title'
 import { H2 } from 'components/heading'
 import { HStack } from 'components/stack'
-import { Home } from 'components/icon'
 import { Text } from 'components/text'
 import useInterval from 'utils/use-interval'
 
@@ -47,36 +45,25 @@ const New: NextPage = () => {
   }
 
   return (
-    <Layout
-      header={
-        <Header>
+    <Layout>
+      <HStack alignment="trailing">
+        <Link href="/" passHref>
           {onboarding ? (
-            <HStack alignment="trailing">
-              <Link href="/" passHref>
-                <Button
-                  as="a"
-                  variant="danger"
-                  disabled={count === 0 ? false : true}
-                >
-                  {count === 0 ? 'Skip' : `Skip (${count})`}
-                </Button>
-              </Link>
-            </HStack>
+            <Button
+              as="a"
+              variant="danger"
+              disabled={count === 0 ? false : true}
+            >
+              {count === 0 ? 'Skip' : `Skip (${count})`}
+            </Button>
           ) : (
-            <HStack alignment="space-between">
-              <Link href="/" passHref>
-                <Button as="a" variant="generic" leftAdornment={<Home />} />
-              </Link>
-              <Link href="/" passHref>
-                <Button as="a" variant="danger">
-                  Cancel
-                </Button>
-              </Link>
-            </HStack>
+            <Button as="a" variant="danger">
+              Cancel
+            </Button>
           )}
-        </Header>
-      }
-    >
+        </Link>
+      </HStack>
+
       <PageTitle>
         <H2 as="h1">{getTitle()}</H2>
         <Text meta>{getDescription()}</Text>

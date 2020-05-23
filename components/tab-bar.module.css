@@ -1,0 +1,113 @@
+.container {
+  background: var(--body-background-color);
+  border-top: 1px solid var(--input-highlight-color);
+  position: fixed;
+  padding-bottom: env(safe-area-inset-bottom);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+@media (min-width: 560px) {
+  .container {
+    top: 0;
+    bottom: initial;
+    border-top: 0;
+    border-bottom: 1px solid var(--input-highlight-color);
+  }
+}
+
+.tabBar {
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  z-index: var(--z-index-tabbar);
+  list-style: none;
+  height: var(--space-64);
+}
+
+.tabBar li {
+  width: 20%;
+}
+
+@media (min-width: 560px) {
+  .tabBar li {
+    width: auto;
+  }
+}
+
+.tabItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+}
+
+.tabItem:hover {
+  color: var(--text-color-90);
+}
+
+.active {
+  opacity: 0.6;
+}
+
+@media (min-width: 560px) {
+  .tabItem {
+    display: inline-flex;
+    flex-direction: row;
+    height: var(--space-40);
+    border-radius: var(--space-12);
+    width: auto;
+    margin-right: var(--space-24);
+  }
+}
+
+@media (min-width: 560px) {
+  .newBookmarkItem {
+    order: 1;
+    margin-left: auto;
+  }
+
+  .newBookmarkItem .tabItem {
+    margin-right: 0;
+  }
+}
+
+.label {
+  font-size: var(--fs-12);
+  padding-top: 2px;
+}
+
+@media (min-width: 560px) {
+  .label {
+    font-size: var(--fs-16);
+    padding-top: var(--space-0);
+    padding-left: var(--space-8);
+    font-weight: var(--fw-medium);
+  }
+}
+
+.newBookmarkLabel {
+  display: none;
+}
+
+@media (min-width: 560px) {
+  .newBookmarkLabel {
+    display: inline;
+    font-size: var(--fs-16);
+  }
+}
+
+@media (max-width: 560px) {
+  /* We hide the label of the button using css, this fixes redudant margin  */
+  .newBookmarkItem button span {
+    margin: 0 calc(var(--space-12) * -1);
+  }
+}

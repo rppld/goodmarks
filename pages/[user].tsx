@@ -6,6 +6,8 @@ import Layout from 'components/layout'
 import { Text } from 'components/text'
 import Bookmark from 'components/bookmark'
 import Button from 'components/button'
+import { HStack } from 'components/stack'
+import { logout } from 'lib/auth'
 import { H2 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
@@ -18,7 +20,7 @@ const User: NextPage = () => {
   const { data, error, mutate } = useSWR(
     () => handle && `/api/bookmarks?handle=${handle}`
   )
-  const { viewer } = useViewer()
+  const { viewer, resetViewer } = useViewer()
 
   function handleLike(newData) {
     const newBookmarks = data.bookmarks.map((item) => {
@@ -85,6 +87,11 @@ const User: NextPage = () => {
       .catch(handleError)
   }
 
+  async function handleLogout() {
+    await logout()
+    resetViewer()
+  }
+
   return (
     <Layout>
       <PageTitle>
@@ -92,15 +99,25 @@ const User: NextPage = () => {
         <Text meta>User ID: {data?.author?.id}</Text>
       </PageTitle>
 
-      {viewer && handle !== viewer.handle ? (
-        <Button
-          onClick={toggleFollowUser}
-          disabled={loading}
-          variant={data?.following ? undefined : 'primary'}
-        >
-          {data?.following ? 'Unfollow' : 'Follow'}
+      <HStack alignment="leading">
+        {viewer && handle !== viewer.handle ? (
+          <Button
+            onClick={toggleFollowUser}
+            disabled={loading}
+            variant={data?.following ? undefined : 'primary'}
+          >
+            {data?.following ? 'Unfollow' : 'Follow'}
+          </Button>
+        ) : null}
+
+        <Link href="/settings" passHref>
+          <Button as="a">Settings</Button>
+        </Link>
+
+        <Button onClick={handleLogout} variant="danger">
+          Logout
         </Button>
-      ) : null}
+      </HStack>
 
       {error && <div>failed to load</div>}
 

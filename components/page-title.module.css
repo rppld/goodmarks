@@ -1,8 +1,4 @@
 .container {
   margin-top: var(--space-16);
-  margin-bottom: var(--space-24);
-}
-
-.center {
-  text-align: center;
+  margin-bottom: var(--space-16);
 }
