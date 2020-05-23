@@ -4,6 +4,7 @@ import useSWR from 'swr'
 
 interface ContextProps {
   viewer: User
+  setViewer: (viewer: User) => void
   resetViewer: () => void
 }
 
@@ -14,6 +15,7 @@ const ViewerProvider: React.FC = (props) => {
   const { data, mutate } = useSWR<ViewerData>('/api/me')
   const value = {
     viewer: data?.viewer,
+    setViewer: (viewer) => mutate({ viewer }),
     resetViewer: () => mutate({ viewer: null }),
   }
 
@@ -27,10 +29,11 @@ function useViewer() {
     throw new Error('useViewer() must be used within a ViewerProvider')
   }
 
-  const { viewer, resetViewer } = context
+  const { viewer, setViewer, resetViewer } = context
 
   return {
     viewer,
+    setViewer,
     resetViewer,
   }
 }

@@ -12,6 +12,7 @@ import TimeAgo from 'timeago-react'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
 import useLikeBookmark from 'utils/use-like-bookmark'
+import getImageUrl from 'utils/get-image-url'
 
 interface ActionProps extends React.ComponentProps<'button'> {
   as?: React.ElementType | string
@@ -67,7 +68,9 @@ const Bookmark: React.FC<Props> = ({
       <VStack>
         <HStack alignment="space-between">
           <HStack>
-            <Avatar src={user.picture} />
+            <Avatar
+              src={user.picture && getImageUrl(user.picture, 'avatarLg')}
+            />
             <div>
               <H5>@{user.handle}</H5>
               <span className={styles['time-ago']}>
