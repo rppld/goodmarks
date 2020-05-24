@@ -1,5 +1,7 @@
 import React from 'react'
 import VisuallyHidden from '@reach/visually-hidden'
+import classNames from 'classnames'
+import { Error, CheckCircle } from 'components/icon'
 import styles from './input.module.css'
 
 interface Props extends React.ComponentPropsWithoutRef<'input'> {
@@ -10,6 +12,7 @@ interface Props extends React.ComponentPropsWithoutRef<'input'> {
   name: string
   type?: string
   rows?: string
+  validate?: () => boolean
 }
 
 const Input = React.forwardRef<HTMLInputElement, Props>(
@@ -21,11 +24,20 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       labelText,
       name,
       type = 'text',
+      validate,
       ...props
     },
     ref: React.Ref<HTMLInputElement>
   ) => (
-    <span className={styles['field-wrapper']}>
+    <span
+      className={classNames(
+        typeof validate === 'function'
+          ? validate()
+            ? styles.valid
+            : styles.invalid
+          : undefined
+      )}
+    >
       {hideLabel ? (
         <VisuallyHidden>
           <label className={styles.label} htmlFor={name}>
@@ -38,14 +50,22 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
         </label>
       )}
 
-      <Component
-        ref={ref}
-        className={styles.field}
-        type={Component === 'input' ? type : undefined}
-        name={name}
-        id={name}
-        {...props}
-      />
+      <span className={styles.fieldWrapper}>
+        <Component
+          ref={ref}
+          className={styles.field}
+          type={Component === 'input' ? type : undefined}
+          name={name}
+          id={name}
+          {...props}
+        />
+
+        {typeof validate === 'function' && (
+          <span className={styles.rightAdornment}>
+            {validate() ? <CheckCircle /> : <Error />}
+          </span>
+        )}
+      </span>
 
       {help ? <span className={styles.help}>{help}</span> : null}
     </span>

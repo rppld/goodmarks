@@ -1,4 +1,9 @@
-.field-wrapper {
+.container {
+  position: relative;
+}
+
+.fieldWrapper {
+  display: block;
   position: relative;
 }
 
@@ -12,6 +17,14 @@
   color: var(--text-color-meta);
 }
 
+.valid .help {
+  color: var(--color-success);
+}
+
+.invalid .help {
+  color: var(--color-danger);
+}
+
 .field {
   width: 100%;
   display: block;
@@ -21,4 +34,25 @@
   font-size: inherit;
   border-radius: var(--space-12);
   padding: var(--space-16) var(--space-12);
+}
+
+.rightAdornment {
+  pointer-events: none;
+  z-index: 2;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--space-48);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.valid .rightAdornment {
+  color: var(--color-success);
+}
+
+.invalid .rightAdornment {
+  color: var(--color-danger);
 }
