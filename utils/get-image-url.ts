@@ -3,9 +3,7 @@ import btoa from 'btoa'
 type Size = 'avatarSm' | 'avatarMd' | 'avatarLg'
 
 function getImageUrl(key: string, size: Size) {
-  if (!key) {
-    throw new Error('No `key` passed to getImageUrl()')
-  }
+  if (!key) return ''
 
   if (key.includes('http')) {
     // If the picture URL contains `http` it’s an indicator that a
