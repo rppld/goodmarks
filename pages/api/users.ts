@@ -11,8 +11,11 @@ import {
 
 const {
   Let,
+  Count,
+  GT,
   Ref,
   Create,
+  Paginate,
   Collection,
   Var,
   HasIdentity,
@@ -34,9 +37,32 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     case 'follow':
       return handleFollow(req, res)
     case 'update':
-    default:
       return handleUpdate(req, res)
+    default:
+      return get(req, res)
   }
+}
+
+async function get(req, res) {
+  const { handle } = req.query
+
+  const data = await serverClient.query(
+    Let(
+      {
+        setRef: Match(Index('users_by_handle'), handle.toLowerCase()),
+        resultsCount: Count(Var('setRef')),
+        userRef: If(
+          GT(Var('resultsCount'), 0),
+          Select(0, Paginate(Var('setRef'), { size: 10 })),
+          false
+        ),
+        user: If(GT(Var('resultsCount'), 0), Get(Var('userRef')), false),
+      },
+      Var('user')
+    )
+  )
+
+  return res.status(200).json(flattenDataKeys(data))
 }
 
 async function handleUpdate(req, res) {

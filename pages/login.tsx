@@ -59,7 +59,12 @@ const Login: NextPage = () => {
       </PageTitle>
 
       <Form onSubmit={formik.handleSubmit}>
-        <Input name="email" labelText="Email" onChange={formik.handleChange} />
+        <Input
+          type="email"
+          name="email"
+          labelText="Email"
+          onChange={formik.handleChange}
+        />
 
         <Input
           type="password"
