@@ -197,6 +197,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  color: var(--color-primary-hover);
+}
+
 button {
   margin: 0;
   padding: 0;
