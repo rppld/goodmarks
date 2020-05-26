@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 import Layout from 'components/layout'
 import SiteSearch from 'components/site-search'
 import { H2 } from 'components/heading'
-import Text from 'components/text'
+import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 
 const Search: NextPage = () => {
