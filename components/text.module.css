@@ -9,13 +9,13 @@
   }
 }
 
-.meta {
+.small {
   font-size: var(--fs-14);
-  color: var(--text-color-meta);
+  line-height: var(--lh-copy);
 }
 
 @media (min-width: 560px) {
-  .meta {
+  .small {
     font-size: var(--fs-16);
   }
 }
@@ -28,6 +28,10 @@
   .caption {
     font-size: var(--fs-14);
   }
+}
+
+.meta {
+  color: var(--text-color-meta);
 }
 
 .semibold {
