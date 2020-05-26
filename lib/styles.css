@@ -46,69 +46,37 @@
   --fw-bold: 700;
 
   /* Colors */
-  --dm-blue-lightest: hsl(230, 93%, 78%);
-  --dm-blue-lighter: hsl(231, 93%, 73%);
-  --dm-blue-light: hsl(230, 93%, 68%);
-  --dm-blue: hsl(231, 92%, 58%);
-  --dm-blue-dark: hsl(231, 92%, 58%);
-  --dm-blue-darker: hsl(230, 92%, 53%);
-  --dm-blue-darkest: hsl(230, 92%, 48%);
+  --blue-lightest: hsl(230, 92%, 73%);
+  --blue-lighter: hsl(230, 92%, 68%);
+  --blue-light: hsl(230, 92%, 63%);
+  --blue: hsl(230, 92%, 58%);
+  --blue-dark: hsl(230, 92%, 53%);
+  --blue-darker: hsl(230, 92%, 48%);
+  --blue-darkest: hsl(230, 92%, 43%);
 
-  --lm-blue-lightest: hsl(230, 92%, 73%);
-  --lm-blue-lighter: hsl(230, 92%, 68%);
-  --lm-blue-light: hsl(230, 92%, 63%);
-  --lm-blue: hsl(230, 92%, 58%);
-  --lm-blue-dark: hsl(230, 92%, 53%);
-  --lm-blue-darker: hsl(230, 92%, 48%);
-  --lm-blue-darkest: hsl(230, 92%, 43%);
+  --green-lightest: hsl(115, 65%, 60%);
+  --green-lighter: hsl(115, 65%, 55%);
+  --green-light: hsl(115, 65%, 50%);
+  --green: hsl(115, 65%, 45%);
+  --green-dark: hsl(115, 65%, 40%);
+  --green-darker: hsl(115, 65%, 35%);
+  --green-darkest: hsl(115, 65%, 30%);
 
-  --dm-green-lightest: hsl(115, 65%, 65%);
-  --dm-green-lighter: hsl(115, 66%, 60%);
-  --dm-green-light: hsl(115, 65%, 55%);
-  --dm-green: hsl(115, 65%, 45%);
-  --dm-green-dark: hsl(115, 65%, 45%);
-  --dm-green-darker: hsl(115, 66%, 40%);
-  --dm-green-darkest: hsl(115, 65%, 35%);
+  --yellow-lightest: hsl(43, 90%, 63%);
+  --yellow-lighter: hsl(43, 90%, 58%);
+  --yellow-light: hsl(43, 90%, 53%);
+  --yellow: hsl(43, 90%, 48%);
+  --yellow-dark: hsl(43, 90%, 43%);
+  --yellow-darker: hsl(43, 90%, 38%);
+  --yellow-darkest: hsl(43, 90%, 33%);
 
-  --lm-green-lightest: hsl(115, 65%, 60%);
-  --lm-green-lighter: hsl(115, 65%, 55%);
-  --lm-green-light: hsl(115, 65%, 50%);
-  --lm-green: hsl(115, 65%, 45%);
-  --lm-green-dark: hsl(115, 65%, 40%);
-  --lm-green-darker: hsl(115, 65%, 35%);
-  --lm-green-darkest: hsl(115, 65%, 30%);
-
-  --dm-yellow-lightest: hsl(43, 90%, 68%);
-  --dm-yellow-lighter: hsl(43, 90%, 63%);
-  --dm-yellow-light: hsl(43, 90%, 58%);
-  --dm-yellow: hsl(43, 90%, 53%);
-  --dm-yellow-dark: hsl(43, 90%, 48%);
-  --dm-yellow-darker: hsl(43, 90%, 43%);
-  --dm-yellow-darkest: hsl(43, 90%, 38%);
-
-  --lm-yellow-lightest: hsl(43, 90%, 63%);
-  --lm-yellow-lighter: hsl(43, 90%, 58%);
-  --lm-yellow-light: hsl(43, 90%, 53%);
-  --lm-yellow: hsl(43, 90%, 48%);
-  --lm-yellow-dark: hsl(43, 90%, 43%);
-  --lm-yellow-darker: hsl(43, 90%, 38%);
-  --lm-yellow-darkest: hsl(43, 90%, 33%);
-
-  --dm-red-lightest: hsl(2, 85%, 67%);
-  --dm-red-lighter: hsl(1, 85%, 62%);
-  --dm-red-light: hsl(2, 85%, 57%);
-  --dm-red: hsl(1, 85%, 52%);
-  --dm-red-dark: hsl(2, 85%, 47%);
-  --dm-red-darker: hsl(2, 85%, 42%);
-  --dm-red-darkest: hsl(1, 85%, 38%);
-
-  --lm-red-lightest: hsl(2, 85%, 62%);
-  --lm-red-lighter: hsl(2, 85%, 57%);
-  --lm-red-light: hsl(2, 85%, 52%);
-  --lm-red: hsl(2, 85%, 47%);
-  --lm-red-dark: hsl(2, 85%, 42%);
-  --lm-red-darker: hsl(2, 85%, 38%);
-  --lm-red-darkest: hsl(2, 85%, 33%);
+  --red-lightest: hsl(2, 85%, 62%);
+  --red-lighter: hsl(2, 85%, 57%);
+  --red-light: hsl(2, 85%, 52%);
+  --red: hsl(2, 85%, 47%);
+  --red-dark: hsl(2, 85%, 42%);
+  --red-darker: hsl(2, 85%, 38%);
+  --red-darkest: hsl(2, 85%, 33%);
 
   --grey: hsla(43, 11%, 37%, 1);
 
@@ -133,14 +101,14 @@
   --white-50: hsla(60, 100%, 99%, 0.5);
   --white-90: hsla(60, 100%, 99%, 0.9);
 
-  --color-primary: var(--lm-blue);
-  --color-primary-hover: var(--lm-blue-dark);
-  --color-success: var(--lm-green);
-  --color-success-hover: var(--lm-green-dark);
-  --color-warning: var(--lm-yellow);
-  --color-warning-hover: var(--lm-yellow-dark);
-  --color-danger: var(--lm-red);
-  --color-danger-hover: var(--lm-red-dark);
+  --color-primary: var(--blue);
+  --color-primary-hover: var(--blue-dark);
+  --color-success: var(--green);
+  --color-success-hover: var(--green-dark);
+  --color-warning: var(--yellow);
+  --color-warning-hover: var(--yellow-dark);
+  --color-danger: var(--red);
+  --color-danger-hover: var(--red-dark);
   --body-background-color: var(--white);
   --text-color: var(--black);
   --text-color-meta: var(--black-50);
@@ -156,14 +124,42 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-primary: var(--dm-blue);
-    --color-primary-hover: var(--dm-blue-darker);
-    --color-success: var(--dm-green);
-    --color-success-hover: var(--dm-green-darker);
-    --color-warning: var(--dm-yellow);
-    --color-warning-hover: var(--dm-yellow-dark);
-    --color-danger: var(--dm-red);
-    --color-danger-hover: var(--dm-red-dark);
+    --blue-lightest: hsl(230, 93%, 78%);
+    --blue-lighter: hsl(231, 93%, 73%);
+    --blue-light: hsl(230, 93%, 68%);
+    --blue: hsl(231, 92%, 58%);
+    --blue-dark: hsl(231, 92%, 58%);
+    --blue-darker: hsl(230, 92%, 53%);
+    --blue-darkest: hsl(230, 92%, 48%);
+
+    --green-lightest: hsl(115, 65%, 65%);
+    --green-lighter: hsl(115, 66%, 60%);
+    --green-light: hsl(115, 65%, 55%);
+    --green: hsl(115, 65%, 45%);
+    --green-dark: hsl(115, 65%, 45%);
+    --green-darker: hsl(115, 66%, 40%);
+    --green-darkest: hsl(115, 65%, 35%);
+
+    --yellow-lightest: hsl(43, 90%, 68%);
+    --yellow-lighter: hsl(43, 90%, 63%);
+    --yellow-light: hsl(43, 90%, 58%);
+    --yellow: hsl(43, 90%, 53%);
+    --yellow-dark: hsl(43, 90%, 48%);
+    --yellow-darker: hsl(43, 90%, 43%);
+    --yellow-darkest: hsl(43, 90%, 38%);
+
+    --red-lightest: hsl(2, 85%, 67%);
+    --red-lighter: hsl(1, 85%, 62%);
+    --red-light: hsl(2, 85%, 57%);
+    --red: hsl(1, 85%, 52%);
+    --red-dark: hsl(2, 85%, 47%);
+    --red-darker: hsl(2, 85%, 42%);
+    --red-darkest: hsl(1, 85%, 38%);
+
+    --color-primary-hover: var(--blue-darker);
+    --color-success-hover: var(--green-darker);
+    --color-warning-hover: var(--yellow-dark);
+    --color-danger-hover: var(--red-dark);
     --body-background-color: var(--black);
     --text-color: var(--white);
     --text-color-meta: var(--white-50);
