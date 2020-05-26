@@ -13,7 +13,7 @@ import PageTitle from 'components/page-title'
 import { H2 } from 'components/heading'
 import { HStack } from 'components/stack'
 import { Home } from 'components/icon'
-import Text from 'components/text'
+import { Text } from 'components/text'
 import useInterval from 'utils/use-interval'
 
 const New: NextPage = () => {

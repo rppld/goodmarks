@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styles from './category-selection.module.css'
-import Text from './text'
+import { Text } from './text'
 import { Movie, Link as LinkIcon, TV } from './icon'
 
 const CategorySelection: React.FC = () => {

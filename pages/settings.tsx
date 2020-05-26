@@ -2,7 +2,7 @@ import React from 'react'
 import { NextPage } from 'next'
 import Layout from 'components/layout'
 import { H2 } from 'components/heading'
-import Text from 'components/text'
+import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 import ProfilePictureDropzone from 'components/profile-picture-dropzone'
 
