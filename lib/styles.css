@@ -46,6 +46,14 @@
   --fw-bold: 700;
 
   /* Colors */
+  --d-blue-lightest: hsl(230, 93%, 78%);
+  --d-blue-lighter: hsl(231, 93%, 73%);
+  --d-blue-light: hsl(230, 93%, 68%);
+  --d-blue: hsl(231, 92%, 58%);
+  --d-blue-dark: hsl(231, 92%, 58%);
+  --d-blue-darker: hsl(230, 92%, 53%);
+  --d-blue-darkest: hsl(230, 92%, 48%);
+
   --blue-lightest: hsl(230, 92%, 73%);
   --blue-lighter: hsl(230, 92%, 68%);
   --blue-light: hsl(230, 92%, 63%);
@@ -53,6 +61,14 @@
   --blue-dark: hsl(230, 92%, 53%);
   --blue-darker: hsl(230, 92%, 48%);
   --blue-darkest: hsl(230, 92%, 43%);
+
+  --d-green-lightest: hsl(115, 65%, 65%);
+  --d-green-lighter: hsl(115, 66%, 60%);
+  --d-green-light: hsl(115, 65%, 55%);
+  --d-green: hsl(115, 65%, 45%);
+  --d-green-dark: hsl(115, 65%, 45%);
+  --d-green-darker: hsl(115, 66%, 40%);
+  --d-green-darkest: hsl(115, 65%, 35%);
 
   --green-lightest: hsl(115, 65%, 60%);
   --green-lighter: hsl(115, 65%, 55%);
@@ -62,6 +78,14 @@
   --green-darker: hsl(115, 65%, 35%);
   --green-darkest: hsl(115, 65%, 30%);
 
+  --d-yellow-lightest: hsl(43, 90%, 68%);
+  --d-yellow-lighter: hsl(43, 90%, 63%);
+  --d-yellow-light: hsl(43, 90%, 58%);
+  --d-yellow: hsl(43, 90%, 53%);
+  --d-yellow-dark: hsl(43, 90%, 48%);
+  --d-yellow-darker: hsl(43, 90%, 43%);
+  --d-yellow-darkest: hsl(43, 90%, 38%);
+
   --yellow-lightest: hsl(43, 90%, 63%);
   --yellow-lighter: hsl(43, 90%, 58%);
   --yellow-light: hsl(43, 90%, 53%);
@@ -69,6 +93,14 @@
   --yellow-dark: hsl(43, 90%, 43%);
   --yellow-darker: hsl(43, 90%, 38%);
   --yellow-darkest: hsl(43, 90%, 33%);
+
+  --d-red-lightest: hsl(2, 85%, 67%);
+  --d-red-lighter: hsl(1, 85%, 62%);
+  --d-red-light: hsl(2, 85%, 57%);
+  --d-red: hsl(1, 85%, 52%);
+  --d-red-dark: hsl(2, 85%, 47%);
+  --d-red-darker: hsl(2, 85%, 42%);
+  --d-red-darkest: hsl(1, 85%, 38%);
 
   --red-lightest: hsl(2, 85%, 62%);
   --red-lighter: hsl(2, 85%, 57%);
