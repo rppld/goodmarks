@@ -1,25 +1,49 @@
 .level-1 {
-  font-size: var(--fs-48);
-  line-height: var(--lh-title);
-}
-
-.level-2 {
   font-size: var(--fs-32);
   line-height: var(--lh-title);
 }
 
-.level-3 {
-  font-size: var(--fs-28);
+@media (min-width: 560px) {
+  .level-1 {
+    font-size: var(--fs-48);
+  }
+}
+
+.level-2 {
+  font-size: var(--fs-26);
   line-height: var(--lh-title);
 }
 
-.level-4 {
+@media (min-width: 560px) {
+  .level-2 {
+    font-size: var(--fs-34);
+  }
+}
+
+.level-3 {
   font-size: var(--fs-22);
+  line-height: var(--lh-title);
+}
+
+@media (min-width: 560px) {
+  .level-3 {
+    font-size: var(--fs-28);
+  }
+}
+
+.level-4 {
+  font-size: var(--fs-20);
   line-height: var(--lh-copy);
 }
 
+@media (min-width: 560px) {
+  .level-4 {
+    font-size: var(--fs-22);
+  }
+}
+
 .level-5 {
-  font-size: var(--fs-16);
+  font-size: var(--fs-18);
   line-height: var(--lh-copy);
 }
 
@@ -28,4 +52,10 @@
   line-height: var(--lh-copy);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+@media (min-width: 560px) {
+  .level-6 {
+    font-size: var(--fs-14);
+  }
 }

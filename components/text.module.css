@@ -1,8 +1,39 @@
 .text {
-  font-size: var(--fs-18);
+  font-size: var(--fs-16);
   line-height: var(--lh-copy);
 }
 
+@media (min-width: 560px) {
+  .text {
+    font-size: var(--fs-18);
+  }
+}
+
 .meta {
+  font-size: var(--fs-14);
   color: var(--text-color-meta);
+}
+
+@media (min-width: 560px) {
+  .meta {
+    font-size: var(--fs-16);
+  }
+}
+
+.caption {
+  font-size: var(--fs-12);
+}
+
+@media (min-width: 560px) {
+  .caption {
+    font-size: var(--fs-14);
+  }
+}
+
+.semibold {
+  font-weight: var(--fw-medium);
+}
+
+.bold {
+  font-weight: var(--fw-bold);
 }
