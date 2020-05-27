@@ -1,26 +1,42 @@
 .container {
   position: relative;
   border-top: 1px solid var(--button-background-color);
-  padding-top: var(--space-32);
-  padding-bottom: var(--space-32);
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
 }
 
-.time-ago {
-  display: block;
-  font-size: var(--fs-14);
-  color: var(--text-color-meta);
+.container:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: var(--space-12);
+}
+
+.userInfo span {
+  margin-bottom: 2px;
+}
+
+.description {
+  margin-top: var(--space-16);
+  margin-bottom: var(--space-16);
 }
 
 .action {
-  color: var(--input-border-color);
+  color: var(--text-color);
   font-size: var(--fs-14);
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-bold);
 }
 
 .adornment {
   margin-right: var(--space-4);
+  color: var(--text-color-40);
 }
 
-.active {
+.active .adornment {
   color: var(--color-primary);
 }

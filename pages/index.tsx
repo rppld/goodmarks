@@ -34,11 +34,11 @@ const Home: NextPage = () => {
       {!data ? (
         <div>loading...</div>
       ) : (
-        <>
+        <div>
           {data.bookmarks.map((item) => (
             <Bookmark {...item} key={item.bookmark.id} onLike={handleLike} />
           ))}
-        </>
+        </div>
       )}
     </Layout>
   )

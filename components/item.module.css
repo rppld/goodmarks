@@ -10,9 +10,25 @@ a:hover .container {
   background-color: var(--button-background-color-hover);
 }
 
+.meta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .poster {
   margin-right: var(--space-4);
   border-radius: var(--space-4);
-  width: 48px;
-  height: 72px;
+  width: 32px;
+  max-width: 32px;
+  min-height: 56px;
+  height: auto;
+  background-color: var(--text-color-10);
+}
+
+@media (min-width: 560px) {
+  .poster {
+    width: 40px;
+    max-width: 40px;
+  }
 }
