@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './item.module.css'
-import { Text } from './text'
+import { Text, CaptionText } from './text'
 import { H4 } from './heading'
 import { HStack } from './stack'
 import Image from './image'
@@ -18,10 +18,10 @@ const Item: React.FC<Props> = ({ image, alt, title, text }) => {
     <div className={styles.container}>
       <HStack alignment="leading">
         {image && <Image src={image} alt={alt} className={styles.poster} />}
-        <span>
-          <H4>{title}</H4>
-          <Text meta>{text}</Text>
-        </span>
+        <div className={styles.meta}>
+          <Text as="h4">{title}</Text>
+          <CaptionText meta>{text}</CaptionText>
+        </div>
       </HStack>
     </div>
   )

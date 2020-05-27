@@ -115,6 +115,8 @@
   --text-color-60: var(--black-60);
   --text-color-90: var(--black-90);
   --text-color-meta: var(--black-50);
+  --text-color-40: var(--black-40);
+  --text-color-10: var(--black-10);
   --button-label-color: var(--black);
   --button-background-color: var(--black-5);
   --button-background-color-hover: var(--black-10);
@@ -172,6 +174,8 @@
     --text-color-60: var(--white-60);
     --text-color-90: var(--white-90);
     --text-color-meta: var(--white-50);
+    --text-color-40: var(--white-40);
+    --text-color-10: var(--white-10);
     --button-label-color: var(--white);
     --button-background-color: var(--white-10);
     --button-background-color-hover: var(--white-15);
