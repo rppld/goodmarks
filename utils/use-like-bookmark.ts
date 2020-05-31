@@ -24,8 +24,9 @@ const useLikeBookmark = (): [
         }),
       })
 
+      const json = await res.json()
       setLoading(false)
-      return await res.json()
+      return json
     } catch (error) {
       console.log(error)
       setError(error.message)

@@ -6,7 +6,6 @@ import { BookmarksData } from 'lib/types'
 import Avatar from './avatar'
 import Item from './item'
 import Link from 'next/link'
-import { H5 } from './heading'
 import { Heart, SpeechBubble } from './icon'
 import TimeAgo from 'timeago-react'
 import getYear from 'date-fns/getYear'
@@ -64,6 +63,26 @@ const Bookmark: React.FC<Props> = ({
     props.onLike(await likeBookmark(bookmark.id))
   }
 
+  function optimisticLikeCount() {
+    if (bookmarkStats.like) {
+      return bookmark.likes - 1
+    }
+    return bookmark.likes + 1
+  }
+
+  function optimisticActiveState() {
+    if (bookmarkStats.like && liking) {
+      return false
+    }
+    if (!bookmarkStats.like && liking) {
+      return true
+    }
+    if (bookmarkStats.like) {
+      return true
+    }
+    return false
+  }
+
   return (
     <div className={styles.container}>
       <VStack>
@@ -81,12 +100,12 @@ const Bookmark: React.FC<Props> = ({
           </HStack>
           <HStack>
             <Action
-              active={bookmarkStats.like}
+              active={optimisticActiveState()}
               leftAdornment={<Heart />}
               onClick={handleLike}
               disabled={liking}
             >
-              {bookmark.likes}
+              {!liking ? bookmark.likes : optimisticLikeCount()}
             </Action>
             <Action
               as="span"
