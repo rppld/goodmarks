@@ -34,7 +34,7 @@
 
 .adornment {
   margin-right: var(--space-4);
-  color: var(--text-color-40);
+  color: var(--text-color-lighter);
 }
 
 .active .adornment {
