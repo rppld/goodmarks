@@ -100,12 +100,12 @@ const Bookmark: React.FC<Props> = ({
           </HStack>
           <HStack>
             <Action
-              active={optimisticActiveState()}
+              active={bookmarkStats.like}
               leftAdornment={<Heart />}
               onClick={handleLike}
               disabled={liking}
             >
-              {!liking ? bookmark.likes : optimisticLikeCount()}
+              {bookmark.likes}
             </Action>
             <Action
               as="span"
