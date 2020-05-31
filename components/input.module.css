@@ -14,7 +14,7 @@
 
 .help {
   font-size: var(--fs-14);
-  color: var(--text-color-meta);
+  color: var(--text-color-lighter);
 }
 
 .valid .help {

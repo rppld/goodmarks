@@ -112,9 +112,8 @@
   --color-danger-hover: var(--red-dark);
   --body-background-color: var(--white);
   --text-color: var(--black);
-  --text-color-60: var(--black-60);
-  --text-color-90: var(--black-90);
-  --text-color-meta: var(--black-50);
+  --text-color: var(--black);
+  --text-color-light: var(--black-90);
   --text-color-lighter: var(--black-40);
   --text-color-lightest: var(--black-10);
   --button-label-color: var(--black);
@@ -171,9 +170,7 @@
     --color-danger-hover: var(--red-dark);
     --body-background-color: var(--black);
     --text-color: var(--white);
-    --text-color-60: var(--white-60);
-    --text-color-90: var(--white-90);
-    --text-color-meta: var(--white-50);
+    --text-color-light: var(--white-90);
     --text-color-lighter: var(--white-40);
     --text-color-lightest: var(--white-10);
     --button-label-color: var(--white);

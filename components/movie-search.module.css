@@ -15,6 +15,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text-color-meta);
+  color: var(--text-color-lighter);
   background-color: var(--button-background-color);
 }
