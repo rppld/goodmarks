@@ -12,7 +12,7 @@ import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
 import useLikeBookmark from 'utils/use-like-bookmark'
 import getImageUrl from 'utils/get-image-url'
-import { Text, SmallText, CaptionText } from './text'
+import { Text, SmallText, Caption } from './text'
 
 interface ActionProps extends React.ComponentProps<'button'> {
   as?: React.ElementType | string
@@ -93,9 +93,9 @@ const Bookmark: React.FC<Props> = ({
             />
             <div className={styles.userInfo}>
               <SmallText>@{user.handle}</SmallText>
-              <CaptionText as="p" meta>
+              <Caption as="p" meta>
                 <TimeAgo datetime={bookmark.created['@ts']} />
-              </CaptionText>
+              </Caption>
             </div>
           </HStack>
           <HStack>

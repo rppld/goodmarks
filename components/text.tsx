@@ -37,7 +37,7 @@ export const SmallText: React.FC<Props> = ({
   )
 }
 
-export const CaptionText: React.FC<Props> = ({
+export const Caption: React.FC<Props> = ({
   as: Component = 'span',
   meta = false,
   children,
