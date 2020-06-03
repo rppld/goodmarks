@@ -46,7 +46,7 @@ interface Props {
   comments: any
   original?: any
   user: any
-  onLike?: (newData: BookmarksData) => void
+  onLike?: () => void
 }
 
 const Bookmark: React.FC<Props> = ({
@@ -60,7 +60,8 @@ const Bookmark: React.FC<Props> = ({
   const [likeBookmark, { loading: liking }] = useLikeBookmark()
 
   const handleLike = async () => {
-    props.onLike(await likeBookmark(bookmark.id))
+    props.onLike()
+    await likeBookmark(bookmark.id)
   }
 
   return (
