@@ -49,10 +49,12 @@ const MovieHeader: React.FC<Props> = ({
         </div>
       )}
 
-      <H6 as="strong">Movie</H6>
-      <H2 as="h1">{title}</H2>
-      <H3 as="p">{getYear(parseISO(releaseDate))}</H3>
-      {children}
+      <div>
+        <H6 as="strong">Movie</H6>
+        <H2 as="h1">{title}</H2>
+        <H3 as="p">{getYear(parseISO(releaseDate))}</H3>
+        {children}
+      </div>
     </header>
   )
 }
