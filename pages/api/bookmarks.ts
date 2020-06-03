@@ -1,4 +1,6 @@
 import { query as q } from 'faunadb'
+import atob from 'atob'
+import btoa from 'btoa'
 import {
   serverClient,
   faunaClient,
@@ -7,6 +9,15 @@ import {
 } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
+import { parseJSON } from 'faunadb/src/_json'
+
+// https://github.com/shiftx/faunadb-graphql-lib/blob/master/src/types/GraphQLFaunaCursorType.ts
+const serialize = (value) => {
+  return btoa(JSON.stringify(value))
+}
+const parseValue = (value) => {
+  return parseJSON(atob(value))
+}
 
 const {
   Create,
@@ -74,6 +85,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 async function getBookmarks(req, res) {
+  const { first, after: cursor } = req.query
+  const size = parseInt(first) || 10
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -121,7 +134,11 @@ async function getBookmarks(req, res) {
                   Index('bookmarks_by_author'),
                   Select(['data', 'user'], Get(Identity()))
                 )
-              )
+              ),
+              {
+                size,
+                after: cursor === 'null' ? undefined : parseValue(cursor),
+              }
             ),
             // the created time has served its purpose for sorting.
             Lambda(['createdTime', 'ref'], Var('ref'))
@@ -134,7 +151,16 @@ async function getBookmarks(req, res) {
     )
   )
 
-  return res.status(200).json(flattenDataKeys(data))
+  const { before, after, ...bookmarks } = data['bookmarks']
+  console.log(data)
+
+  return res.status(200).json({
+    edges: flattenDataKeys(bookmarks),
+    pageInfo: {
+      hasNextPage: Boolean(after),
+      endCursor: Boolean(after) ? serialize(after) : null,
+    },
+  })
 }
 
 async function getBookmarksByUserHandle(req, res) {
