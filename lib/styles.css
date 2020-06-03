@@ -88,6 +88,7 @@
   --black-30: hsla(0, 0%, 0%, 0.3);
   --black-40: hsla(0, 0%, 0%, 0.4);
   --black-50: hsla(0, 0%, 0%, 0.5);
+  --black-80: hsla(0, 0%, 0%, 0.8);
   --black-90: hsla(0, 0%, 0%, 0.9);
 
   --white: hsla(60, 100%, 99%, 1);
@@ -100,6 +101,7 @@
   --white-40: hsla(60, 100%, 99%, 0.4);
   --white-50: hsla(60, 100%, 99%, 0.5);
   --white-60: hsla(60, 100%, 99%, 0.6);
+  --white-80: hsla(60, 100%, 99%, 0.8);
   --white-90: hsla(60, 100%, 99%, 0.9);
 
   --color-primary: var(--blue);
@@ -111,10 +113,13 @@
   --color-danger: var(--red);
   --color-danger-hover: var(--red-dark);
   --body-background-color: var(--white);
+  --body-background-color-light: var(--white-90);
+  --body-background-color-lighter: var(--white-40);
+  --body-background-color-lightest: var(--white-10);
   --text-color: var(--black);
   --text-color: var(--black);
-  --text-color-light: var(--black-90);
-  --text-color-lighter: var(--black-40);
+  --text-color-light: var(--black-80);
+  --text-color-lighter: var(--black-50);
   --text-color-lightest: var(--black-10);
   --button-label-color: var(--black);
   --button-background-color: var(--black-5);
@@ -169,9 +174,12 @@
     --color-warning-hover: var(--yellow-dark);
     --color-danger-hover: var(--red-dark);
     --body-background-color: var(--black);
+    --body-background-color-light: var(--black-90);
+    --body-background-color-lighter: var(--black-40);
+    --body-background-color-lightest: var(--black-10);
     --text-color: var(--white);
-    --text-color-light: var(--white-90);
-    --text-color-lighter: var(--white-40);
+    --text-color-light: var(--white-80);
+    --text-color-lighter: var(--white-50);
     --text-color-lightest: var(--white-10);
     --button-label-color: var(--white);
     --button-background-color: var(--white-10);

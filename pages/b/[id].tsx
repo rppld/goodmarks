@@ -1,7 +1,6 @@
 import React from 'react'
 import { NextPage } from 'next'
 import useSWR, { mutate } from 'swr'
-import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import { useRouter } from 'next/router'
 import Input from 'components/input'
@@ -16,6 +15,7 @@ import useDeleteBookmark from 'utils/use-delete-bookmark'
 import useLikeBookmark from 'utils/use-like-bookmark'
 import useDeleteComment from 'utils/use-delete-comment'
 import useCreateComment from 'utils/use-create-comment'
+import PageTitle from 'components/page-title'
 
 const BookmarkDetail: NextPage = () => {
   const router = useRouter()
@@ -95,6 +95,8 @@ const BookmarkDetail: NextPage = () => {
       ],
     })
   }
+
+  console.log(bookmark)
 
   return (
     <Layout>
