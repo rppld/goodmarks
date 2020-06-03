@@ -18,12 +18,16 @@
   color: var(--text-color-lighter);
 }
 
+.header p {
+  margin-bottom: var(--space-16);
+}
+
 .heroWrapper {
   position: relative;
   display: flex;
   justify-content: center;
   padding: var(--space-16) 0;
-  margin-bottom: var(--space-16);
+  margin-bottom: var(--space-8);
 }
 
 @media (min-width: 560px) {

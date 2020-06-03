@@ -9,6 +9,7 @@
   padding-left: var(--space-12);
   padding-right: var(--space-12);
   font-weight: var(--fw-medium);
+  white-space: nowrap;
   font-size: inherit;
 }
 

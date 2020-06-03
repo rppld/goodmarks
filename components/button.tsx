@@ -5,7 +5,7 @@ import styles from './button.module.css'
 interface Props extends React.ComponentPropsWithoutRef<'button'> {
   as?: React.ElementType | string
   href?: string // When used as `a`
-  variant?: string
+  variant?: 'primary' | 'success' | 'warning' | 'danger'
   fullWidth?: boolean
   size?: 'sm' | 'lg'
   disabled?: boolean

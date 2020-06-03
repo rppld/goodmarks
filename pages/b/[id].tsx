@@ -96,8 +96,6 @@ const BookmarkDetail: NextPage = () => {
     })
   }
 
-  console.log(bookmark)
-
   return (
     <Layout>
       <PageTitle>

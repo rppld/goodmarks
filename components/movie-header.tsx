@@ -31,7 +31,7 @@ const MovieHeader: React.FC<Props> = ({
   }
 
   const heroStyles = {
-    backgroundImage: `url(${baseUrl.md}${backdropPath})`,
+    backgroundImage: `url(${baseUrl.sm}${backdropPath})`,
   }
 
   return (
