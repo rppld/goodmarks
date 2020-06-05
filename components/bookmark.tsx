@@ -93,19 +93,21 @@ const Bookmark: React.FC<Props> = ({
           </Action>
         </HStack>
       </HStack>
-      <div className={styles.description}>
-        {bookmark.description && <Text as="p">{bookmark.description}</Text>}
+      <div className={styles.text}>
+        {bookmark.text && <Text as="p">{bookmark.text}</Text>}
       </div>
       <Link href="/b/[id]" as={`/b/${bookmark.id}`}>
         <a>
           <Item
-            title={bookmark.title}
-            text={getYear(
-              parseISO(
-                bookmark.details['first_air_date'] ||
-                  bookmark.details['release_date']
-              )
-            )}
+            title={bookmark.details.title || bookmark.details.name}
+            text={
+              getYear(
+                parseISO(
+                  bookmark.details['first_air_date'] ||
+                    bookmark.details['release_date']
+                )
+              ) || bookmark.details.url
+            }
             image={`https://image.tmdb.org/t/p/w220_and_h330_face/${bookmark.details['poster_path']}`}
             alt={`Poster for ${bookmark.title}`}
           />

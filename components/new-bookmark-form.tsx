@@ -28,13 +28,11 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   const queryString = router && router.asPath.split('?')[1]
   const query = queryString && qs.parse(queryString)
   const onboarding = query?.onboarding === 'true'
-
   const [error, setError] = React.useState(null)
   const [selection, setSelection] = React.useState(null)
   const formik = useFormik({
     initialValues: {
-      title: '',
-      description: '',
+      text: '',
       details: {},
     },
     onSubmit: handleSubmit,
@@ -97,11 +95,10 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: selection ? selection.name || selection.title : values.title,
+          text: values.text,
           category: `${category}s`, // Plural, e.g. "links" or "tv-shows".
-          description: values.description,
           details: selection ? selection : values.details,
-          hashtags: parseHashtags(values.description) || [],
+          hashtags: parseHashtags(values.text) || [],
         }),
       })
 
@@ -158,9 +155,9 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
           />
 
           <Input
-            labelText="Description"
+            labelText="Text"
             hideLabel
-            name="description"
+            name="text"
             placeholder="Lives up to the hype"
             as="textarea"
             rows="6"
@@ -169,23 +166,23 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
           <HStack alignment="trailing">
             <Button variant="primary" type="submit">
-              {formik.values.description.length > 0 ? 'Save' : 'Skip for now'}
+              {formik.values.text.length > 0 ? 'Save' : 'Skip for now'}
             </Button>
           </HStack>
         </Form>
       ) : category === 'link' ? (
         <Form onSubmit={formik.handleSubmit}>
           <Input
-            name="title"
-            labelText="Title"
+            as="textarea"
+            rows="6"
+            name="text"
+            labelText="Text"
             onChange={formik.handleChange}
           />
 
           <Input
-            as="textarea"
-            rows="6"
-            name="description"
-            labelText="Description"
+            name="details.title"
+            labelText="Title"
             onChange={formik.handleChange}
           />
 

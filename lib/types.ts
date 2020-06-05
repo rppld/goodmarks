@@ -1,7 +1,6 @@
 export interface Bookmark {
   id: string
-  title: string
-  description: string
+  text: string
   comments: number
   likes: number
   reposts: number

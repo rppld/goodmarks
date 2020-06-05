@@ -6,11 +6,10 @@ import Layout from 'components/layout'
 import { useRouter } from 'next/router'
 import Input from 'components/input'
 import Button from 'components/button'
-import { Text } from 'components/text'
 import Form from 'components/form'
 import { HStack } from 'components/stack'
 import { useViewer } from 'components/viewer-context'
-import { H2 } from 'components/heading'
+import { H2, H4 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
 import { useFormik } from 'formik'
 import useDeleteBookmark from 'utils/use-delete-bookmark'
@@ -18,14 +17,14 @@ import useLikeBookmark from 'utils/use-like-bookmark'
 import useDeleteComment from 'utils/use-delete-comment'
 import useCreateComment from 'utils/use-create-comment'
 
-const Bookmark: NextPage = () => {
+const BookmarkDetail: NextPage = () => {
   const router = useRouter()
   const { id } = router.query
   const { data, error } = useSWR<BookmarksData>(
     () => id && `/api/bookmarks?id=${id}`
   )
-  const { bookmark, bookmarkStats, user, comments } =
-    data?.bookmarks?.length > 0 && data.bookmarks[0]
+  const item = data?.bookmarks?.length > 0 && data.bookmarks[0]
+  const { bookmark, bookmarkStats, user, comments } = item
   const { viewer } = useViewer()
   const isOwnedByViewer = data && viewer && user?.id === viewer.id
   const formik = useFormik({
@@ -99,16 +98,13 @@ const Bookmark: NextPage = () => {
 
   return (
     <Layout>
+      <PageTitle>
+        <H2 as="h1">Bookmark</H2>
+      </PageTitle>
+
       {error && <div>failed to load</div>}
 
-      {!data ? (
-        <div>loading...</div>
-      ) : (
-        <PageTitle>
-          <H2 as="h1">{bookmark?.title}</H2>
-          <Text meta>{bookmark?.description}</Text>
-        </PageTitle>
-      )}
+      {!data ? <div>loading...</div> : <H4>{bookmark.text}</H4>}
 
       {viewer && (
         <Button
@@ -181,4 +177,4 @@ const Bookmark: NextPage = () => {
   )
 }
 
-export default Bookmark
+export default BookmarkDetail

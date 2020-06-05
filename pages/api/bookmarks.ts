@@ -509,13 +509,13 @@ async function deleteBookmark(req, res) {
 }
 
 async function createBookmark(req, res) {
-  const { title, description, details, category, hashtags } = req.body
+  const { text, details, category, hashtags } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
   try {
-    if (!title) {
-      throw new Error('Title and link must be provided.')
+    if (!text) {
+      throw new Error('A text must be provided.')
     }
 
     const data = await faunaClient(faunaSecret).query(
@@ -530,8 +530,7 @@ async function createBookmark(req, res) {
         },
         Create(Collection('Bookmarks'), {
           data: {
-            title,
-            description,
+            text,
             likes: 0,
             comments: 0,
             reposts: 0,
