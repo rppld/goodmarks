@@ -66,7 +66,7 @@ async function get(req, res) {
 }
 
 async function handleUpdate(req, res) {
-  const { userId, updates } = req.body
+  const { userId, payload } = req.body
 
   const { oldUser, newUser } = await serverClient.query(
     Let(
@@ -75,8 +75,7 @@ async function handleUpdate(req, res) {
         user: Get(Var('userRef')),
         updateUser: Update(Var('userRef'), {
           data: {
-            ...Var('user'),
-            ...updates,
+            ...payload,
           },
         }),
       },

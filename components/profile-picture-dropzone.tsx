@@ -19,6 +19,7 @@ const ProfilePictureDropzone: React.FC<Props> = (props) => {
       const fileName = await uploadFile(acceptedFiles[0])
       // Save new picture in database.
       handleUpdateUser(viewer.id, {
+        ...viewer,
         picture: fileName,
       })
     },
@@ -28,7 +29,7 @@ const ProfilePictureDropzone: React.FC<Props> = (props) => {
     fetch('/api/users?action=update', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, updates: payload }),
+      body: JSON.stringify({ userId, payload }),
     })
       .then((res) => res.json())
       .then((data) => setViewer(data))
