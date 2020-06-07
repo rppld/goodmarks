@@ -1,0 +1,14 @@
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: var(--space-8);
+}
+
+.authorInfo span {
+  margin-bottom: 2px;
+}
+
+.authorInfo a {
+  color: var(--text-color);
+}

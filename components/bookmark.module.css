@@ -5,17 +5,6 @@
   padding-bottom: var(--space-24);
 }
 
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: var(--space-8);
-}
-
-.userInfo span {
-  margin-bottom: 2px;
-}
-
 .text {
   margin-top: var(--space-16);
   margin-bottom: var(--space-16);

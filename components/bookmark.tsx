@@ -2,16 +2,14 @@ import React from 'react'
 import classNames from 'classnames'
 import styles from './bookmark.module.css'
 import { HStack } from './stack'
-import Avatar from './avatar'
 import Item from './item'
 import Link from 'next/link'
 import { Heart, ChatBubble, ChatBubbleOutlined, HeartOutlined } from './icon'
-import TimeAgo from 'timeago-react'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
 import useLikeBookmark from 'utils/use-like-bookmark'
-import getImageUrl from 'utils/get-image-url'
-import { Text, SmallText, Caption } from './text'
+import { Text } from './text'
+import AuthorInfo from './author-info'
 
 interface ActionProps extends React.ComponentProps<'button'> {
   as?: React.ElementType | string
@@ -68,16 +66,8 @@ const Bookmark: React.FC<Props> = ({
   return (
     <div className={styles.container}>
       <HStack alignment="space-between">
+        <AuthorInfo user={user} timestamp={bookmark.created['@ts']} />
         <HStack>
-          <Avatar src={user.picture && getImageUrl(user.picture, 'avatarLg')} />
-          <div className={styles.userInfo}>
-            <SmallText>@{user.handle}</SmallText>
-            <Caption as="p" meta>
-              <TimeAgo datetime={bookmark.created['@ts']} />
-            </Caption>
-          </div>
-        </HStack>
-        <HStack spacing="md">
           <Action
             active={bookmarkStats.like}
             leftAdornment={
