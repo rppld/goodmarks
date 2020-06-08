@@ -71,16 +71,13 @@ const createHashTagsAndUsersByWordpartsIndex = CreateIndex({
       collection: Collection('Users'),
       fields: {
         length: Query(
-          Lambda('user', Length(Select(['data', 'name'], Var('user'))))
+          Lambda('user', Length(Select(['data', 'handle'], Var('user'))))
         ),
         wordparts: Query(
           Lambda(
             'user',
             Union(
               // We'll search both on the name and the handle.
-              // TODO: This is currently broken for users that don’t
-              // have a name. For this to work, both `name` and
-              // `handle` need to be defined.
               Union(getWordParts(Select(['data', 'handle'], Var('user')))),
               Union(getWordParts(Select(['data', 'name'], Var('user'))))
             )
@@ -317,7 +314,7 @@ const createCommentsByBookmarkAndAuthorOrderedIndex = CreateIndex({
 })
 
 async function query(client) {
-  await client.query(createCommentsByBookmarkAndAuthorOrderedIndex)
+  await client.query(createHashTagsAndUsersByWordpartsIndex)
 }
 
 module.exports = { query }
