@@ -8,6 +8,7 @@ const {
   Time,
   TimeDiff,
   Var,
+  If,
   Add,
   Multiply,
   Lambda,
@@ -79,7 +80,15 @@ const createHashTagsAndUsersByWordpartsIndex = CreateIndex({
             Union(
               // We'll search both on the name and the handle.
               Union(getWordParts(Select(['data', 'handle'], Var('user')))),
-              Union(getWordParts(Select(['data', 'name'], Var('user'))))
+              // TODO: `name` can be undefined, but I couldn’t find a
+              // way to check for that. I’m passing a random string
+              // `@` as default value for `Select()` in this case,
+              // which isn’t ideal but good enough I guess. It means
+              // that searching for `@` will return all results from
+              // the collection, but let’s block that by requiring a
+              // minimum term-length on the client before a call to
+              // the endpoint is made.
+              Union(getWordParts(Select(['data', 'name'], Var('user'), '@')))
             )
           )
         ),

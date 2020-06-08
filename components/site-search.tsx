@@ -16,9 +16,10 @@ const SiteSearch: React.FC = () => {
   const [searchTerm, setSearchTerm] = React.useState('')
   const useAutocompleteSearch = autocompleteSearch('hashtags_and_users')
   const results = useAutocompleteSearch(searchTerm)
+  const min = 3
 
   const handleChange = debounce((value) => {
-    setSearchTerm(value)
+    value.length >= min && setSearchTerm(value)
   }, 250)
 
   function handleSelect(result: any = {}) {
@@ -50,7 +51,10 @@ const SiteSearch: React.FC = () => {
     <Combobox
       aria-label="Cities"
       onSelect={(val) => {
-        const selectedIndex = findIndex(results, (res) => res.name === val)
+        const selectedIndex = findIndex(
+          results,
+          (res) => val === res.name || res.handle
+        )
         handleSelect(results[selectedIndex])
       }}
     >
@@ -64,8 +68,11 @@ const SiteSearch: React.FC = () => {
         <ComboboxPopover>
           {results.length > 0 ? (
             <ComboboxList>
-              {results.map((user) => (
-                <ComboboxOption key={user.id} value={user.name} />
+              {results.map((item) => (
+                <ComboboxOption
+                  key={item.id}
+                  value={item.handle || item.name}
+                />
               ))}
             </ComboboxList>
           ) : (
