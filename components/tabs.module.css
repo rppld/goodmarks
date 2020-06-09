@@ -32,8 +32,8 @@
 }
 
 .tab:active {
-  color: var(--text-color);
-  border-color: var(--text-color-light);
+  color: var(--text-color-light);
+  border-color: var(--text-color-lighter);
 }
 
 .active {
