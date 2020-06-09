@@ -3,16 +3,18 @@ import { NextPage } from 'next'
 import Link from 'next/link'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
-import { Text } from 'components/text'
+import { Text, SmallText } from 'components/text'
 import BookmarkNode from 'components/bookmark-node'
 import Button from 'components/button'
 import { HStack, VStack } from 'components/stack'
 import { logout } from 'lib/auth'
-import { H4 } from 'components/heading'
+import { H2 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
+import getImageUrl from 'utils/get-image-url'
+import Avatar from 'components/avatar'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -111,21 +113,19 @@ const User: NextPage = () => {
 
   return (
     <Layout>
-      <PageTitle>
-        <VStack>
-          <div>
-            <H4 as="h1">
-              {data?.author?.name ? data?.author?.name : `@${handle}`}
-            </H4>
-            {data?.author?.name && (
-              <Text meta as="p">
-                @{handle}
-              </Text>
-            )}
-          </div>
+      <HStack alignment="leading" spacing="md">
+        <Avatar
+          src={data && getImageUrl(data?.author.picture, 'avatarLg')}
+          size="lg"
+        />
+        <PageTitle>
+          <H2 as="h1">
+            {data?.author?.name ? data?.author?.name : `@${handle}`}
+          </H2>
+          <SmallText meta>@{handle}</SmallText>
           {data?.author?.bio && <Text as="p">{data?.author?.bio}</Text>}
-        </VStack>
-      </PageTitle>
+        </PageTitle>
+      </HStack>
 
       <HStack alignment="leading">
         {isViewer ? (
@@ -140,6 +140,7 @@ const User: NextPage = () => {
           </>
         ) : (
           <Button
+            fullWidth
             onClick={toggleFollowUser}
             disabled={loading}
             variant={data?.following ? undefined : 'primary'}
