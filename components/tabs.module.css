@@ -31,12 +31,14 @@
   justify-content: center;
 }
 
+.tab:hover,
 .tab:active {
   color: var(--text-color-light);
   border-color: var(--text-color-lighter);
 }
 
-.active {
+.active,
+.active:hover {
   color: var(--text-color-light);
   border-color: var(--color-primary);
 }
