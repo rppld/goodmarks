@@ -551,16 +551,12 @@ async function createBookmark(req, res) {
   }
 }
 
-async function getBookmarksByReference(req, res) {
-  const { id } = req.query
-  const cookies = cookie.parse(req.headers.cookie ?? '')
-  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+export const bookmarkApi = async (bookmarkId: string, faunaSecret?: string) => {
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
-
   const data = await client.query(
     Let(
       {
-        bookmarkRef: Ref(Collection('Bookmarks'), id),
+        bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
           q.Map(
             Paginate(
@@ -575,7 +571,19 @@ async function getBookmarksByReference(req, res) {
       }
     )
   )
-  return res.status(200).json(flattenDataKeys(data))
+
+  // Bit awkward to first stringify the data and then parse it again
+  // as JSON, but it could still contain FQL and this is the only way
+  // I found to get rid of it.
+  const json = JSON.stringify(flattenDataKeys(data))
+  return JSON.parse(json)
+}
+
+async function getBookmarksByReference(req, res) {
+  const { id } = req.query
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+  return res.status(200).send(await bookmarkApi(id, faunaSecret))
 }
 
 async function getAllBookmarks(req, res) {
