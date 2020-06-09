@@ -1,0 +1,38 @@
+.tabs {
+  display: flex;
+  list-style: none;
+  justify-content: row;
+  margin-top: var(--space-16);
+
+  /* Full bleed hack */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.tab {
+  background-color: var(--body-background-color);
+  height: var(--space-40);
+  border-bottom: 2px solid var(--text-color-lightest);
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-16);
+  color: var(--text-color-lighter);
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tab:active {
+  color: var(--text-color);
+  border-color: var(--text-color-light);
+}
+
+.active {
+  color: var(--text-color-light);
+  border-color: var(--color-primary);
+}
