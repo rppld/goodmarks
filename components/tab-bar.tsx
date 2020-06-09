@@ -14,7 +14,7 @@ const TabBar: React.FC = () => {
   const { viewer } = useViewer()
 
   function getTabClassName(href) {
-    if (router.pathname.includes(href)) {
+    if (router.pathname.includes(href) || router.asPath.includes(href)) {
       return classNames(styles.tabItem, styles.active)
     }
     return styles.tabItem
@@ -64,12 +64,12 @@ const TabBar: React.FC = () => {
         <li>
           {viewer ? (
             <Link href="/[user]" as={`/${viewer.handle}`}>
-              <a className={styles.tabItem}>
+              <a className={getTabClassName('/[user]')}>
                 <Avatar
                   src={getImageUrl(viewer.picture, 'avatarSm')}
                   size="sm"
                 />
-                <span className={styles.label}>{viewer.handle}</span>
+                <span className={styles.label}>Profile</span>
               </a>
             </Link>
           ) : (
