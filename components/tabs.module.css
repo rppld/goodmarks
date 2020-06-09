@@ -3,14 +3,18 @@
   list-style: none;
   justify-content: row;
   margin-top: var(--space-16);
+}
 
-  /* Full bleed hack */
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+@media (max-width: 560px) {
+  .tabs {
+    /* Full bleed hack */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
 }
 
 .tab {
