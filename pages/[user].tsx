@@ -12,6 +12,7 @@ import { H2 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
+import Tabs from 'components/tabs'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -92,6 +93,21 @@ const User: NextPage = () => {
     resetViewer()
   }
 
+  const tabs = [
+    {
+      href: `/${handle}`,
+      label: 'Bookmarks',
+    },
+    {
+      href: `/${handle}/lists`,
+      label: 'Lists',
+    },
+    {
+      href: `/${handle}/following`,
+      label: 'Following',
+    },
+  ]
+
   return (
     <Layout>
       <PageTitle>
@@ -118,6 +134,8 @@ const User: NextPage = () => {
           Logout
         </Button>
       </HStack>
+
+      <Tabs tabs={tabs} />
 
       {error && <div>failed to load</div>}
 
