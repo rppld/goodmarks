@@ -24,6 +24,13 @@
 }
 
 .wrapper.lg {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  min-height: 72px;
+}
+
+.wrapper.xl {
   width: 256px;
   height: 256px;
   min-width: 256px;

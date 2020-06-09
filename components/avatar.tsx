@@ -4,7 +4,7 @@ import styles from './avatar.module.css'
 import Image from './image'
 
 interface Props {
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   alt?: string
   src: string
 }
