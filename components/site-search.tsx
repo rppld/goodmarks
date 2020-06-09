@@ -9,7 +9,6 @@ import {
 import Router from 'next/router'
 import debounce from 'lodash/debounce'
 import Input from './input'
-import findIndex from 'lodash/findIndex'
 import autocompleteSearch from 'utils/autocomplete-search'
 
 const SiteSearch: React.FC = () => {
@@ -51,11 +50,11 @@ const SiteSearch: React.FC = () => {
     <Combobox
       aria-label="Cities"
       onSelect={(val) => {
-        const selectedIndex = findIndex(
-          results,
-          (res) => val === res.name || res.handle
-        )
-        handleSelect(results[selectedIndex])
+        const matchUserOrHashtag = (item) => {
+          return item.handle ? item.handle === val : item.name === val
+        }
+        const selectedItem = results.filter(matchUserOrHashtag)[0]
+        handleSelect(selectedItem)
       }}
     >
       <Input
@@ -64,6 +63,7 @@ const SiteSearch: React.FC = () => {
         placeholder="#covid19"
         as={ComboboxInput}
       />
+
       {results && (
         <ComboboxPopover>
           {results.length > 0 ? (
