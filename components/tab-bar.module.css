@@ -9,7 +9,7 @@
   z-index: 1;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .container {
     top: 0;
     bottom: initial;
@@ -36,7 +36,7 @@
   width: 20%;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .tabBar li {
     width: auto;
   }
@@ -58,7 +58,7 @@
   opacity: 0.6;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .tabItem {
     display: inline-flex;
     flex-direction: row;
@@ -69,7 +69,7 @@
   }
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .newBookmarkItem {
     order: 1;
     margin-left: auto;
@@ -85,7 +85,7 @@
   padding-top: 2px;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .label {
     font-size: var(--fs-16);
     padding-top: var(--space-0);
@@ -98,14 +98,14 @@
   display: none;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .newBookmarkLabel {
     display: inline;
     font-size: var(--fs-16);
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 620px) {
   /* We hide the label of the button using css, this fixes redudant margin  */
   .newBookmarkItem button span {
     margin: 0 calc(var(--space-12) * -1);

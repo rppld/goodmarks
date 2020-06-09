@@ -126,7 +126,7 @@
 
   --z-index-tabbar: 10;
 
-  --container-max-width: 35rem; /* 560px */
+  --container-max-width: 35rem; /* 620px */
 }
 
 @media (prefers-color-scheme: dark) {

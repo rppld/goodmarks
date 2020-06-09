@@ -3,7 +3,7 @@
   line-height: var(--lh-title);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .level-1 {
     font-size: var(--fs-48);
   }
@@ -14,7 +14,7 @@
   line-height: var(--lh-title);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .level-2 {
     font-size: var(--fs-34);
   }
@@ -25,7 +25,7 @@
   line-height: var(--lh-title);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .level-3 {
     font-size: var(--fs-28);
   }
@@ -36,7 +36,7 @@
   line-height: var(--lh-copy);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .level-4 {
     font-size: var(--fs-22);
   }
@@ -54,7 +54,7 @@
   letter-spacing: 0.05em;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .level-6 {
     font-size: var(--fs-14);
   }

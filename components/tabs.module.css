@@ -13,7 +13,7 @@
   margin-right: -50vw;
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .tabs {
     width: auto;
     position: relative;

@@ -3,7 +3,7 @@
   padding-bottom: var(--space-56);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .container {
     padding-top: var(--space-96);
   }
@@ -17,7 +17,7 @@
   padding-right: var(--space-16);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .main {
     padding: 0;
   }

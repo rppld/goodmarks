@@ -24,7 +24,7 @@ a:hover .container {
   background-color: var(--text-color-lightest);
 }
 
-@media (min-width: 560px) {
+@media (min-width: 620px) {
   .poster {
     width: 40px;
     height: 56px;
