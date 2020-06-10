@@ -1,16 +1,15 @@
 import React from 'react'
-import Link from 'next/link'
 import { NextPage } from 'next'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import qs from 'querystringify'
 import { withAuthSync } from 'lib/auth'
 import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
 import Layout from 'components/layout'
-import CategorySelection from 'components/category-selection'
 import Button from 'components/button'
+import CategorySelection from 'components/category-selection'
 import PageTitle from 'components/page-title'
-import { H2 } from 'components/heading'
-import { HStack } from 'components/stack'
+import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import useInterval from 'utils/use-interval'
 
@@ -31,7 +30,7 @@ const New: NextPage = () => {
 
   function getTitle() {
     if (onboarding) return 'Done!'
-    return 'New bookmark'
+    return 'New Bookmark'
   }
 
   function getDescription() {
@@ -46,30 +45,20 @@ const New: NextPage = () => {
 
   return (
     <Layout>
-      <HStack alignment="trailing">
-        <Link href="/" passHref>
-          {onboarding ? (
-            <Button
-              as="a"
-              variant="danger"
-              disabled={count === 0 ? false : true}
-            >
-              {count === 0 ? 'Skip' : `Skip (${count})`}
-            </Button>
-          ) : (
-            <Button as="a" variant="danger">
-              Cancel
-            </Button>
-          )}
-        </Link>
-      </HStack>
-
       <PageTitle>
-        <H2 as="h1">{getTitle()}</H2>
+        <H4 as="h1">{getTitle()}</H4>
         <Text meta>{getDescription()}</Text>
       </PageTitle>
 
       <CategorySelection />
+
+      {onboarding && (
+        <Link href="/" passHref>
+          <Button as="a" variant="danger" disabled={count === 0 ? false : true}>
+            {count === 0 ? 'Skip' : `Skip (${count})`}
+          </Button>
+        </Link>
+      )}
     </Layout>
   )
 }

@@ -4,7 +4,7 @@ import PageTitle from './page-title'
 import { useRouter } from 'next/router'
 import qs from 'querystringify'
 import parseHashtags from 'utils/parse-hashtags'
-import { H2 } from './heading'
+import { H4 } from './heading'
 import { Text } from './text'
 import MovieSearch from './movie-search'
 import Input from './input'
@@ -12,12 +12,10 @@ import Item from './item'
 import { useFormik } from 'formik'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
-import Link from 'next/link'
 import Button from './button'
 import Layout from './layout'
 import Form from './form'
 import { HStack } from './stack'
-import { ChevronLeft } from './icon'
 
 interface Props {
   category: string
@@ -48,20 +46,6 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     if (category === 'tv-show') return 'TV show'
     if (category === 'link') return 'Link'
     return ''
-  }
-
-  function getBackButtonLabel() {
-    if (selection) {
-      switch (category) {
-        case 'movie':
-          return 'Movie'
-        case 'tv-show':
-          return 'TV show'
-        default:
-          return ''
-      }
-    }
-    return 'New bookmark'
   }
 
   function getSubheading() {
@@ -116,30 +100,8 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
   return (
     <Layout>
-      <HStack
-        alignment={onboarding && !selection ? 'trailing' : 'space-between'}
-      >
-        {selection ? (
-          <Button onClick={resetSelection} leftAdornment={<ChevronLeft />}>
-            {getBackButtonLabel()}
-          </Button>
-        ) : onboarding ? null : (
-          <Link href="/new" passHref>
-            <Button as="a" leftAdornment={<ChevronLeft />}>
-              New bookmark
-            </Button>
-          </Link>
-        )}
-
-        <Link href="/" passHref>
-          <Button as="a" variant="danger">
-            Cancel
-          </Button>
-        </Link>
-      </HStack>
-
       <PageTitle>
-        <H2 as="h1">{getHeading()}</H2>
+        <H4 as="h1">{getHeading()}</H4>
         <Text meta>{getSubheading()}</Text>
       </PageTitle>
 

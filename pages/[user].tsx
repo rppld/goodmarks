@@ -8,7 +8,7 @@ import Bookmark from 'components/bookmark'
 import Button from 'components/button'
 import { HStack } from 'components/stack'
 import { logout } from 'lib/auth'
-import { H2 } from 'components/heading'
+import { H4 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
@@ -111,7 +111,7 @@ const User: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">@{handle}</H2>
+        <H4 as="h1">@{handle}</H4>
         <Text meta>User ID: {data?.author?.id}</Text>
       </PageTitle>
 

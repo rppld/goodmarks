@@ -5,10 +5,6 @@
   padding-bottom: var(--space-24);
 }
 
-.container:first-of-type {
-  border-top: 0;
-}
-
 .userInfo {
   display: flex;
   flex-direction: column;
