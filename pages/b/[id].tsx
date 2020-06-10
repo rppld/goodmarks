@@ -8,7 +8,7 @@ import Button from 'components/button'
 import Form from 'components/form'
 import { HStack } from 'components/stack'
 import { useViewer } from 'components/viewer-context'
-import { H2, H4 } from 'components/heading'
+import { H4 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
 import { useFormik } from 'formik'
 import useDeleteBookmark from 'utils/use-delete-bookmark'
@@ -115,7 +115,7 @@ const BookmarkDetail: NextPage<Props> = ({ initialData, bookmarkId }) => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Bookmark</H2>
+        <H4 as="h1">Bookmark</H4>
       </PageTitle>
 
       {error && <div>failed to load</div>}

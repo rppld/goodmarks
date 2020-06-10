@@ -1,5 +1,6 @@
 .level-1 {
   font-size: var(--fs-32);
+  font-weight: var(--fw-black);
   line-height: var(--lh-title);
 }
 
@@ -11,6 +12,7 @@
 
 .level-2 {
   font-size: var(--fs-26);
+  font-weight: var(--fw-black);
   line-height: var(--lh-title);
 }
 
@@ -22,6 +24,7 @@
 
 .level-3 {
   font-size: var(--fs-22);
+  font-weight: var(--fw-black);
   line-height: var(--lh-title);
 }
 
@@ -33,13 +36,8 @@
 
 .level-4 {
   font-size: var(--fs-20);
+  font-weight: var(--fw-black);
   line-height: var(--lh-copy);
-}
-
-@media (min-width: 620px) {
-  .level-4 {
-    font-size: var(--fs-22);
-  }
 }
 
 .level-5 {

@@ -1,5 +1,5 @@
 .container {
-  background: var(--body-background-color);
+  background-color: var(--body-background-color);
   border-top: 1px solid var(--input-highlight-color);
   position: fixed;
   padding-bottom: env(safe-area-inset-bottom);
@@ -11,10 +11,12 @@
 
 @media (min-width: 620px) {
   .container {
-    top: 0;
-    bottom: initial;
+    top: unset;
+    bottom: unset;
+    right: unset;
+    left: unset;
     border-top: 0;
-    border-bottom: 1px solid var(--input-highlight-color);
+    padding: 0;
   }
 }
 
@@ -32,6 +34,15 @@
   height: var(--space-64);
 }
 
+@media (min-width: 620px) {
+  .tabBar {
+    display: flex;
+    justify-content: unset;
+    align-items: unset;
+    flex-direction: column;
+  }
+}
+
 .tabBar li {
   width: 20%;
 }
@@ -39,6 +50,10 @@
 @media (min-width: 620px) {
   .tabBar li {
     width: auto;
+  }
+
+  .tabBar li:not(:first-child) {
+    margin-top: var(--space-24);
   }
 }
 
@@ -62,7 +77,6 @@
   .tabItem {
     display: inline-flex;
     flex-direction: row;
-    height: var(--space-40);
     border-radius: var(--space-12);
     width: auto;
     margin-right: var(--space-24);
@@ -72,7 +86,6 @@
 @media (min-width: 620px) {
   .newBookmarkItem {
     order: 1;
-    margin-left: auto;
   }
 
   .newBookmarkItem .tabItem {
@@ -87,10 +100,10 @@
 
 @media (min-width: 620px) {
   .label {
-    font-size: var(--fs-16);
+    font-size: var(--fs-20);
     padding-top: var(--space-0);
     padding-left: var(--space-8);
-    font-weight: var(--fw-medium);
+    font-weight: var(--fw-bold);
   }
 }
 

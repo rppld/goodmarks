@@ -6,7 +6,7 @@ import Layout from 'components/layout'
 import Input from 'components/input'
 import Button from 'components/button'
 import Form from 'components/form'
-import { H2 } from 'components/heading'
+import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 import GoogleG from 'components/google-g'
@@ -48,7 +48,7 @@ const Login: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Log in</H2>
+        <H4 as="h1">Log In</H4>
         <Text meta>
           Or{' '}
           <Link href="/signup">

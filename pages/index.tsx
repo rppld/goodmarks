@@ -4,7 +4,7 @@ import useSWR from 'swr'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import Bookmark from 'components/bookmark'
-import { H2 } from 'components/heading'
+import { H4 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
 
 const Home: NextPage = () => {
@@ -39,7 +39,7 @@ const Home: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Latest bookmarks</H2>
+        <H4 as="h1">Latest Bookmarks</H4>
       </PageTitle>
 
       {error && <div>failed to load</div>}

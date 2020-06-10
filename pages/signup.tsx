@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Layout from 'components/layout'
 import Input from 'components/input'
 import Form from 'components/form'
-import { H2 } from 'components/heading'
+import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 import Button from 'components/button'
@@ -94,7 +94,7 @@ const Signup: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Create an account</H2>
+        <H4 as="h1">Create An Account</H4>
         <Text meta>
           Or{' '}
           <Link href="/login">

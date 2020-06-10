@@ -2,7 +2,7 @@ import React from 'react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 import Layout from 'components/layout'
-import { H2 } from 'components/heading'
+import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 import { HStack, VStack } from 'components/stack'
@@ -15,7 +15,7 @@ const Picture: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H2 as="h1">Picture</H2>
+        <H4 as="h1">Picture</H4>
         <Text meta>
           Choose a picture that shows up next to your display name.
         </Text>
