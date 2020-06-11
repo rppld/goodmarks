@@ -1,8 +1,6 @@
 import React from 'react'
 import Router from 'next/router'
 import PageTitle from './page-title'
-import { useRouter } from 'next/router'
-import qs from 'querystringify'
 import parseHashtags from 'utils/parse-hashtags'
 import { H4 } from './heading'
 import { Text } from './text'
@@ -22,10 +20,6 @@ interface Props {
 }
 
 const NewBookmarkForm: React.FC<Props> = ({ category }) => {
-  const router = useRouter()
-  const queryString = router && router.asPath.split('?')[1]
-  const query = queryString && qs.parse(queryString)
-  const onboarding = query?.onboarding === 'true'
   const [error, setError] = React.useState(null)
   const [selection, setSelection] = React.useState(null)
   const formik = useFormik({
@@ -42,9 +36,9 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
   function getHeading() {
     if (selection) return 'Description'
-    if (category === 'movie') return 'Movie'
-    if (category === 'tv-show') return 'TV show'
-    if (category === 'link') return 'Link'
+    if (category === 'movie') return 'Bookmark a Movie'
+    if (category === 'tv-show') return 'Bookmark a TV show'
+    if (category === 'link') return 'Bookmark a Link'
     return ''
   }
 

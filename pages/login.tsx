@@ -59,15 +59,19 @@ const Login: NextPage = () => {
       </PageTitle>
 
       <Form onSubmit={formik.handleSubmit}>
-        <Button
-          as="a"
-          href="/api/auth?action=oauth2&provider=google"
-          size="lg"
-          leftAdornment={<GoogleG />}
-        >
-          Continue with Google
-        </Button>
-        <span>or log in using your email address</span>
+        {process.env.NODE_ENV === 'development' && (
+          <>
+            <Button
+              as="a"
+              href="/api/auth?action=oauth2&provider=google"
+              size="lg"
+              leftAdornment={<GoogleG />}
+            >
+              Continue with Google
+            </Button>
+            <span>or log in using your email address</span>
+          </>
+        )}
         <Input
           type="email"
           name="email"
