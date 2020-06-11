@@ -40,7 +40,7 @@ const New: NextPage = () => {
         'Now go ahead and add your first bookmark.',
       ].join(' ')
     }
-    return 'Choose a category.'
+    return 'Choose a category for your bookmark.'
   }
 
   return (

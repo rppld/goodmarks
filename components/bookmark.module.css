@@ -22,7 +22,7 @@
 }
 
 .action {
-  color: var(--text-color);
+  color: var(--text-color-lighter);
   font-size: var(--fs-14);
   font-weight: var(--fw-bold);
 }

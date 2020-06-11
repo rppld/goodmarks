@@ -5,7 +5,7 @@ import { HStack } from './stack'
 import Avatar from './avatar'
 import Item from './item'
 import Link from 'next/link'
-import { Heart, SpeechBubble } from './icon'
+import { Heart, ChatBubble, ChatBubbleOutlined, HeartOutlined } from './icon'
 import TimeAgo from 'timeago-react'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
@@ -75,10 +75,16 @@ const Bookmark: React.FC<Props> = ({
             </Caption>
           </div>
         </HStack>
-        <HStack>
+        <HStack spacing="md">
           <Action
             active={bookmarkStats.like}
-            leftAdornment={<Heart />}
+            leftAdornment={
+              bookmarkStats.like ? (
+                <Heart size="sm" />
+              ) : (
+                <HeartOutlined size="sm" />
+              )
+            }
             onClick={handleLike}
             disabled={liking}
           >
@@ -87,7 +93,13 @@ const Bookmark: React.FC<Props> = ({
           <Action
             as="span"
             active={bookmarkStats.comment}
-            leftAdornment={<SpeechBubble />}
+            leftAdornment={
+              bookmarkStats.comment ? (
+                <ChatBubble size="sm" />
+              ) : (
+                <ChatBubbleOutlined size="sm" />
+              )
+            }
           >
             {bookmark.comments}
           </Action>

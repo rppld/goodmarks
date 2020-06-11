@@ -1,7 +1,6 @@
 import React from 'react'
 import styles from './item.module.css'
 import { Text, Caption } from './text'
-import { H4 } from './heading'
 import { HStack } from './stack'
 import Image from './image'
 
