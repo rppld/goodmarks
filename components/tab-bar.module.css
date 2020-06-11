@@ -66,11 +66,11 @@
 }
 
 .tabItem:hover {
-  color: var(--text-color-90);
+  color: var(--blue);
 }
 
 .active {
-  opacity: 0.6;
+  color: var(--blue);
 }
 
 @media (min-width: 620px) {
