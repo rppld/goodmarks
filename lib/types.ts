@@ -22,6 +22,7 @@ export interface User {
 export interface BookmarksData {
   bookmarks: {
     bookmark: Bookmark
+    category: any
     bookmarkStats: any
     user: User
     comments: [{ comment: Comment; author: User }]

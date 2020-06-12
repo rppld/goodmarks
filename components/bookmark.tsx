@@ -41,6 +41,7 @@ const Action: React.FC<ActionProps> = ({
 // TODO: Add proper types here.
 interface Props {
   bookmark: any
+  category: any
   bookmarkStats: any
   comments: any
   original?: any
@@ -50,6 +51,7 @@ interface Props {
 
 const Bookmark: React.FC<Props> = ({
   bookmark,
+  category,
   bookmarkStats,
   comments,
   original,
@@ -112,6 +114,7 @@ const Bookmark: React.FC<Props> = ({
         <a>
           <Item
             title={bookmark.details.title || bookmark.details.name}
+            category={category.slug}
             text={
               getYear(
                 parseISO(
@@ -120,7 +123,10 @@ const Bookmark: React.FC<Props> = ({
                 )
               ) || bookmark.details.url
             }
-            image={`https://image.tmdb.org/t/p/w220_and_h330_face/${bookmark.details['poster_path']}`}
+            image={
+              bookmark.details['poster_path'] &&
+              `https://image.tmdb.org/t/p/w220_and_h330_face/${bookmark.details['poster_path']}`
+            }
             alt={`Poster for ${bookmark.title}`}
           />
         </a>
