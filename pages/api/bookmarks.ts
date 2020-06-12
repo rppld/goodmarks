@@ -639,6 +639,8 @@ function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
             // Normal bookmark, there is no original.
             false
           ),
+          // Get the category the bookmark belongs to.
+          category: Get(Select(['data', 'category'], Var('bookmark'))),
           // Get the user that wrote the bookmark.
           user: Get(Select(['data', 'author'], Var('bookmark'))),
           // Get the account via identity.
@@ -686,6 +688,7 @@ function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
         // Return our elements
         {
           user: Var('user'),
+          category: Var('category'),
           original: Var('original'),
           bookmark: Var('bookmark'),
           bookmarkStats: Var('bookmarkStats'),
