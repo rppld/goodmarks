@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-24);
+  padding-bottom: var(--space-24);
+  border-top: 1px solid var(--button-background-color);
+}
+
+.container:first-child {
+  border-top: none;
+}

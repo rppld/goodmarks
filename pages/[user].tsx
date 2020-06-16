@@ -11,6 +11,7 @@ import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
 import ProfilePageHeader from 'components/profile-page-header'
 import Toolbar from 'components/toolbar'
+import ListEdge from 'components/list-edge'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -143,7 +144,13 @@ const User: NextPage = () => {
       {!data ? (
         <div>loading...</div>
       ) : (
-        <>
+        <div>
+          <ListEdge
+            id="1234567890"
+            title="All Christopher Nolan Movies"
+            description="A list with all the movies from director Christopher Nolan"
+            datetime="0"
+          />
           {data.bookmarks.length > 0 && (
             <>
               {data.bookmarks.map((item) => (
@@ -155,7 +162,7 @@ const User: NextPage = () => {
               ))}
             </>
           )}
-        </>
+        </div>
       )}
     </Layout>
   )
