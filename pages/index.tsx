@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 import useSWR from 'swr'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
-import Bookmark from 'components/bookmark'
+import BookmarkEdge from 'components/bookmark-edge'
 import { H4 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
 
@@ -49,7 +49,7 @@ const Home: NextPage = () => {
       ) : (
         <div>
           {data.bookmarks.map((item) => (
-            <Bookmark
+            <BookmarkEdge
               {...item}
               key={item.bookmark.id}
               onLike={() => handleLike(item.bookmark.id)}
