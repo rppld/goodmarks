@@ -254,6 +254,13 @@ body {
   hyphens: auto;
 }
 
+/* Apply this class to any elements inside other elements with
+click-handlers attached. It will ignore click events on its children
+to capture the parent as the click target. */
+.action > * {
+  pointer-events: none;
+}
+
 [data-reach-menu-list],
 [data-reach-combobox-popover] {
   overflow: hidden;
