@@ -1,20 +1,16 @@
 import React from 'react'
 import { NextPage } from 'next'
 import Link from 'next/link'
-import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
-import { Text, SmallText } from 'components/text'
 import BookmarkNode from 'components/bookmark-node'
 import Button from 'components/button'
-import { HStack, VStack } from 'components/stack'
 import { logout } from 'lib/auth'
-import { H2 } from 'components/heading'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
-import getImageUrl from 'utils/get-image-url'
-import Avatar from 'components/avatar'
+import ProfilePageHeader from 'components/profile-page-header'
+import Toolbar from 'components/toolbar'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -113,32 +109,10 @@ const User: NextPage = () => {
 
   return (
     <Layout>
-      <HStack alignment="leading" spacing="md">
-        <Avatar
-          src={data && getImageUrl(data?.author.picture, 'avatarLg')}
-          size="lg"
-        />
-        <PageTitle>
-          <H2 as="h1">
-            {data?.author?.name ? data?.author?.name : `@${handle}`}
-          </H2>
-          <SmallText meta>@{handle}</SmallText>
-          {data?.author?.bio && <Text as="p">{data?.author?.bio}</Text>}
-        </PageTitle>
-      </HStack>
+      <ProfilePageHeader user={data?.author}></ProfilePageHeader>
 
-      <HStack alignment="leading">
-        {isViewer ? (
-          <>
-            <Link href="/settings" passHref>
-              <Button as="a">Edit profile</Button>
-            </Link>
-
-            <Button onClick={handleLogout} variant="danger">
-              Logout
-            </Button>
-          </>
-        ) : (
+      <Toolbar>
+        {viewer && handle !== viewer.handle ? (
           <Button
             fullWidth
             onClick={toggleFollowUser}
@@ -147,8 +121,20 @@ const User: NextPage = () => {
           >
             {data?.following ? 'Unfollow' : 'Follow'}
           </Button>
+        ) : (
+          <>
+            <Link href="/settings" passHref>
+              <Button as="a" fullWidth>
+                Settings
+              </Button>
+            </Link>
+
+            <Button onClick={handleLogout} fullWidth>
+              Logout
+            </Button>
+          </>
         )}
-      </HStack>
+      </Toolbar>
 
       <Tabs tabs={tabs} />
 
