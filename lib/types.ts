@@ -30,6 +30,7 @@ export interface User {
   handle: string
   name: string
   picture: string
+  bio: string
 }
 
 export interface BookmarkStats {

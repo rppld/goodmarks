@@ -14,13 +14,13 @@ interface Props {
 const AuthorInfo: React.FC<Props> = ({ user, createdAt }) => {
   return (
     <>
-      <Link href="/[id]" as={`/${user.handle}`}>
+      <Link href="/[user]" as={`/${user.handle}`}>
         <a className="action">
           <Avatar src={user.picture && getImageUrl(user.picture, 'avatarLg')} />
         </a>
       </Link>
       <div className={styles.authorInfo}>
-        <Link href="/[id]" as={`/${user.handle}`}>
+        <Link href="/[user]" as={`/${user.handle}`}>
           <a className="action">
             <SmallText>@{user.handle}</SmallText>
           </a>
