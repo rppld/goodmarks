@@ -391,6 +391,7 @@ async function createComment(req, res) {
               text: text,
               author: Select(['data', 'user'], Get(Identity())),
               bookmark: Var('bookmarkRef'),
+              created: Now(),
             },
           }),
           bookmark: Get(Var('bookmarkRef')),

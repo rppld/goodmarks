@@ -1,0 +1,12 @@
+.container {
+  position: relative;
+  border-top: 1px solid var(--button-background-color);
+  padding-top: var(--space-16);
+  padding-bottom: var(--space-16);
+  cursor: pointer;
+}
+
+.text {
+  margin-top: var(--space-16);
+  margin-bottom: var(--space-16);
+}

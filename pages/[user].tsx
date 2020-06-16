@@ -4,7 +4,7 @@ import Link from 'next/link'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import { Text } from 'components/text'
-import Bookmark from 'components/bookmark'
+import BookmarkEdge from 'components/bookmark-edge'
 import Button from 'components/button'
 import { HStack } from 'components/stack'
 import { logout } from 'lib/auth'
@@ -22,9 +22,10 @@ const User: NextPage = () => {
     () => handle && `/api/bookmarks?handle=${handle}`
   )
   const { viewer, resetViewer } = useViewer()
+  const isViewer = viewer && handle === viewer.handle
 
   function handleLike(newData) {
-    const newBookmarks = data.bookmarks.map((item) => {
+    const newBookmarkEdges = data.bookmarks.map((item) => {
       if (item.bookmark.id === newData.bookmarks[0].bookmark.id) {
         return newData.bookmarks[0]
       }
@@ -32,7 +33,7 @@ const User: NextPage = () => {
     })
 
     mutate({
-      bookmarks: newBookmarks,
+      bookmarks: newBookmarkEdges,
     })
   }
 
@@ -116,7 +117,17 @@ const User: NextPage = () => {
       </PageTitle>
 
       <HStack alignment="leading">
-        {viewer && handle !== viewer.handle ? (
+        {isViewer ? (
+          <>
+            <Link href="/settings" passHref>
+              <Button as="a">Settings</Button>
+            </Link>
+
+            <Button onClick={handleLogout} variant="danger">
+              Logout
+            </Button>
+          </>
+        ) : (
           <Button
             onClick={toggleFollowUser}
             disabled={loading}
@@ -124,15 +135,7 @@ const User: NextPage = () => {
           >
             {data?.following ? 'Unfollow' : 'Follow'}
           </Button>
-        ) : null}
-
-        <Link href="/settings" passHref>
-          <Button as="a">Settings</Button>
-        </Link>
-
-        <Button onClick={handleLogout} variant="danger">
-          Logout
-        </Button>
+        )}
       </HStack>
 
       <Tabs tabs={tabs} />
@@ -146,7 +149,7 @@ const User: NextPage = () => {
           {data.bookmarks.length > 0 && (
             <>
               {data.bookmarks.map((item) => (
-                <Bookmark
+                <BookmarkEdge
                   {...item}
                   key={item.bookmark.id}
                   onLike={handleLike}

@@ -1,0 +1,26 @@
+.container {
+  position: relative;
+  border-top: 1px solid var(--button-background-color);
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+  display: flex;
+}
+
+.header {
+  display: flex;
+  color: var(--text-color-lighter);
+}
+
+.header * {
+  color: inherit;
+  display: inline-block;
+}
+
+.avatarContainer {
+  padding-right: var(--space-8);
+}
+
+.avatarContainer * {
+  color: inherit;
+  display: inline-block;
+}
