@@ -16,13 +16,13 @@ const AuthorInfo: React.FC<Props> = ({ user, timestamp }) => {
   return (
     <HStack>
       <Link href="/[id]" as={`/${user.handle}`}>
-        <a>
+        <a className="action">
           <Avatar src={user.picture && getImageUrl(user.picture, 'avatarLg')} />
         </a>
       </Link>
       <div className={styles.authorInfo}>
         <Link href="/[id]" as={`/${user.handle}`}>
-          <a>
+          <a className="action">
             <SmallText>@{user.handle}</SmallText>
           </a>
         </Link>

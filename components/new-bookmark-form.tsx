@@ -6,7 +6,7 @@ import { H4 } from './heading'
 import { Text } from './text'
 import MovieSearch from './movie-search'
 import Input from './input'
-import Item from './item'
+import Embed from './embed'
 import { useFormik } from 'formik'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
@@ -101,7 +101,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
       {selection ? (
         <Form onSubmit={formik.handleSubmit}>
-          <Item
+          <Embed
             title={selection.name || selection.title}
             image={`https://image.tmdb.org/t/p/w220_and_h330_face/${selection['poster_path']}`}
             alt={`Poster for ${selection.name || selection.title}`}
