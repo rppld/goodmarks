@@ -6,7 +6,7 @@ import Layout from 'components/layout'
 import { Text } from 'components/text'
 import BookmarkEdge from 'components/bookmark-edge'
 import Button from 'components/button'
-import { HStack } from 'components/stack'
+import { HStack, VStack } from 'components/stack'
 import { logout } from 'lib/auth'
 import { H4 } from 'components/heading'
 import useSWR from 'swr'
@@ -112,15 +112,26 @@ const User: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H4 as="h1">@{handle}</H4>
-        <Text meta>User ID: {data?.author?.id}</Text>
+        <VStack>
+          <div>
+            <H4 as="h1">
+              {data?.author?.name ? data?.author?.name : `@${handle}`}
+            </H4>
+            {data?.author?.name && (
+              <Text meta as="p">
+                @{handle}
+              </Text>
+            )}
+          </div>
+          {data?.author?.bio && <Text>{data?.author?.bio}</Text>}
+        </VStack>
       </PageTitle>
 
       <HStack alignment="leading">
         {isViewer ? (
           <>
             <Link href="/settings" passHref>
-              <Button as="a">Settings</Button>
+              <Button as="a">Edit profile</Button>
             </Link>
 
             <Button onClick={handleLogout} variant="danger">
