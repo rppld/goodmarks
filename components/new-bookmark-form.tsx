@@ -8,8 +8,6 @@ import MovieSearch from './movie-search'
 import Input from './input'
 import Embed from './embed'
 import { useFormik } from 'formik'
-import getYear from 'date-fns/getYear'
-import parseISO from 'date-fns/parseISO'
 import Button from './button'
 import Layout from './layout'
 import Form from './form'
@@ -102,12 +100,18 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
       {selection ? (
         <Form onSubmit={formik.handleSubmit}>
           <Embed
-            title={selection.name || selection.title}
-            image={`https://image.tmdb.org/t/p/w220_and_h330_face/${selection['poster_path']}`}
-            alt={`Poster for ${selection.name || selection.title}`}
-            text={getYear(
-              parseISO(selection['first_air_date'] || selection['release_date'])
-            )}
+            as="span"
+            bookmark={{
+              id: 'new',
+              created: 'new',
+              text: 'new',
+              comments: 0,
+              likes: 0,
+              reposts: 0,
+              details: {
+                ...selection,
+              },
+            }}
           />
 
           <Input

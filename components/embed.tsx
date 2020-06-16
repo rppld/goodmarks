@@ -9,6 +9,7 @@ import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
 
 interface Props {
+  as?: React.ElementType | string
   bookmark: Bookmark
   category?: any
 }
@@ -27,7 +28,11 @@ const getCategoryPlaceholder = (category) => {
   )
 }
 
-const Embed: React.FC<Props> = ({ bookmark, category }) => {
+const Embed: React.FC<Props> = ({
+  as: Component = 'a',
+  bookmark,
+  category,
+}) => {
   const image =
     bookmark.details['poster_path'] &&
     `https://image.tmdb.org/t/p/w220_and_h330_face/${bookmark.details['poster_path']}`
@@ -40,7 +45,7 @@ const Embed: React.FC<Props> = ({ bookmark, category }) => {
       : bookmark.details.url
 
   return (
-    <a href={url} className="action">
+    <Component href={Component === 'a' ? url : undefined} className="action">
       <div className={styles.container}>
         <HStack alignment="leading">
           {image ? (
@@ -69,7 +74,7 @@ const Embed: React.FC<Props> = ({ bookmark, category }) => {
           </div>
         </HStack>
       </div>
-    </a>
+    </Component>
   )
 }
 
