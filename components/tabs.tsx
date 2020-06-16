@@ -19,7 +19,7 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
   return (
     <ul className={styles.tabs}>
       {tabs.map((tab) => (
-        <Link href={tab.href} as={tab.href}>
+        <Link href={tab.href} as={tab.href} key={tab.href}>
           <a
             className={classNames(
               styles.tab,
