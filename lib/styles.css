@@ -1,3 +1,87 @@
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Regular.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Italic.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Semibold.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-SemiboldItalic.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Bold.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-BoldItalic.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-Black.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('/fonts/SourceSansPro-BlackItalic.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Source Sans Variable';
+  src: url('/fonts/SourceSansVariable-Roman.woff2')
+      format('woff2 supports variations'),
+    url('/fonts/SourceSansVariable-Roman.woff2') format('woff2-variations');
+  font-display: swap;
+  font-weight: 1 999;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans Variable';
+  src: url('/fonts/SourceSansVariable-Italic.woff2')
+      format('woff2 supports variations'),
+    url('/fonts/SourceSansVariable-Italic.woff2') format('woff2-variations');
+  font-display: swap;
+  font-weight: 1 999;
+  font-style: italic;
+}
+
 :root {
   /* Spacing */
   --space-0: 0;
@@ -38,7 +122,7 @@
   --lh-copy: 1.4;
 
   /* Font families */
-  --ff-default: 'Roboto', sans-serif;
+  --ff-sans: 'Source Sans Pro', sans-serif;
 
   /* Font weights */
   --fw-regular: 400;
@@ -128,6 +212,12 @@
   --z-index-tabbar: 10;
 
   --container-max-width: 40rem;
+}
+
+@supports (font-variation-settings: normal) {
+  :root {
+    --ff-sans: 'Source Sans Variable', sans-serif;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -245,7 +335,7 @@ q:before {
 }
 
 body {
-  font-family: var(--ff-default);
+  font-family: var(--ff-sans);
   font-weight: var(--fw-regular);
   line-height: var(--lh-copy);
   font-size: var(--fs-18);
