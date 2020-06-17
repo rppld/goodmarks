@@ -1,0 +1,44 @@
+.container {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-bookmark);
+
+  /* Make full-bled */
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+@media (min-width: 620px) {
+  .container {
+    /* Reset full-bled */
+    width: auto;
+    position: relative;
+    left: auto;
+    right: auto;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.body {
+  cursor: pointer;
+  padding: var(--space-16);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.container + .container {
+  margin-top: var(--space-16);
+}
+
+.text {
+  padding-top: var(--space-16);
+}

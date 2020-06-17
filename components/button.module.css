@@ -1,29 +1,30 @@
 .base {
-  background-color: var(--button-background-color);
-  color: var(--button-label-color);
+  background-color: var(--color-button);
+  color: var(--color-button-label);
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: var(--space-12);
+  border-radius: var(--space-32);
   height: var(--space-40);
-  padding-left: var(--space-12);
-  padding-right: var(--space-12);
+  padding-left: var(--space-16);
+  padding-right: var(--space-16);
   font-weight: var(--fw-medium);
   font-size: inherit;
 }
 
 .base.lg {
   height: var(--space-56);
+  border-radius: var(--space-16);
 }
 
 .base:focus,
 .base:hover {
-  background-color: var(--button-background-color-hover);
-  color: var(--button-label-color);
+  background-color: var(--color-button-hover);
+  color: var(--color-button-label);
 }
 
 .base.disabled {
-  color: var(--black-50);
+  color: var(--color-black-50);
 }
 
 .disabled {
@@ -31,34 +32,19 @@
   cursor: default;
 }
 
-.primary,
-.success,
-.warning,
-.danger {
-  text-shadow: 1px 1px 0 var(--black-20);
-}
-
-.primary svg,
-.success svg,
-.warning svg,
-.danger svg {
-  -webkit-filter: drop-shadow(1px 1px 0 var(--black-20));
-  filter: drop-shadow(1px 1px 0 var(--black-20));
-}
-
 .primary {
   background-color: var(--color-primary);
-  color: var(--white);
+  color: var(--color-button-label-primary);
 }
 
 .primary:focus,
 .primary:hover {
   background-color: var(--color-primary-hover);
-  color: var(--white);
+  color: var(--color-button-label-primary);
 }
 
 .primary.disabled {
-  color: var(--white-50);
+  color: var(--color-white-50);
 }
 
 .primary.disabled:hover {
@@ -67,17 +53,17 @@
 
 .success {
   background-color: var(--color-success);
-  color: var(--white);
+  color: var(--color-white);
 }
 
 .success:focus,
 .success:hover {
   background-color: var(--color-success-hover);
-  color: var(--white);
+  color: var(--color-white);
 }
 
 .success.disabled {
-  color: var(--white-50);
+  color: var(--color-white-50);
 }
 
 .success.disabled:hover {
@@ -86,17 +72,17 @@
 
 .warning {
   background-color: var(--color-warning);
-  color: var(--white);
+  color: var(--color-white);
 }
 
 .warning:focus,
 .warning:hover {
   background-color: var(--color-warning-hover);
-  color: var(--white);
+  color: var(--color-white);
 }
 
 .warning.disabled {
-  color: var(--white-50);
+  color: var(--color-white-50);
 }
 
 .warning.disabled:hover {
@@ -105,17 +91,17 @@
 
 .danger {
   background-color: var(--color-danger);
-  color: var(--white);
+  color: var(--color-white);
 }
 
 .danger:focus,
 .danger:hover {
   background-color: var(--color-danger-hover);
-  color: var(--white);
+  color: var(--color-white);
 }
 
 .danger.disabled {
-  color: var(--white-50);
+  color: var(--color-white-50);
 }
 
 .danger.disabled:hover {
@@ -129,11 +115,11 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-left: calc(var(--space-12) * -1);
+  margin-left: calc(var(--space-16) * -1);
 }
 
 .no-children .adornment {
-  margin-right: calc(var(--space-12) * -1);
+  margin-right: calc(var(--space-16) * -1);
 }
 
 .fullWidth {

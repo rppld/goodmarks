@@ -1,0 +1,25 @@
+.action {
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-14);
+}
+
+.adornment {
+  margin-right: var(--space-4);
+  color: var(--color-text-lightest);
+  display: inline-block;
+  transform: translateY(-1px);
+}
+
+.action:hover .adornment,
+.active .adornment {
+  color: var(--color-text-lighter);
+}
+
+.likeToggle:hover .adornment,
+.likeToggle.active .adornment {
+  color: var(--color-red);
+}
+
+.active:hover .adornment {
+  color: var(--color-text-lightest);
+}

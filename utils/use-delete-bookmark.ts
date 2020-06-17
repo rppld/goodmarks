@@ -1,5 +1,4 @@
 import React from 'react'
-import Router from 'next/router'
 
 type Hook = () => [
   (id: string) => Promise<void>,
@@ -23,7 +22,7 @@ const useDeleteBookmark: Hook = () => {
       })
 
       if (response.ok) {
-        Router.push('/')
+        setLoading(false)
       }
     } catch (error) {
       console.log(error)

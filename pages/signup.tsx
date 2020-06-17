@@ -154,7 +154,7 @@ const Signup: NextPage = () => {
           onChange={handleChange}
           onBlur={formik.handleBlur}
           help={
-            formik.errors.email && formik.touched.email
+            formik.values.email && formik.errors.email && formik.touched.email
               ? String(formik.errors.email)
               : null
           }
@@ -170,7 +170,9 @@ const Signup: NextPage = () => {
           onChange={handleChange}
           onBlur={formik.handleBlur}
           help={
-            formik.errors.password && formik.touched.password
+            formik.values.password &&
+            formik.errors.password &&
+            formik.touched.password
               ? String(formik.errors.password)
               : null
           }

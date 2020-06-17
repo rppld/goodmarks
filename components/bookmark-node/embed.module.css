@@ -1,0 +1,104 @@
+.container {
+  padding: var(--space-16);
+  color: var(--color-black-90);
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+}
+
+.movies {
+  color: var(--color-bookmark-movies);
+  border-bottom-color: var(--color-bookmark-embed-movies-outline);
+  background-color: var(--color-bookmark-embed-movies);
+}
+
+.tv-shows {
+  color: var(--color-bookmark-tv-shows);
+  border-bottom-color: var(--color-bookmark-embed-tv-shows-outline);
+  background-color: var(--color-bookmark-embed-tv-shows);
+}
+
+.links {
+  color: var(--color-bookmark-links);
+  border-bottom-color: var(--color-bookmark-embed-links-outline);
+  background-color: var(--color-bookmark-embed-links);
+}
+
+.link:focus .movies,
+.link:hover .movies {
+  background-color: var(--color-bookmark-embed-movies-outline);
+}
+
+.link:focus .tv-shows,
+.link:hover .tv-shows {
+  background-color: var(--color-bookmark-embed-tv-shows-outline);
+}
+
+.link:focus .links,
+.link:hover .links {
+  background-color: var(--color-bookmark-embed-links-outline);
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.details h4 {
+  max-width: 250px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 620px) {
+  .details h4 {
+    max-width: 300px;
+  }
+}
+
+.details span {
+  opacity: 0.5;
+}
+
+.placeholder {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  border-radius: var(--space-32);
+  justify-content: center;
+  align-items: center;
+  color: var(--color-white);
+}
+
+.movies.placeholder,
+.link:hover .movies.placeholder,
+.link:focus .movies.placeholder {
+  background-color: var(--color-bookmark-movies);
+}
+
+.tv-shows.placeholder,
+.link:hover .tv-shows.placeholder,
+.link:focus .tv-shows.placeholder {
+  background-color: var(--color-bookmark-tv-shows);
+}
+
+.links.placeholder,
+.link:hover .links.placeholder,
+.link:focus .links.placeholder {
+  background-color: var(--color-bookmark-links);
+}
+
+.poster {
+  margin-right: var(--space-4);
+  border-radius: var(--space-4);
+  width: 32px;
+  height: 45px;
+}
+
+@media (min-width: 620px) {
+  .poster {
+    width: 40px;
+    height: 56px;
+  }
+}

@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './author-info.module.css'
 import Link from 'next/link'
-import Avatar from './avatar'
-import { SmallText, Caption } from './text'
+import Avatar from '../avatar'
+import { SmallText, Caption } from '../text'
 import TimeAgo from 'timeago-react'
 import getImageUrl from 'utils/get-image-url'
 
@@ -25,7 +25,7 @@ const AuthorInfo: React.FC<Props> = ({ user, createdAt }) => {
             <SmallText>@{user.handle}</SmallText>
           </a>
         </Link>
-        <Caption as="p" meta>
+        <Caption as="p">
           <TimeAgo datetime={createdAt} />
         </Caption>
       </div>

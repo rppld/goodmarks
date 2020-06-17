@@ -1,11 +1,12 @@
 .container {
   position: relative;
   overflow: hidden;
-  border-radius: var(--space-8);
-  background-color: var(--button-background-color);
+  border-radius: var(--space-16);
+  background-color: var(--color-button);
   width: 128px;
   height: 128px;
   cursor: pointer;
+  margin-bottom: var(--space-16);
 }
 
 .image {

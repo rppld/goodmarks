@@ -3,6 +3,7 @@
   list-style: none;
   justify-content: row;
   margin-top: var(--space-16);
+  margin-bottom: var(--space-16);
 
   /* Full bleed hack */
   width: 100vw;
@@ -25,12 +26,12 @@
 }
 
 .tab {
-  background-color: var(--body-background-color);
+  background-color: var(--color-body);
   height: var(--space-40);
-  border-bottom: 2px solid var(--text-color-lightest);
+  border-bottom: 2px solid var(--color-text-lightest);
   font-weight: var(--fw-medium);
   font-size: var(--fs-16);
-  color: var(--text-color-lighter);
+  color: var(--color-text-lighter);
   width: 100%;
   text-align: center;
   display: flex;
@@ -40,12 +41,12 @@
 
 .tab:hover,
 .tab:active {
-  color: var(--text-color-light);
-  border-color: var(--text-color-lighter);
+  color: var(--color-text-light);
+  border-color: var(--color-text-lighter);
 }
 
 .active,
 .active:hover {
-  color: var(--text-color-light);
+  color: var(--color-text-light);
   border-color: var(--color-primary);
 }
