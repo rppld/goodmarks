@@ -1,31 +1,19 @@
 import React from 'react'
 import useSWR from 'swr'
-import {
-  Heart,
-  ChatBubble,
-  ChatBubbleOutlined,
-  HeartOutlined,
-  More,
-} from './icon'
+import Router from 'next/router'
 import styles from './bookmark-detail.module.css'
 import Input from './input'
-import { Text } from './text'
 import Button from './button'
-import Embed from './embed'
 import Form from './form'
+import BookmarkNode from './bookmark-node'
 import { HStack, VStack } from './stack'
 import { useViewer } from './viewer-context'
 import { H5 } from './heading'
 import { BookmarksData } from 'lib/types'
 import { useFormik } from 'formik'
-import useDeleteBookmark from 'utils/use-delete-bookmark'
-import useLikeBookmark from 'utils/use-like-bookmark'
 import useDeleteComment from 'utils/use-delete-comment'
 import useCreateComment from 'utils/use-create-comment'
-import AuthorInfo from './author-info'
-import Action from './action'
-import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
-import CommentEdge from './comment-edge'
+import CommentNode from './comment-node'
 
 interface Props {
   initialData: BookmarksData
@@ -39,17 +27,14 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
   )
   const manuallyRevalidated = React.useRef(false)
   const item = data?.bookmarks?.length > 0 && data.bookmarks[0]
-  const { bookmark, bookmarkStats, user, comments, category } = item
+  const { comments } = item
   const { viewer } = useViewer()
-  const isOwnedByViewer = data && viewer && user?.id === viewer.id
   const formik = useFormik({
     initialValues: {
       comment: '',
     },
     onSubmit: handleCreateComment,
   })
-  const [deleteBookmark, { loading: deleting }] = useDeleteBookmark()
-  const [likeBookmark, { loading: liking }] = useLikeBookmark()
   const [createComment] = useCreateComment()
   const [deleteComment] = useDeleteComment()
 
@@ -88,7 +73,6 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
       },
       false
     )
-    await likeBookmark(bookmarkId)
   }
 
   async function handleCreateComment(values, { resetForm }) {
@@ -144,62 +128,12 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
       {!data ? (
         <div>loading...</div>
       ) : (
-        <VStack>
-          <HStack alignment="leading">
-            <AuthorInfo user={user} createdAt={bookmark.created['@ts']} />
-          </HStack>
-
-          {bookmark.text && <Text as="p">{bookmark.text}</Text>}
-
-          <HStack>
-            <Action
-              active={bookmarkStats.like}
-              leftAdornment={
-                bookmarkStats.like ? (
-                  <Heart size="sm" />
-                ) : (
-                  <HeartOutlined size="sm" />
-                )
-              }
-              onClick={viewer && handleLike}
-              disabled={liking}
-              className="action"
-            >
-              {bookmark.likes}
-            </Action>
-
-            <Action
-              as="span"
-              active={bookmarkStats.comment}
-              leftAdornment={
-                bookmarkStats.comment ? (
-                  <ChatBubble size="sm" />
-                ) : (
-                  <ChatBubbleOutlined size="sm" />
-                )
-              }
-            >
-              {bookmark.comments}
-            </Action>
-
-            {isOwnedByViewer && (
-              <Menu>
-                <MenuButton>
-                  <Action as="span" leftAdornment={<More size="sm" />} />
-                </MenuButton>
-                <MenuList>
-                  <MenuItem
-                    onSelect={() => deleteBookmark(bookmarkId)}
-                    disabled={deleting}
-                  >
-                    {deleting ? 'Deleting' : 'Delete bookmark'}
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            )}
-          </HStack>
-
-          <Embed bookmark={bookmark} category={category.slug} />
+        <VStack spacing="md">
+          <BookmarkNode
+            {...item}
+            onLike={handleLike}
+            onDelete={() => Router.push('/')}
+          />
 
           {comments?.length > 0 && (
             <>
@@ -207,7 +141,7 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
               <ul className={styles.commentsList}>
                 {comments.map(({ comment, author }) => (
                   <li key={comment.id}>
-                    <CommentEdge
+                    <CommentNode
                       author={author}
                       comment={comment}
                       onDelete={handleDeleteComment}
@@ -232,15 +166,17 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
                   onChange={formik.handleChange}
                 />
 
-                <HStack alignment="trailing">
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    disabled={formik.isSubmitting}
-                  >
-                    {formik.isSubmitting ? 'Posting' : 'Post'}
-                  </Button>
-                </HStack>
+                <footer>
+                  <HStack alignment="trailing">
+                    <Button
+                      type="submit"
+                      variant="primary"
+                      disabled={formik.isSubmitting}
+                    >
+                      {formik.isSubmitting ? 'Posting' : 'Post'}
+                    </Button>
+                  </HStack>
+                </footer>
               </Form>
             </>
           )}

@@ -1,10 +1,11 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './embed.module.css'
-import { Text, Caption } from './text'
+import { Text, Caption } from '../text'
 import { Bookmark } from 'lib/types'
-import { HStack } from './stack'
-import Image from './image'
-import { Movie, Link, TV } from './icon'
+import { HStack } from '../stack'
+import Image from '../image'
+import { Movie, Link, TV } from '../icon'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
 
@@ -16,7 +17,7 @@ interface Props {
 
 const getCategoryPlaceholder = (category) => {
   return (
-    <span className={styles.poster}>
+    <span className={classNames(styles.placeholder, styles[category])}>
       {category === 'tv-shows' ? (
         <TV />
       ) : category === 'movies' ? (
@@ -45,8 +46,11 @@ const Embed: React.FC<Props> = ({
       : bookmark.details.url
 
   return (
-    <Component href={Component === 'a' ? url : undefined} className="action">
-      <div className={styles.container}>
+    <Component
+      href={Component === 'a' ? url : undefined}
+      className={classNames('action', styles.link)}
+    >
+      <div className={classNames(styles.container, styles[category])}>
         <HStack alignment="leading">
           {image ? (
             <Image
@@ -63,7 +67,7 @@ const Embed: React.FC<Props> = ({
             <Text as="h4">
               {bookmark.details.title || bookmark.details.name}
             </Text>
-            <Caption meta>
+            <Caption>
               {getYear(
                 parseISO(
                   bookmark.details['first_air_date'] ||

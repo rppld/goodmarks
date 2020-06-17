@@ -6,6 +6,7 @@ interface Props extends React.ComponentProps<'button'> {
   as?: React.ElementType | string
   active?: boolean
   leftAdornment?: any
+  isLikeToggle?: boolean
 }
 
 const Action: React.FC<Props> = ({
@@ -13,13 +14,15 @@ const Action: React.FC<Props> = ({
   active,
   leftAdornment,
   children,
+  isLikeToggle,
   className: passedClassName,
   ...props
 }) => {
   const className = classNames(
     passedClassName,
     styles.action,
-    active && styles.active
+    active && styles.active,
+    isLikeToggle && styles.likeToggle
   )
 
   return (

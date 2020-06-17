@@ -14,7 +14,7 @@ export interface BookmarkCategory {
   slug: String
 }
 
-export interface CommentEdge {
+export interface CommentNode {
   comment: Comment
   author: User
 }
@@ -48,7 +48,7 @@ export interface BookmarksData {
     category: BookmarkCategory
     bookmarkStats: BookmarkStats
     user: User
-    comments: CommentEdge[]
+    comments: CommentNode[]
   }[]
 }
 

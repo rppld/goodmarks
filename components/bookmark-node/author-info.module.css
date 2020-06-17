@@ -1,0 +1,7 @@
+.authorInfo {
+  transform: translateY(-2px); /* Optical adjustment */
+}
+
+.authorInfo p {
+  color: var(--color-text-lighter);
+}

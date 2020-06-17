@@ -58,7 +58,7 @@ const SettingsDetail: React.FC = () => {
   }, [viewer])
 
   return (
-    <VStack>
+    <>
       <ProfilePictureDropzone />
 
       <Form onSubmit={formik.handleSubmit}>
@@ -76,17 +76,19 @@ const SettingsDetail: React.FC = () => {
           value={formik.values.bio}
           onChange={formik.handleChange}
         />
-        <HStack alignment="trailing">
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={formik.isSubmitting}
-          >
-            {formik.isSubmitting ? 'Saving' : 'Save profile'}
-          </Button>
-        </HStack>
+        <footer>
+          <HStack alignment="trailing">
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={formik.isSubmitting}
+            >
+              {formik.isSubmitting ? 'Saving' : 'Save profile'}
+            </Button>
+          </HStack>
+        </footer>
       </Form>
-    </VStack>
+    </>
   )
 }
 

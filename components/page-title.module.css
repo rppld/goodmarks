@@ -1,3 +1,11 @@
 .container {
   margin-bottom: var(--space-16);
 }
+
+.container > * {
+  display: block;
+}
+
+.container * + * {
+  margin-top: var(--space-4);
+}

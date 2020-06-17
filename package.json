@@ -21,7 +21,6 @@
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
     "next": "^9.4.5-canary.12",
-    "next-fonts": "^1.2.0",
     "querystringify": "^2.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

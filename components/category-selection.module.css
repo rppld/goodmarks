@@ -7,11 +7,11 @@
 
 .category {
   position: relative;
-  color: var(--button-label-color);
-  background-color: var(--button-background-color);
+  color: var(--color-button-label);
+  background-color: var(--color-button);
   display: flex;
   padding: var(--space-16);
-  border-radius: var(--space-12);
+  border-radius: var(--space-8);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,7 @@
 
 .category:focus,
 .category:hover {
-  background-color: var(--button-background-color-hover);
+  background-color: var(--color-button-hover);
 }
 
 .label {

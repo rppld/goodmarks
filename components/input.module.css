@@ -14,7 +14,7 @@
 
 .help {
   font-size: var(--fs-14);
-  color: var(--text-color-lighter);
+  color: var(--color-text-lighter);
 }
 
 .valid .help {
@@ -28,23 +28,22 @@
 .field {
   width: 100%;
   display: block;
-  color: var(--text-color);
-  box-shadow: 0 0 0 1px var(--input-border-color) inset;
-  background-color: var(--input-background-color);
+  color: var(--color-text);
+  box-shadow: 0 0 0 2px var(--color-input-outline) inset;
+  background-color: var(--color-input);
   font-size: inherit;
-  border-radius: var(--space-12);
-  padding: var(--space-16) var(--space-12);
+  border-radius: var(--space-16);
+  padding: var(--space-16);
   min-height: var(--space-56);
 }
 
 .field:hover {
-  box-shadow: 0 0 0 1px var(--input-border-color-hover) inset;
+  box-shadow: 0 0 0 2px var(--color-input-outline-hover) inset;
 }
 
 .field:focus {
   outline: 0;
-  box-shadow: 0 0 0 1px var(--body-background-color) inset,
-    0 0 0 2px var(--input-outline-color);
+  box-shadow: 0 0 0 2px var(--color-input-outline-hover) inset;
 }
 
 .rightAdornment {

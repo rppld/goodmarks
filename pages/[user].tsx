@@ -4,7 +4,7 @@ import Link from 'next/link'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import { Text } from 'components/text'
-import BookmarkEdge from 'components/bookmark-edge'
+import BookmarkNode from 'components/bookmark-node'
 import Button from 'components/button'
 import { HStack, VStack } from 'components/stack'
 import { logout } from 'lib/auth'
@@ -25,7 +25,7 @@ const User: NextPage = () => {
   const isViewer = viewer && handle === viewer.handle
 
   function handleLike(newData) {
-    const newBookmarkEdges = data.bookmarks.map((item) => {
+    const newBookmarkNodes = data.bookmarks.map((item) => {
       if (item.bookmark.id === newData.bookmarks[0].bookmark.id) {
         return newData.bookmarks[0]
       }
@@ -33,7 +33,7 @@ const User: NextPage = () => {
     })
 
     mutate({
-      bookmarks: newBookmarkEdges,
+      bookmarks: newBookmarkNodes,
     })
   }
 
@@ -160,7 +160,7 @@ const User: NextPage = () => {
           {data.bookmarks.length > 0 && (
             <>
               {data.bookmarks.map((item) => (
-                <BookmarkEdge
+                <BookmarkNode
                   {...item}
                   key={item.bookmark.id}
                   onLike={handleLike}

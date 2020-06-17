@@ -3,7 +3,7 @@ import { NextPage } from 'next'
 import useSWR from 'swr'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
-import BookmarkEdge from 'components/bookmark-edge'
+import BookmarkNode from 'components/bookmark-node'
 import { H4 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
 
@@ -36,6 +36,16 @@ const Home: NextPage = () => {
     mutate(newData, false)
   }
 
+  function handleDelete(bookmarkId) {
+    const newData = {
+      bookmarks: data.bookmarks.filter((item) => {
+        return item.bookmark.id !== bookmarkId
+      }),
+    }
+
+    mutate(newData, false)
+  }
+
   return (
     <Layout>
       <PageTitle>
@@ -49,10 +59,11 @@ const Home: NextPage = () => {
       ) : (
         <div>
           {data.bookmarks.map((item) => (
-            <BookmarkEdge
+            <BookmarkNode
               {...item}
               key={item.bookmark.id}
               onLike={() => handleLike(item.bookmark.id)}
+              onDelete={() => handleDelete(item.bookmark.id)}
             />
           ))}
         </div>

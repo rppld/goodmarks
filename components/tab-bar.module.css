@@ -1,6 +1,6 @@
 .container {
-  background-color: var(--body-background-color);
-  border-top: 1px solid var(--input-highlight-color);
+  background-color: var(--color-body);
+  border-top: 1px solid var(--color-input-outline);
   position: fixed;
   padding-bottom: env(safe-area-inset-bottom);
   bottom: 0;
@@ -62,22 +62,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--text-color);
+  color: var(--color-text-lighter);
 }
 
 .tabItem:hover {
-  color: var(--blue);
+  color: var(--color-primary-hover);
 }
 
 .active {
-  color: var(--blue);
+  color: var(--color-primary);
 }
 
 @media (min-width: 620px) {
   .tabItem {
     display: inline-flex;
     flex-direction: row;
-    border-radius: var(--space-12);
     width: auto;
     margin-right: var(--space-24);
   }
@@ -121,6 +120,6 @@
 @media (max-width: 620px) {
   /* We hide the label of the button using css, this fixes redudant margin  */
   .newBookmarkItem button span {
-    margin: 0 calc(var(--space-12) * -1);
+    margin: 0 calc(var(--space-16) * -1);
   }
 }
