@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import styles from './category-selection.module.css'
 import { Text } from './text'
@@ -15,7 +16,7 @@ const CategorySelection: React.FC = () => {
       <li>
         <Link href="/b/new/[category]" as={`/b/new/movie${query}`}>
           <a>
-            <div className={styles.category}>
+            <div className={classNames(styles.category, styles.movies)}>
               <Movie size="md" />
               <div className={styles.label}>
                 <Text>Movie</Text>
@@ -27,7 +28,7 @@ const CategorySelection: React.FC = () => {
       <li>
         <Link href="/b/new/[category]" as={`/b/new/tv-show${query}`}>
           <a>
-            <div className={styles.category}>
+            <div className={classNames(styles.category, styles['tv-shows'])}>
               <TV size="md" />
               <div className={styles.label}>
                 <Text>TV show</Text>
@@ -39,7 +40,7 @@ const CategorySelection: React.FC = () => {
       <li>
         <Link href="/b/new/[category]" as={`/b/new/link${query}`}>
           <a>
-            <div className={styles.category}>
+            <div className={classNames(styles.category, styles.links)}>
               <LinkIcon size="md" />
               <div className={styles.label}>
                 <Text>Link</Text>

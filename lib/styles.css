@@ -97,18 +97,6 @@
   --color-white-80: hsla(0, 0%, 100%, 0.8);
   --color-white-90: hsla(0, 0%, 100%, 0.9);
 
-  /* HEY color combo 1 */
-  --color-canary: hsla(49, 100%, 90%, 1);
-  --color-dark-blue: hsla(204, 91%, 38%, 1);
-
-  /* HEY color combo 2 */
-  --color-blurple: hsla(254, 96%, 56%, 1);
-  --color-peach: hsla(18, 95%, 93%, 1);
-
-  /* HEY color combo 3 */
-  --color-mint: hsla(162, 75%, 83%, 1);
-  --color-purple: hsla(284, 100%, 32%, 1);
-
   /* Bookmark colors */
   --color-bookmark-movies: var(--color-blue);
   --color-bookmark-tv-shows: var(--color-green);
