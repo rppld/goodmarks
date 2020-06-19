@@ -20,7 +20,6 @@
 }
 
 .vstack > * + * {
-  display: block;
   margin-top: var(--space-8);
 }
 

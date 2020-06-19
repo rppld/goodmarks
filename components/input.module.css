@@ -35,6 +35,7 @@
   border-radius: var(--space-16);
   padding: var(--space-16);
   min-height: var(--space-56);
+  resize: none;
 }
 
 .field:hover {

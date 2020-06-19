@@ -250,7 +250,7 @@ to capture the parent as the click target. */
 [data-reach-menu-list],
 [data-reach-combobox-popover] {
   overflow: hidden;
-  border-radius: var(--space-8);
+  border-radius: var(--space-16);
   box-shadow: var(--color-black-20) 0 0 15px, var(--color-black-10) 0 0 3px 1px;
   border: 0;
   padding: 0;
@@ -269,7 +269,7 @@ to capture the parent as the click target. */
 [data-reach-combobox-option],
 [data-reach-menu-item] {
   margin: 0 !important;
-  padding: var(--space-8);
+  padding: var(--space-16);
   white-space: pre; /* Otherwise spaces aren’t rendered */
 }
 
@@ -282,6 +282,15 @@ to capture the parent as the click target. */
 [data-reach-combobox-option][data-highlighted],
 [data-reach-combobox-option][data-highlighted]:hover,
 [data-reach-combobox-option]:hover {
-  background-color: var(--color-input-outline);
+  background-color: var(--color-black-5);
   color: inherit;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-reach-menu-item][data-selected],
+  [data-reach-combobox-option][data-highlighted],
+  [data-reach-combobox-option][data-highlighted]:hover,
+  [data-reach-combobox-option]:hover {
+    background-color: var(--color-white-10);
+  }
 }

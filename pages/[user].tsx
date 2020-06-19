@@ -123,7 +123,7 @@ const User: NextPage = () => {
               </Text>
             )}
           </div>
-          {data?.author?.bio && <Text>{data?.author?.bio}</Text>}
+          {data?.author?.bio && <Text as="p">{data?.author?.bio}</Text>}
         </VStack>
       </PageTitle>
 
