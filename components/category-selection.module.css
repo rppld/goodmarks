@@ -7,11 +7,13 @@
 
 .category {
   position: relative;
-  color: var(--color-button-label);
+  color: var(--color-white);
   background-color: var(--color-button);
   display: flex;
   padding: var(--space-16);
   border-radius: var(--space-8);
+  border-width: 2px;
+  border-style: solid;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,6 +22,39 @@
 .category:focus,
 .category:hover {
   background-color: var(--color-button-hover);
+}
+
+.movies {
+  color: var(--color-bookmark-movies);
+  background-color: var(--color-bookmark-embed-movies);
+  border-color: var(--color-bookmark-embed-movies-outline);
+}
+
+.movies:focus,
+.movies:hover {
+  background-color: var(--color-bookmark-embed-movies-outline);
+}
+
+.tv-shows {
+  color: var(--color-bookmark-tv-shows);
+  background-color: var(--color-bookmark-embed-tv-shows);
+  border-color: var(--color-bookmark-embed-tv-shows-outline);
+}
+
+.tv-shows:focus,
+.tv-shows:hover {
+  background-color: var(--color-bookmark-embed-tv-shows-outline);
+}
+
+.links {
+  color: var(--color-bookmark-links);
+  background-color: var(--color-bookmark-embed-links);
+  border-color: var(--color-bookmark-embed-links-outline);
+}
+
+.links:focus,
+.links:hover {
+  background-color: var(--color-bookmark-embed-links-outline);
 }
 
 .label {
