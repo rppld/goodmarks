@@ -11,8 +11,6 @@ const HashtagDetail: React.FC = () => {
     hashtag ? `/api/bookmarks?hashtag=${hashtag}` : null
   )
 
-  console.log(data)
-
   function handleLike(bookmarkId) {
     const newData = {
       bookmarks: data.bookmarks.map((item) => {
