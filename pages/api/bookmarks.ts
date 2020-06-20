@@ -78,10 +78,7 @@ async function getBookmarks(req, res) {
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
   if (!faunaSecret) {
-    // TODO: This is only temporary to have content on the homepage.
-    // Should eventually be removed because we won’t need to render
-    // all bookmarks anywhere.
-    return getAllBookmarks(req, res)
+    return res.status(401).send('Unauthorized')
   }
 
   const data = await faunaClient(faunaSecret).query(
@@ -585,25 +582,6 @@ async function getBookmarksByReference(req, res) {
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
   return res.status(200).send(await bookmarkApi(id, faunaSecret))
-}
-
-async function getAllBookmarks(req, res) {
-  const cookies = cookie.parse(req.headers.cookie ?? '')
-  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
-  const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
-
-  const { data } = await client.query(
-    getBookmarksWithUsersMapGetGeneric(
-      q.Map(
-        Paginate(Match(Index('all_bookmarks'))),
-        Lambda(['createdTime', 'ref'], Var('ref'))
-      )
-    )
-  )
-
-  return res.status(200).json({
-    bookmarks: data.map(flattenDataKeys),
-  })
 }
 
 function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
