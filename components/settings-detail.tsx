@@ -1,5 +1,5 @@
 import React from 'react'
-import { VStack, HStack } from './stack'
+import { HStack } from './stack'
 import ProfilePictureDropzone from './profile-picture-dropzone'
 import Input from './input'
 import Button from './button'

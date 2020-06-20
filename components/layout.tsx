@@ -11,7 +11,6 @@ const Layout: React.FC<Props> = ({ title, ...props }) => (
   <div className={styles.container} {...props}>
     <Head>
       <title>{title}</title>
-      <link rel="stylesheet" href="https://fonts.xz.style/serve/roboto.css" />
     </Head>
     <header role="banner" className={styles.sidebar}>
       <TabBar />
