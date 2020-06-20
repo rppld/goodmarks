@@ -3,7 +3,6 @@ import styles from './index.module.css'
 import { HStack } from '../stack'
 import Router from 'next/router'
 import Embed from './embed'
-import classNames from 'classnames'
 import { Heart, ChatBubble, More } from '../icon'
 import useLikeBookmark from 'utils/use-like-bookmark'
 import useDeleteBookmark from 'utils/use-delete-bookmark'
@@ -69,7 +68,7 @@ const BookmarkNode: React.FC<Props> = ({
               active={bookmarkStats.like}
               leftAdornment={<Heart size="sm" />}
               onClick={viewer && handleLike}
-              disabled={liking}
+              disabled={!viewer || liking}
               className="action"
               isLikeToggle={true}
             >
