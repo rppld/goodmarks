@@ -40,7 +40,7 @@ const {
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id, handle, action } = req.query
+  const { id, hashtag, handle, action } = req.query
 
   if (action === 'create') {
     return createBookmark(req, res)
@@ -64,6 +64,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (id) {
     return getBookmarksByReference(req, res)
+  }
+
+  if (hashtag) {
+    return getBookmarksByHashtag(req, res)
   }
 
   if (handle) {
@@ -582,6 +586,35 @@ async function getBookmarksByReference(req, res) {
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
   return res.status(200).send(await bookmarkApi(id, faunaSecret))
+}
+
+async function getBookmarksByHashtag(req, res) {
+  const { hashtag } = req.query
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+  const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
+
+  const data = await client.query(
+    Let(
+      {
+        hashtagRef: Select(
+          [0],
+          Paginate(Match(Index('hashtags_by_name'), hashtag))
+        ),
+        bookmarks: getBookmarksWithUsersMapGetGeneric(
+          q.Map(
+            Paginate(Match(Index('bookmarks_by_hashtag'), Var('hashtagRef'))),
+            Lambda(['bookmarkScore', 'bookmarkRef'], Var('bookmarkRef'))
+          )
+        ),
+      },
+      {
+        bookmarks: Var('bookmarks'),
+      }
+    )
+  )
+
+  return res.status(200).json(flattenDataKeys(data))
 }
 
 function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {

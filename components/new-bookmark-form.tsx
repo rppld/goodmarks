@@ -28,6 +28,10 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     onSubmit: handleSubmit,
   })
 
+  React.useEffect(() => {
+    console.log(parseHashtags(formik.values.text))
+  }, [formik.values.text])
+
   function resetSelection() {
     return setSelection(null)
   }
@@ -74,7 +78,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
           text: values.text,
           category: `${category}s`, // Plural, e.g. "links" or "tv-shows".
           details: selection ? selection : values.details,
-          hashtags: parseHashtags(values.text) || [],
+          hashtags: parseHashtags(values.text),
         }),
       })
 

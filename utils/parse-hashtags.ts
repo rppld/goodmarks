@@ -4,5 +4,6 @@ export default function (str) {
   }
 
   const matcher = /[#]+[A-Za-z0-9-_]+/g
-  return str.match(matcher)
+  const hashtags = [...(str.match(matcher) || [])]
+  return hashtags.map((tag) => tag.replace('#', ''))
 }
