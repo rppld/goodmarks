@@ -5,6 +5,7 @@ import {
   ComboboxPopover,
   ComboboxList,
   ComboboxOption,
+  ComboboxOptionText,
 } from '@reach/combobox'
 import Router from 'next/router'
 import debounce from 'lodash/debounce'
@@ -69,10 +70,10 @@ const SiteSearch: React.FC = () => {
           {results.length > 0 ? (
             <ComboboxList>
               {results.map((item) => (
-                <ComboboxOption
-                  key={item.id}
-                  value={item.handle || item.name}
-                />
+                <ComboboxOption key={item.id} value={item.handle || item.name}>
+                  {item.name && <span>#</span>}
+                  <ComboboxOptionText />
+                </ComboboxOption>
               ))}
             </ComboboxList>
           ) : (
