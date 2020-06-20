@@ -39,7 +39,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   function getHeading() {
     if (selection) return 'Description'
     if (category === 'movie') return 'Bookmark a Movie'
-    if (category === 'tv-show') return 'Bookmark a TV show'
+    if (category === 'tv-show') return 'Bookmark a TV Show'
     if (category === 'link') return 'Bookmark a Link'
     return ''
   }
