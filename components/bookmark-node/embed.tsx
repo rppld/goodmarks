@@ -52,17 +52,19 @@ const Embed: React.FC<Props> = ({
     >
       <div className={classNames(styles.container, styles[category])}>
         <HStack alignment="leading">
-          {image ? (
-            <Image
-              src={image}
-              alt={`Thumbnail for ${
-                bookmark.details.title || bookmark.details.name
-              }`}
-              className={styles.poster}
-            />
-          ) : (
-            getCategoryPlaceholder(category)
-          )}
+          <div className={styles.icon}>
+            {image ? (
+              <Image
+                src={image}
+                alt={`Thumbnail for ${
+                  bookmark.details.title || bookmark.details.name
+                }`}
+                className={styles.poster}
+              />
+            ) : (
+              getCategoryPlaceholder(category)
+            )}
+          </div>
           <div className={styles.details}>
             <Text as="h4">
               {bookmark.details.title || bookmark.details.name}
