@@ -4,6 +4,7 @@ import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import { H4 } from 'components/heading'
 import { useRouter } from 'next/router'
+import HashtagDetail from 'components/hashtag-detail'
 
 const User: NextPage = () => {
   const router = useRouter()
@@ -14,6 +15,7 @@ const User: NextPage = () => {
       <PageTitle>
         <H4 as="h1">#{hashtag}</H4>
       </PageTitle>
+      <HashtagDetail />
     </Layout>
   )
 }

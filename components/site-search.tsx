@@ -31,7 +31,7 @@ const SiteSearch: React.FC = () => {
 
     if (isHashtag) {
       // For proper routing we need to remove the leading hash.
-      const tag = result.name.substr(1)
+      const tag = result.name
       return Router.push('/hashtags/[hashtag]', `/hashtags/${tag}`)
     }
 
