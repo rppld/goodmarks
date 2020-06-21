@@ -8,6 +8,18 @@ export interface Bookmark {
   details: any
 }
 
+export interface List {
+  id: string
+  created: any
+  name: string
+  description: string
+  comments: number
+  likes: number
+  reposts: number
+  items: any
+  hashtags: any
+}
+
 export interface BookmarkCategory {
   id: string
   name: string
@@ -42,11 +54,29 @@ export interface BookmarkStats {
   bookmark: any
 }
 
+export interface ListStats {
+  id: string
+  comment: boolean
+  like: boolean
+  repost: boolean
+  user: any
+  list: any
+}
+
 export interface BookmarksData {
   bookmarks: {
     bookmark: Bookmark
     category: BookmarkCategory
     bookmarkStats: BookmarkStats
+    user: User
+    comments: CommentNode[]
+  }[]
+}
+
+export interface ListsData {
+  edges: {
+    list: List
+    listStats: ListStats
     user: User
     comments: CommentNode[]
   }[]
