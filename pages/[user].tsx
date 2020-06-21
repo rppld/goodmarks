@@ -71,7 +71,6 @@ const User: NextPage = () => {
   function handleSuccess(result) {
     setLoading(false)
     mutate({ ...data, following: !data.following })
-    console.log('following', result)
   }
 
   const fetchOptions = {
