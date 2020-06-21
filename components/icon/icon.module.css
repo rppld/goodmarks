@@ -5,6 +5,11 @@
   color: inherit;
 }
 
+.xs {
+  width: 16px;
+  height: 16px;
+}
+
 .sm {
   width: 24px;
   height: 24px;

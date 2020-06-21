@@ -1,26 +1,67 @@
 .container {
   padding: var(--space-16);
+  margin-top: var(--space-16);
+  border-radius: var(--space-16);
   color: var(--color-black-90);
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
+}
+
+@media (min-width: 620px) {
+  .container {
+    border-radius: var(--space-8);
+  }
+}
+
+.container p {
+  margin-top: var(--space-12);
+  color: var(--color-text-lighter);
+}
+
+.metaIcon {
+  margin-left: var(--space-8);
+  margin-right: var(--space-4);
+}
+
+.metaIcon:first-child {
+  margin-left: 0;
 }
 
 .movies {
-  color: var(--color-bookmark-movies);
   border-bottom-color: var(--color-bookmark-embed-movies-outline);
   background-color: var(--color-bookmark-embed-movies);
 }
 
+.movies h4 {
+  color: var(--color-bookmark-movies);
+}
+
+.movies .meta {
+  color: var(--color-bookmark-embed-movies-meta);
+}
+
 .tv-shows {
-  color: var(--color-bookmark-tv-shows);
   border-bottom-color: var(--color-bookmark-embed-tv-shows-outline);
   background-color: var(--color-bookmark-embed-tv-shows);
 }
 
+.tv-shows h4 {
+  color: var(--color-bookmark-tv-shows);
+}
+
+.tv-shows .meta {
+  color: var(--color-bookmark-embed-tv-shows-meta);
+}
+
 .links {
-  color: var(--color-bookmark-links);
   border-bottom-color: var(--color-bookmark-embed-links-outline);
   background-color: var(--color-bookmark-embed-links);
+}
+
+.links h4 {
+  color: var(--color-bookmark-links);
+}
+
+.links .meta {
+  color: var(--color-bookmark-embed-links-meta);
 }
 
 .link:focus .movies,
@@ -60,10 +101,6 @@
   .details h4 {
     max-width: 300px;
   }
-}
-
-.details span {
-  opacity: 0.5;
 }
 
 .placeholder {

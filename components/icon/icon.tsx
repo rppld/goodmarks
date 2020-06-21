@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import styles from './icon.module.css'
 
 export interface IconProps {
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
 }
 
 interface Props extends IconProps {

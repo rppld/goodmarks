@@ -1,11 +1,11 @@
 import React from 'react'
 import classNames from 'classnames'
 import styles from './embed.module.css'
-import { Text, Caption } from '../text'
+import { Text, Caption, SmallText } from '../text'
 import { Bookmark } from 'lib/types'
 import { HStack } from '../stack'
 import Image from '../image'
-import { Movie, Link, TV } from '../icon'
+import { Movie, Link, TV, Calendar, Star } from '../icon'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
 
@@ -38,12 +38,20 @@ const Embed: React.FC<Props> = ({
     bookmark.details['poster_path'] &&
     `https://image.tmdb.org/t/p/w220_and_h330_face/${bookmark.details['poster_path']}`
 
+  console.log(bookmark?.details)
+
   const url =
     category === 'tv-shows'
       ? `https://www.themoviedb.org/tv/${bookmark.details.id}`
       : category === 'movies'
       ? `https://www.themoviedb.org/movie/${bookmark.details.id}`
       : bookmark.details.url
+
+  const releaseYear = getYear(
+    parseISO(
+      bookmark.details['first_air_date'] || bookmark.details['release_date']
+    )
+  )
 
   return (
     <Component
@@ -69,16 +77,35 @@ const Embed: React.FC<Props> = ({
             <Text as="h4">
               {bookmark.details.title || bookmark.details.name}
             </Text>
-            <Caption>
-              {getYear(
-                parseISO(
-                  bookmark.details['first_air_date'] ||
-                    bookmark.details['release_date']
-                )
-              ) || bookmark.details.url}
-            </Caption>
+
+            <div className={styles.meta}>
+              {releaseYear ? (
+                <>
+                  <span className={styles.metaIcon}>
+                    <Calendar size="xs" />
+                  </span>
+                  <Caption as="b">{releaseYear}</Caption>
+                </>
+              ) : null}
+
+              {bookmark.details.vote_average ? (
+                <>
+                  <span className={styles.metaIcon}>
+                    <Star size="xs" />
+                  </span>
+                  <Caption as="b">{bookmark.details.vote_average}</Caption>
+                </>
+              ) : null}
+
+              {bookmark.details.url ? (
+                <Caption as="b">{bookmark.details.url}</Caption>
+              ) : null}
+            </div>
           </div>
         </HStack>
+        {bookmark.details.overview ? (
+          <SmallText as="p">{bookmark.details.overview}</SmallText>
+        ) : null}
       </div>
     </Component>
   )
