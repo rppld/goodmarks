@@ -1,31 +1,25 @@
 import React from 'react'
 import styles from './list-node.module.css'
-import TimeAgo from 'timeago-react'
 import { H4 } from './heading'
 import { Text, SmallText } from './text'
-import Link from 'next/link'
 import { VStack } from './stack'
+import { List } from 'lib/types'
 
 interface Props {
-  id: string
-  title: string
-  description: string
-  datetime: string
+  list: List
 }
 
-const ListNode: React.FC<Props> = ({ id, title, description, datetime }) => {
+const ListNode: React.FC<Props> = ({ list }) => {
   return (
-    <Link href={`/list/[id]`} as={`/list/${id}`}>
-      <div className={styles.container}>
-        <VStack>
-          <H4>{title}</H4>
-          <Text as="p">{description}</Text>
-          <SmallText meta as="p">
-            Last updated: <TimeAgo datetime={datetime} />
-          </SmallText>
-        </VStack>
-      </div>
-    </Link>
+    <div className={styles.container}>
+      <VStack>
+        <H4>{list.name}</H4>
+        <Text as="p">{list.description}</Text>
+        <SmallText meta as="p">
+          Last updated:
+        </SmallText>
+      </VStack>
+    </div>
   )
 }
 
