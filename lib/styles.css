@@ -4,6 +4,7 @@
   --space-2: 0.125rem;
   --space-4: 0.25rem;
   --space-8: 0.5rem;
+  --space-12: 0.75rem;
   --space-16: 1rem;
   --space-24: 1.5rem;
   --space-32: 2rem;
@@ -53,17 +54,20 @@
   --color-blue-5: hsla(231, 92%, 58%, 0.05);
   --color-blue-15: hsla(231, 92%, 58%, 0.15);
   --color-blue-25: hsla(231, 92%, 58%, 0.25);
+  --color-blue-60: hsla(231, 92%, 58%, 0.6);
   --color-blue-dark: hsla(231, 92%, 48%, 1);
   --color-green: hsla(115, 65%, 45%, 1);
   --color-green-5: hsla(115, 65%, 45%, 0.05);
   --color-green-15: hsla(115, 65%, 45%, 0.15);
   --color-green-25: hsla(115, 65%, 45%, 0.25);
+  --color-green-60: hsla(115, 65%, 45%, 0.6);
   --color-green-dark: hsla(115, 65%, 35%, 1);
-  --color-yellow: hsla(43, 90%, 58%, 1);
-  --color-yellow-5: hsla(43, 90%, 58%, 0.05);
-  --color-yellow-15: hsla(43, 90%, 58%, 0.15);
-  --color-yellow-25: hsla(43, 90%, 58%, 0.25);
-  --color-yellow-dark: hsla(43, 90%, 48%, 1);
+  --color-yellow: hsla(43, 90%, 48%, 1);
+  --color-yellow-5: hsla(43, 90%, 48%, 0.05);
+  --color-yellow-15: hsla(43, 90%, 48%, 0.15);
+  --color-yellow-25: hsla(43, 90%, 48%, 0.25);
+  --color-yellow-60: hsla(43, 90%, 48%, 0.6);
+  --color-yellow-dark: hsla(43, 90%, 38%, 1);
   --color-red: hsla(1, 80%, 58%, 1);
   --color-red-dark: hsla(1, 80%, 48%, 1);
 
@@ -111,13 +115,16 @@
   --color-bookmark-links: var(--color-yellow);
   --color-bookmark-embed-movies: var(--color-blue-5);
   --color-bookmark-embed-movies-outline: var(--color-blue-15);
+  --color-bookmark-embed-movies-meta: var(--color-blue-60);
   --color-bookmark-embed-tv-shows: var(--color-green-5);
   --color-bookmark-embed-tv-shows-outline: var(--color-green-15);
+  --color-bookmark-embed-tv-shows-meta: var(--color-green-60);
   --color-bookmark-embed-links: var(--color-yellow-5);
   --color-bookmark-embed-links-outline: var(--color-yellow-15);
+  --color-bookmark-embed-links-meta: var(--color-yellow-60);
 
   /* System colors */
-  --color-body: hsl(0, 0%, 98%);
+  --color-body: hsl(216, 22%, 96%);
   --color-text: var(--color-black);
   --color-text-light: var(--color-black-80);
   --color-text-lighter: var(--color-black-40);
@@ -138,6 +145,7 @@
   --color-input-outline-hover: var(--color-black-20);
   --color-input: var(--color-white);
   --color-bookmark: var(--color-white);
+  --color-bookmark-hover: var(--color-black-5);
 
   /* Layout */
   --z-index-tabbar: 10;
@@ -161,6 +169,7 @@
     --color-input-outline: var(--color-white-15);
     --color-input-outline-hover: var(--color-white-20);
     --color-bookmark: var(--color-black);
+    --color-bookmark-hover: var(--color-white-5);
     --color-bookmark-embed-movies: var(--color-blue-15);
     --color-bookmark-embed-movies-outline: var(--color-blue-25);
     --color-bookmark-embed-tv-shows: var(--color-green-15);
