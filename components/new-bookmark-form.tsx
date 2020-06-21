@@ -28,10 +28,6 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     onSubmit: handleSubmit,
   })
 
-  React.useEffect(() => {
-    console.log(parseHashtags(formik.values.text))
-  }, [formik.values.text])
-
   function resetSelection() {
     return setSelection(null)
   }
@@ -87,7 +83,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
       }
 
       const data = await response.json()
-      Router.push(`/b/${data.id}`)
+      Router.push('/b/[id]', `/b/${data.id}`)
     } catch (error) {
       console.error(error)
       setError(error.message)
