@@ -14,7 +14,11 @@
 }
 
 .container:hover {
-  box-shadow: 0 0 0 2px var(--color-bookmark-hover);
+  box-shadow: 0 0 0 2px var(--color-bookmark-border-hover);
+}
+
+.container:active {
+  box-shadow: 0 0 0 2px var(--color-bookmark-border-active);
 }
 
 @media (min-width: 620px) {

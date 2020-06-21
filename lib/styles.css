@@ -145,7 +145,8 @@
   --color-input-outline-hover: var(--color-black-20);
   --color-input: var(--color-white);
   --color-bookmark: var(--color-white);
-  --color-bookmark-hover: var(--color-black-5);
+  --color-bookmark-border-hover: var(--color-black-5);
+  --color-bookmark-border-active: var(--color-black-15);
 
   /* Layout */
   --z-index-tabbar: 10;
@@ -169,7 +170,8 @@
     --color-input-outline: var(--color-white-15);
     --color-input-outline-hover: var(--color-white-20);
     --color-bookmark: var(--color-black);
-    --color-bookmark-hover: var(--color-white-5);
+    --color-bookmark-border-hover: var(--color-white-5);
+    --color-bookmark-border-active: var(--color-white-15);
     --color-bookmark-embed-movies: var(--color-blue-15);
     --color-bookmark-embed-movies-outline: var(--color-blue-25);
     --color-bookmark-embed-tv-shows: var(--color-green-15);
