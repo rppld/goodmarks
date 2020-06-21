@@ -1,5 +1,5 @@
 .container {
-  padding: var(--space-16);
+  padding: var(--space-12);
   margin-top: var(--space-16);
   border-radius: var(--space-16);
   color: var(--color-black-90);

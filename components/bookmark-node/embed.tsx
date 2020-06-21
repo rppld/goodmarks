@@ -38,8 +38,6 @@ const Embed: React.FC<Props> = ({
     bookmark.details['poster_path'] &&
     `https://image.tmdb.org/t/p/w220_and_h330_face/${bookmark.details['poster_path']}`
 
-  console.log(bookmark?.details)
-
   const url =
     category === 'tv-shows'
       ? `https://www.themoviedb.org/tv/${bookmark.details.id}`
@@ -103,9 +101,6 @@ const Embed: React.FC<Props> = ({
             </div>
           </div>
         </HStack>
-        {bookmark.details.overview ? (
-          <SmallText as="p">{bookmark.details.overview}</SmallText>
-        ) : null}
       </div>
     </Component>
   )
