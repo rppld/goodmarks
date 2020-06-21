@@ -1,4 +1,4 @@
-import faunadb from 'faunadb'
+import faunadb, { query as q } from 'faunadb'
 import cookie from 'cookie'
 
 export const FAUNA_SECRET_COOKIE = 'faunaSecret'
@@ -54,4 +54,34 @@ export function flattenDataKeys(obj) {
   } else {
     return obj
   }
+}
+
+export async function createHashtags(items) {
+  // items is an array that looks like:
+  // [{ name: 'hash' }, { name: 'tag' }]
+  return q.Map(
+    items,
+    q.Lambda(
+      ['hashtag'],
+      q.Let(
+        {
+          match: q.Match(q.Index('hashtags_by_name'), q.Var('hashtag')),
+        },
+        q.If(
+          q.Exists(q.Var('match')),
+          // Paginate returns a { data: [ <references> ]} object. We
+          // validated that there is one element with exists already.
+          // We can fetch it with Select(['data', 0], ...)
+          q.Select(['data', 0], q.Paginate(q.Var('match'))),
+          // If it doesn't exist we create it and return the reference.
+          q.Select(
+            ['ref'],
+            q.Create(q.Collection('Hashtags'), {
+              data: { name: q.Var('hashtag') },
+            })
+          )
+        )
+      )
+    )
+  )
 }

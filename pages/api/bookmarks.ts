@@ -4,6 +4,7 @@ import {
   faunaClient,
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
+  createHashtags,
 } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
@@ -420,36 +421,6 @@ async function createComment(req, res) {
   }
 }
 
-async function createHashtags(items) {
-  // items is an array that looks like:
-  // [{ name: 'hash' }, { name: 'tag' }]
-  return q.Map(
-    items,
-    Lambda(
-      ['hashtag'],
-      Let(
-        {
-          match: Match(Index('hashtags_by_name'), Var('hashtag')),
-        },
-        If(
-          Exists(Var('match')),
-          // Paginate returns a { data: [ <references> ]} object. We
-          // validated that there is one element with exists already.
-          // We can fetch it with Select(['data', 0], ...)
-          Select(['data', 0], Paginate(Var('match'))),
-          // If it doesn't exist we create it and return the reference.
-          Select(
-            ['ref'],
-            Create(Collection('Hashtags'), {
-              data: { name: Var('hashtag') },
-            })
-          )
-        )
-      )
-    )
-  )
-}
-
 async function deleteBookmark(req, res) {
   const { id } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
@@ -485,7 +456,7 @@ async function deleteBookmark(req, res) {
               ),
               Lambda(['ts', 'commentRef'], Delete(Var('commentRef')))
             ),
-            // Remove all stats related to the bookmar.
+            // Remove all stats related to the bookmark.
             q.Map(
               Paginate(
                 Match(Index('bookmark_stats_by_bookmark'), Var('bookmarkRef')),
