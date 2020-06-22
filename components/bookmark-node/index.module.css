@@ -3,6 +3,7 @@
   overflow: hidden;
   background-color: var(--color-bookmark);
   padding: var(--space-16);
+  cursor: pointer;
 
   /* Make full-bled */
   width: 100vw;
@@ -32,10 +33,6 @@
     margin-right: 0;
     border-radius: var(--space-16);
   }
-}
-
-.body {
-  cursor: pointer;
 }
 
 .header {

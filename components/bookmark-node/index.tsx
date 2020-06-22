@@ -56,57 +56,55 @@ const BookmarkNode: React.FC<Props> = ({
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.body} onClick={handleClick}>
-        <header className={styles.header}>
-          <HStack>
-            <AuthorInfo user={user} createdAt={bookmark.created['@ts']} />
-          </HStack>
+    <div className={styles.container} onClick={handleClick}>
+      <header className={styles.header}>
+        <HStack>
+          <AuthorInfo user={user} createdAt={bookmark.created['@ts']} />
+        </HStack>
 
-          <HStack spacing="md">
-            <Action
-              active={bookmarkStats.like}
-              leftAdornment={<Heart size="sm" />}
-              onClick={viewer && handleLike}
-              disabled={!viewer || liking}
-              className="action"
-              isLikeToggle={true}
-            >
-              {bookmark.likes > 0 ? bookmark.likes : null}
-            </Action>
+        <HStack spacing="md">
+          <Action
+            active={bookmarkStats.like}
+            leftAdornment={<Heart size="sm" />}
+            onClick={viewer && handleLike}
+            disabled={!viewer || liking}
+            className="action"
+            isLikeToggle={true}
+          >
+            {bookmark.likes > 0 ? bookmark.likes : null}
+          </Action>
 
-            <Action
-              as="span"
-              active={bookmarkStats.comment}
-              leftAdornment={<ChatBubble size="sm" />}
-            >
-              {bookmark.comments > 0 ? bookmark.comments : null}
-            </Action>
+          <Action
+            as="span"
+            active={bookmarkStats.comment}
+            leftAdornment={<ChatBubble size="sm" />}
+          >
+            {bookmark.comments > 0 ? bookmark.comments : null}
+          </Action>
 
-            {isOwnedByViewer && (
-              <Menu>
-                <Action
-                  as={MenuButton}
-                  leftAdornment={<More size="sm" />}
+          {isOwnedByViewer && (
+            <Menu>
+              <Action
+                as={MenuButton}
+                leftAdornment={<More size="sm" />}
+                className="action"
+              />
+              <MenuList>
+                <MenuItem
+                  onSelect={handleDelete}
+                  disabled={deleting}
                   className="action"
-                />
-                <MenuList>
-                  <MenuItem
-                    onSelect={handleDelete}
-                    disabled={deleting}
-                    className="action"
-                  >
-                    {deleting ? 'Deleting' : 'Delete bookmark'}
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            )}
-          </HStack>
-        </header>
+                >
+                  {deleting ? 'Deleting' : 'Delete bookmark'}
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          )}
+        </HStack>
+      </header>
 
-        <div className={styles.text}>
-          {bookmark.text && <Text as="p">{bookmark.text}</Text>}
-        </div>
+      <div className={styles.text}>
+        {bookmark.text && <Text as="p">{bookmark.text}</Text>}
       </div>
 
       <Embed bookmark={bookmark} category={category.slug} />
