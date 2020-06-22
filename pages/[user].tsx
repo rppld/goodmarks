@@ -11,8 +11,8 @@ import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
 import ProfilePageHeader from 'components/profile-page-header'
 import Toolbar from 'components/toolbar'
-import ListEdge from 'components/list-edge'
-import UserEdge from 'components/user-edge'
+import ListEdge from 'components/list-node'
+import UserEdge from 'components/user-node'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
