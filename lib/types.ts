@@ -16,7 +16,7 @@ export interface List {
   comments: number
   likes: number
   reposts: number
-  items: any
+  items: Bookmark[]
   hashtags: any
 }
 
@@ -63,19 +63,22 @@ export interface ListStats {
   list: any
 }
 
+export interface BookmarkNode {
+  bookmark: Bookmark
+  category: BookmarkCategory
+  bookmarkStats: BookmarkStats
+  user: User
+  comments: CommentNode[]
+}
+
 export interface BookmarksData {
-  bookmarks: {
-    bookmark: Bookmark
-    category: BookmarkCategory
-    bookmarkStats: BookmarkStats
-    user: User
-    comments: CommentNode[]
-  }[]
+  bookmarks: BookmarkNode[]
 }
 
 export interface ListsData {
   edges: {
     list: List
+    items: BookmarkNode[]
     listStats: ListStats
     user: User
     comments: CommentNode[]
