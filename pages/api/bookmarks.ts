@@ -5,6 +5,7 @@ import {
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
   createHashtags,
+  getBookmarksWithUsersMapGetGeneric,
 } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
@@ -24,7 +25,6 @@ const {
   Select,
   Get,
   Identity,
-  Contains,
   Now,
   Union,
   Paginate,
@@ -586,98 +586,4 @@ async function getBookmarksByHashtag(req, res) {
   )
 
   return res.status(200).json(flattenDataKeys(data))
-}
-
-function getBookmarksWithUsersMapGetGeneric(bookmarksSetRefOrArray, depth = 1) {
-  // Let's do this with a let to clearly show the separate steps.
-  return q.Map(
-    // For all bookmarks this is just
-    // Paginate(Documents(Collection('Bookmarks'))), else it's a match
-    // on an index.
-    bookmarksSetRefOrArray,
-    Lambda((ref) =>
-      Let(
-        {
-          bookmark: Get(Var('ref')),
-          // Get the original bookmark
-          original: If(
-            Contains(['data', 'original'], Var('bookmark')),
-            // Reposted bookmark. Get original bookmark's data. We
-            // want to get the original as well in the same structure,
-            // let's just use recursion to construct that query, we
-            // could get the whole repost chain like this, it looks a
-            // bit like traversing a graph. We are only interested in
-            // the first reposted bookmark so we pas depth 1 as
-            // default, depth is meant to make sure sure we don't loop
-            // endelessly in javascript.
-            depth > 0
-              ? Select(
-                  [0],
-                  getBookmarksWithUsersMapGetGeneric(
-                    [Select(['data', 'original'], Var('bookmark'))],
-                    depth - 1
-                  )
-                )
-              : false,
-            // Normal bookmark, there is no original.
-            false
-          ),
-          // Get the category the bookmark belongs to.
-          category: Get(Select(['data', 'category'], Var('bookmark'))),
-          // Get the user that wrote the bookmark.
-          user: Get(Select(['data', 'author'], Var('bookmark'))),
-          // Get the account via identity.
-          account: If(HasIdentity(), Get(Identity()), false),
-          // Get the user that is currently logged in.
-          currentUserRef: If(
-            HasIdentity(),
-            Select(['data', 'user'], Var('account')),
-            false
-          ),
-          // Get the statistics for the bookmark
-          bookmarkStatsMatch: Match(
-            Index('bookmark_stats_by_user_and_bookmark'),
-            Var('currentUserRef'),
-            Select(['ref'], Var('bookmark'))
-          ),
-          followerStatsMatch: Match(
-            Index('follower_stats_by_author_and_follower'),
-            Var('currentUserRef'),
-            Select(['ref'], Var('bookmark'))
-          ),
-          bookmarkStats: If(
-            Exists(Var('bookmarkStatsMatch')),
-            Get(Var('bookmarkStatsMatch')),
-            {}
-          ),
-          // Get comments, index has two values so lambda has two values
-          comments: q.Map(
-            Paginate(Match(Index('comments_by_bookmark_ordered'), Var('ref'))),
-            Lambda(
-              ['ts', 'commentRef'],
-              Let(
-                {
-                  comment: Get(Var('commentRef')),
-                  author: Get(Select(['data', 'author'], Var('comment'))),
-                },
-                {
-                  comment: Var('comment'),
-                  author: Var('author'),
-                }
-              )
-            )
-          ),
-        },
-        // Return our elements
-        {
-          user: Var('user'),
-          category: Var('category'),
-          original: Var('original'),
-          bookmark: Var('bookmark'),
-          bookmarkStats: Var('bookmarkStats'),
-          comments: Var('comments'),
-        }
-      )
-    )
-  )
 }
