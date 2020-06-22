@@ -249,27 +249,55 @@ function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
 
 export const listApi = async (listId: string, faunaSecret?: string) => {
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
-  const data = await client.query(
+  const { edges, isPrivate, viewerIsAuthor } = await client.query(
     Let(
       {
         listRef: Ref(Collection('Lists'), listId),
-        edges: getListsWithUsersMapGetGeneric(
-          q.Map(
-            Paginate(Match(Index('lists_by_reference'), Var('listRef'))),
-            Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
+        isPrivate: Select(['data', 'private'], Get(Var('listRef'))),
+        authorRef: Select(['data', 'author'], Get(Var('listRef'))),
+        account: If(HasIdentity(), Get(Identity()), false),
+        currentUserRef: If(
+          HasIdentity(),
+          Select(['data', 'user'], Var('account')),
+          false
+        ),
+        viewerIsAuthor: Equals(Var('currentUserRef'), Var('authorRef')),
+        edges: If(
+          Var('isPrivate'),
+          If(
+            Var('viewerIsAuthor'),
+            getListsWithUsersMapGetGeneric(
+              q.Map(
+                Paginate(Match(Index('lists_by_reference'), Var('listRef'))),
+                Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
+              )
+            ),
+            []
+          ),
+          getListsWithUsersMapGetGeneric(
+            q.Map(
+              Paginate(Match(Index('lists_by_reference'), Var('listRef'))),
+              Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
+            )
           )
         ),
       },
       {
         edges: Var('edges'),
+        isPrivate: Var('isPrivate'),
+        viewerIsAuthor: Var('viewerIsAuthor'),
       }
     )
   )
 
+  if (isPrivate && !viewerIsAuthor) {
+    throw new Error('Unauthorized: Private list')
+  }
+
   // Bit awkward to first stringify the data and then parse it again
   // as JSON, but it could still contain FQL and this is the only way
   // I found to get rid of it.
-  const json = JSON.stringify(flattenDataKeys(data))
+  const json = JSON.stringify(flattenDataKeys({ edges }))
   return JSON.parse(json)
 }
 
@@ -277,5 +305,11 @@ async function getListsByReference(req, res) {
   const { id } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
-  return res.status(200).send(await listApi(id, faunaSecret))
+
+  try {
+    const data = await listApi(id, faunaSecret)
+    return res.status(200).send(data)
+  } catch (error) {
+    return res.status(401).send(error.message)
+  }
 }
