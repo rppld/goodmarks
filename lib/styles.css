@@ -305,3 +305,9 @@ to capture the parent as the click target. */
     background-color: var(--color-white-10);
   }
 }
+
+[data-reach-custom-checkbox-container]:focus-within,
+[data-reach-custom-checkbox-container][data-focus] {
+  box-shadow: 0 0 0 2px var(--color-input-outline-hover) inset;
+  outline: 0;
+}
