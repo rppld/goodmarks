@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './list-edge.module.css'
+import styles from './list-node.module.css'
 import TimeAgo from 'timeago-react'
 import { H4 } from './heading'
 import { Text, SmallText } from './text'
