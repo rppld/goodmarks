@@ -7,6 +7,7 @@
     "fauna": "node ./scripts/index.js"
   },
   "dependencies": {
+    "@reach/checkbox": "^0.10.4",
     "@reach/combobox": "^0.10.4",
     "@reach/listbox": "^0.10.4",
     "@reach/menu-button": "^0.10.4",

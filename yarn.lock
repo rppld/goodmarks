@@ -1150,6 +1150,16 @@
     "@reach/utils" "0.10.4"
     tslib "^2.0.0"
 
+"@reach/checkbox@^0.10.4":
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/@reach/checkbox/-/checkbox-0.10.4.tgz#80b6000135dbed7081e725fdeb5423e624c8b25d"
+  integrity sha512-oHyb5+xTUo6TtJO+Ee/Bkb/Ygju80ZGML15GuaJbivK2UvKWbX/5v/dA5O6WxupljvY0q8f59ohX03v1dD3cYQ==
+  dependencies:
+    "@reach/auto-id" "0.10.4"
+    "@reach/machine" "0.10.4"
+    "@reach/utils" "0.10.4"
+    tslib "^2.0.0"
+
 "@reach/combobox@^0.10.4":
   version "0.10.4"
   resolved "https://registry.yarnpkg.com/@reach/combobox/-/combobox-0.10.4.tgz#d3c00276195ae405f993370202651548ad626e06"
