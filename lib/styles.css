@@ -149,7 +149,6 @@
   --color-bookmark-border-active: var(--color-black-15);
 
   /* Layout */
-  --z-index-tabbar: 10;
   --container-max-width: 40rem;
 }
 
@@ -256,6 +255,10 @@ click-handlers attached. It will ignore click events on its children
 to capture the parent as the click target. */
 .action * {
   pointer-events: none;
+}
+
+[data-reach-listbox-popover] {
+  z-index: 2;
 }
 
 [data-reach-menu-list],
