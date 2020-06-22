@@ -1,8 +1,12 @@
 import React from 'react'
+import { useViewer } from 'components/viewer-context'
+import Router, { useRouter } from 'next/router'
+import Button from 'components/button'
 import { ListsData } from 'lib/types'
 import { VStack } from 'components/stack'
 import useSWR from 'swr'
 import ListNode from 'components/list-node'
+import useDeleteList from 'utils/use-delete-list'
 
 interface Props {
   initialData: ListsData
@@ -10,11 +14,21 @@ interface Props {
 }
 
 const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
+  const { viewer } = useViewer()
+  const { query } = useRouter()
   const { data, error } = useSWR<ListsData>(
     () => listId && `/api/lists?id=${listId}`,
     { initialData }
   )
   const item = data?.edges?.length > 0 && data.edges[0]
+  const [deleteList, { loading: deleting }] = useDeleteList()
+
+  const handleDelete = async () => {
+    await deleteList(listId)
+    const href = '/[user]/lists'
+    const as = `/${query.user}/lists`
+    Router.push(href, as)
+  }
 
   return (
     <div>
@@ -25,6 +39,11 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
       ) : (
         <VStack spacing="md">
           <ListNode {...item} />
+          {query.user === viewer.handle ? (
+            <Button onClick={handleDelete} variant="danger" disabled={deleting}>
+              Delete list
+            </Button>
+          ) : null}
         </VStack>
       )}
     </div>
