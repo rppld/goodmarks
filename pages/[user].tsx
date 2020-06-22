@@ -110,7 +110,7 @@ const User: NextPage = () => {
 
   return (
     <Layout>
-      <ProfilePageHeader user={data?.author}></ProfilePageHeader>
+      <ProfilePageHeader user={data?.author} />
 
       <Toolbar>
         {viewer && handle !== viewer.handle ? (
@@ -145,13 +145,8 @@ const User: NextPage = () => {
         <div>loading...</div>
       ) : (
         <div>
-          <ListEdge
-            id="1234567890"
-            title="All Christopher Nolan Movies"
-            description="A list with all the movies from director Christopher Nolan"
-            datetime="0"
-          />
           <UserEdge user={data?.author} />
+
           {data.bookmarks.length > 0 && (
             <>
               {data.bookmarks.map((item) => (
