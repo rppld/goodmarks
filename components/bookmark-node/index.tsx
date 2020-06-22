@@ -8,7 +8,7 @@ import useLikeBookmark from 'utils/use-like-bookmark'
 import useDeleteBookmark from 'utils/use-delete-bookmark'
 import { useViewer } from 'components/viewer-context'
 import { Text } from '../text'
-import AuthorInfo from './author-info'
+import AuthorInfo from '../author-info'
 import Action from './action'
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
 

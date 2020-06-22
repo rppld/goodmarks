@@ -1,10 +1,9 @@
 import React from 'react'
 import classNames from 'classnames'
 import styles from './profile-page-header.module.css'
-import { H2 } from 'components/heading'
-import { HStack } from 'components/stack'
+import { H4 } from 'components/heading'
+import { HStack, VStack } from 'components/stack'
 import { SmallText } from 'components/text'
-import PageTitle from 'components/page-title'
 import getImageUrl from 'utils/get-image-url'
 import Avatar from 'components/avatar'
 import { User } from 'lib/types'
@@ -25,10 +24,10 @@ const ProfilePageHeader: React.FC<Props> = ({ user, children, ...props }) => {
           src={user && getImageUrl(user?.picture, 'avatarLg')}
           size="lg"
         />
-        <PageTitle>
-          <H2 as="h1">{user?.name ? user?.name : user?.handle}</H2>
+        <VStack spacing="sm">
+          <H4 as="h1">{user?.name ? user?.name : user?.handle}</H4>
           <SmallText meta>@{user?.handle}</SmallText>
-        </PageTitle>
+        </VStack>
       </HStack>
     </header>
   )

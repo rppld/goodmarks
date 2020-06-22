@@ -12,6 +12,7 @@ import Tabs from 'components/tabs'
 import ProfilePageHeader from 'components/profile-page-header'
 import Toolbar from 'components/toolbar'
 import ListEdge from 'components/list-edge'
+import UserEdge from 'components/user-edge'
 
 const User: NextPage = () => {
   const [loading, setLoading] = React.useState(false)
@@ -151,6 +152,7 @@ const User: NextPage = () => {
             description="A list with all the movies from director Christopher Nolan"
             datetime="0"
           />
+          <UserEdge user={data?.author} />
           {data.bookmarks.length > 0 && (
             <>
               {data.bookmarks.map((item) => (
