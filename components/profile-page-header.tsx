@@ -1,9 +1,8 @@
 import React from 'react'
-import classNames from 'classnames'
 import styles from './profile-page-header.module.css'
 import { H4 } from 'components/heading'
 import { HStack, VStack } from 'components/stack'
-import { SmallText } from 'components/text'
+import { Text } from 'components/text'
 import getImageUrl from 'utils/get-image-url'
 import Avatar from 'components/avatar'
 import { User } from 'lib/types'
@@ -13,12 +12,9 @@ interface Props {
 }
 
 const ProfilePageHeader: React.FC<Props> = ({ user, children, ...props }) => {
-  const className = classNames(styles.header)
-
   return (
-    <header className={className} {...props}>
+    <header className={styles.header} {...props}>
       {children}
-
       <HStack alignment="leading" spacing="md">
         <Avatar
           src={user && getImageUrl(user?.picture, 'avatarLg')}
@@ -26,7 +22,7 @@ const ProfilePageHeader: React.FC<Props> = ({ user, children, ...props }) => {
         />
         <VStack spacing="sm">
           <H4 as="h1">{user?.name ? user?.name : user?.handle}</H4>
-          <SmallText meta>@{user?.handle}</SmallText>
+          <Text meta>@{user?.handle}</Text>
         </VStack>
       </HStack>
     </header>
