@@ -322,8 +322,32 @@ const createCommentsByBookmarkAndAuthorOrderedIndex = CreateIndex({
   serialized: true,
 })
 
+const createListsByAuthorAndPrivateIndex = CreateIndex({
+  name: 'lists_by_author_and_private',
+  source: Collection('Lists'),
+  terms: [
+    {
+      field: ['data', 'author'],
+    },
+    {
+      field: ['data', 'private'],
+    },
+  ],
+  values: [
+    {
+      // We want the results to be sorted on creation time
+      field: ['data', 'created'],
+      reverse: true,
+    },
+    {
+      field: ['ref'], // return the fweet reference
+    },
+  ],
+  serialized: true,
+})
+
 async function query(client) {
-  await client.query(createHashTagsAndUsersByWordpartsIndex)
+  await client.query(createListsByAuthorAndPrivateIndex)
 }
 
 module.exports = { query }
