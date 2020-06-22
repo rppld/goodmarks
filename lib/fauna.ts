@@ -56,31 +56,241 @@ export function flattenDataKeys(obj) {
   }
 }
 
+const {
+  Create,
+  Collection,
+  HasIdentity,
+  Select,
+  Get,
+  Identity,
+  Contains,
+  Paginate,
+  Let,
+  Lambda,
+  Var,
+  Exists,
+  Match,
+  Index,
+  If,
+} = q
+
 export async function createHashtags(items) {
   // items is an array that looks like:
   // [{ name: 'hash' }, { name: 'tag' }]
   return q.Map(
     items,
-    q.Lambda(
+    Lambda(
       ['hashtag'],
-      q.Let(
+      Let(
         {
-          match: q.Match(q.Index('hashtags_by_name'), q.Var('hashtag')),
+          match: Match(Index('hashtags_by_name'), Var('hashtag')),
         },
-        q.If(
-          q.Exists(q.Var('match')),
+        If(
+          Exists(Var('match')),
           // Paginate returns a { data: [ <references> ]} object. We
           // validated that there is one element with exists already.
           // We can fetch it with Select(['data', 0], ...)
-          q.Select(['data', 0], q.Paginate(q.Var('match'))),
+          Select(['data', 0], Paginate(Var('match'))),
           // If it doesn't exist we create it and return the reference.
-          q.Select(
+          Select(
             ['ref'],
-            q.Create(q.Collection('Hashtags'), {
-              data: { name: q.Var('hashtag') },
+            Create(Collection('Hashtags'), {
+              data: { name: Var('hashtag') },
             })
           )
         )
+      )
+    )
+  )
+}
+
+export function getBookmarksWithUsersMapGetGeneric(
+  bookmarksSetRefOrArray,
+  depth = 1
+) {
+  // Let's do this with a let to clearly show the separate steps.
+  return q.Map(
+    // For all bookmarks this is just
+    // Paginate(Documents(Collection('Bookmarks'))), else it's a match
+    // on an index.
+    bookmarksSetRefOrArray,
+    Lambda((ref) =>
+      Let(
+        {
+          bookmark: Get(Var('ref')),
+          // Get the original bookmark
+          original: If(
+            Contains(['data', 'original'], Var('bookmark')),
+            // Reposted bookmark. Get original bookmark's data. We
+            // want to get the original as well in the same structure,
+            // let's just use recursion to construct that query, we
+            // could get the whole repost chain like this, it looks a
+            // bit like traversing a graph. We are only interested in
+            // the first reposted bookmark so we pas depth 1 as
+            // default, depth is meant to make sure sure we don't loop
+            // endelessly in javascript.
+            depth > 0
+              ? Select(
+                  [0],
+                  getBookmarksWithUsersMapGetGeneric(
+                    [Select(['data', 'original'], Var('bookmark'))],
+                    depth - 1
+                  )
+                )
+              : false,
+            // Normal bookmark, there is no original.
+            false
+          ),
+          // Get the category the bookmark belongs to.
+          category: Get(Select(['data', 'category'], Var('bookmark'))),
+          // Get the user that wrote the bookmark.
+          user: Get(Select(['data', 'author'], Var('bookmark'))),
+          // Get the account via identity.
+          account: If(HasIdentity(), Get(Identity()), false),
+          // Get the user that is currently logged in.
+          currentUserRef: If(
+            HasIdentity(),
+            Select(['data', 'user'], Var('account')),
+            false
+          ),
+          // Get the statistics for the bookmark
+          bookmarkStatsMatch: Match(
+            Index('bookmark_stats_by_user_and_bookmark'),
+            Var('currentUserRef'),
+            Select(['ref'], Var('bookmark'))
+          ),
+          followerStatsMatch: Match(
+            Index('follower_stats_by_author_and_follower'),
+            Var('currentUserRef'),
+            Select(['ref'], Var('bookmark'))
+          ),
+          bookmarkStats: If(
+            Exists(Var('bookmarkStatsMatch')),
+            Get(Var('bookmarkStatsMatch')),
+            {}
+          ),
+          // Get comments, index has two values so lambda has two values
+          comments: q.Map(
+            Paginate(Match(Index('comments_by_bookmark_ordered'), Var('ref'))),
+            Lambda(
+              ['ts', 'commentRef'],
+              Let(
+                {
+                  comment: Get(Var('commentRef')),
+                  author: Get(Select(['data', 'author'], Var('comment'))),
+                },
+                {
+                  comment: Var('comment'),
+                  author: Var('author'),
+                }
+              )
+            )
+          ),
+        },
+        // Return our elements
+        {
+          user: Var('user'),
+          category: Var('category'),
+          original: Var('original'),
+          bookmark: Var('bookmark'),
+          bookmarkStats: Var('bookmarkStats'),
+          comments: Var('comments'),
+        }
+      )
+    )
+  )
+}
+
+export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
+  // Let's do this with a let to clearly show the separate steps.
+  return q.Map(
+    // For all lists this is just
+    // Paginate(Documents(Collection('Lists'))), else it's a match
+    // on an index.
+    listsSetRefOrArray,
+    Lambda((ref) =>
+      Let(
+        {
+          list: Get(Var('ref')),
+          // Get the original list
+          original: If(
+            Contains(['data', 'original'], Var('list')),
+            // Reposted list. Get original list's data. We
+            // want to get the original as well in the same structure,
+            // let's just use recursion to construct that query, we
+            // could get the whole repost chain like this, it looks a
+            // bit like traversing a graph. We are only interested in
+            // the first reposted list so we pas depth 1 as
+            // default, depth is meant to make sure sure we don't loop
+            // endelessly in javascript.
+            depth > 0
+              ? Select(
+                  [0],
+                  getListsWithUsersMapGetGeneric(
+                    [Select(['data', 'original'], Var('list'))],
+                    depth - 1
+                  )
+                )
+              : false,
+            // Normal list, there is no original.
+            false
+          ),
+          items: getBookmarksWithUsersMapGetGeneric(
+            Select(['data', 'items'], Var('list'))
+          ),
+          // Get the user that wrote the list.
+          user: Get(Select(['data', 'author'], Var('list'))),
+          // Get the account via identity.
+          account: If(HasIdentity(), Get(Identity()), false),
+          // Get the user that is currently logged in.
+          currentUserRef: If(
+            HasIdentity(),
+            Select(['data', 'user'], Var('account')),
+            false
+          ),
+          // Get the statistics for the list
+          listStatsMatch: Match(
+            Index('list_stats_by_user_and_list'),
+            Var('currentUserRef'),
+            Select(['ref'], Var('list'))
+          ),
+          followerStatsMatch: Match(
+            Index('follower_stats_by_author_and_follower'),
+            Var('currentUserRef'),
+            Select(['ref'], Var('list'))
+          ),
+          listStats: If(
+            Exists(Var('listStatsMatch')),
+            Get(Var('listStatsMatch')),
+            {}
+          ),
+          // Get comments, index has two values so lambda has two values
+          comments: q.Map(
+            Paginate(Match(Index('comments_by_list_ordered'), Var('ref'))),
+            Lambda(
+              ['ts', 'commentRef'],
+              Let(
+                {
+                  comment: Get(Var('commentRef')),
+                  author: Get(Select(['data', 'author'], Var('comment'))),
+                },
+                {
+                  comment: Var('comment'),
+                  author: Var('author'),
+                }
+              )
+            )
+          ),
+        },
+        // Return our elements
+        {
+          user: Var('user'),
+          original: Var('original'),
+          list: Var('list'),
+          items: Var('items'),
+          listStats: Var('listStats'),
+          comments: Var('comments'),
+        }
       )
     )
   )
