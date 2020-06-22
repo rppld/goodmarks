@@ -13,14 +13,14 @@ interface Props {
   datetime: string
 }
 
-const ListEdge: React.FC<Props> = ({ id, title, description, datetime }) => {
+const ListNode: React.FC<Props> = ({ id, title, description, datetime }) => {
   return (
     <Link href={`/list/[id]`} as={`/list/${id}`}>
       <div className={styles.container}>
         <VStack>
           <H4>{title}</H4>
-          <Text>{description}</Text>
-          <SmallText meta>
+          <Text as="p">{description}</Text>
+          <SmallText meta as="p">
             Last updated: <TimeAgo datetime={datetime} />
           </SmallText>
         </VStack>
@@ -29,4 +29,4 @@ const ListEdge: React.FC<Props> = ({ id, title, description, datetime }) => {
   )
 }
 
-export default ListEdge
+export default ListNode
