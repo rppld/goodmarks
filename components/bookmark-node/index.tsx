@@ -6,21 +6,31 @@ import Embed from './embed'
 import { Heart, ChatBubble, More } from '../icon'
 import useLikeBookmark from 'utils/use-like-bookmark'
 import useDeleteBookmark from 'utils/use-delete-bookmark'
-import useAddBookmarkToList from 'utils/use-add-bookmark-to-list'
 import useRemoveBookmarkFromList from 'utils/use-remove-bookmark-from-list'
 import { useViewer } from 'components/viewer-context'
 import { Text } from '../text'
 import AuthorInfo from '../author-info'
 import Action from './action'
+import AddToListDialog from '../add-to-list-dialog'
+
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
+import {
+  Bookmark,
+  List,
+  BookmarkStats,
+  BookmarkCategory,
+  User,
+  CommentNode,
+} from 'lib/types'
 
 interface Props {
-  bookmark: any
-  category: any
-  bookmarkStats: any
-  comments: any
-  original?: any
-  user: any
+  bookmark: Bookmark
+  category: BookmarkCategory
+  bookmarkStats: BookmarkStats
+  comments: CommentNode[]
+  original?: Bookmark
+  list?: List
+  user: User
   onLike?: () => void
   onDelete?: () => void
 }
@@ -32,17 +42,21 @@ const BookmarkNode: React.FC<Props> = ({
   comments,
   original,
   user,
+  list,
   ...props
 }) => {
   const [likeBookmark, { loading: liking }] = useLikeBookmark()
   const [deleteBookmark, { loading: deleting }] = useDeleteBookmark()
-  const [addToList, { loading: addingToList }] = useAddBookmarkToList()
+
   const [
     removeFromList,
     { loading: removingFromList },
   ] = useRemoveBookmarkFromList()
   const { viewer } = useViewer()
   const isOwnedByViewer = viewer && user?.id === viewer.id
+  const [showDialog, setShowDialog] = React.useState(false)
+  const openDialog = () => setShowDialog(true)
+  const closeDialog = () => setShowDialog(false)
 
   const handleLike = async () => {
     props.onLike()
@@ -54,13 +68,8 @@ const BookmarkNode: React.FC<Props> = ({
     props.onDelete()
   }
 
-  const handleAddToList = async () => {
-    const res = await addToList(bookmark.id, '268930836415382023')
-    console.log(res)
-  }
-
   const handleRemoveFromList = async () => {
-    const res = await removeFromList(bookmark.id, '268930836415382023')
+    const res = await removeFromList(bookmark.id, list.id)
     console.log(res)
   }
 
@@ -107,21 +116,19 @@ const BookmarkNode: React.FC<Props> = ({
                 className="action"
               />
               <MenuList>
-                <MenuItem
-                  onSelect={handleAddToList}
-                  disabled={addingToList}
-                  className="action"
-                >
-                  {addingToList ? 'Adding' : 'Add to list'}
+                <MenuItem onSelect={openDialog} className="action">
+                  Add to list
                 </MenuItem>
 
-                <MenuItem
-                  onSelect={handleRemoveFromList}
-                  disabled={removingFromList}
-                  className="action"
-                >
-                  {removingFromList ? 'Removing' : 'Remove from list'}
-                </MenuItem>
+                {list && (
+                  <MenuItem
+                    onSelect={handleRemoveFromList}
+                    disabled={removingFromList}
+                    className="action"
+                  >
+                    {removingFromList ? 'Removing' : 'Remove from list'}
+                  </MenuItem>
+                )}
 
                 {isOwnedByViewer && (
                   <MenuItem
@@ -143,6 +150,12 @@ const BookmarkNode: React.FC<Props> = ({
       </div>
 
       <Embed bookmark={bookmark} category={category.slug} />
+
+      <AddToListDialog
+        isOpen={showDialog}
+        onDismiss={closeDialog}
+        bookmarkId={bookmark.id}
+      />
     </div>
   )
 }
