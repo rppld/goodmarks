@@ -1,9 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 import styles from './embed.module.css'
-import { Text, Caption, SmallText } from '../text'
+import { Text, Caption } from '../text'
 import { Bookmark } from 'lib/types'
-import { HStack } from '../stack'
 import Image from '../image'
 import { Movie, Link, TV, Calendar, Star } from '../icon'
 import getYear from 'date-fns/getYear'
@@ -57,50 +56,46 @@ const Embed: React.FC<Props> = ({
       className={classNames('action', styles.link)}
     >
       <div className={classNames(styles.container, styles[category])}>
-        <HStack alignment="leading">
-          <div className={styles.icon}>
-            {image ? (
-              <Image
-                src={image}
-                alt={`Thumbnail for ${
-                  bookmark.details.title || bookmark.details.name
-                }`}
-                className={styles.poster}
-              />
-            ) : (
-              getCategoryPlaceholder(category)
-            )}
+        <div className={styles.icon}>
+          {image ? (
+            <Image
+              src={image}
+              alt={`Thumbnail for ${
+                bookmark.details.title || bookmark.details.name
+              }`}
+              className={styles.poster}
+            />
+          ) : (
+            getCategoryPlaceholder(category)
+          )}
+        </div>
+        <div className={styles.details}>
+          <Text as="h4">{bookmark.details.title || bookmark.details.name}</Text>
+
+          <div className={styles.meta}>
+            {releaseYear ? (
+              <Caption>
+                <span className={styles.metaIcon}>
+                  <Calendar size="xs" />
+                </span>{' '}
+                {releaseYear}
+              </Caption>
+            ) : null}
+
+            {bookmark.details.vote_average ? (
+              <Caption>
+                <span className={styles.metaIcon}>
+                  <Star size="xs" />
+                </span>
+                {bookmark.details.vote_average}
+              </Caption>
+            ) : null}
+
+            {bookmark.details.url ? (
+              <Caption>{bookmark.details.url}</Caption>
+            ) : null}
           </div>
-          <div className={styles.details}>
-            <Text as="h4">
-              {bookmark.details.title || bookmark.details.name}
-            </Text>
-
-            <div className={styles.meta}>
-              {releaseYear ? (
-                <>
-                  <span className={styles.metaIcon}>
-                    <Calendar size="xs" />
-                  </span>
-                  <Caption as="b">{releaseYear}</Caption>
-                </>
-              ) : null}
-
-              {bookmark.details.vote_average ? (
-                <>
-                  <span className={styles.metaIcon}>
-                    <Star size="xs" />
-                  </span>
-                  <Caption as="b">{bookmark.details.vote_average}</Caption>
-                </>
-              ) : null}
-
-              {bookmark.details.url ? (
-                <Caption as="b">{bookmark.details.url}</Caption>
-              ) : null}
-            </div>
-          </div>
-        </HStack>
+        </div>
       </div>
     </Component>
   )
