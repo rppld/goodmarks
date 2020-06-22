@@ -60,6 +60,8 @@ const SiteSearch: React.FC = () => {
     >
       <Input
         name="search"
+        labelText="Search"
+        hideLabel
         onChange={(e) => handleChange(e.target.value)}
         placeholder="#covid19"
         as={ComboboxInput}
