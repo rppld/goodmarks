@@ -5,6 +5,7 @@ import Input from './input'
 import { useFormik } from 'formik'
 import Button from './button'
 import Form from './form'
+import Checkbox from './checkbox'
 import { useViewer } from './viewer-context'
 
 const NewListForm: React.FC = () => {
@@ -14,6 +15,7 @@ const NewListForm: React.FC = () => {
     initialValues: {
       name: '',
       description: '',
+      private: false,
     },
     onSubmit: handleSubmit,
   })
@@ -28,6 +30,7 @@ const NewListForm: React.FC = () => {
         body: JSON.stringify({
           name: values.name,
           description: values.description,
+          private: values.private,
           hashtags: parseHashtags(values.description),
           items: [],
         }),
@@ -53,7 +56,7 @@ const NewListForm: React.FC = () => {
         type="text"
         name="name"
         labelText="Name"
-        help="Keep it short"
+        help="The name for your list"
         onChange={formik.handleChange}
       />
 
@@ -64,6 +67,14 @@ const NewListForm: React.FC = () => {
         labelText="Description"
         help="Describe what your list is about"
         onChange={formik.handleChange}
+      />
+
+      <Checkbox
+        name="private"
+        labelText="Private"
+        help="Choose whether the list should be public or private"
+        onChange={formik.handleChange}
+        checked={formik.values.private}
       />
 
       <Button type="submit" variant="primary" size="lg">
