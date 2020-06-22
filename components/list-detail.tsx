@@ -49,7 +49,7 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
 
           <div>
             {edge.items.map((item) => (
-              <BookmarkNode {...item} key={item.bookmark.id} />
+              <BookmarkNode {...item} key={item.bookmark.id} list={edge.list} />
             ))}
           </div>
         </VStack>
