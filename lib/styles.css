@@ -56,18 +56,18 @@
   --color-blue-25: hsla(231, 92%, 58%, 0.25);
   --color-blue-60: hsla(231, 92%, 58%, 0.6);
   --color-blue-dark: hsla(231, 92%, 48%, 1);
-  --color-green: hsla(115, 65%, 45%, 1);
-  --color-green-5: hsla(115, 65%, 45%, 0.05);
-  --color-green-15: hsla(115, 65%, 45%, 0.15);
-  --color-green-25: hsla(115, 65%, 45%, 0.25);
-  --color-green-60: hsla(115, 65%, 45%, 0.6);
-  --color-green-dark: hsla(115, 65%, 35%, 1);
-  --color-yellow: hsla(43, 90%, 48%, 1);
-  --color-yellow-5: hsla(43, 90%, 48%, 0.05);
-  --color-yellow-15: hsla(43, 90%, 48%, 0.15);
-  --color-yellow-25: hsla(43, 90%, 48%, 0.25);
-  --color-yellow-60: hsla(43, 90%, 48%, 0.6);
-  --color-yellow-dark: hsla(43, 90%, 38%, 1);
+  --color-green: hsla(114, 87%, 33%, 1);
+  --color-green-5: hsla(114, 87%, 33%, 0.05);
+  --color-green-15: hsla(114, 87%, 33%, 0.15);
+  --color-green-25: hsla(114, 87%, 33%, 0.25);
+  --color-green-60: hsla(114, 87%, 33%, 0.6);
+  --color-green-dark: hsla(114, 87%, 33%, 1);
+  --color-crimson: hsl(349, 82%, 49%);
+  --color-crimson-5: hsla(349, 82%, 49%, 0.05);
+  --color-crimson-15: hsla(349, 82%, 49%, 0.15);
+  --color-crimson-25: hsla(349, 82%, 49%, 0.25);
+  --color-crimson-60: hsla(349, 82%, 49%, 0.6);
+  --color-crimson-dark: hsla(349, 82%, 19%, 1);
   --color-red: hsla(1, 80%, 58%, 1);
   --color-red-dark: hsla(1, 80%, 48%, 1);
 
@@ -112,16 +112,16 @@
   /* Bookmark colors */
   --color-bookmark-movies: var(--color-blue);
   --color-bookmark-tv-shows: var(--color-green);
-  --color-bookmark-links: var(--color-yellow);
+  --color-bookmark-links: var(--color-crimson);
   --color-bookmark-embed-movies: var(--color-blue-5);
   --color-bookmark-embed-movies-outline: var(--color-blue-15);
   --color-bookmark-embed-movies-meta: var(--color-blue-60);
   --color-bookmark-embed-tv-shows: var(--color-green-5);
   --color-bookmark-embed-tv-shows-outline: var(--color-green-15);
   --color-bookmark-embed-tv-shows-meta: var(--color-green-60);
-  --color-bookmark-embed-links: var(--color-yellow-5);
-  --color-bookmark-embed-links-outline: var(--color-yellow-15);
-  --color-bookmark-embed-links-meta: var(--color-yellow-60);
+  --color-bookmark-embed-links: var(--color-crimson-5);
+  --color-bookmark-embed-links-outline: var(--color-crimson-15);
+  --color-bookmark-embed-links-meta: var(--color-crimson-60);
 
   /* System colors */
   --color-body: hsl(216, 22%, 96%);
@@ -133,8 +133,8 @@
   --color-primary-hover: var(--color-black-80);
   --color-success: var(--color-green);
   --color-success-hover: var(--color-green-dark);
-  --color-warning: var(--color-yellow);
-  --color-warning-hover: var(--color-yellow-dark);
+  --color-warning: var(--color-crimson);
+  --color-warning-hover: var(--color-crimson-dark);
   --color-danger: var(--color-red);
   --color-danger-hover: var(--color-red-dark);
   --color-button-label: var(--color-black);
@@ -185,8 +185,8 @@
     --color-bookmark-embed-movies-outline: var(--color-blue-25);
     --color-bookmark-embed-tv-shows: var(--color-green-15);
     --color-bookmark-embed-tv-shows-outline: var(--color-green-25);
-    --color-bookmark-embed-links: var(--color-yellow-15);
-    --color-bookmark-embed-links-outline: var(--color-yellow-25);
+    --color-bookmark-embed-links: var(--color-crimson-15);
+    --color-bookmark-embed-links-outline: var(--color-crimson-25);
   }
 }
 
