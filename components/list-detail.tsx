@@ -5,6 +5,7 @@ import Button from 'components/button'
 import { ListsData } from 'lib/types'
 import { VStack } from 'components/stack'
 import useSWR from 'swr'
+import BookmarkNode from 'components/bookmark-node'
 import ListNode from 'components/list-node'
 import useDeleteList from 'utils/use-delete-list'
 
@@ -20,7 +21,7 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
     () => listId && `/api/lists?id=${listId}`,
     { initialData }
   )
-  const item = data?.edges?.length > 0 && data.edges[0]
+  const edge = data?.edges?.length > 0 && data.edges[0]
   const [deleteList, { loading: deleting }] = useDeleteList()
 
   const handleDelete = async () => {
@@ -38,12 +39,19 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
         <div>loading...</div>
       ) : (
         <VStack spacing="md">
-          <ListNode {...item} />
-          {query.user === viewer.handle ? (
+          <ListNode {...edge} />
+
+          {query?.user === viewer?.handle ? (
             <Button onClick={handleDelete} variant="danger" disabled={deleting}>
               Delete list
             </Button>
           ) : null}
+
+          <div>
+            {edge.items.map((item) => (
+              <BookmarkNode {...item} key={item.bookmark.id} />
+            ))}
+          </div>
         </VStack>
       )}
     </div>
