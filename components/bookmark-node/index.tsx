@@ -6,6 +6,8 @@ import Embed from './embed'
 import { Heart, ChatBubble, More } from '../icon'
 import useLikeBookmark from 'utils/use-like-bookmark'
 import useDeleteBookmark from 'utils/use-delete-bookmark'
+import useAddBookmarkToList from 'utils/use-add-bookmark-to-list'
+import useRemoveBookmarkFromList from 'utils/use-remove-bookmark-from-list'
 import { useViewer } from 'components/viewer-context'
 import { Text } from '../text'
 import AuthorInfo from '../author-info'
@@ -34,6 +36,11 @@ const BookmarkNode: React.FC<Props> = ({
 }) => {
   const [likeBookmark, { loading: liking }] = useLikeBookmark()
   const [deleteBookmark, { loading: deleting }] = useDeleteBookmark()
+  const [addToList, { loading: addingToList }] = useAddBookmarkToList()
+  const [
+    removeFromList,
+    { loading: removingFromList },
+  ] = useRemoveBookmarkFromList()
   const { viewer } = useViewer()
   const isOwnedByViewer = viewer && user?.id === viewer.id
 
@@ -45,6 +52,16 @@ const BookmarkNode: React.FC<Props> = ({
   const handleDelete = async () => {
     await deleteBookmark(bookmark.id)
     props.onDelete()
+  }
+
+  const handleAddToList = async () => {
+    const res = await addToList(bookmark.id, '268930836415382023')
+    console.log(res)
+  }
+
+  const handleRemoveFromList = async () => {
+    const res = await removeFromList(bookmark.id, '268930836415382023')
+    console.log(res)
   }
 
   const handleClick = (e) => {
@@ -82,7 +99,7 @@ const BookmarkNode: React.FC<Props> = ({
             {bookmark.comments > 0 ? bookmark.comments : null}
           </Action>
 
-          {isOwnedByViewer && (
+          {viewer && (
             <Menu>
               <Action
                 as={MenuButton}
@@ -91,12 +108,30 @@ const BookmarkNode: React.FC<Props> = ({
               />
               <MenuList>
                 <MenuItem
-                  onSelect={handleDelete}
-                  disabled={deleting}
+                  onSelect={handleAddToList}
+                  disabled={addingToList}
                   className="action"
                 >
-                  {deleting ? 'Deleting' : 'Delete bookmark'}
+                  {addingToList ? 'Adding' : 'Add to list'}
                 </MenuItem>
+
+                <MenuItem
+                  onSelect={handleRemoveFromList}
+                  disabled={removingFromList}
+                  className="action"
+                >
+                  {removingFromList ? 'Removing' : 'Remove from list'}
+                </MenuItem>
+
+                {isOwnedByViewer && (
+                  <MenuItem
+                    onSelect={handleDelete}
+                    disabled={deleting}
+                    className="action"
+                  >
+                    {deleting ? 'Deleting' : 'Delete bookmark'}
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           )}
