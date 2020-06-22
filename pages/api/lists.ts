@@ -48,7 +48,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (action === 'delete') {
-    // return deleteList(req, res)
+    return deleteList(req, res)
   }
 
   if (action === 'comment') {
@@ -112,6 +112,60 @@ async function createList(req, res) {
   }
 }
 
+async function deleteList(req, res) {
+  const { id } = req.query
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  try {
+    if (!id) {
+      throw new Error('List ID must be provided.')
+    }
+
+    await faunaClient(faunaSecret).query(
+      Let(
+        {
+          viewer: Select(['data', 'user'], Get(Identity())),
+          listRef: Ref(Collection('Lists'), id),
+          list: Get(Var('listRef')),
+          author: Select(['data', 'author'], Var('list')),
+        },
+        q.If(
+          // Check if user is allowed to delete this list.
+          Equals(Var('viewer'), Var('author')),
+          q.Do(
+            // Remove all the comments on the list.
+            q.Map(
+              Paginate(
+                Match(Index('comments_by_list_ordered'), Var('listRef')),
+                {
+                  size: 100000,
+                }
+              ),
+              Lambda(['ts', 'commentRef'], Delete(Var('commentRef')))
+            ),
+            // Remove all stats related to the list.
+            q.Map(
+              Paginate(Match(Index('list_stats_by_list'), Var('listRef')), {
+                size: 100000,
+              }),
+              Lambda(['listStatsRef'], Delete(Var('listStatsRef')))
+            ),
+            // Remove list itself.
+            Delete(Var('listRef'))
+          ),
+          Abort('Not allowed')
+        )
+      )
+    )
+
+    return res.status(200).send('Comments and list successfully deleted.')
+  } catch (error) {
+    console.log(error)
+    return res.status(400).send(error.message)
+  }
+}
+
 async function getListsByUserHandle(req, res) {
   const { handle } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
@@ -160,7 +214,7 @@ function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
   // Let's do this with a let to clearly show the separate steps.
   return q.Map(
     // For all lists this is just
-    // Paginate(Documents(Collection('Bookmarks'))), else it's a match
+    // Paginate(Documents(Collection('Lists'))), else it's a match
     // on an index.
     listsSetRefOrArray,
     Lambda((ref) =>
