@@ -73,7 +73,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 async function createList(req, res) {
-  const { name, description, hashtags, items } = req.body
+  const { name, description, private: isPrivate, hashtags, items } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -92,6 +92,7 @@ async function createList(req, res) {
           data: {
             name,
             description,
+            private: isPrivate,
             items,
             likes: 0,
             comments: 0,
@@ -123,9 +124,23 @@ async function getListsByUserHandle(req, res) {
         setRef: Match(Index('users_by_handle'), handle.toLowerCase()),
         authorRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
         author: Get(Var('authorRef')),
+        account: If(HasIdentity(), Get(Identity()), false),
+        currentUserRef: If(
+          HasIdentity(),
+          Select(['data', 'user'], Var('account')),
+          false
+        ),
+        viewerIsAuthor: Equals(Var('currentUserRef'), Var('authorRef')),
+        match: If(
+          Var('viewerIsAuthor'),
+          // Return all lists if the viewer is the list-author.
+          Match(Index('lists_by_author'), Var('authorRef')),
+          // Otherwise only return the public ones.
+          Match(Index('lists_by_author_and_private'), Var('authorRef'), false)
+        ),
         edges: getListsWithUsersMapGetGeneric(
           q.Map(
-            Paginate(Match(Index('lists_by_author'), Var('authorRef'))),
+            Paginate(Var('match')),
             // The index contains two values so our lambda also takes
             // two values.
             Lambda(['createdTime', 'ref'], Var('ref'))
