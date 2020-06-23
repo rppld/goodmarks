@@ -39,12 +39,9 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  margin-bottom: var(--space-16);
 }
 
 .container + .container {
   margin-top: var(--space-16);
-}
-
-.text {
-  padding-top: var(--space-16);
 }

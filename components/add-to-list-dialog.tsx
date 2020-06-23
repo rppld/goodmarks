@@ -1,5 +1,5 @@
 import React from 'react'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import { useViewer } from './viewer-context'
 import Dialog, { DialogProps } from './dialog'
 import Button from './button'
@@ -8,9 +8,14 @@ import { Listbox, ListboxOption } from '@reach/listbox'
 
 interface Props extends DialogProps {
   bookmarkId: string
+  onSuccess?: () => any
 }
 
-const AddToListDialog: React.FC<Props> = ({ bookmarkId, ...props }) => {
+const AddToListDialog: React.FC<Props> = ({
+  bookmarkId,
+  onSuccess,
+  ...props
+}) => {
   const [value, setValue] = React.useState(null)
   const [addToList, { loading }] = useAddBookmarkToList()
   const { viewer } = useViewer()
@@ -21,6 +26,8 @@ const AddToListDialog: React.FC<Props> = ({ bookmarkId, ...props }) => {
 
   const handleAddToList = async () => {
     const res = await addToList(bookmarkId, value)
+    mutate(`/api/lists?id=${value}`)
+    onSuccess()
     console.log(res)
   }
 
@@ -41,6 +48,10 @@ const AddToListDialog: React.FC<Props> = ({ bookmarkId, ...props }) => {
       </Button>
     </Dialog>
   )
+}
+
+AddToListDialog.defaultProps = {
+  onSuccess: () => {},
 }
 
 export default AddToListDialog

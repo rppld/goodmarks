@@ -3,7 +3,7 @@ import { useViewer } from 'components/viewer-context'
 import Router, { useRouter } from 'next/router'
 import Button from 'components/button'
 import { ListsData } from 'lib/types'
-import { VStack } from 'components/stack'
+import { VStack, HStack } from 'components/stack'
 import useSWR from 'swr'
 import BookmarkNode from 'components/bookmark-node'
 import ListNode from 'components/list-node'
@@ -17,7 +17,7 @@ interface Props {
 const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
   const { viewer } = useViewer()
   const { query } = useRouter()
-  const { data, error } = useSWR<ListsData>(
+  const { data, error, mutate } = useSWR<ListsData>(
     () => listId && `/api/lists?id=${listId}`,
     { initialData }
   )
@@ -31,6 +31,21 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
     Router.push(href, as)
   }
 
+  const handleRemoveFromList = async (listItemId) => {
+    // Remove item from cached data.
+    mutate(
+      {
+        edges: [
+          {
+            ...edge,
+            items: edge.items.filter((item) => item.id !== listItemId),
+          },
+        ],
+      },
+      false
+    )
+  }
+
   return (
     <div>
       {error && <div>failed to load</div>}
@@ -42,14 +57,27 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
           <ListNode {...edge} />
 
           {query?.user === viewer?.handle ? (
-            <Button onClick={handleDelete} variant="danger" disabled={deleting}>
-              Delete list
-            </Button>
+            <HStack alignment="leading">
+              <Button onClick={() => {}}>Edit list</Button>
+              <Button
+                onClick={handleDelete}
+                variant="danger"
+                disabled={deleting}
+              >
+                Delete list
+              </Button>
+            </HStack>
           ) : null}
 
           <div>
             {edge.items.map((item) => (
-              <BookmarkNode {...item} key={item.bookmark.id} list={edge.list} />
+              <BookmarkNode
+                {...item.bookmark}
+                key={item.id}
+                list={edge.list}
+                listItemId={item.id}
+                onRemoveFromList={handleRemoveFromList}
+              />
             ))}
           </div>
         </VStack>

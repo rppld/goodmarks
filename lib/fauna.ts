@@ -117,7 +117,7 @@ export function getBookmarksWithUsersMapGetGeneric(
     Lambda((ref) =>
       Let(
         {
-          bookmark: Get(Var('ref')),
+          bookmark: If(Exists(Var('ref')), Get(Var('ref')), false),
           // Get the original bookmark
           original: If(
             Contains(['data', 'original'], Var('bookmark')),
@@ -142,9 +142,17 @@ export function getBookmarksWithUsersMapGetGeneric(
             false
           ),
           // Get the category the bookmark belongs to.
-          category: Get(Select(['data', 'category'], Var('bookmark'))),
+          category: If(
+            Exists(Var('ref')),
+            Get(Select(['data', 'category'], Var('bookmark'))),
+            false
+          ),
           // Get the user that wrote the bookmark.
-          user: Get(Select(['data', 'author'], Var('bookmark'))),
+          user: If(
+            Exists(Var('ref')),
+            Get(Select(['data', 'author'], Var('bookmark'))),
+            false
+          ),
           // Get the account via identity.
           account: If(HasIdentity(), Get(Identity()), false),
           // Get the user that is currently logged in.
@@ -154,20 +162,32 @@ export function getBookmarksWithUsersMapGetGeneric(
             false
           ),
           // Get the statistics for the bookmark
-          bookmarkStatsMatch: Match(
-            Index('bookmark_stats_by_user_and_bookmark'),
-            Var('currentUserRef'),
-            Select(['ref'], Var('bookmark'))
+          bookmarkStatsMatch: If(
+            Exists(Var('ref')),
+            Match(
+              Index('bookmark_stats_by_user_and_bookmark'),
+              Var('currentUserRef'),
+              Select(['ref'], Var('bookmark'))
+            ),
+            false
           ),
-          followerStatsMatch: Match(
-            Index('follower_stats_by_author_and_follower'),
-            Var('currentUserRef'),
-            Select(['ref'], Var('bookmark'))
+          followerStatsMatch: If(
+            Exists(Var('ref')),
+            Match(
+              Index('follower_stats_by_author_and_follower'),
+              Var('currentUserRef'),
+              Select(['ref'], Var('bookmark'))
+            ),
+            false
           ),
           bookmarkStats: If(
-            Exists(Var('bookmarkStatsMatch')),
-            Get(Var('bookmarkStatsMatch')),
-            {}
+            Exists(Var('ref')),
+            If(
+              Exists(Var('bookmarkStatsMatch')),
+              Get(Var('bookmarkStatsMatch')),
+              {}
+            ),
+            false
           ),
           // Get comments, index has two values so lambda has two values
           comments: q.Map(
@@ -211,7 +231,7 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
     Lambda((ref) =>
       Let(
         {
-          list: Get(Var('ref')),
+          list: If(Exists(Var('ref')), Get(Var('ref')), false),
           // Get the original list
           original: If(
             Contains(['data', 'original'], Var('list')),
@@ -235,8 +255,17 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
             // Normal list, there is no original.
             false
           ),
-          items: getBookmarksWithUsersMapGetGeneric(
-            Select(['data', 'items'], Var('list'))
+          items: q.Map(
+            Select(['data', 'items'], Var('list')),
+            q.Lambda('item', {
+              id: Select(['id'], Var('item')),
+              bookmark: Select(
+                0,
+                getBookmarksWithUsersMapGetGeneric([
+                  Select(['ref'], Var('item')),
+                ])
+              ),
+            })
           ),
           // Get the user that wrote the list.
           user: Get(Select(['data', 'author'], Var('list'))),

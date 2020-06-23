@@ -30,9 +30,11 @@ interface Props {
   comments: CommentNode[]
   original?: Bookmark
   list?: List
+  listItemId?: string
   user: User
   onLike?: () => void
   onDelete?: () => void
+  onRemoveFromList?: (listItemId: string) => void
 }
 
 const BookmarkNode: React.FC<Props> = ({
@@ -43,11 +45,11 @@ const BookmarkNode: React.FC<Props> = ({
   original,
   user,
   list,
+  listItemId,
   ...props
 }) => {
   const [likeBookmark, { loading: liking }] = useLikeBookmark()
   const [deleteBookmark, { loading: deleting }] = useDeleteBookmark()
-
   const [
     removeFromList,
     { loading: removingFromList },
@@ -69,7 +71,8 @@ const BookmarkNode: React.FC<Props> = ({
   }
 
   const handleRemoveFromList = async () => {
-    const res = await removeFromList(bookmark.id, list.id)
+    const res = await removeFromList(listItemId, list.id)
+    props.onRemoveFromList(listItemId)
     console.log(res)
   }
 
@@ -79,6 +82,37 @@ const BookmarkNode: React.FC<Props> = ({
       return false
     }
     Router.push('/b/[id]', `/b/${bookmark.id}`)
+  }
+
+  if (!bookmark) {
+    // Return blank item for deleted bookmark.
+    return (
+      <div className={styles.container}>
+        <HStack spacing="md" alignment="space-between">
+          <Text as="p" meta>
+            This item is no longer available.
+          </Text>
+          {viewer && list ? (
+            <Menu>
+              <Action
+                as={MenuButton}
+                leftAdornment={<More size="sm" />}
+                className="action"
+              />
+              <MenuList>
+                <MenuItem
+                  onSelect={handleRemoveFromList}
+                  disabled={removingFromList}
+                  className="action"
+                >
+                  {removingFromList ? 'Removing' : 'Remove from list'}
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          ) : null}
+        </HStack>
+      </div>
+    )
   }
 
   return (
@@ -145,9 +179,7 @@ const BookmarkNode: React.FC<Props> = ({
         </HStack>
       </header>
 
-      <div className={styles.text}>
-        {bookmark.text && <Text as="p">{bookmark.text}</Text>}
-      </div>
+      {bookmark.text && <Text as="p">{bookmark.text}</Text>}
 
       <Embed bookmark={bookmark} category={category.slug} />
 
@@ -155,9 +187,16 @@ const BookmarkNode: React.FC<Props> = ({
         isOpen={showDialog}
         onDismiss={closeDialog}
         bookmarkId={bookmark.id}
+        onSuccess={closeDialog}
       />
     </div>
   )
+}
+
+BookmarkNode.defaultProps = {
+  onLike: () => {},
+  onDelete: () => {},
+  onRemoveFromList: () => {},
 }
 
 export default BookmarkNode
