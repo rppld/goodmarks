@@ -2,6 +2,7 @@ import React from 'react'
 import useSWR from 'swr'
 import Link from 'next/link'
 import ListNode from './list-node'
+import { VStack } from './stack'
 import { useRouter } from 'next/router'
 
 const ListsOverview: React.FC = () => {
@@ -10,24 +11,25 @@ const ListsOverview: React.FC = () => {
     () => query.user && `/api/lists?handle=${query.user}`
   )
 
+  if (data?.edges?.length === 0) {
+    return null
+  }
+
   return (
-    <div>
-      {data?.edges?.length > 0 ? (
-        <div>
-          {data.edges.map(({ list }) => (
-            <Link
-              href="/[user]/lists/[id]"
-              as={`/${query.user}/lists/${list.id}`}
-              key={list.id}
-            >
-              <a>
-                <ListNode list={list} />
-              </a>
-            </Link>
-          ))}
+    <VStack spacing="md">
+      {data?.edges?.map(({ list }) => (
+        <div key={list.id}>
+          <Link
+            href="/[user]/lists/[id]"
+            as={`/${query.user}/lists/${list.id}`}
+          >
+            <a>
+              <ListNode list={list} />
+            </a>
+          </Link>
         </div>
-      ) : null}
-    </div>
+      ))}
+    </VStack>
   )
 }
 

@@ -45,6 +45,7 @@ export async function getServerSideProps({ req, res, params }) {
     const initialData = await listApi(id, faunaSecret)
     return { props: { initialData, listId: id } }
   } catch (error) {
+    console.log(error)
     return {
       props: {
         error: {

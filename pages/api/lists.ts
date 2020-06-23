@@ -12,6 +12,7 @@ import cookie from 'cookie'
 
 const {
   Filter,
+  NewId,
   Create,
   Not,
   HasIdentity,
@@ -88,7 +89,6 @@ async function removeItemFromList(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          itemRef: Ref(Collection('Bookmarks'), itemId),
           listRef: Ref(Collection('Lists'), listId),
           list: Get(Var('listRef')),
           currentItems: Select(['data', 'items'], Var('list'), []),
@@ -102,7 +102,7 @@ async function removeItemFromList(req, res) {
             data: {
               items: Filter(
                 Var('currentItems'),
-                Lambda('i', Not(Equals(Var('i'), Var('itemRef'))))
+                Lambda('i', Not(Equals(Select(['id'], Var('i')), itemId)))
               ),
             },
           }),
@@ -142,7 +142,14 @@ async function addItemToList(req, res) {
           Equals(Var('viewerRef'), Var('authorRef')),
           Update(Var('listRef'), {
             data: {
-              items: Distinct(Append(Var('currentItems'), [Var('itemRef')])),
+              items: Distinct(
+                Append(Var('currentItems'), [
+                  {
+                    id: NewId(),
+                    ref: Var('itemRef'),
+                  },
+                ])
+              ),
             },
           }),
           Abort('Not allowed')

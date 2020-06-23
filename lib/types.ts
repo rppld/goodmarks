@@ -75,10 +75,15 @@ export interface BookmarksData {
   bookmarks: BookmarkNode[]
 }
 
+export interface ListItem {
+  id: string
+  bookmark: BookmarkNode
+}
+
 export interface ListsData {
   edges: {
     list: List
-    items: BookmarkNode[]
+    items: ListItem[]
     listStats: ListStats
     user: User
     comments: CommentNode[]

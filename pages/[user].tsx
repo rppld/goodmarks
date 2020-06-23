@@ -11,7 +11,6 @@ import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
 import ProfilePageHeader from 'components/profile-page-header'
 import Toolbar from 'components/toolbar'
-import ListEdge from 'components/list-node'
 import UserEdge from 'components/user-node'
 
 const User: NextPage = () => {
@@ -22,7 +21,6 @@ const User: NextPage = () => {
     () => handle && `/api/bookmarks?handle=${handle}`
   )
   const { viewer, resetViewer } = useViewer()
-  const isViewer = viewer && handle === viewer.handle
 
   function handleLike(newData) {
     const newBookmarkNodes = data.bookmarks.map((item) => {
