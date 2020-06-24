@@ -35,7 +35,6 @@ const MovieSearch: React.FC<Props> = ({
   label,
   onSelect,
   placeholder,
-  ...props
 }) => {
   const [searchTerm, setSearchTerm] = React.useState('')
   const useAutocompleteSearch = autocompleteSearch(context)
@@ -56,6 +55,8 @@ const MovieSearch: React.FC<Props> = ({
     >
       <Input
         name="Search TMDb"
+        labelText="Search"
+        hideLabel
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder}
         as={ComboboxInput}
