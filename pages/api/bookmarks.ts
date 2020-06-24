@@ -42,6 +42,8 @@ const {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { id, hashtag, handle, action } = req.query
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
   if (action === 'create') {
     return createBookmark(req, res)
@@ -75,10 +77,33 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return getBookmarksByUserHandle(req, res)
   }
 
-  return getBookmarks(req, res)
+  if (faunaSecret) {
+    return getFriendsFeed(req, res)
+  }
+
+  return getLatestFeed(req, res)
 }
 
-async function getBookmarks(req, res) {
+async function getLatestFeed(req, res) {
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+  const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
+
+  const { data } = await client.query(
+    getBookmarksWithUsersMapGetGeneric(
+      q.Map(
+        Paginate(Match(Index('all_bookmarks'))),
+        Lambda(['createdTime', 'ref'], Var('ref'))
+      )
+    )
+  )
+
+  return res.status(200).json({
+    bookmarks: data.map(flattenDataKeys),
+  })
+}
+
+async function getFriendsFeed(req, res) {
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -86,6 +111,7 @@ async function getBookmarks(req, res) {
     return res.status(401).send('Unauthorized')
   }
 
+  // For logged-in users we show a feed of people they’re following.
   const data = await faunaClient(faunaSecret).query(
     Let(
       {

@@ -243,8 +243,8 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
             Let(
               {
                 // The popularityfactor determines how much popularity
-                // weighs up against age, setting both to one means that one like or
-                // one repost is worth aging minute.
+                // weighs up against age, setting both to one means
+                // that one like or one repost is worth aging minute.
                 likesFactor: 1,
                 repostsFactor: 1,
                 bookmarkLikes: Select(['data', 'bookmarkLikes'], Var('stats')),
