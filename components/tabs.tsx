@@ -15,15 +15,16 @@ interface Props {
 
 const Tabs: React.FC<Props> = ({ tabs }) => {
   const router = useRouter()
+  console.log(router)
 
   return (
     <ul className={styles.tabs}>
-      {tabs.map((tab, i) => (
-        <Link href={tab.href} as={tab.href} key={i}>
+      {tabs.map((tab) => (
+        <Link href={tab.href} as={tab.href} key={tab.href}>
           <a
             className={classNames(
               styles.tab,
-              router.asPath.includes(tab.href) ? styles.active : null
+              router.pathname === tab.href ? styles.active : null
             )}
           >
             <li>{tab.label}</li>
