@@ -3,8 +3,14 @@ import useSWR from 'swr'
 import BookmarkNode from 'components/bookmark-node'
 import { BookmarksData } from 'lib/types'
 
-const LatestBookmarks: React.FC = () => {
-  const { data, error, mutate } = useSWR<BookmarksData>('/api/bookmarks')
+interface Props {
+  sort?: 'latest' | 'popular'
+}
+
+const BookmarksFeed: React.FC<Props> = ({ sort }) => {
+  const { data, error, mutate } = useSWR<BookmarksData>(
+    `/api/bookmarks?sort=${sort}`
+  )
 
   function handleLike(bookmarkId) {
     const newData = {
@@ -64,4 +70,4 @@ const LatestBookmarks: React.FC = () => {
   )
 }
 
-export default LatestBookmarks
+export default BookmarksFeed

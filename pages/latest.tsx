@@ -6,16 +6,16 @@ import { H4 } from 'components/heading'
 import BookmarksTabs from 'components/bookmarks-tabs'
 import BookmarksFeed from 'components/bookmarks-feed'
 
-const Home: NextPage = () => {
+const Latest: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
         <H4 as="h1">Bookmarks</H4>
       </PageTitle>
       <BookmarksTabs />
-      <BookmarksFeed />
+      <BookmarksFeed sort="latest" />
     </Layout>
   )
 }
 
-export default Home
+export default Latest
