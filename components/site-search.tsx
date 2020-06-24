@@ -73,7 +73,7 @@ const SiteSearch: React.FC = () => {
             <ComboboxList>
               {results.map((item) => (
                 <ComboboxOption key={item.id} value={item.handle || item.name}>
-                  {item.name && <span>#</span>}
+                  {!item.handle && <span>#</span>}
                   <ComboboxOptionText />
                 </ComboboxOption>
               ))}
