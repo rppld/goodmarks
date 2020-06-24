@@ -77,6 +77,7 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
                 list={edge.list}
                 listItemId={item.id}
                 onRemoveFromList={handleRemoveFromList}
+                linkToBookmarkDetail
               />
             ))}
           </div>

@@ -62,6 +62,7 @@ const BookmarksFeed: React.FC<Props> = ({ sort }) => {
               key={item.bookmark.id}
               onLike={() => handleLike(item.bookmark.id)}
               onDelete={() => handleDelete(item.bookmark.id)}
+              linkToBookmarkDetail
             />
           ))}
         </div>
