@@ -257,7 +257,7 @@ body {
   font-size: var(--fs-18);
   background-color: var(--color-body);
   color: var(--color-text);
-  hyphens: auto;
+  /* hyphens: auto; */
 }
 
 /* Apply this class to any elements inside other elements with
