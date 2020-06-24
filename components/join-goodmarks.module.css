@@ -1,0 +1,9 @@
+.header p {
+  font-size: var(--fs-20);
+}
+
+@media (min-width: 620px) {
+  .header p {
+    font-size: var(--fs-22);
+  }
+}
