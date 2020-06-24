@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import styles from './index.module.css'
 import { HStack } from '../stack'
 import Router from 'next/router'
@@ -35,6 +36,7 @@ interface Props {
   onLike?: () => void
   onDelete?: () => void
   onRemoveFromList?: (listItemId: string) => void
+  linkToBookmarkDetail?: boolean
 }
 
 const BookmarkNode: React.FC<Props> = ({
@@ -46,6 +48,7 @@ const BookmarkNode: React.FC<Props> = ({
   user,
   list,
   listItemId,
+  linkToBookmarkDetail,
   ...props
 }) => {
   const [likeBookmark, { loading: liking }] = useLikeBookmark()
@@ -116,7 +119,13 @@ const BookmarkNode: React.FC<Props> = ({
   }
 
   return (
-    <div className={styles.container} onClick={handleClick}>
+    <div
+      className={classNames(
+        styles.container,
+        linkToBookmarkDetail && styles.link
+      )}
+      onClick={linkToBookmarkDetail ? handleClick : undefined}
+    >
       <header className={styles.header}>
         <HStack>
           <AuthorInfo user={user} createdAt={bookmark.created['@ts']} />
@@ -197,6 +206,7 @@ BookmarkNode.defaultProps = {
   onLike: () => {},
   onDelete: () => {},
   onRemoveFromList: () => {},
+  linkToBookmarkDetail: false,
 }
 
 export default BookmarkNode
