@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import Button from './button'
 import Avatar from './avatar'
-import { Plus, MagnifyingGlass, Home, User, List } from './icon'
+import { Plus, MagnifyingGlass, Bookmark, User, List } from './icon'
 import { useViewer } from 'components/viewer-context'
 import styles from './tab-bar.module.css'
 import getImageUrl from 'utils/get-image-url'
@@ -31,7 +31,7 @@ const TabBar: React.FC = () => {
                 router.pathname === '/' ? styles.active : null
               )}
             >
-              <Home />
+              <Bookmark />
               <span className={styles.label}>Home</span>
             </a>
           </Link>
@@ -45,8 +45,8 @@ const TabBar: React.FC = () => {
           </Link>
         </li>
         <li className={styles.newBookmarkItem}>
-          <Link href="/new" passHref>
-            <a href="/search" className={getTabClassName('/new')}>
+          <Link href="/b/new" passHref>
+            <a href="/search" className={getTabClassName('/b/new')}>
               <Button variant="primary" leftAdornment={<Plus />}>
                 <span className={styles.newBookmarkLabel}>New</span>
               </Button>
