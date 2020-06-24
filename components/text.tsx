@@ -5,18 +5,21 @@ import styles from './text.module.css'
 interface Props {
   as?: React.ElementType | string
   meta?: boolean
+  className?: string
 }
 
 export const Text: React.FC<Props> = ({
   as: Component = 'span',
   meta = false,
   children,
+  className,
   ...props
 }) => {
-  const className = classNames(styles.hstack, styles.text, meta && styles.meta)
-
   return (
-    <Component className={className} {...props}>
+    <Component
+      className={classNames(className, styles.text, meta && styles.meta)}
+      {...props}
+    >
       {children}
     </Component>
   )
@@ -43,11 +46,7 @@ export const Caption: React.FC<Props> = ({
   children,
   ...props
 }) => {
-  const className = classNames(
-    styles.hstack,
-    styles.caption,
-    meta && styles.meta
-  )
+  const className = classNames(styles.caption, meta && styles.meta)
 
   return (
     <Component className={className} {...props}>
