@@ -28,10 +28,6 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     onSubmit: handleSubmit,
   })
 
-  function resetSelection() {
-    return setSelection(null)
-  }
-
   function getHeading() {
     if (selection) return 'Description'
     if (category === 'movie') return 'Bookmark a Movie'
