@@ -131,7 +131,7 @@ const ProfileDetail: React.FC = () => {
             </Link>
 
             <Button onClick={handleLogout} fullWidth>
-              Logout
+              Sign out
             </Button>
           </>
         )}
