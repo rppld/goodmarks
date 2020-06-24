@@ -2,7 +2,7 @@
   display: flex;
   list-style: none;
   justify-content: row;
-  margin-top: var(--space-16);
+  margin-top: var(--space-8);
   margin-bottom: var(--space-16);
 
   /* Full bleed hack */
