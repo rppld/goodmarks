@@ -1,9 +1,6 @@
 import React from 'react'
 import useSWR from 'swr'
-import PageTitle from 'components/page-title'
-import Layout from 'components/layout'
 import BookmarkNode from 'components/bookmark-node'
-import { H4 } from 'components/heading'
 import { BookmarksData } from 'lib/types'
 
 const LatestBookmarks: React.FC = () => {
@@ -46,11 +43,7 @@ const LatestBookmarks: React.FC = () => {
   }
 
   return (
-    <Layout>
-      <PageTitle>
-        <H4 as="h1">Latest Bookmarks</H4>
-      </PageTitle>
-
+    <>
       {error && <div>failed to load</div>}
 
       {!data ? (
@@ -67,7 +60,7 @@ const LatestBookmarks: React.FC = () => {
           ))}
         </div>
       )}
-    </Layout>
+    </>
   )
 }
 
