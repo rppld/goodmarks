@@ -1,0 +1,8 @@
+.header {
+  margin-bottom: var(--space-16);
+}
+
+.handle {
+  display: block;
+  transform: translateX(-1px); /* Optical adjustment */
+}
