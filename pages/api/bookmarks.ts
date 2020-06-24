@@ -41,7 +41,7 @@ const {
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id, hashtag, handle, action } = req.query
+  const { id, hashtag, handle, action, sort } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -77,14 +77,41 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return getBookmarksByUserHandle(req, res)
   }
 
-  if (faunaSecret) {
-    return getFriendsFeed(req, res)
+  if (sort === 'latest') {
+    return getLatestBookmarks(req, res)
   }
 
-  return getLatestFeed(req, res)
+  if (sort === 'popular') {
+    return getPopularBookmarks(req, res)
+  }
+
+  if (faunaSecret) {
+    return getFollowingBookmarks(req, res)
+  }
+
+  return getPopularBookmarks(req, res)
 }
 
-async function getLatestFeed(req, res) {
+async function getPopularBookmarks(req, res) {
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+  const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
+
+  const { data } = await client.query(
+    getBookmarksWithUsersMapGetGeneric(
+      q.Map(
+        Paginate(Match(Index('bookmarks_by_popularity'))),
+        Lambda(['createdTime', 'ref'], Var('ref'))
+      )
+    )
+  )
+
+  return res.status(200).json({
+    bookmarks: data.map(flattenDataKeys),
+  })
+}
+
+async function getLatestBookmarks(req, res) {
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
@@ -103,7 +130,7 @@ async function getLatestFeed(req, res) {
   })
 }
 
-async function getFriendsFeed(req, res) {
+async function getFollowingBookmarks(req, res) {
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 

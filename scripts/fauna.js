@@ -8,7 +8,6 @@ const {
   Time,
   TimeDiff,
   Var,
-  If,
   Add,
   Multiply,
   Lambda,
@@ -142,14 +141,16 @@ const createBookmarksByHashtagIndex = CreateIndex({
           Let(
             {
               // The popularityfactor determines how much popularity
-              // weighs up against age, setting both to one means that one like or
-              // one repost is worth aging minute.
+              // weighs up against age, setting both to one means that
+              // one like or one repost is worth aging minute.
               likesFactor: 5,
               repostsFactor: 5,
-              // Let's add comments as well for the sake of completeness, didn't
-              // add it in the general bookmark index since comments does not mean you like it,
-              // they might be out of anger :), in this case it makes sense since they are not necessarily your comments
-              // The ones that are interacted with are higher up.
+              // Let's add comments as well for the sake of
+              // completeness, didn't add it in the general bookmark
+              // index since comments does not mean you like it, they
+              // might be out of anger :), in this case it makes sense
+              // since they are not necessarily your comments The ones
+              // that are interacted with are higher up.
               commentsFactor: 5,
               likes: Select(['data', 'likes'], Var('bookmark')),
               comments: Select(['data', 'comments'], Var('bookmark')),
@@ -162,9 +163,9 @@ const createBookmarksByHashtagIndex = CreateIndex({
                 'minutes'
               ),
             },
-            // Adding the time since the unix timestamps
-            // together with postlikes and postReposts provides us with
-            // decaying popularity or a mixture of popularity and
+            // Adding the time since the unix timestamps together with
+            // postlikes and postReposts provides us with decaying
+            // popularity or a mixture of popularity and
             Add(
               Multiply(Var('likesFactor'), Var('likes')),
               Multiply(Var('repostsFactor'), Var('reposts')),
@@ -181,6 +182,65 @@ const createBookmarksByHashtagIndex = CreateIndex({
       field: ['data', 'hashtags'],
     },
   ],
+  values: [
+    {
+      binding: 'bookmarkScore',
+      reverse: true,
+    },
+    {
+      field: ['ref'],
+    },
+  ],
+  serialized: true,
+})
+
+const createBookmarksByPopularityIndex = CreateIndex({
+  name: 'bookmarks_by_popularity',
+  source: {
+    collection: Collection('Bookmarks'),
+    fields: {
+      bookmarkScore: Query(
+        Lambda(
+          'bookmark',
+          Let(
+            {
+              // The popularityfactor determines how much popularity
+              // weighs up against age, setting both to one means that
+              // one like or one repost is worth aging minute.
+              likesFactor: 5,
+              repostsFactor: 5,
+              // Let's add comments as well for the sake of
+              // completeness, didn't add it in the general bookmark
+              // index since comments does not mean you like it, they
+              // might be out of anger :), in this case it makes sense
+              // since they are not necessarily your comments The ones
+              // that are interacted with are higher up.
+              commentsFactor: 5,
+              likes: Select(['data', 'likes'], Var('bookmark')),
+              comments: Select(['data', 'comments'], Var('bookmark')),
+              reposts: Select(['data', 'reposts'], Var('bookmark')),
+              txTime: Now(),
+              unixStartTime: Time('1970-01-01T00:00:00+00:00'),
+              ageInSecsSinceUnix: TimeDiff(
+                Var('unixStartTime'),
+                Var('txTime'),
+                'minutes'
+              ),
+            },
+            // Adding the time since the unix timestamps together with
+            // postlikes and postReposts provides us with decaying
+            // popularity or a mixture of popularity and
+            Add(
+              Multiply(Var('likesFactor'), Var('likes')),
+              Multiply(Var('repostsFactor'), Var('reposts')),
+              Multiply(Var('commentsFactor'), Var('comments')),
+              Var('ageInSecsSinceUnix')
+            )
+          )
+        )
+      ),
+    },
+  },
   values: [
     {
       binding: 'bookmarkScore',
@@ -247,11 +307,8 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
                 // that one like or one repost is worth aging minute.
                 likesFactor: 1,
                 repostsFactor: 1,
-                bookmarkLikes: Select(['data', 'bookmarkLikes'], Var('stats')),
-                bookmarkReposts: Select(
-                  ['data', 'bookmarkReposts'],
-                  Var('stats')
-                ),
+                postLikes: Select(['data', 'postLikes'], Var('stats')),
+                postReposts: Select(['data', 'postReposts'], Var('stats')),
                 txTime: Now(),
                 unixStarttime: Time('1970-01-01T00:00:00+00:00'),
                 ageInSecsSinceUnix: TimeDiff(
@@ -261,11 +318,11 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
                 ),
               },
               // Adding the time since the unix timestamps
-              // together with bookmarkLikes and bookmarkReposts provides us with
+              // together with postLikes and postReposts provides us with
               // decaying popularity or a mixture of popularity and
               Add(
-                Multiply(Var('likesFactor'), Var('bookmarkLikes')),
-                Multiply(Var('repostsFactor'), Var('bookmarkReposts')),
+                Multiply(Var('likesFactor'), Var('postLikes')),
+                Multiply(Var('repostsFactor'), Var('postReposts')),
                 Var('ageInSecsSinceUnix')
               )
             )
