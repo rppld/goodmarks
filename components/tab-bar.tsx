@@ -24,7 +24,7 @@ const TabBar: React.FC = () => {
     <div className={styles.container}>
       <ul className={classNames(styles.tabBar)}>
         <li>
-          <Link href="/" passHref>
+          <Link href="/">
             <a
               className={classNames(
                 styles.tabItem,
@@ -37,7 +37,7 @@ const TabBar: React.FC = () => {
           </Link>
         </li>
         <li>
-          <Link href="/search" passHref>
+          <Link href="/search">
             <a className={getTabClassName('/search')}>
               <MagnifyingGlass />
               <span className={styles.label}>Search</span>
@@ -45,7 +45,7 @@ const TabBar: React.FC = () => {
           </Link>
         </li>
         <li className={styles.newBookmarkItem}>
-          <Link href="/b/new" passHref>
+          <Link href="/b/new">
             <a href="/search" className={getTabClassName('/b/new')}>
               <Button variant="primary" leftAdornment={<Plus />}>
                 <span className={styles.newBookmarkLabel}>New</span>
@@ -54,12 +54,21 @@ const TabBar: React.FC = () => {
           </Link>
         </li>
         <li>
-          <Link href="/[user]/lists" as={`/${viewer?.handle}/lists`} passHref>
-            <a className={getTabClassName('/lists')}>
-              <List />
-              <span className={styles.label}>Lists</span>
-            </a>
-          </Link>
+          {viewer ? (
+            <Link href="/[user]/lists" as={`/${viewer?.handle}/lists`}>
+              <a className={getTabClassName('/lists')}>
+                <List />
+                <span className={styles.label}>Lists</span>
+              </a>
+            </Link>
+          ) : (
+            <Link href="/login">
+              <a className={getTabClassName('/lists')}>
+                <List />
+                <span className={styles.label}>Lists</span>
+              </a>
+            </Link>
+          )}
         </li>
         <li>
           {viewer ? (
