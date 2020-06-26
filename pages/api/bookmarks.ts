@@ -201,7 +201,7 @@ async function getBookmarksByUserHandle(req, res) {
   const data = await client.query(
     Let(
       {
-        setRef: Match(Index('users_by_handle'), handle.toLowerCase()),
+        setRef: Match(Index('users_by_handle'), handle),
         authorRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
         author: Get(Var('authorRef')),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
