@@ -26,7 +26,7 @@ const Picture: NextPage = () => {
           <ProfilePictureDropzone onDrop={() => setHasPicture(true)} />
         </HStack>
         <div>
-          <Link href="/new?onboarding=true" passHref>
+          <Link href="/b/new?onboarding=true" passHref>
             <Button as="a" variant="primary" size="lg" fullWidth>
               {hasPicture ? 'Continue' : 'Skip for now'}
             </Button>

@@ -13,7 +13,7 @@ const CategorySelection: React.FC = () => {
   return (
     <ul className={styles.list}>
       <li>
-        <Link href="/new/[category]" as={`/new/movie${query}`}>
+        <Link href="/b/new/[category]" as={`/b/new/movie${query}`}>
           <a>
             <div className={styles.category}>
               <Movie size="md" />
@@ -25,7 +25,7 @@ const CategorySelection: React.FC = () => {
         </Link>
       </li>
       <li>
-        <Link href="/new/[category]" as={`/new/tv-show${query}`}>
+        <Link href="/b/new/[category]" as={`/b/new/tv-show${query}`}>
           <a>
             <div className={styles.category}>
               <TV size="md" />
@@ -37,7 +37,7 @@ const CategorySelection: React.FC = () => {
         </Link>
       </li>
       <li>
-        <Link href="/new/[category]" as={`/new/link${query}`}>
+        <Link href="/b/new/[category]" as={`/b/new/link${query}`}>
           <a>
             <div className={styles.category}>
               <LinkIcon size="md" />
