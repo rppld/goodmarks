@@ -28,6 +28,7 @@ const {
   Update,
   Delete,
   Exists,
+  Union,
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -45,11 +46,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 async function get(req, res) {
   const { handle } = req.query
+  const lowerCaseHandle = handle.toLowerCase()
 
   const data = await serverClient.query(
     Let(
       {
-        setRef: Match(Index('users_by_handle'), handle),
+        // Check if handle exists the way it has been entered.
+        originalCaseSetRef: Match(Index('users_by_handle'), handle),
+        // Check if lowercase version of entered handle exists.
+        lowerCaseSetRef: Match(Index('users_by_handle'), lowerCaseHandle),
+        setRef: Union(Var('originalCaseSetRef'), Var('lowerCaseSetRef')),
         resultsCount: Count(Var('setRef')),
         userRef: If(
           GT(Var('resultsCount'), 0),
