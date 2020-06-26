@@ -49,7 +49,7 @@ async function get(req, res) {
   const data = await serverClient.query(
     Let(
       {
-        setRef: Match(Index('users_by_handle'), handle.toLowerCase()),
+        setRef: Match(Index('users_by_handle'), handle),
         resultsCount: Count(Var('setRef')),
         userRef: If(
           GT(Var('resultsCount'), 0),
