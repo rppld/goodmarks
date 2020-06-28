@@ -1,6 +1,7 @@
 import React from 'react'
 import useSWR from 'swr'
 import BookmarkNode from 'components/bookmark-node'
+import InfiniteScrollTrigger from 'components/infinite-scroll-trigger'
 import { BookmarksData } from 'lib/types'
 
 interface Props {
@@ -67,6 +68,11 @@ const BookmarksFeed: React.FC<Props> = ({ sort }) => {
           ))}
         </div>
       )}
+
+      <InfiniteScrollTrigger
+        onIntersect={() => console.log('Fetch more')}
+        disabled={false}
+      />
     </>
   )
 }
