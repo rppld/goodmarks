@@ -5,3 +5,11 @@
 .authorInfo p {
   color: var(--color-text-lighter);
 }
+
+.action:hover {
+  opacity: 0.8;
+}
+
+.action:active {
+  opacity: 0.6;
+}
