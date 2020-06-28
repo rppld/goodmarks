@@ -3,16 +3,16 @@
   list-style: none;
   justify-content: row;
   margin-top: var(--space-8);
-  margin-bottom: var(--space-16);
+  margin-bottom: var(--space-12);
 
   background-color: var(--color-button);
   overflow: hidden;
   padding: var(--space-4);
-  border-radius: var(--space-40);
+  border-radius: var(--space-16);
 }
 
 .tab {
-  border-radius: var(--space-40);
+  border-radius: var(--space-12);
   height: var(--space-40);
   font-weight: var(--fw-medium);
   font-size: var(--fs-16);
