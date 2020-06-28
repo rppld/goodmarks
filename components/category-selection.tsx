@@ -26,7 +26,7 @@ const CategoryTile: React.FC<props> = ({
       <Link href={linkHref} as={linkAs}>
         <a>
           <div className={classNames(styles.category, className)}>
-            {icon}
+            <div className={styles['icon-container']}>{icon}</div>
             <div className={styles.label}>
               <Text>{label}</Text>
             </div>
@@ -48,7 +48,7 @@ const CategorySelection: React.FC = () => {
         linkHref="/b/new/[category]"
         linkAs={`/b/new/movie${query}`}
         label="Movie"
-        icon={<Movie size="md" />}
+        icon={<Movie />}
         className={styles.movies}
       />
 
@@ -56,7 +56,7 @@ const CategorySelection: React.FC = () => {
         linkHref="/b/new/[category]"
         linkAs={`/b/new/tv-show${query}`}
         label="TV show"
-        icon={<TV size="md" />}
+        icon={<TV />}
         className={styles['tv-shows']}
       />
 
@@ -64,7 +64,7 @@ const CategorySelection: React.FC = () => {
         linkHref="/b/new/[category]"
         linkAs={`/b/new/link${query}`}
         label="Link"
-        icon={<LinkIcon size="md" />}
+        icon={<LinkIcon />}
         className={styles.links}
       />
     </ul>
