@@ -3,3 +3,7 @@
   align-items: center;
   margin-bottom: var(--space-16);
 }
+
+.userInfo {
+  transform: translateY(-4px); /* Optical adjustment */
+}
