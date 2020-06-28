@@ -83,9 +83,14 @@ const ProfileDetail: React.FC = () => {
 
   const toggleFollowUser = () => {
     setLoading(true)
-    fetch('/api/users?action=follow', fetchOptions)
-      .then(handleSuccess)
-      .catch(handleError)
+
+    if (viewer) {
+      fetch('/api/users?action=follow', fetchOptions)
+        .then(handleSuccess)
+        .catch(handleError)
+    } else {
+      router.push('/login')
+    }
   }
 
   async function handleLogout() {
@@ -101,9 +106,11 @@ const ProfileDetail: React.FC = () => {
             src={data?.author && getImageUrl(data.author.picture, 'avatarLg')}
             size="lg"
           />
-          <div>
+          <div className={styles.userInfo}>
             {data?.author?.name ? (
-              <Caption meta>@{data?.author?.handle}</Caption>
+              <Caption meta as="p">
+                @{data?.author?.handle}
+              </Caption>
             ) : null}
             <H4 as="h1">
               {data?.author?.name
@@ -118,16 +125,7 @@ const ProfileDetail: React.FC = () => {
       </header>
 
       <Toolbar>
-        {viewer && handle !== viewer.handle ? (
-          <Button
-            fullWidth
-            onClick={toggleFollowUser}
-            disabled={loading}
-            variant={data?.following ? undefined : 'primary'}
-          >
-            {data?.following ? 'Unfollow' : 'Follow'}
-          </Button>
-        ) : (
+        {viewer && handle === viewer.handle ? (
           <>
             <Link href="/settings" passHref>
               <Button as="a" fullWidth>
@@ -139,6 +137,15 @@ const ProfileDetail: React.FC = () => {
               Sign out
             </Button>
           </>
+        ) : (
+          <Button
+            fullWidth
+            onClick={toggleFollowUser}
+            disabled={loading}
+            variant={data?.following ? undefined : 'primary'}
+          >
+            {data?.following ? 'Unfollow' : 'Follow'}
+          </Button>
         )}
       </Toolbar>
 
