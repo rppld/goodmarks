@@ -12,7 +12,7 @@
   display: flex;
   padding: var(--space-16);
   border-radius: var(--space-8);
-  border-width: 2px;
+  border-width: 0px;
   border-style: solid;
   display: flex;
   flex-direction: column;
