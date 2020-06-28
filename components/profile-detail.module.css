@@ -2,7 +2,7 @@
   margin-bottom: var(--space-16);
 }
 
-.handle {
+.bio {
   display: block;
   transform: translateX(-1px); /* Optical adjustment */
 }
