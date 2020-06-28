@@ -106,21 +106,23 @@ const ProfileDetail: React.FC = () => {
             src={data?.author && getImageUrl(data.author.picture, 'avatarLg')}
             size="lg"
           />
-          <div className={styles.userInfo}>
-            {data?.author?.name ? (
-              <Caption meta as="p">
-                @{data?.author?.handle}
-              </Caption>
-            ) : null}
-            <H4 as="h1">
-              {data?.author?.name
-                ? data.author.name
-                : `@${data?.author?.handle}`}
-            </H4>
-            {data?.author?.bio ? (
-              <SmallText as="p">{data?.author?.bio}</SmallText>
-            ) : null}
-          </div>
+          {data?.author?.handle !== undefined ? (
+            <div className={styles.userInfo}>
+              {data?.author?.name ? (
+                <Caption meta as="p">
+                  @{data?.author?.handle}
+                </Caption>
+              ) : null}
+              <H4 as="h1">
+                {data?.author?.name
+                  ? data.author.name
+                  : `@${data?.author?.handle}`}
+              </H4>
+              {data?.author?.bio ? (
+                <SmallText as="p">{data?.author?.bio}</SmallText>
+              ) : null}
+            </div>
+          ) : null}
         </HStack>
       </header>
 
