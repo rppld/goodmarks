@@ -31,7 +31,7 @@ const TabBar: React.FC = () => {
                 router.pathname === '/' ? styles.active : null
               )}
             >
-              <Bookmark />
+              <div className={styles.iconContainer}><Bookmark /></div>
               <span className={styles.label}>Home</span>
             </a>
           </Link>
@@ -39,7 +39,7 @@ const TabBar: React.FC = () => {
         <li>
           <Link href="/search">
             <a className={getTabClassName('/search')}>
-              <MagnifyingGlass />
+            <div className={styles.iconContainer}><MagnifyingGlass /></div>
               <span className={styles.label}>Search</span>
             </a>
           </Link>
@@ -57,14 +57,14 @@ const TabBar: React.FC = () => {
           {viewer ? (
             <Link href="/[user]/lists" as={`/${viewer?.handle}/lists`}>
               <a className={getTabClassName('/lists')}>
-                <List />
+              <div className={styles.iconContainer}><List /></div>
                 <span className={styles.label}>Lists</span>
               </a>
             </Link>
           ) : (
             <Link href="/login">
               <a className={getTabClassName('/lists')}>
-                <List />
+              <div className={styles.iconContainer}><List /></div>
                 <span className={styles.label}>Lists</span>
               </a>
             </Link>
@@ -74,17 +74,17 @@ const TabBar: React.FC = () => {
           {viewer ? (
             <Link href="/[user]" as={`/${viewer.handle}`}>
               <a className={getTabClassName('/[user]')}>
-                <Avatar
+              <div className={styles.iconContainer}><Avatar
                   src={getImageUrl(viewer.picture, 'avatarSm')}
                   size="sm"
-                />
+                /></div>
                 <span className={styles.label}>Profile</span>
               </a>
             </Link>
           ) : (
             <Link href="/login">
               <a className={getTabClassName('/login')}>
-                <User />
+              <div className={styles.iconContainer}><User /></div>
                 <span className={styles.label}>Profile</span>
               </a>
             </Link>
