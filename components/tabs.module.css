@@ -2,33 +2,17 @@
   display: flex;
   list-style: none;
   justify-content: row;
-  margin-top: var(--space-8);
   margin-bottom: var(--space-16);
 
-  /* Full bleed hack */
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-}
-
-@media (min-width: 620px) {
-  .tabs {
-    width: auto;
-    position: relative;
-    left: auto;
-    right: auto;
-    margin-left: 0;
-    margin-right: 0;
-  }
+  background-color: var(--color-button);
+  overflow: hidden;
+  padding: var(--space-4);
+  border-radius: var(--space-40);
 }
 
 .tab {
-  background-color: var(--color-body);
+  border-radius: var(--space-40);
   height: var(--space-40);
-  border-bottom: 2px solid var(--color-text-lightest);
   font-weight: var(--fw-medium);
   font-size: var(--fs-16);
   color: var(--color-text-lighter);
@@ -37,16 +21,21 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-left: var(--space-4);
+}
+
+.tab:first-child {
+  margin-left: 0;
 }
 
 .tab:hover,
 .tab:active {
   color: var(--color-text-light);
-  border-color: var(--color-text-lighter);
+  background-color: var(--color-button-hover);
 }
 
 .active,
 .active:hover {
   color: var(--color-text-light);
-  border-color: var(--color-primary);
+  background-color: var(--color-bookmark);
 }
