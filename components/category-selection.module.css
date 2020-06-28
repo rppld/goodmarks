@@ -11,12 +11,28 @@
   background-color: var(--color-button);
   display: flex;
   padding: var(--space-16);
-  border-radius: var(--space-8);
+  border-radius: var(--space-16);
   border-width: 0px;
   border-style: solid;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.icon-container {
+  padding: var(--space-12);
+  border-radius: 50%;
+  color: var(--color-white);
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-8);
+}
+
+@media (min-width: 620px) {
+  .icon-container {
+    margin-top: var(--space-24);
+    margin-bottom: var(--space-16);
+    padding: var(--space-12);
+  }
 }
 
 .category:focus,
@@ -35,6 +51,10 @@
   background-color: var(--color-bookmark-embed-movies-outline);
 }
 
+.movies .icon-container {
+  background-color: var(--color-bookmark-movies);
+}
+
 .tv-shows {
   color: var(--color-bookmark-tv-shows);
   background-color: var(--color-bookmark-embed-tv-shows);
@@ -46,6 +66,10 @@
   background-color: var(--color-bookmark-embed-tv-shows-outline);
 }
 
+.tv-shows .icon-container {
+  background-color: var(--color-bookmark-tv-shows);
+}
+
 .links {
   color: var(--color-bookmark-links);
   background-color: var(--color-bookmark-embed-links);
@@ -55,6 +79,10 @@
 .links:focus,
 .links:hover {
   background-color: var(--color-bookmark-embed-links-outline);
+}
+
+.links .icon-container {
+  background-color: var(--color-bookmark-links);
 }
 
 .label {
