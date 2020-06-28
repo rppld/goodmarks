@@ -1,5 +1,6 @@
 .container {
   margin-bottom: var(--space-16);
+  margin-top: 6px; /* fix to align title with desktop header */
 }
 
 .container > * {

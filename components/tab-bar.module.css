@@ -43,16 +43,16 @@
 }
 
 @media (min-width: 620px) {
-.iconContainer {
-  width: 40px;
-  height: 40px;
-  padding: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  background-color: var(--color-button)
-}
+  .iconContainer {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: var(--color-button);
+  }
 }
 
 .tabBar li {
