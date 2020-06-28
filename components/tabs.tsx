@@ -23,7 +23,7 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
           <a
             className={classNames(
               styles.tab,
-              router.pathname === tab.href ? styles.active : null
+              router.asPath === tab.href ? styles.active : null
             )}
           >
             <li>{tab.label}</li>
