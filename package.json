@@ -13,6 +13,7 @@
     "@reach/listbox": "^0.10.5",
     "@reach/menu-button": "^0.10.5",
     "@reach/visually-hidden": "^0.10.4",
+    "atob": "^2.1.2",
     "aws-sdk": "^2.706.0",
     "btoa": "^1.2.1",
     "classnames": "^2.2.6",
