@@ -19,25 +19,25 @@
   align-items: center;
 }
 
-.icon-container {
-  padding: var(--space-12);
-  border-radius: 50%;
-  color: var(--color-white);
-  margin-top: var(--space-12);
-  margin-bottom: var(--space-8);
-}
-
-@media (min-width: 620px) {
-  .icon-container {
-    margin-top: var(--space-24);
-    margin-bottom: var(--space-16);
-    padding: var(--space-12);
-  }
-}
-
 .category:focus,
 .category:hover {
   background-color: var(--color-button-hover);
+}
+
+.icon-container {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: var(--color-white);
+  margin-top: var(--space-8);
+}
+
+.label {
+  font-weight: var(--fw-medium);
+  margin-top: var(--space-16);
 }
 
 .movies {
@@ -83,9 +83,4 @@
 
 .links .icon-container {
   background-color: var(--color-bookmark-links);
-}
-
-.label {
-  font-weight: var(--fw-medium);
-  margin-top: var(--space-8);
 }

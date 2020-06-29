@@ -27,9 +27,7 @@ const CategoryTile: React.FC<props> = ({
         <a>
           <div className={classNames(styles.category, className)}>
             <div className={styles['icon-container']}>{icon}</div>
-            <div className={styles.label}>
-              <Text>{label}</Text>
-            </div>
+            <div className={styles.label}>{label}</div>
           </div>
         </a>
       </Link>
