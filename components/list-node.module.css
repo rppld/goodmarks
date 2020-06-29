@@ -1,12 +1,10 @@
 .container {
   display: flex;
   flex-direction: column;
-
   position: relative;
   overflow: hidden;
   background-color: var(--color-bookmark);
   padding: var(--space-16);
-  cursor: pointer;
 
   /* Make full-bled */
   width: 100vw;
@@ -17,11 +15,15 @@
   margin-right: -50vw;
 }
 
-.container:hover {
+a .container {
+  cursor: pointer;
+}
+
+a .container:hover {
   box-shadow: 0 0 0 2px var(--color-bookmark-border-hover);
 }
 
-.container:active {
+a .container:active {
   box-shadow: 0 0 0 2px var(--color-bookmark-border-active);
 }
 

@@ -19,7 +19,7 @@ const ListsOverview: React.FC = () => {
   }
 
   return (
-    <>
+    <VStack spacing="md">
       {viewer?.handle === query.user ? (
         <Link href="/lists/new" passHref>
           <Button as="a" variant="primary">
@@ -28,21 +28,19 @@ const ListsOverview: React.FC = () => {
         </Link>
       ) : null}
 
-      <VStack spacing="md">
-        {data?.edges?.map(({ list }) => (
-          <div key={list.id}>
-            <Link
-              href="/[user]/lists/[id]"
-              as={`/${query.user}/lists/${list.id}`}
-            >
-              <a>
-                <ListNode list={list} />
-              </a>
-            </Link>
-          </div>
-        ))}
-      </VStack>
-    </>
+      {data?.edges?.map(({ list }) => (
+        <div key={list.id}>
+          <Link
+            href="/[user]/lists/[id]"
+            as={`/${query.user}/lists/${list.id}`}
+          >
+            <a>
+              <ListNode list={list} />
+            </a>
+          </Link>
+        </div>
+      ))}
+    </VStack>
   )
 }
 

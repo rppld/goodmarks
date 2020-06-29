@@ -16,7 +16,6 @@ const Lists: NextPage = () => {
         <H4 as="h1">Lists</H4>
         <Text meta>@{query.user}</Text>
       </PageTitle>
-
       <ListsOverview />
     </Layout>
   )
