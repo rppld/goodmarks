@@ -183,25 +183,24 @@ async function getFollowingBookmarks(req, res) {
           // following.
           Union(
             // Fetch the bookmarks of the people I’m following.
-            Join(
-              // the index takes one term, the user that is browsing
-              // our app
-              Match(
-                Index('follower_stats_by_user_popularity'),
-                Select(['data', 'user'], Get(Identity()))
-              ),
-              // Join can also take a lambda, and we have to use a
-              // lambda since our index returns more than one
-              // variable. Our index again contains two values (the
-              // score and the author ref), so takes an array of two
-              // values We only care about the author ref which we
-              // will feed into the bookmarks_by_author index, to get
-              // bookmark references. Added advantage, because we use a
-              // join here we can let the index sort as well ;).
-              Lambda(
-                ['bookmarkScore', 'authorRef'],
-                Match(Index('bookmarks_by_author'), Var('authorRef'))
-              )
+            Let(
+              {
+                userSet: Paginate(
+                  Match(
+                    Index('follower_stats_by_user_popularity'),
+                    Select(['data', 'user'], Get(Identity()))
+                  )
+                ),
+                users: q.Map(
+                  Select(['data'], Var('userSet')),
+                  Lambda(['score', 'ref'], Var('ref'))
+                ),
+                peopleBookmarks: q.Map(
+                  Var('users'),
+                  Lambda('x', Match(Index('bookmarks_by_author'), Var('x')))
+                ),
+              },
+              Union(Var('peopleBookmarks'))
             ),
             // Fetch my own bookmarks.
             Match(
