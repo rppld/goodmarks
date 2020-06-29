@@ -44,6 +44,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return createList(req, res)
   }
 
+  if (action === 'update') {
+    return updateList(req, res)
+  }
+
   if (action === 'delete') {
     return deleteList(req, res)
   }
@@ -150,6 +154,46 @@ async function addItemToList(req, res) {
                   },
                 ])
               ),
+            },
+          }),
+          Abort('Not allowed')
+        )
+      )
+    )
+
+    return res.status(200).json(flattenDataKeys(data))
+  } catch (error) {
+    console.log(error)
+    return res.status(400).send(error.message)
+  }
+}
+
+async function updateList(req, res) {
+  const { listId, name, description, private: isPrivate, hashtags } = req.body
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+
+  try {
+    if (!listId) throw new Error('A list ID must be provided.')
+
+    const data = await faunaClient(faunaSecret).query(
+      Let(
+        {
+          listRef: Ref(Collection('Lists'), listId),
+          list: Get(Var('listRef')),
+          viewerRef: Select(['data', 'user'], Get(Identity())),
+          authorRef: Select(['data', 'author'], Var('list')),
+          hashtagRefs: await createHashtags(hashtags),
+        },
+        If(
+          // Check if user is allowed to update this list.
+          Equals(Var('viewerRef'), Var('authorRef')),
+          Update(Var('listRef'), {
+            data: {
+              name,
+              description,
+              private: isPrivate,
+              hashtags: Var('hashtagRefs'),
             },
           }),
           Abort('Not allowed')

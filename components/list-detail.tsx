@@ -1,5 +1,6 @@
 import React from 'react'
 import { useViewer } from 'components/viewer-context'
+import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
 import Button from 'components/button'
 import { ListsData } from 'lib/types'
@@ -58,7 +59,13 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
 
           {query?.user === viewer?.handle ? (
             <HStack alignment="leading">
-              <Button onClick={() => {}}>Edit list</Button>
+              <Link
+                href="/[user]/lists/[id]/edit"
+                as={`/${query.user}/lists/${query.id}/edit`}
+                passHref
+              >
+                <Button as="a">Edit list</Button>
+              </Link>
               <Button
                 onClick={handleDelete}
                 variant="danger"

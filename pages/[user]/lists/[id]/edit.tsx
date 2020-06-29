@@ -5,15 +5,15 @@ import { H4 } from 'components/heading'
 import PageTitle from 'components/page-title'
 import EditListForm from 'components/edit-list-form'
 
-const NewList: NextPage = () => {
+const EditList: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <H4 as="h1">New List</H4>
+        <H4 as="h1">Edit List</H4>
       </PageTitle>
       <EditListForm />
     </Layout>
   )
 }
 
-export default NewList
+export default EditList

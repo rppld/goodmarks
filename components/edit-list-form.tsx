@@ -1,5 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
+import useSWR, { mutate } from 'swr'
+import { useRouter } from 'next/router'
 import parseHashtags from 'utils/parse-hashtags'
 import Input from './input'
 import { useFormik } from 'formik'
@@ -8,8 +10,9 @@ import Form from './form'
 import Checkbox from './checkbox'
 import { useViewer } from './viewer-context'
 
-const NewListForm: React.FC = () => {
-  const { viewer, setViewer } = useViewer()
+const EditListForm: React.FC = () => {
+  const { query } = useRouter()
+  const { viewer } = useViewer()
   const [error, setError] = React.useState(null)
   const formik = useFormik({
     initialValues: {
@@ -20,21 +23,52 @@ const NewListForm: React.FC = () => {
     onSubmit: handleSubmit,
   })
 
+  useSWR(query?.id ? `/api/lists?id=${query.id}` : null, {
+    onSuccess: (data) => {
+      const list = data.edges[0].list
+      formik.setFieldValue('name', list.name)
+      formik.setFieldValue('description', list.description)
+      formik.setFieldValue('private', list.private)
+    },
+  })
+
+  async function update(values) {
+    const res = await fetch('/api/lists?action=update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        listId: query.id,
+        name: values.name,
+        description: values.description,
+        private: values.private,
+        hashtags: parseHashtags(values.description),
+      }),
+    })
+    mutate(`/api/lists?id=${query.id}`)
+    return res
+  }
+
+  async function create(values) {
+    return await fetch('/api/lists?action=create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: values.name,
+        description: values.description,
+        private: values.private,
+        hashtags: parseHashtags(values.description),
+        items: [],
+      }),
+    })
+  }
+
   async function handleSubmit(values) {
     setError(null)
 
     try {
-      const response = await fetch('/api/lists?action=create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: values.name,
-          description: values.description,
-          private: values.private,
-          hashtags: parseHashtags(values.description),
-          items: [],
-        }),
-      })
+      // If there’s a list ID in the URL, we can assume the user is on
+      // the route to update a list.
+      const response = query?.id ? await update(values) : await create(values)
 
       if (response.status !== 200) {
         throw new Error(await response.text())
@@ -57,6 +91,7 @@ const NewListForm: React.FC = () => {
         name="name"
         labelText="Name"
         help="The name for your list"
+        defaultValue={formik.values.name}
         onChange={formik.handleChange}
       />
 
@@ -66,6 +101,7 @@ const NewListForm: React.FC = () => {
         name="description"
         labelText="Description"
         help="Describe what your list is about"
+        defaultValue={formik.values.description}
         onChange={formik.handleChange}
       />
 
@@ -78,7 +114,7 @@ const NewListForm: React.FC = () => {
       />
 
       <Button type="submit" variant="primary" size="lg">
-        Create List
+        {query?.id ? 'Save Changes' : 'Create List'}
       </Button>
 
       {error && <p>Error: {error}</p>}
@@ -86,4 +122,4 @@ const NewListForm: React.FC = () => {
   )
 }
 
-export default NewListForm
+export default EditListForm
