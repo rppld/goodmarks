@@ -7,12 +7,19 @@ import { BookmarksData } from 'lib/types'
 import qs from 'querystringify'
 
 interface Props {
-  cacheKey: string
-  query?: any
+  cacheKey?: string
+  postsPerPage?: number
+  handle?: string
+  sort?: string
+  hashtag?: string
 }
 
-const BookmarksFeed: React.FC<Props> = ({ cacheKey, query }) => {
-  const postsPerPage = 10
+const BookmarksFeed: React.FC<Props> = ({
+  cacheKey,
+  postsPerPage,
+  ...props
+}) => {
+  const query = props // Rest of the props are passed as query params.
   const { pages, isLoadingMore, isReachingEnd, loadMore } = useSWRPages(
     // page key
     `${cacheKey}?${qs.stringify(query)}`,
@@ -91,7 +98,7 @@ const BookmarksFeed: React.FC<Props> = ({ cacheKey, query }) => {
     },
 
     // deps of the page component
-    []
+    [query]
   )
 
   return (
@@ -110,6 +117,11 @@ const BookmarksFeed: React.FC<Props> = ({ cacheKey, query }) => {
       </InfiniteScrollTrigger>
     </>
   )
+}
+
+BookmarksFeed.defaultProps = {
+  cacheKey: '/api/bookmarks',
+  postsPerPage: 10,
 }
 
 export default BookmarksFeed

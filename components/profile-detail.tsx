@@ -1,12 +1,10 @@
 import React from 'react'
 import styles from './profile-detail.module.css'
 import { H4 } from 'components/heading'
-import { HStack } from 'components/stack'
 import { SmallText } from 'components/text'
 import getImageUrl from 'utils/get-image-url'
 import Avatar from 'components/avatar'
 import Link from 'next/link'
-import BookmarkNode from 'components/bookmark-node'
 import Button from 'components/button'
 import { logout } from 'lib/auth'
 import useSWR from 'swr'
@@ -14,53 +12,16 @@ import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
 import Toolbar from 'components/toolbar'
+import BookmarksFeed from 'components/bookmarks-feed'
 
 const ProfileDetail: React.FC = () => {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
   const { user: handle } = router.query
-  const { data, error, mutate } = useSWR(
+  const { data, mutate } = useSWR(
     () => handle && `/api/bookmarks?handle=${handle}`
   )
   const { viewer, resetViewer } = useViewer()
-
-  function handleLike(bookmarkId) {
-    const newData = {
-      ...data,
-      edges: data.edges.map((item) => {
-        if (item.bookmark.id === bookmarkId) {
-          const isLiked = item.bookmarkStats.like
-          return {
-            ...item,
-            bookmark: {
-              ...item.bookmark,
-              likes: isLiked
-                ? item.bookmark.likes - 1
-                : item.bookmark.likes + 1,
-            },
-            bookmarkStats: {
-              ...item.bookmarkStats,
-              like: !isLiked,
-            },
-          }
-        }
-        return item
-      }),
-    }
-
-    mutate(newData, false)
-  }
-
-  function handleDelete(bookmarkId) {
-    const newData = {
-      ...data,
-      edges: data.edges.filter((item) => {
-        return item.bookmark.id !== bookmarkId
-      }),
-    }
-
-    mutate(newData, false)
-  }
 
   const safeVerifyError = (error, keys) => {
     if (keys.length > 0) {
@@ -87,7 +48,7 @@ const ProfileDetail: React.FC = () => {
       'description',
     ])
     if (functionErrorDescription.includes('not unique')) {
-      console.warn('You are already folllowing this author')
+      console.warn('You are already following this author')
     } else {
       console.error('Unknown error')
     }
@@ -102,7 +63,7 @@ const ProfileDetail: React.FC = () => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      authorId: data?.author?.id,
+      authorId: data?.user?.id,
     }),
   }
 
@@ -126,29 +87,26 @@ const ProfileDetail: React.FC = () => {
   return (
     <>
       <header className={styles.header}>
-        <HStack alignment="leading" spacing="md">
-          <Avatar
-            src={data?.author && getImageUrl(data.author.picture, 'avatarLg')}
-            size="lg"
-          />
-          {data?.author?.handle !== undefined ? (
-            <div className={styles.userInfo}>
-              {data?.author?.name ? (
-                <SmallText meta as="p">
-                  @{data?.author?.handle}
-                </SmallText>
-              ) : null}
-              <H4 as="h1">
-                {data?.author?.name
-                  ? data.author.name
-                  : `@${data?.author?.handle}`}
-              </H4>
-              {data?.author?.bio ? (
-                <SmallText as="p">{data?.author?.bio}</SmallText>
-              ) : null}
-            </div>
-          ) : null}
-        </HStack>
+        <Avatar
+          src={data?.user && getImageUrl(data.user.picture, 'avatarLg')}
+          size="xl"
+        />
+
+        {data?.user?.handle !== undefined ? (
+          <div className={styles.userInfo}>
+            {data?.user?.name ? (
+              <SmallText meta as="p">
+                @{data?.user?.handle}
+              </SmallText>
+            ) : null}
+            <H4 as="h1">
+              {data?.user?.name ? data.user.name : `@${data?.user?.handle}`}
+            </H4>
+            {data?.user?.bio ? (
+              <SmallText as="p">{data?.user?.bio}</SmallText>
+            ) : null}
+          </div>
+        ) : null}
       </header>
 
       <Toolbar>
@@ -189,27 +147,7 @@ const ProfileDetail: React.FC = () => {
         ]}
       />
 
-      {error && <div>failed to load</div>}
-
-      {!data ? (
-        <div>loading...</div>
-      ) : (
-        <div>
-          {data.edges.length > 0 && (
-            <>
-              {data.edges.map((item) => (
-                <BookmarkNode
-                  {...item}
-                  key={item.bookmark.id}
-                  onLike={() => handleLike(item.bookmark.id)}
-                  onDelete={() => handleDelete(item.bookmark.id)}
-                  linkToBookmarkDetail
-                />
-              ))}
-            </>
-          )}
-        </div>
-      )}
+      {handle && <BookmarksFeed handle={String(handle)} />}
     </>
   )
 }

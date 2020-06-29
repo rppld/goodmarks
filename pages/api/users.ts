@@ -47,8 +47,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 async function get(req, res) {
   const { handle } = req.query
   const lowerCaseHandle = handle.toLowerCase()
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+  const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
 
-  const data = await serverClient.query(
+  const data = await client.query(
     Let(
       {
         // Check if handle exists the way it has been entered.

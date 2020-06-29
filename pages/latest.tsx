@@ -15,7 +15,7 @@ const Latest: NextPage = () => {
       </PageTitle>
       <JoinGoodmarks />
       <BookmarksTabs />
-      <BookmarksFeed cacheKey="/api/bookmarks" query={{ sort: 'latest' }} />
+      <BookmarksFeed sort="latest" />
     </Layout>
   )
 }
