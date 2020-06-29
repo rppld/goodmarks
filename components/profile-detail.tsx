@@ -24,17 +24,42 @@ const ProfileDetail: React.FC = () => {
   )
   const { viewer, resetViewer } = useViewer()
 
-  function handleLike(newData) {
-    const newBookmarkNodes = data.bookmarks.map((item) => {
-      if (item.bookmark.id === newData.bookmarks[0].bookmark.id) {
-        return newData.bookmarks[0]
-      }
-      return item
-    })
+  function handleLike(bookmarkId) {
+    const newData = {
+      ...data,
+      edges: data.edges.map((item) => {
+        if (item.bookmark.id === bookmarkId) {
+          const isLiked = item.bookmarkStats.like
+          return {
+            ...item,
+            bookmark: {
+              ...item.bookmark,
+              likes: isLiked
+                ? item.bookmark.likes - 1
+                : item.bookmark.likes + 1,
+            },
+            bookmarkStats: {
+              ...item.bookmarkStats,
+              like: !isLiked,
+            },
+          }
+        }
+        return item
+      }),
+    }
 
-    mutate({
-      bookmarks: newBookmarkNodes,
-    })
+    mutate(newData, false)
+  }
+
+  function handleDelete(bookmarkId) {
+    const newData = {
+      ...data,
+      edges: data.edges.filter((item) => {
+        return item.bookmark.id !== bookmarkId
+      }),
+    }
+
+    mutate(newData, false)
   }
 
   const safeVerifyError = (error, keys) => {
@@ -170,13 +195,15 @@ const ProfileDetail: React.FC = () => {
         <div>loading...</div>
       ) : (
         <div>
-          {data.bookmarks.length > 0 && (
+          {data.edges.length > 0 && (
             <>
-              {data.bookmarks.map((item) => (
+              {data.edges.map((item) => (
                 <BookmarkNode
                   {...item}
                   key={item.bookmark.id}
-                  onLike={handleLike}
+                  onLike={() => handleLike(item.bookmark.id)}
+                  onDelete={() => handleDelete(item.bookmark.id)}
+                  linkToBookmarkDetail
                 />
               ))}
             </>

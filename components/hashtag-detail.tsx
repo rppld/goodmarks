@@ -13,7 +13,7 @@ const HashtagDetail: React.FC = () => {
 
   function handleLike(bookmarkId) {
     const newData = {
-      bookmarks: data.bookmarks.map((item) => {
+      edges: data.edges.map((item) => {
         if (item.bookmark.id === bookmarkId) {
           const isLiked = item.bookmarkStats.like
           return {
@@ -39,7 +39,7 @@ const HashtagDetail: React.FC = () => {
 
   function handleDelete(bookmarkId) {
     const newData = {
-      bookmarks: data.bookmarks.filter((item) => {
+      edges: data.edges.filter((item) => {
         return item.bookmark.id !== bookmarkId
       }),
     }
@@ -55,7 +55,7 @@ const HashtagDetail: React.FC = () => {
         <div>loading...</div>
       ) : (
         <div>
-          {data.bookmarks.map((item) => (
+          {data.edges.map((item) => (
             <BookmarkNode
               {...item}
               key={item.bookmark.id}
