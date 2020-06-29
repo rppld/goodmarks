@@ -35,7 +35,7 @@ const BookmarksFeed: React.FC<Props> = ({ cacheKey, query }) => {
       function handleLike(bookmarkId) {
         const newData = {
           ...data,
-          bookmarks: data.edges.map((item) => {
+          edges: data.edges.map((item) => {
             if (item.bookmark.id === bookmarkId) {
               const isLiked = item.bookmarkStats.like
               return {
@@ -62,7 +62,7 @@ const BookmarksFeed: React.FC<Props> = ({ cacheKey, query }) => {
       function handleDelete(bookmarkId) {
         const newData = {
           ...data,
-          bookmarks: data.edges.filter((item) => {
+          edges: data.edges.filter((item) => {
             return item.bookmark.id !== bookmarkId
           }),
         }
