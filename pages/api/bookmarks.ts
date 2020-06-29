@@ -229,20 +229,24 @@ async function getFollowingBookmarks(req, res) {
 }
 
 async function getBookmarksByUserHandle(req, res) {
-  const { handle } = req.query
+  const { handle, first, after: cursor = 'null' } = req.query
+  const size = parseInt(first) || 10
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
 
-  const data = await client.query(
+  const data: any = await client.query(
     Let(
       {
         setRef: Match(Index('users_by_handle'), handle),
-        authorRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
-        author: Get(Var('authorRef')),
+        userRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
+        user: Get(Var('userRef')),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
           q.Map(
-            Paginate(Match(Index('bookmarks_by_author'), Var('authorRef'))),
+            Paginate(Match(Index('bookmarks_by_author'), Var('userRef')), {
+              size,
+              after: cursor === 'null' ? undefined : parseValue(cursor),
+            }),
             // The index contains two values so our lambda also takes
             // two values.
             Lambda(['createdTime', 'ref'], Var('ref'))
@@ -252,7 +256,7 @@ async function getBookmarksByUserHandle(req, res) {
           HasIdentity(),
           Match(
             Index('follower_stats_by_author_and_follower'),
-            Var('authorRef'),
+            Var('userRef'),
             Select(['data', 'user'], Get(Identity()))
           ),
           false
@@ -260,14 +264,24 @@ async function getBookmarksByUserHandle(req, res) {
         following: If(HasIdentity(), Exists(Var('followerStatsMatch')), false),
       },
       {
-        author: Var('author'),
-        edges: Var('bookmarks'),
+        user: Var('user'),
+        bookmarks: Var('bookmarks'),
         following: Var('following'),
       }
     )
   )
+  const { user, following, bookmarks } = data
+  const { before, after, ...edges } = bookmarks
 
-  return res.status(200).json(flattenDataKeys(data))
+  return res.status(200).json({
+    user: flattenDataKeys(user),
+    following,
+    edges: flattenDataKeys(edges),
+    pageInfo: {
+      hasNextPage: Boolean(after),
+      endCursor: Boolean(after) ? serialize(after) : null,
+    },
+  })
 }
 
 async function likeBookmark(req, res) {

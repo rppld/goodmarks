@@ -15,9 +15,7 @@ const User: NextPage = () => {
       <PageTitle>
         <H4 as="h1">#{hashtag}</H4>
       </PageTitle>
-      {hashtag && (
-        <BookmarksFeed cacheKey="/api/bookmarks" query={{ hashtag }} />
-      )}
+      {hashtag && <BookmarksFeed hashtag={String(hashtag)} />}
     </Layout>
   )
 }

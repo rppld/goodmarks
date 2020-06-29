@@ -5,5 +5,5 @@
 }
 
 .userInfo {
-  transform: translateY(-4px); /* Optical adjustment */
+  margin-left: var(--space-16);
 }

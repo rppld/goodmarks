@@ -15,7 +15,7 @@ const Home: NextPage = () => {
       </PageTitle>
       <JoinGoodmarks />
       <BookmarksTabs />
-      <BookmarksFeed cacheKey="/api/bookmarks" />
+      <BookmarksFeed />
     </Layout>
   )
 }
