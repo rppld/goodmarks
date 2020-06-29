@@ -72,7 +72,7 @@ export interface BookmarkNode {
 }
 
 export interface BookmarksData {
-  bookmarks: BookmarkNode[]
+  edges: BookmarkNode[]
 }
 
 export interface ListItem {

@@ -26,7 +26,7 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
     { initialData }
   )
   const manuallyRevalidated = React.useRef(false)
-  const item = data?.bookmarks?.length > 0 && data.bookmarks[0]
+  const item = data?.edges?.length > 0 && data.edges[0]
   const { comments } = item
   const { viewer } = useViewer()
   const formik = useFormik({
@@ -50,12 +50,12 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
   }, [data, bookmarkId, viewer, mutate])
 
   async function handleLike() {
-    const item = data.bookmarks[0]
+    const item = data.edges[0]
     const isLiked = item.bookmarkStats.like
 
     mutate(
       {
-        bookmarks: [
+        edges: [
           {
             ...item,
             bookmark: {
@@ -79,11 +79,11 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
     try {
       const { comment } = await createComment(values.comment, bookmarkId)
       mutate({
-        bookmarks: [
+        edges: [
           {
-            ...data.bookmarks[0],
+            ...data.edges[0],
             comments: [
-              ...data.bookmarks[0].comments,
+              ...data.edges[0].comments,
               {
                 comment: {
                   id: comment.id,
@@ -110,10 +110,10 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
   async function handleDeleteComment(commentId) {
     const res = await deleteComment(commentId)
     mutate({
-      bookmarks: [
+      edges: [
         {
-          ...data.bookmarks[0],
-          comments: data.bookmarks[0].comments.filter(
+          ...data.edges[0],
+          comments: data.edges[0].comments.filter(
             ({ comment }) => comment.id !== res.comment.id
           ),
         },
