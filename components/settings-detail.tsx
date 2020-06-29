@@ -9,6 +9,7 @@ import { useFormik } from 'formik'
 import { useViewer } from './viewer-context'
 
 const SettingsDetail: React.FC = () => {
+  const bioMaxLength = 70
   const { viewer, setViewer } = useViewer()
 
   const handleUpdateUser = (values) => {
@@ -36,10 +37,10 @@ const SettingsDetail: React.FC = () => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(5, 'Must be 5 characters or more')
-      .max(40, 'Must be 50 characters or less'),
+      .max(40, 'Must be 40 characters or less'),
     bio: Yup.string()
       .min(5, 'Must be 5 characters or more')
-      .max(70, 'Must be 70 characters or less'),
+      .max(bioMaxLength, `Must be ${bioMaxLength} characters or less`),
   })
 
   const formik = useFormik({
@@ -68,14 +69,21 @@ const SettingsDetail: React.FC = () => {
           value={formik.values.name}
           onChange={formik.handleChange}
         />
+
         <Input
           as="textarea"
           rows="6"
           labelText="Bio"
           name="bio"
+          help={
+            formik.values.bio
+              ? String(bioMaxLength - formik.values.bio.length)
+              : String(bioMaxLength)
+          }
           value={formik.values.bio}
           onChange={formik.handleChange}
         />
+
         <footer>
           <HStack alignment="trailing">
             <Button
