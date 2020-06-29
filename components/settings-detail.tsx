@@ -67,7 +67,7 @@ const SettingsDetail: React.FC = () => {
         <Input
           labelText="Name"
           name="name"
-          value={formik.values.name}
+          defaultValue={formik.values.name}
           onChange={formik.handleChange}
         />
 
@@ -81,7 +81,7 @@ const SettingsDetail: React.FC = () => {
               ? String(bioMaxLength - formik.values.bio.length)
               : String(bioMaxLength)
           }
-          value={formik.values.bio}
+          defaultValue={formik.values.bio}
           onChange={formik.handleChange}
         />
 
