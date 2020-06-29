@@ -69,6 +69,7 @@ const Embed: React.FC<Props> = ({
             getCategoryPlaceholder(category)
           )}
         </div>
+
         <div className={styles.details}>
           <Text as="h4">{bookmark.details.title || bookmark.details.name}</Text>
 
@@ -82,12 +83,12 @@ const Embed: React.FC<Props> = ({
               </Caption>
             ) : null}
 
-            {bookmark.details.vote_average ? (
+            {bookmark.details['vote_average'] ? (
               <Caption>
                 <span className={styles.metaIcon}>
                   <Star size="xs" />
                 </span>
-                {bookmark.details.vote_average}
+                {bookmark.details['vote_average']}
               </Caption>
             ) : null}
 

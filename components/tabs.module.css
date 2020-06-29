@@ -3,8 +3,7 @@
   list-style: none;
   justify-content: row;
   margin-top: var(--space-8);
-  margin-bottom: var(--space-12);
-
+  margin-bottom: var(--space-16);
   background-color: var(--color-button);
   overflow: hidden;
   padding: var(--space-4);

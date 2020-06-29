@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './profile-detail.module.css'
 import { H4 } from 'components/heading'
 import { HStack } from 'components/stack'
-import { SmallText, Caption } from 'components/text'
+import { SmallText } from 'components/text'
 import getImageUrl from 'utils/get-image-url'
 import Avatar from 'components/avatar'
 import Link from 'next/link'
@@ -109,9 +109,9 @@ const ProfileDetail: React.FC = () => {
           {data?.author?.handle !== undefined ? (
             <div className={styles.userInfo}>
               {data?.author?.name ? (
-                <Caption meta as="p">
+                <SmallText meta as="p">
                   @{data?.author?.handle}
-                </Caption>
+                </SmallText>
               ) : null}
               <H4 as="h1">
                 {data?.author?.name
