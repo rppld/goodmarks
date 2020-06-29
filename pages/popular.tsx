@@ -15,7 +15,7 @@ const Popular: NextPage = () => {
       </PageTitle>
       <JoinGoodmarks />
       <BookmarksTabs />
-      <BookmarksFeed sort="popular" />
+      <BookmarksFeed cacheKey="/api/bookmarks" query={{ sort: 'popular' }} />
     </Layout>
   )
 }
