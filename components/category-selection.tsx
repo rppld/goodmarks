@@ -3,7 +3,6 @@ import Link from 'next/link'
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import styles from './category-selection.module.css'
-import { Text } from './text'
 import { Movie, Link as LinkIcon, TV } from './icon'
 
 interface props {
