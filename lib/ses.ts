@@ -11,21 +11,20 @@ const ses = new aws.SES()
 
 export const sendCommentNotification = (toEmail, bookmarkUrl) => {
   const params = {
-    Source: 'support@goodmarks.app',
+    Source: 'Goodmarks <support@goodmarks.app>',
     Destination: {
       ToAddresses: [toEmail],
     },
-    ReplyToAddresses: ['support@goodmarks.app'],
     Message: {
       Body: {
         Html: {
           Charset: 'UTF-8',
-          Data: `Someone commented on <a href="${bookmarkUrl}">your bookmark</a>.`,
+          Data: `Someone left a comment on <a href="${bookmarkUrl}">your bookmark</a>.`,
         },
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: 'New comment',
+        Data: 'New comment on your bookmark',
       },
     },
   }
@@ -34,4 +33,5 @@ export const sendCommentNotification = (toEmail, bookmarkUrl) => {
     .sendEmail(params)
     .promise()
     .then((res) => console.log(res))
+    .catch((error) => console.log(error))
 }

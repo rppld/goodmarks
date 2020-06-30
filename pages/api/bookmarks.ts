@@ -470,6 +470,7 @@ async function createComment(req, res) {
         {
           account: Get(Identity()),
           userRef: Select(['data', 'user'], Var('account')),
+          userId: Select(['id'], Var('userRef')),
           bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
           bookmarkStatsRef: Match(
             Index('bookmark_stats_by_user_and_bookmark'),
@@ -516,14 +517,21 @@ async function createComment(req, res) {
         },
         {
           comment: Var('comment'),
+          userId: Var('userId'),
           bookmarkWithUserAndAccount: Var('bookmarkWithUserAndAccount'),
         }
       )
     )
 
     const { origin } = absoluteUrl(req)
-    const { userEmail } = data.bookmarkWithUserAndAccount
-    sendCommentNotification(userEmail, `${origin}/b/${bookmarkId}`)
+    const bookmark = data.bookmarkWithUserAndAccount[0]
+    const { author, authorEmail } = bookmark
+
+    if (author.ref.id !== data.userId) {
+      // Send email notification if the viewer comments on a bookmark
+      // that’s not their own.
+      sendCommentNotification(authorEmail, `${origin}/b/${bookmarkId}`)
+    }
 
     return res.status(200).json(
       flattenDataKeys({
