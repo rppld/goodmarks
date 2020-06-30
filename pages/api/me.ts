@@ -3,7 +3,7 @@ import cookie from 'cookie'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { faunaClient, FAUNA_SECRET_COOKIE } from 'lib/fauna'
 
-const { Identity, Select, Get } = q
+const { Identity, Select, Get, Let, Var } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const cookies = cookie.parse(req.headers.cookie ?? '')
@@ -17,12 +17,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 }
 
 export const profileApi = async (faunaSecret) => {
-  const { ref, data } = await faunaClient(faunaSecret).query(
-    Get(Select(['data', 'user'], Get(Identity())))
+  const { user, email }: any = await faunaClient(faunaSecret).query(
+    Let(
+      {
+        user: Get(Select(['data', 'user'], Get(Identity()))),
+        email: Select(['data', 'email'], Get(Identity())),
+      },
+      {
+        user: Var('user'),
+        email: Var('email'),
+      }
+    )
   )
   const viewer = {
-    id: ref.id,
-    ...data,
+    id: user.ref.id,
+    email,
+    ...user.data,
   }
   return {
     viewer,
