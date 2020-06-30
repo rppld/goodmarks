@@ -8,17 +8,20 @@ const getItems = (viewer) => {
   if (viewer) {
     tabs.push(
       {
-        href: `/`,
+        linkHref: `/`,
+        linkAs: `/`,
         label: 'Following',
       },
       {
-        href: `/popular`,
+        linkHref: `/popular`,
+        linkAs: `/popular`,
         label: 'Popular',
       }
     )
   } else {
     tabs.push({
-      href: `/`,
+      linkHref: `/popular`,
+      linkAs: `/popular`,
       label: 'Popular',
     })
   }
@@ -26,7 +29,8 @@ const getItems = (viewer) => {
   return [
     ...tabs,
     {
-      href: `/latest`,
+      linkHref: `/latest`,
+      linkAs: `/latest`,
       label: 'Latest',
     },
   ]
