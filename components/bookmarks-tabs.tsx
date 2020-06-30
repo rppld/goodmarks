@@ -20,8 +20,8 @@ const getItems = (viewer) => {
     )
   } else {
     tabs.push({
-      linkHref: `/popular`,
-      linkAs: `/popular`,
+      linkHref: `/`,
+      linkAs: `/`,
       label: 'Popular',
     })
   }
