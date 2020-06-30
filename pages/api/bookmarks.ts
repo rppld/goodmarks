@@ -12,6 +12,8 @@ import cookie from 'cookie'
 import { parseJSON } from 'faunadb/src/_json'
 import atob from 'atob'
 import btoa from 'btoa'
+import { sendCommentNotification } from 'lib/ses'
+import absoluteUrl from 'utils/absolute-url'
 
 const serialize = (value) => {
   return btoa(JSON.stringify(value))
@@ -463,7 +465,7 @@ async function createComment(req, res) {
       throw new Error('Text must be provided.')
     }
 
-    const data = await faunaClient(faunaSecret).query(
+    const data: any = await faunaClient(faunaSecret).query(
       Let(
         {
           account: Get(Identity()),
@@ -505,19 +507,29 @@ async function createComment(req, res) {
               comments: Add(1, Select(['data', 'comments'], Var('bookmark'))),
             },
           }),
-          // We then get the bookmark in the same format as when we normally get them.
-          // Since FQL is composable we can easily do this.
+          // We then get the bookmark in the same format as when we
+          // normally get them. Since FQL is composable we can easily
+          // do this.
           bookmarkWithUserAndAccount: getBookmarksWithUsersMapGetGeneric([
             Var('bookmarkRef'),
           ]),
         },
         {
           comment: Var('comment'),
+          bookmarkWithUserAndAccount: Var('bookmarkWithUserAndAccount'),
         }
       )
     )
 
-    return res.status(200).json(flattenDataKeys(data))
+    const { origin } = absoluteUrl(req)
+    const { userEmail } = data.bookmarkWithUserAndAccount
+    sendCommentNotification(userEmail, `${origin}/b/${bookmarkId}`)
+
+    return res.status(200).json(
+      flattenDataKeys({
+        comment: data.comment,
+      })
+    )
   } catch (error) {
     console.log(error)
     res.status(400).send(error.message)

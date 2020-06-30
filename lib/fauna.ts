@@ -153,6 +153,13 @@ export function getBookmarksWithUsersMapGetGeneric(
             Get(Select(['data', 'author'], Var('bookmark'))),
             false
           ),
+          userAccount: Get(
+            Match(
+              Index('accounts_by_user'),
+              Select(['data', 'author'], Var('bookmark'))
+            )
+          ),
+          userEmail: Select(['data', 'email'], Var('userAccount')),
           // Get the account via identity.
           account: If(HasIdentity(), Get(Identity()), false),
           // Get the user that is currently logged in.
@@ -210,6 +217,7 @@ export function getBookmarksWithUsersMapGetGeneric(
         // Return our elements
         {
           user: Var('user'),
+          userEmail: Var('userEmail'),
           category: Var('category'),
           original: Var('original'),
           bookmark: Var('bookmark'),
