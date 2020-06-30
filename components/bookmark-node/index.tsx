@@ -32,7 +32,7 @@ interface Props {
   original?: Bookmark
   list?: List
   listItemId?: string
-  user: User
+  author: User
   onLike?: () => void
   onDelete?: () => void
   onRemoveFromList?: (listItemId: string) => void
@@ -45,7 +45,7 @@ const BookmarkNode: React.FC<Props> = ({
   bookmarkStats,
   comments,
   original,
-  user,
+  author,
   list,
   listItemId,
   linkToBookmarkDetail,
@@ -58,7 +58,7 @@ const BookmarkNode: React.FC<Props> = ({
     { loading: removingFromList },
   ] = useRemoveBookmarkFromList()
   const { viewer } = useViewer()
-  const isOwnedByViewer = viewer && user?.id === viewer.id
+  const isOwnedByViewer = viewer && author?.id === viewer.id
   const [showDialog, setShowDialog] = React.useState(false)
   const openDialog = () => setShowDialog(true)
   const closeDialog = () => setShowDialog(false)
@@ -128,7 +128,7 @@ const BookmarkNode: React.FC<Props> = ({
     >
       <header className={styles.header}>
         <HStack>
-          <AuthorInfo user={user} createdAt={bookmark.created['@ts']} />
+          <AuthorInfo user={author} createdAt={bookmark.created['@ts']} />
         </HStack>
 
         <HStack spacing="md">
