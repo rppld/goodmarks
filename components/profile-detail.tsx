@@ -12,7 +12,6 @@ import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
 import Toolbar from 'components/toolbar'
-import BookmarksFeed from 'components/bookmarks-feed'
 
 const ProfileDetail: React.FC = () => {
   const [loading, setLoading] = React.useState(false)
@@ -137,17 +136,17 @@ const ProfileDetail: React.FC = () => {
       <Tabs
         tabs={[
           {
-            href: `/${handle}`,
+            linkAs: `/${handle}`,
+            linkHref: `/[user]`,
             label: 'Bookmarks',
           },
           {
-            href: `/${handle}/lists`,
+            linkAs: `/${handle}/lists`,
+            linkHref: `/[user]/lists`,
             label: 'Lists',
           },
         ]}
       />
-
-      {handle && <BookmarksFeed handle={String(handle)} />}
     </>
   )
 }
