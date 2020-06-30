@@ -16,8 +16,8 @@ const JoinGoodmarks: React.FC = () => {
         <VStack>
           <header className={styles.header}>
             <Text as="p">
-              Goodmarks is a community to share your favourites with your
-              friends. No algorithm. No AI. 100 percent human.
+              Goodmarks is a community to share favorites with friends. No
+              algorithm. No AI. 100% human.
             </Text>
           </header>
           <HStack alignment="leading">
