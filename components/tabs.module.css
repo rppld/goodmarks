@@ -15,7 +15,6 @@
   height: var(--space-40);
   font-weight: var(--fw-medium);
   font-size: var(--fs-16);
-  color: var(--color-text-lighter);
   width: 100%;
   text-align: center;
   display: flex;
@@ -30,12 +29,12 @@
 
 .tab:hover,
 .tab:active {
-  color: var(--color-text-light);
+  color: var(--color-text);
   background-color: var(--color-button-hover);
 }
 
 .active,
 .active:hover {
-  color: var(--color-text-light);
+  color: var(--color-text);
   background-color: var(--color-bookmark);
 }
