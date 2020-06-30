@@ -148,24 +148,24 @@ export function getBookmarksWithUsersMapGetGeneric(
             false
           ),
           // Get the user that wrote the bookmark.
-          user: If(
+          author: If(
             Exists(Var('ref')),
             Get(Select(['data', 'author'], Var('bookmark'))),
             false
           ),
-          userAccount: Get(
+          authorAccount: Get(
             Match(
               Index('accounts_by_user'),
               Select(['data', 'author'], Var('bookmark'))
             )
           ),
-          userEmail: Select(['data', 'email'], Var('userAccount')),
+          authorEmail: Select(['data', 'email'], Var('authorAccount')),
           // Get the account via identity.
-          account: If(HasIdentity(), Get(Identity()), false),
+          currentUserAccount: If(HasIdentity(), Get(Identity()), false),
           // Get the user that is currently logged in.
           currentUserRef: If(
             HasIdentity(),
-            Select(['data', 'user'], Var('account')),
+            Select(['data', 'user'], Var('currentUserAccount')),
             false
           ),
           // Get the statistics for the bookmark
@@ -216,8 +216,8 @@ export function getBookmarksWithUsersMapGetGeneric(
         },
         // Return our elements
         {
-          user: Var('user'),
-          userEmail: Var('userEmail'),
+          author: Var('author'),
+          authorEmail: Var('authorEmail'),
           category: Var('category'),
           original: Var('original'),
           bookmark: Var('bookmark'),
@@ -276,13 +276,13 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
             })
           ),
           // Get the user that wrote the list.
-          user: Get(Select(['data', 'author'], Var('list'))),
+          author: Get(Select(['data', 'author'], Var('list'))),
           // Get the account via identity.
-          account: If(HasIdentity(), Get(Identity()), false),
+          currentUserAccount: If(HasIdentity(), Get(Identity()), false),
           // Get the user that is currently logged in.
           currentUserRef: If(
             HasIdentity(),
-            Select(['data', 'user'], Var('account')),
+            Select(['data', 'user'], Var('currentUserAccount')),
             false
           ),
           // Get the statistics for the list
@@ -321,7 +321,7 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
         },
         // Return our elements
         {
-          user: Var('user'),
+          author: Var('author'),
           original: Var('original'),
           list: Var('list'),
           items: Var('items'),

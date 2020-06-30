@@ -64,10 +64,12 @@ export interface ListStats {
 }
 
 export interface BookmarkNode {
-  bookmark: Bookmark
+  author: User
+  authorEmail: string
   category: BookmarkCategory
+  original: any
+  bookmark: Bookmark
   bookmarkStats: BookmarkStats
-  user: User
   comments: CommentNode[]
 }
 
