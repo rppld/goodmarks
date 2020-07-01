@@ -11,8 +11,8 @@ import { ListsData } from 'lib/types'
 import { listApi } from 'pages/api/lists'
 
 interface Props {
-  initialData?: ListsData
-  listId?: string
+  initialData: ListsData
+  listId: string
   error?: {
     code: number
     message: string
@@ -36,7 +36,7 @@ const Lists: NextPage<Props> = ({ initialData, listId, error }) => {
 
 // SSR this page, because lists can be private and in that case we
 // should return an appropriate error page and status code.
-export async function getServerSideProps({ req, res, params }) {
+export async function getServerSideProps({ req, params }) {
   const { id } = params
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]

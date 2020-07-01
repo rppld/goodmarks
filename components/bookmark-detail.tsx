@@ -25,7 +25,6 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
     () => bookmarkId && `/api/bookmarks?id=${bookmarkId}`,
     { initialData }
   )
-  const manuallyRevalidated = React.useRef(false)
   const item = data?.edges?.length > 0 && data.edges[0]
   const { comments } = item
   const { viewer } = useViewer()
@@ -37,17 +36,6 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
   })
   const [createComment] = useCreateComment()
   const [deleteComment] = useDeleteComment()
-
-  React.useEffect(() => {
-    // Manually revalidate upon mount in order to fetch the bookmark
-    // stats, e.g. to show whether the viewer likes the bookmark or
-    // not. These stats will always be empty at first, because we
-    // can’t pass the cookie along inside `getStaticProps()`.
-    if (data && viewer && !manuallyRevalidated.current) {
-      mutate()
-      manuallyRevalidated.current = true
-    }
-  }, [data, bookmarkId, viewer, mutate])
 
   async function handleLike() {
     const item = data.edges[0]
