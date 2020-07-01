@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import { useRouter } from 'next/router'
 import Button from './button'
 import Avatar from './avatar'
-import { Plus, MagnifyingGlass, Bookmark, User, List } from './icon'
+import { Plus, MagnifyingGlass, Bookmark, User, Article } from './icon'
 import { useViewer } from 'components/viewer-context'
 import styles from './tab-bar.module.css'
 import getImageUrl from 'utils/get-image-url'
@@ -57,14 +57,14 @@ const TabBar: React.FC = () => {
           {viewer ? (
             <Link href="/[user]/lists" as={`/${viewer?.handle}/lists`}>
               <a className={getTabClassName('/lists')}>
-                <List />
+                <Article />
                 <span className={styles.label}>Lists</span>
               </a>
             </Link>
           ) : (
             <Link href="/login">
               <a className={getTabClassName('/lists')}>
-                <List />
+                <Article />
                 <span className={styles.label}>Lists</span>
               </a>
             </Link>
