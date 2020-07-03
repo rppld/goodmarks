@@ -46,10 +46,10 @@
 }
 
 .level-6 {
-  font-size: var(--fs-14);
+  font-size: var(--fs-12);
   line-height: var(--lh-copy);
+  color: var(--color-text-lighter);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 @media (min-width: 620px) {

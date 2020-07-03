@@ -87,7 +87,7 @@ export interface ListsData {
     list: List
     items: ListItem[]
     listStats: ListStats
-    user: User
+    author: User
     comments: CommentNode[]
   }[]
 }

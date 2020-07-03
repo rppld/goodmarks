@@ -7,8 +7,11 @@ import { ListsData } from 'lib/types'
 import { VStack, HStack } from 'components/stack'
 import useSWR from 'swr'
 import BookmarkNode from 'components/bookmark-node'
-import ListNode from 'components/list-node'
 import useDeleteList from 'utils/use-delete-list'
+import { H2 } from './heading'
+import { Text } from './text'
+import AuthorInfo from './author-info'
+import { Pencil, Trash } from './icon'
 
 interface Props {
   initialData: ListsData
@@ -47,6 +50,8 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
     )
   }
 
+  console.log(edge)
+
   return (
     <div>
       {error && <div>failed to load</div>}
@@ -55,7 +60,16 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
         <div>loading...</div>
       ) : (
         <VStack spacing="md">
-          <ListNode {...edge} />
+          <AuthorInfo
+            user={edge.author}
+            subtitle="Last updated: "
+            createdAt={edge.list.created['@ts']}
+          />
+
+          <VStack spacing="sm">
+            <H2>{edge.list.name}</H2>
+            <Text as="p">{edge.list.description}</Text>
+          </VStack>
 
           {query?.user === viewer?.handle ? (
             <HStack alignment="leading">
@@ -64,19 +78,23 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
                 as={`/${query.user}/lists/${query.id}/edit`}
                 passHref
               >
-                <Button as="a">Edit list</Button>
+                <Button as="a" leftAdornment={<Pencil />} iconOnly>
+                  Edit list
+                </Button>
               </Link>
               <Button
                 onClick={handleDelete}
                 variant="danger"
                 disabled={deleting}
+                iconOnly
+                leftAdornment={<Trash />}
               >
                 Delete list
               </Button>
             </HStack>
           ) : null}
 
-          <div>
+          <VStack spacing="sm">
             {edge.items.map((item) => (
               <BookmarkNode
                 {...item.bookmark}
@@ -87,7 +105,7 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
                 linkToBookmarkDetail
               />
             ))}
-          </div>
+          </VStack>
         </VStack>
       )}
     </div>
