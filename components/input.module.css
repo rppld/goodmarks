@@ -34,6 +34,7 @@
   box-shadow: 0 0 0 2px var(--color-input-outline) inset;
   background-color: var(--color-input);
   font-size: inherit;
+  font-family: inherit;
   border-radius: var(--space-16);
   padding: var(--space-16);
   min-height: var(--space-56);
