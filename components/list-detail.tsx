@@ -50,8 +50,6 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
     )
   }
 
-  console.log(edge)
-
   return (
     <div>
       {error && <div>failed to load</div>}
@@ -62,12 +60,12 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
         <VStack spacing="md">
           <AuthorInfo
             user={edge.author}
-            subtitle="Last updated: "
+            subtitle="Updated "
             createdAt={edge.list.created['@ts']}
           />
 
           <VStack spacing="sm">
-            <H2>{edge.list.name}</H2>
+            <H2 as="h1">{edge.list.name}</H2>
             <Text as="p">{edge.list.description}</Text>
           </VStack>
 
@@ -78,7 +76,7 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
                 as={`/${query.user}/lists/${query.id}/edit`}
                 passHref
               >
-                <Button as="a" leftAdornment={<Pencil />} iconOnly>
+                <Button leftAdornment={<Pencil />} iconOnly>
                   Edit list
                 </Button>
               </Link>
