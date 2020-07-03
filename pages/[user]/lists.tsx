@@ -1,7 +1,7 @@
 import React from 'react'
 import { NextPage } from 'next'
 import Layout from 'components/layout'
-import ProfileDetail from 'components/profile-detail'
+import ProfileHeader from 'components/profile-header'
 import { useRouter } from 'next/router'
 import ListsOverview from 'components/lists-overview'
 
@@ -11,7 +11,7 @@ const User: NextPage = () => {
 
   return (
     <Layout>
-      <ProfileDetail />
+      <ProfileHeader />
       {handle && <ListsOverview handle={String(handle)} />}
     </Layout>
   )

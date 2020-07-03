@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './profile-detail.module.css'
+import styles from './profile-header.module.css'
 import { H4 } from 'components/heading'
 import { SmallText } from 'components/text'
 import getImageUrl from 'utils/get-image-url'
@@ -13,7 +13,7 @@ import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
 import Toolbar from 'components/toolbar'
 
-const ProfileDetail: React.FC = () => {
+const ProfileHeader: React.FC = () => {
   const [loading, setLoading] = React.useState(false)
   const router = useRouter()
   const { user: handle } = router.query
@@ -151,4 +151,4 @@ const ProfileDetail: React.FC = () => {
   )
 }
 
-export default ProfileDetail
+export default ProfileHeader
