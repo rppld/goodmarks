@@ -26,9 +26,6 @@ const Lists: NextPage<Props> = ({ initialData, listId, error }) => {
 
   return (
     <Layout>
-      <PageTitle>
-        <H4 as="h1">List</H4>
-      </PageTitle>
       {error ? error : <ListDetail initialData={initialData} listId={listId} />}
     </Layout>
   )

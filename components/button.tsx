@@ -44,7 +44,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
           <span className={styles.adornment}>{leftAdornment}</span>
         ) : null}
 
-        <span className={styles.label}>{children}</span>
+        {iconOnly ? <span className={styles.label}>{children}</span> : children}
       </Component>
     )
   }

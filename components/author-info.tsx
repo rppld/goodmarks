@@ -37,7 +37,8 @@ const AuthorInfo: React.FC<Props> = ({ user, createdAt, subtitle }) => {
           </a>
         </Link>
         <Caption as="p" meta>
-          {createdAt ? <TimeAgo datetime={createdAt} /> : subtitle}
+          {subtitle}
+          {createdAt ? <TimeAgo datetime={createdAt} /> : null}
         </Caption>
       </div>
     </HStack>
