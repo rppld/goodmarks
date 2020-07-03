@@ -3,7 +3,6 @@ import styles from './tabs.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import classNames from 'classnames'
-import { stringList } from 'aws-sdk/clients/datapipeline'
 
 interface Tab {
   linkHref: string
