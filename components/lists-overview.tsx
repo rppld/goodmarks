@@ -30,7 +30,7 @@ const ListsOverview: React.FC<Props> = ({ handle }) => {
       </VStack>
     )
   } else {
-    return <div>No lists</div>
+    return <div>Loading...</div>
   }
 }
 

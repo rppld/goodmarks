@@ -13,7 +13,7 @@ export interface DialogProps extends ReachDialogProps {
 const Dialog: React.FC<DialogProps> = ({ children, a11yTitle, ...props }) => {
   return (
     <DialogOverlay className={styles.overlay} {...props}>
-      <DialogContent className={styles.overlay} aria-label={a11yTitle}>
+      <DialogContent className={styles.content} aria-label={a11yTitle}>
         {children}
       </DialogContent>
     </DialogOverlay>
