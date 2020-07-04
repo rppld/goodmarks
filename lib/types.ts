@@ -18,6 +18,7 @@ export interface List {
   reposts: number
   items: Bookmark[]
   hashtags: any
+  ts: number
 }
 
 export interface BookmarkCategory {

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Router, { useRouter } from 'next/router'
 import Button from 'components/button'
 import { ListsData } from 'lib/types'
-import { VStack, HStack } from 'components/stack'
+import { VStack } from 'components/stack'
 import useSWR from 'swr'
 import BookmarkNode from 'components/bookmark-node'
 import useDeleteList from 'utils/use-delete-list'
@@ -12,8 +12,6 @@ import PageTitle from 'components/page-title'
 import { H4 } from './heading'
 import { Text } from './text'
 import Toolbar from 'components/toolbar'
-import TimeAgo from 'timeago-react'
-import parseISO from 'date-fns/parseISO'
 
 interface Props {
   initialData: ListsData
