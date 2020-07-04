@@ -8,10 +8,12 @@ import { VStack, HStack } from 'components/stack'
 import useSWR from 'swr'
 import BookmarkNode from 'components/bookmark-node'
 import useDeleteList from 'utils/use-delete-list'
-import { H2 } from './heading'
+import PageTitle from 'components/page-title'
+import { H4 } from './heading'
 import { Text } from './text'
-import AuthorInfo from './author-info'
-import { Pencil, Trash } from './icon'
+import Toolbar from 'components/toolbar'
+import TimeAgo from 'timeago-react'
+import parseISO from 'date-fns/parseISO'
 
 interface Props {
   initialData: ListsData
@@ -58,38 +60,32 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
         <div>loading...</div>
       ) : (
         <VStack spacing="md">
-          <AuthorInfo
-            user={edge.author}
-            subtitle="Updated "
-            createdAt={edge.list.created['@ts']}
-          />
-
-          <VStack spacing="sm">
-            <H2 as="h1">{edge.list.name}</H2>
+          <PageTitle>
+            <H4 as="h1">{edge.list.name}</H4>
+            <Text meta>
+              @{edge.author.handle}, {edge.list.ts}
+            </Text>
             <Text as="p">{edge.list.description}</Text>
-          </VStack>
+          </PageTitle>
 
           {query?.user === viewer?.handle ? (
-            <HStack alignment="leading">
+            <Toolbar>
               <Link
                 href="/[user]/lists/[id]/edit"
                 as={`/${query.user}/lists/${query.id}/edit`}
                 passHref
               >
-                <Button leftAdornment={<Pencil />} iconOnly>
-                  Edit list
-                </Button>
+                <Button fullWidth>Edit list</Button>
               </Link>
               <Button
                 onClick={handleDelete}
                 variant="danger"
+                fullWidth
                 disabled={deleting}
-                iconOnly
-                leftAdornment={<Trash />}
               >
                 Delete list
               </Button>
-            </HStack>
+            </Toolbar>
           ) : null}
 
           <VStack spacing="sm">
