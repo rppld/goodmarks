@@ -77,7 +77,9 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
                 as={`/${query.user}/lists/${query.id}/edit`}
                 passHref
               >
-                <Button fullWidth>Edit list</Button>
+                <Button as="a" fullWidth>
+                  Edit list
+                </Button>
               </Link>
               <Button
                 onClick={handleDelete}
