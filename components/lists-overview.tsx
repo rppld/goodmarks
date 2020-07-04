@@ -15,19 +15,23 @@ const ListsOverview: React.FC<Props> = ({ handle }) => {
     return null
   }
 
-  return (
-    <VStack spacing="md">
-      {data?.edges?.map(({ list }) => (
-        <div key={list.id}>
-          <Link href="/[user]/lists/[id]" as={`/${handle}/lists/${list.id}`}>
-            <a>
-              <ListNode list={list} />
-            </a>
-          </Link>
-        </div>
-      ))}
-    </VStack>
-  )
+  if (data) {
+    return (
+      <VStack spacing="md">
+        {data?.edges?.map(({ list }) => (
+          <div key={list.id}>
+            <Link href="/[user]/lists/[id]" as={`/${handle}/lists/${list.id}`}>
+              <a>
+                <ListNode list={list} />
+              </a>
+            </Link>
+          </div>
+        ))}
+      </VStack>
+    )
+  } else {
+    return <div>No lists</div>
+  }
 }
 
 export default ListsOverview
