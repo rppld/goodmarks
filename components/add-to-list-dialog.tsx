@@ -36,8 +36,6 @@ const AddToListDialog: React.FC<Props> = ({
     console.log(res)
   }
 
-  console.log(data)
-
   return (
     <Dialog {...props} a11yTitle="Add bookmark to list">
       <VStack spacing="md">
