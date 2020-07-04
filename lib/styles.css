@@ -255,8 +255,79 @@ to capture the parent as the click target. */
   pointer-events: none;
 }
 
+[data-reach-listbox-button] {
+  width: 100%;
+  display: flex;
+  color: var(--color-text);
+  box-shadow: 0 0 0 2px var(--color-input-outline) inset;
+  border: none;
+  background-color: var(--color-input);
+  font-size: inherit;
+  font-family: inherit;
+  border-radius: var(--space-16);
+  padding: var(--space-16);
+  min-height: var(--space-56);
+}
+
+[data-reach-listbox-button]:hover {
+  box-shadow: 0 0 0 2px var(--color-input-outline-hover) inset;
+}
+
+[data-reach-listbox-button]:focus {
+  outline: 0;
+  box-shadow: 0 0 0 2px var(--color-text-lighter) inset;
+}
+
+[data-reach-listbox-button][aria-expanded='true'] {
+  box-shadow: 0 0 0 2px var(--color-input-outline-hover) inset;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+[data-reach-listbox-button][aria-disabled='true'] {
+  opacity: 0.5;
+}
+
+[data-reach-listbox-button][aria-disabled='true']:hover {
+  box-shadow: 0 0 0 2px var(--color-input-outline) inset;
+}
+
 [data-reach-listbox-popover] {
   z-index: 2;
+  background-color: var(--color-body);
+  box-shadow: 0 0 0 2px var(--color-input-outline) inset;
+  padding: 0;
+  border-bottom-left-radius: var(--space-16);
+  border-bottom-right-radius: var(--space-16);
+  overflow: hidden;
+}
+
+[data-reach-listbox-popover]:focus-within {
+  border: 2px solid var(--color-text-lighter);
+  /* border-top: 0; */
+  outline: 0;
+}
+
+[data-reach-listbox-list]:focus {
+  background-color: var(--color-body);
+  outline: 0;
+}
+
+[data-reach-listbox-option] {
+  background-color: var(--color-input);
+  padding: var(--space-8) var(--space-16);
+}
+
+[data-reach-listbox-option][data-current] {
+  background-color: var(--color-input-outline);
+  color: var(--color-text);
+}
+
+[data-reach-listbox-option][aria-selected='true'] {
+  background-color: var(--color-text-lighter);
+}
+[data-reach-listbox-option][aria-disabled='true'] {
+  opacity: 0.6;
 }
 
 [data-reach-menu-list],

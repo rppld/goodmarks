@@ -7,6 +7,9 @@ import useAddBookmarkToList from 'utils/use-add-bookmark-to-list'
 import { Listbox, ListboxOption } from '@reach/listbox'
 import { VStack } from './stack'
 import { H3 } from './heading'
+import { ArrowDown } from './icon'
+import { Text } from './text'
+import Link from 'next/link'
 
 interface Props extends DialogProps {
   bookmarkId: string
@@ -33,13 +36,23 @@ const AddToListDialog: React.FC<Props> = ({
     console.log(res)
   }
 
+  console.log(data)
+
   return (
     <Dialog {...props} a11yTitle="Add bookmark to list">
       <VStack spacing="md">
-        <H3 as="h1">Choose a list</H3>
+        <VStack spacing="sm">
+          <H3 as="h1">Add to list</H3>
+          <Text meta as="p">
+            Add to one of your exisisting lists or{' '}
+            <Link href="/lists/new">
+              <a>create a new list.</a>
+            </Link>
+          </Text>
+        </VStack>
 
         {data?.edges.length > 0 && (
-          <Listbox value={value} onChange={setValue}>
+          <Listbox value={value} onChange={setValue} arrow={<ArrowDown />}>
             {data?.edges.map((item) => (
               <ListboxOption key={item.list.id} value={item.list.id}>
                 {item.list.name}
@@ -51,6 +64,7 @@ const AddToListDialog: React.FC<Props> = ({
         <Button
           onClick={handleAddToList}
           disabled={loading}
+          variant="primary"
           size="lg"
           fullWidth
         >

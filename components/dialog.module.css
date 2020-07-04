@@ -13,11 +13,18 @@
 }
 
 .content {
+  background-color: var(--color-white);
   margin: var(--space-32) 0 0 0;
   border-top-left-radius: var(--space-16);
   border-top-right-radius: var(--space-16);
   padding: var(--space-24);
   width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .content {
+    background-color: var(--color-body);
+  }
 }
 
 @media (min-width: 620px) {
