@@ -8,8 +8,7 @@ import ListsOverview from 'components/lists-overview'
 import { useViewer } from 'components/viewer-context'
 import Button from 'components/button'
 import Link from 'next/link'
-import { HStack } from 'components/stack'
-import { Plus } from 'components/icon'
+import { VStack } from 'components/stack'
 
 const Lists: NextPage = () => {
   const { viewer } = useViewer()
@@ -18,20 +17,20 @@ const Lists: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
-        <HStack alignment="space-between">
-          <H4 as="h1">Lists</H4>
-
-          {viewer?.handle ? (
-            <Link href="/lists/new" passHref>
-              <Button as="a" variant="primary" leftAdornment={<Plus />}>
-                New list
-              </Button>
-            </Link>
-          ) : null}
-        </HStack>
+        <H4 as="h1">Lists</H4>
       </PageTitle>
 
-      <ListsOverview handle={viewer?.handle} />
+      <VStack spacing="md">
+        <ListsOverview handle={viewer?.handle} />
+
+        {viewer?.handle ? (
+          <Link href="/lists/new" passHref>
+            <Button variant="primary" fullWidth size="lg">
+              New list
+            </Button>
+          </Link>
+        ) : null}
+      </VStack>
     </Layout>
   )
 }
