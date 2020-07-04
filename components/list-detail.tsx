@@ -61,7 +61,11 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
           <PageTitle>
             <H4 as="h1">{edge.list.name}</H4>
             <Text meta>
-              @{edge.author.handle}, {edge.list.ts}
+              By{' '}
+              <Link href="/[user]" as={`/${edge.author.handle}`}>
+                <a>@{edge.author.handle}</a>
+              </Link>
+              , {edge.list.ts}
             </Text>
             <Text as="p">{edge.list.description}</Text>
           </PageTitle>
