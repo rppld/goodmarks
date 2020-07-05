@@ -5,7 +5,7 @@ import { H4 } from 'components/heading'
 import { SmallText } from 'components/text'
 import PageTitle from 'components/page-title'
 import Link from 'next/link'
-import MenuList from 'components/menu-list'
+import NavList from 'components/nav-list'
 import { VStack } from 'components/stack'
 
 const Settings: NextPage = () => {
@@ -16,7 +16,7 @@ const Settings: NextPage = () => {
       </PageTitle>
 
       <VStack spacing="md">
-        <MenuList>
+        <NavList>
           <Link href="/settings/profile">
             <a>
               <li>Profile settings</li>
@@ -28,9 +28,9 @@ const Settings: NextPage = () => {
               <li>Notification settings</li>
             </a>
           </Link>
-        </MenuList>
+        </NavList>
 
-        <MenuList>
+        <NavList>
           <Link href="/about">
             <a>
               <li>About</li>
@@ -51,7 +51,7 @@ const Settings: NextPage = () => {
               <li>Terms</li>
             </a>
           </Link>
-        </MenuList>
+        </NavList>
 
         <SmallText meta as="p">
           © 2020 Goodmarks
