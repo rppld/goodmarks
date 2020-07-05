@@ -113,11 +113,11 @@ async function getPopularBookmarks(req, res) {
   const data: any = await client.query(
     getBookmarksWithUsersMapGetGeneric(
       q.Map(
-        Paginate(Match(Index('bookmarks_by_ranking')), {
+        Paginate(Match(Index('bookmarks_by_popularity')), {
           size,
           after: cursor === 'null' ? undefined : parseValue(cursor),
         }),
-        Lambda(['createdTime', 'ref'], Var('ref'))
+        Lambda(['bookmarkRanking', 'ref'], Var('ref'))
       )
     )
   )

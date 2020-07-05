@@ -153,13 +153,21 @@ export function getBookmarksWithUsersMapGetGeneric(
             Get(Select(['data', 'author'], Var('bookmark'))),
             false
           ),
-          authorAccount: Get(
-            Match(
-              Index('accounts_by_user'),
-              Select(['data', 'author'], Var('bookmark'))
-            )
+          authorAccount: If(
+            Exists(Var('ref')),
+            Get(
+              Match(
+                Index('accounts_by_user'),
+                Select(['data', 'author'], Var('bookmark'))
+              )
+            ),
+            false
           ),
-          authorEmail: Select(['data', 'email'], Var('authorAccount')),
+          authorEmail: If(
+            Exists(Var('ref')),
+            Select(['data', 'email'], Var('authorAccount')),
+            false
+          ),
           // Get the account via identity.
           currentUserAccount: If(HasIdentity(), Get(Identity()), false),
           // Get the user that is currently logged in.

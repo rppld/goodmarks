@@ -8,6 +8,7 @@ const {
   Time,
   TimeDiff,
   Var,
+  Epoch,
   Add,
   Multiply,
   Lambda,
@@ -198,7 +199,7 @@ const createBookmarksByHashtagIndex = CreateIndex({
 
 // Based on “Designing and Implementing a Ranking Algorithm”
 // https://bit.ly/3eULrJk
-const createBookmarksByPopularityIndex = CreateIndex({
+const createBookmarksByRankingIndex = CreateIndex({
   name: 'bookmarks_by_ranking',
   source: {
     collection: Collection('Bookmarks'),
@@ -213,13 +214,16 @@ const createBookmarksByPopularityIndex = CreateIndex({
               comments: Select(['data', 'comments'], Var('bookmark')),
               reposts: Select(['data', 'reposts'], Var('bookmark')),
               created: Select(['data', 'created'], Var('bookmark')),
-              updated: Select(['ts'], Var('bookmark')),
               unixStartTime: Time('1970-01-01T00:00:00+00:00'),
-              timeUnix: TimeDiff(Var('unixStartTime'), Now(), 'seconds'),
-              ageInSeconds: TimeDiff(
+              ageInMinsSinceUnix: TimeDiff(
                 Var('unixStartTime'),
                 Var('created'),
-                'seconds'
+                'minutes'
+              ),
+              updatedInMinsSinceUnix: TimeDiff(
+                Var('unixStartTime'),
+                Epoch(Select(['ts'], Var('bookmark')), 'microsecond'),
+                'minutes'
               ),
               score: Add(
                 Var('likes'),
@@ -230,27 +234,12 @@ const createBookmarksByPopularityIndex = CreateIndex({
               decay: Add(
                 1,
                 Subtract(
-                  Pow(
-                    Multiply(
-                      Divide(
-                        Subtract(Var('timeUnix'), Var('ageInSeconds')),
-                        14400000
-                      ),
-                      0.4
-                    ),
-                    2
-                  ),
+                  Pow(Multiply(Divide(Var('ageInMinsSinceUnix'), 240), 0.4), 2),
                   Pow(
                     Multiply(
                       Subtract(
-                        Divide(
-                          Subtract(Var('timeUnix'), Var('ageInSeconds')),
-                          14400000
-                        ),
-                        Divide(
-                          Subtract(Var('timeUnix'), Var('updated')),
-                          14400000
-                        )
+                        Divide(Var('ageInMinsSinceUnix'), 240),
+                        Divide(Var('updatedInMinsSinceUnix'), 240)
                       ),
                       0.3
                     ),
@@ -258,8 +247,68 @@ const createBookmarksByPopularityIndex = CreateIndex({
                   )
                 )
               ),
+              rank: Divide(Var('score'), Var('decay')),
             },
-            Divide(Var('score'), Var('decay'))
+            Var('rank')
+          )
+        )
+      ),
+    },
+  },
+  values: [
+    {
+      binding: 'bookmarkRanking',
+      reverse: true,
+    },
+    {
+      field: ['ref'],
+    },
+  ],
+  serialized: true,
+})
+
+const createBookmarksByPopularityIndex = CreateIndex({
+  name: 'bookmarks_by_popularity',
+  source: {
+    collection: Collection('Bookmarks'),
+    fields: {
+      bookmarkRanking: Query(
+        Lambda(
+          'bookmark',
+          Let(
+            {
+              // The popularityfactor determines how much popularity
+              // weighs up against age, setting both to one means that
+              // one like or one refweet is worth aging minute.
+              likesfactor: 5,
+              repostsfactor: 5,
+              // Let's add comments as well for the sake of
+              // completeness, didn't add it in the general fweet
+              // index since comments does not mean you like it, they
+              // might be out of anger :), in this case it makes sense
+              // since they are not necessarily your comments The ones
+              // that are interacted with are higher up.
+              commentsFactor: 0.08,
+              likes: Select(['data', 'likes'], Var('bookmark')),
+              comments: Select(['data', 'comments'], Var('bookmark')),
+              reposts: Select(['data', 'reposts'], Var('bookmark')),
+              txtime: Now(),
+              unixstarttime: Time('1970-01-01T00:00:00+00:00'),
+              ageInSecsSinceUnix: TimeDiff(
+                Var('unixstarttime'),
+                Var('txtime'),
+                'minutes'
+              ),
+            },
+            // Adding the time since the unix timestamps together with
+            // postlikes and postreposts provides us with decaying
+            // popularity or a mixture of popularity and
+            Add(
+              Multiply(Var('likesfactor'), Var('likes')),
+              Multiply(Var('repostsfactor'), Var('reposts')),
+              Multiply(Var('commentsFactor'), Var('comments')),
+              Var('ageInSecsSinceUnix')
+            )
           )
         )
       ),
