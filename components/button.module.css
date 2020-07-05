@@ -118,15 +118,8 @@
   margin-left: calc(var(--space-16) * -1);
 }
 
-.no-children .adornment,
-.icon-only .adornment {
+.no-children .adornment {
   margin-right: calc(var(--space-16) * -1);
-}
-
-.icon-only .label {
-  width: 0;
-  overflow: hidden;
-  opacity: 0;
 }
 
 .full-width {
