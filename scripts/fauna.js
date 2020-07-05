@@ -214,17 +214,7 @@ const createBookmarksByRankingIndex = CreateIndex({
               comments: Select(['data', 'comments'], Var('bookmark')),
               reposts: Select(['data', 'reposts'], Var('bookmark')),
               created: Select(['data', 'created'], Var('bookmark')),
-              unixStartTime: Time('1970-01-01T00:00:00+00:00'),
-              ageInMinsSinceUnix: TimeDiff(
-                Var('unixStartTime'),
-                Var('created'),
-                'minutes'
-              ),
-              updatedInMinsSinceUnix: TimeDiff(
-                Var('unixStartTime'),
-                Epoch(Select(['ts'], Var('bookmark')), 'microsecond'),
-                'minutes'
-              ),
+              updated: Epoch(Select(['ts'], Var('bookmark')), 'microsecond'),
               score: Add(
                 Var('likes'),
                 Var('reposts'),
@@ -234,12 +224,18 @@ const createBookmarksByRankingIndex = CreateIndex({
               decay: Add(
                 1,
                 Subtract(
-                  Pow(Multiply(Divide(Var('ageInMinsSinceUnix'), 240), 0.4), 2),
+                  Pow(
+                    Multiply(
+                      Divide(Subtract(Now(), Var('created')), 14400000),
+                      0.4
+                    ),
+                    2
+                  ),
                   Pow(
                     Multiply(
                       Subtract(
-                        Divide(Var('ageInMinsSinceUnix'), 240),
-                        Divide(Var('updatedInMinsSinceUnix'), 240)
+                        Divide(Subtract(Now(), Var('created')), 14400000),
+                        Divide(Subtract(Now(), Var('updated')), 14400000)
                       ),
                       0.3
                     ),
@@ -247,9 +243,8 @@ const createBookmarksByRankingIndex = CreateIndex({
                   )
                 )
               ),
-              rank: Divide(Var('score'), Var('decay')),
             },
-            Var('rank')
+            Divide(Var('score'), Var('decay'))
           )
         )
       ),
