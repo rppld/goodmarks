@@ -8,7 +8,7 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useViewer } from './viewer-context'
 
-const SettingsDetail: React.FC = () => {
+const SettingsProfile: React.FC = () => {
   const bioMaxLength = 70
   const { viewer, setViewer } = useViewer()
 
@@ -101,4 +101,4 @@ const SettingsDetail: React.FC = () => {
   )
 }
 
-export default SettingsDetail
+export default SettingsProfile
