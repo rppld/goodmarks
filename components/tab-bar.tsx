@@ -55,7 +55,7 @@ const TabBar: React.FC = () => {
         </li>
         <li>
           {viewer ? (
-            <Link href="/lists" as={`/lists`}>
+            <Link href="/lists">
               <a className={getTabClassName('/lists')}>
                 <Article />
                 <span className={styles.label}>Lists</span>

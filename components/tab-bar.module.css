@@ -112,7 +112,6 @@
 @media (min-width: 620px) {
   .newBookmarkLabel {
     display: inline;
-    font-size: var(--fs-16);
   }
 }
 
