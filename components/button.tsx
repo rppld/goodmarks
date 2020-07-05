@@ -7,7 +7,6 @@ interface Props extends React.ComponentPropsWithoutRef<'button'> {
   href?: string // When used as `a`
   variant?: string
   fullWidth?: boolean
-  iconOnly?: boolean
   size?: 'sm' | 'lg'
   disabled?: boolean
   leftAdornment?: React.ReactElement
@@ -20,7 +19,6 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
       children,
       variant,
       fullWidth = false,
-      iconOnly = false,
       size = 'sm',
       disabled = false,
       leftAdornment,
@@ -33,7 +31,6 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
       styles[size],
       variant && styles[variant],
       fullWidth && styles['full-width'],
-      iconOnly && styles['icon-only'],
       disabled && styles.disabled,
       React.Children.count(children) === 0 && styles['no-children']
     )
@@ -43,8 +40,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
         {leftAdornment ? (
           <span className={styles.adornment}>{leftAdornment}</span>
         ) : null}
-
-        {iconOnly ? <span className={styles.label}>{children}</span> : children}
+        {children}
       </Component>
     )
   }
