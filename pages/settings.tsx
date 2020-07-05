@@ -2,7 +2,7 @@ import React from 'react'
 import { NextPage } from 'next'
 import Layout from 'components/layout'
 import { H4 } from 'components/heading'
-import { Text, SmallText } from 'components/text'
+import { SmallText } from 'components/text'
 import PageTitle from 'components/page-title'
 import Link from 'next/link'
 import MenuList from 'components/menu-list'
@@ -57,7 +57,6 @@ const Settings: NextPage = () => {
           © 2020 Goodmarks
         </SmallText>
       </VStack>
-      {/* <SettingsProfile /> */}
     </Layout>
   )
 }
