@@ -12,6 +12,7 @@ import PageTitle from 'components/page-title'
 import { H4 } from './heading'
 import { Text } from './text'
 import Toolbar from 'components/toolbar'
+import TimeAgo from 'timeago-react'
 
 interface Props {
   initialData: ListsData
@@ -65,7 +66,7 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
               <Link href="/[user]" as={`/${edge.author.handle}`}>
                 <a>@{edge.author.handle}</a>
               </Link>
-              , {edge.list.ts}
+              , updated <TimeAgo datetime={new Date(edge.list.ts / 1000)} />.
             </Text>
             <Text as="p">{edge.list.description}</Text>
           </PageTitle>
