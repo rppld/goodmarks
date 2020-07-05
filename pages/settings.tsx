@@ -36,7 +36,7 @@ const Settings: NextPage = () => {
               <li>About</li>
             </a>
           </Link>
-          <Link href="/Contact">
+          <Link href="/contact">
             <a>
               <li>Contact</li>
             </a>
