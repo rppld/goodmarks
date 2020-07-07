@@ -37,6 +37,7 @@ interface Props {
   onDelete?: () => void
   onRemoveFromList?: (listItemId: string) => void
   linkToBookmarkDetail?: boolean
+  preview?: boolean
 }
 
 const BookmarkNode: React.FC<Props> = ({
@@ -49,6 +50,7 @@ const BookmarkNode: React.FC<Props> = ({
   list,
   listItemId,
   linkToBookmarkDetail,
+  preview,
   ...props
 }) => {
   const [likeBookmark, { loading: liking }] = useLikeBookmark()
@@ -122,70 +124,79 @@ const BookmarkNode: React.FC<Props> = ({
     <div
       className={classNames(
         styles.container,
-        linkToBookmarkDetail && styles.link
+        linkToBookmarkDetail && styles.link,
+        preview && styles.preview
       )}
       onClick={linkToBookmarkDetail ? handleClick : undefined}
     >
       <header className={styles.header}>
         <HStack>
-          <AuthorInfo user={author} createdAt={bookmark.created['@ts']} />
-        </HStack>
-
-        <HStack spacing="md">
-          <Action
-            active={bookmarkStats.like}
-            leftAdornment={<Heart size="sm" />}
-            onClick={viewer && handleLike}
-            disabled={!viewer || liking}
-            className="action"
-            isLikeToggle={true}
-          >
-            {bookmark.likes > 0 ? bookmark.likes : null}
-          </Action>
-
-          <Action
-            as="span"
-            active={bookmarkStats.comment}
-            leftAdornment={<ChatBubble size="sm" />}
-          >
-            {bookmark.comments > 0 ? bookmark.comments : null}
-          </Action>
-
-          {viewer && (
-            <Menu>
-              <Action
-                as={MenuButton}
-                leftAdornment={<More size="sm" />}
-                className="action"
-              />
-              <MenuList>
-                <MenuItem onSelect={openDialog} className="action">
-                  Add to list
-                </MenuItem>
-
-                {list && (
-                  <MenuItem
-                    onSelect={handleRemoveFromList}
-                    disabled={removingFromList}
-                    className="action"
-                  >
-                    {removingFromList ? 'Removing' : 'Remove from list'}
-                  </MenuItem>
-                )}
-
-                {isOwnedByViewer && (
-                  <MenuItem
-                    onSelect={handleDelete}
-                    disabled={deleting}
-                    className="action"
-                  >
-                    {deleting ? 'Deleting' : 'Delete bookmark'}
-                  </MenuItem>
-                )}
-              </MenuList>
-            </Menu>
+          {preview ? (
+            <AuthorInfo user={author} subtitle="just now" />
+          ) : (
+            <AuthorInfo user={author} createdAt={bookmark.created['@ts']} />
           )}
         </HStack>
+
+        {preview ? (
+          <span className={styles.previewLabel}>Preview</span>
+        ) : (
+          <HStack spacing="md">
+            <Action
+              active={bookmarkStats.like}
+              leftAdornment={<Heart size="sm" />}
+              onClick={viewer && handleLike}
+              disabled={!viewer || liking}
+              className="action"
+              isLikeToggle={true}
+            >
+              {bookmark.likes > 0 ? bookmark.likes : null}
+            </Action>
+
+            <Action
+              as="span"
+              active={bookmarkStats.comment}
+              leftAdornment={<ChatBubble size="sm" />}
+            >
+              {bookmark.comments > 0 ? bookmark.comments : null}
+            </Action>
+
+            {viewer && (
+              <Menu>
+                <Action
+                  as={MenuButton}
+                  leftAdornment={<More size="sm" />}
+                  className="action"
+                />
+                <MenuList>
+                  <MenuItem onSelect={openDialog} className="action">
+                    Add to list
+                  </MenuItem>
+
+                  {list && (
+                    <MenuItem
+                      onSelect={handleRemoveFromList}
+                      disabled={removingFromList}
+                      className="action"
+                    >
+                      {removingFromList ? 'Removing' : 'Remove from list'}
+                    </MenuItem>
+                  )}
+
+                  {isOwnedByViewer && (
+                    <MenuItem
+                      onSelect={handleDelete}
+                      disabled={deleting}
+                      className="action"
+                    >
+                      {deleting ? 'Deleting' : 'Delete bookmark'}
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </Menu>
+            )}
+          </HStack>
+        )}
       </header>
 
       {bookmark.text && <Text as="p">{bookmark.text}</Text>}
