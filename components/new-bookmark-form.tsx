@@ -3,28 +3,38 @@ import Router from 'next/router'
 import PageTitle from './page-title'
 import parseHashtags from 'utils/parse-hashtags'
 import { H4 } from './heading'
+import * as Yup from 'yup'
 import { Text } from './text'
 import MovieSearch from './movie-search'
 import Input from './input'
-import Embed from './bookmark-node/embed'
+import BookmarkNode from './bookmark-node'
 import { useFormik } from 'formik'
 import Button from './button'
 import Layout from './layout'
 import Form from './form'
 import { HStack } from './stack'
+import { useViewer } from './viewer-context'
 
 interface Props {
   category: string
 }
 
 const NewBookmarkForm: React.FC<Props> = ({ category }) => {
+  const textMaxLength = 140
+  const { viewer } = useViewer()
   const [error, setError] = React.useState(null)
   const [selection, setSelection] = React.useState(null)
+  const validationSchema = Yup.object({
+    text: Yup.string()
+      .min(3, 'Must be 3 characters or more')
+      .max(textMaxLength, `Must be ${textMaxLength} characters or less`),
+  })
   const formik = useFormik({
     initialValues: {
       text: '',
       details: {},
     },
+    validationSchema,
     onSubmit: handleSubmit,
   })
 
@@ -59,8 +69,40 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     }
   }
 
+  function getMockedBookmarkProps(details) {
+    return {
+      category: {
+        id: 'category',
+        name: category,
+        slug: `${category}s`,
+      },
+      bookmarkStats: {
+        id: 'stats',
+        comment: false,
+        like: false,
+        repost: false,
+        user: {},
+        bookmark: {},
+      },
+      comments: [],
+      author: viewer,
+      bookmark: {
+        id: 'new',
+        created: 'just now',
+        text: formik.values.text || '...',
+        comments: 0,
+        likes: 0,
+        reposts: 0,
+        details: {
+          ...details,
+        },
+      },
+    }
+  }
+
   async function handleSubmit(values) {
     setError(null)
+    formik.setSubmitting(true)
 
     try {
       const response = await fetch('/api/bookmarks?action=create', {
@@ -82,6 +124,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
       Router.push('/b/[id]', `/b/${data.id}`)
     } catch (error) {
       console.error(error)
+      formik.setSubmitting(false)
       setError(error.message)
     }
   }
@@ -95,45 +138,37 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
       {selection ? (
         <Form onSubmit={formik.handleSubmit}>
-          <Embed
-            as="span"
-            bookmark={{
-              id: 'new',
-              created: 'new',
-              text: 'new',
-              comments: 0,
-              likes: 0,
-              reposts: 0,
-              details: {
-                ...selection,
-              },
-            }}
-          />
+          <BookmarkNode preview {...getMockedBookmarkProps(selection)} />
 
           <Input
             labelText="Text"
-            hideLabel
             name="text"
-            placeholder="Lives up to the hype"
+            placeholder="Lives up to the hype!"
             as="textarea"
             rows="6"
+            help={
+              formik.values.text
+                ? String(textMaxLength - formik.values.text.length)
+                : String(textMaxLength)
+            }
             onChange={formik.handleChange}
           />
 
           <HStack alignment="trailing">
-            <Button variant="primary" type="submit">
-              {formik.values.text.length > 0 ? 'Save' : 'Skip for now'}
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={formik.isSubmitting}
+            >
+              {formik.isSubmitting ? 'Creating bookmark' : 'Create bookmark'}
             </Button>
           </HStack>
         </Form>
       ) : category === 'link' ? (
         <Form onSubmit={formik.handleSubmit}>
-          <Input
-            as="textarea"
-            rows="6"
-            name="text"
-            labelText="Text"
-            onChange={formik.handleChange}
+          <BookmarkNode
+            preview
+            {...getMockedBookmarkProps(formik.values.details)}
           />
 
           <Input
@@ -149,9 +184,26 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             onChange={formik.handleChange}
           />
 
+          <Input
+            as="textarea"
+            rows="6"
+            name="text"
+            labelText="Text"
+            onChange={formik.handleChange}
+            help={
+              formik.values.text
+                ? String(textMaxLength - formik.values.text.length)
+                : String(textMaxLength)
+            }
+          />
+
           <HStack alignment="trailing">
-            <Button type="submit" variant="primary">
-              Add bookmark
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={formik.isSubmitting}
+            >
+              {formik.isSubmitting ? 'Creating bookmark' : 'Create bookmark'}
             </Button>
           </HStack>
 

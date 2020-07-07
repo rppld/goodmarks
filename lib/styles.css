@@ -50,6 +50,7 @@
   --fw-black: 800;
 
   /* Colors */
+  --color-yellow: #ffdd00;
   --color-blue: hsla(231, 92%, 58%, 1);
   --color-blue-5: hsla(231, 92%, 58%, 0.05);
   --color-blue-15: hsla(231, 92%, 58%, 0.15);
