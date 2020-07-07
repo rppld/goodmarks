@@ -8,7 +8,7 @@ const {
   Time,
   TimeDiff,
   Var,
-  Epoch,
+  Sqrt,
   Add,
   Multiply,
   Lambda,
@@ -214,33 +214,22 @@ const createBookmarksByRankingIndex = CreateIndex({
               comments: Select(['data', 'comments'], Var('bookmark')),
               reposts: Select(['data', 'reposts'], Var('bookmark')),
               created: Select(['data', 'created'], Var('bookmark')),
-              updated: Epoch(Select(['ts'], Var('bookmark')), 'microsecond'),
+              unixStartTime: Time('1970-01-01T00:00:00+00:00'),
+              createdDiff: TimeDiff(
+                Var('unixStartTime'),
+                Var('created'),
+                'microseconds'
+              ),
               score: Add(
                 Var('likes'),
                 Var('reposts'),
                 Multiply(Var('comments'), Var('commentsFactor')),
                 0.75
               ),
-              decay: Add(
+              decay: Subtract(
                 1,
-                Subtract(
-                  Pow(
-                    Multiply(
-                      Divide(Subtract(Now(), Var('created')), 14400000),
-                      0.4
-                    ),
-                    2
-                  ),
-                  Pow(
-                    Multiply(
-                      Subtract(
-                        Divide(Subtract(Now(), Var('created')), 14400000),
-                        Divide(Subtract(Now(), Var('updated')), 14400000)
-                      ),
-                      0.3
-                    ),
-                    2
-                  )
+                Sqrt(
+                  Multiply(Divide(Var('createdDiff'), 14400000000), 0.000004)
                 )
               ),
             },
