@@ -183,7 +183,7 @@ const BookmarkNode: React.FC<Props> = ({
                     </MenuItem>
                   )}
 
-                  {isOwnedByViewer && (
+                  {isOwnedByViewer && !list && (
                     <MenuItem
                       onSelect={handleDelete}
                       disabled={deleting}
