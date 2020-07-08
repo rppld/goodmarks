@@ -13,11 +13,12 @@ const TabBar: React.FC = () => {
   const router = useRouter()
   const { viewer } = useViewer()
 
-  function getTabClassName(href) {
-    if (router.pathname.includes(href) || router.asPath.includes(href)) {
+  function setActiveState(hrefArray: string[]) {
+    if (hrefArray.includes(router.pathname)) {
       return classNames(styles.tabItem, styles.active)
+    } else {
+      return styles.tabItem
     }
-    return styles.tabItem
   }
 
   return (
@@ -25,12 +26,7 @@ const TabBar: React.FC = () => {
       <ul className={classNames(styles.tabBar)}>
         <li>
           <Link href="/">
-            <a
-              className={classNames(
-                styles.tabItem,
-                router.pathname === '/' ? styles.active : null
-              )}
-            >
+            <a className={setActiveState(['/', '/popular', '/latest'])}>
               <Bookmark />
               <span className={styles.label}>Home</span>
             </a>
@@ -38,7 +34,7 @@ const TabBar: React.FC = () => {
         </li>
         <li>
           <Link href="/search">
-            <a className={getTabClassName('/search')}>
+            <a className={setActiveState(['/search'])}>
               <MagnifyingGlass />
               <span className={styles.label}>Search</span>
             </a>
@@ -46,7 +42,7 @@ const TabBar: React.FC = () => {
         </li>
         <li className={styles.newBookmarkItem}>
           <Link href="/b/new">
-            <a href="/search" className={getTabClassName('/b/new')}>
+            <a href="/search" className={setActiveState(['/b/new'])}>
               <Button variant="primary" leftAdornment={<Plus />}>
                 <span className={styles.newBookmarkLabel}>New</span>
               </Button>
@@ -56,14 +52,14 @@ const TabBar: React.FC = () => {
         <li>
           {viewer ? (
             <Link href="/lists">
-              <a className={getTabClassName('/lists')}>
+              <a className={setActiveState(['/lists'])}>
                 <Article />
                 <span className={styles.label}>Lists</span>
               </a>
             </Link>
           ) : (
             <Link href="/login">
-              <a className={getTabClassName('/lists')}>
+              <a className={setActiveState(['/lists'])}>
                 <Article />
                 <span className={styles.label}>Lists</span>
               </a>
@@ -73,7 +69,7 @@ const TabBar: React.FC = () => {
         <li>
           {viewer ? (
             <Link href="/[user]" as={`/${viewer.handle}`}>
-              <a className={getTabClassName('/[user]')}>
+              <a className={setActiveState(['/[user]', '/[user]/lists'])}>
                 <Avatar
                   src={getImageUrl(viewer.picture, 'avatarSm')}
                   size="sm"
@@ -83,7 +79,7 @@ const TabBar: React.FC = () => {
             </Link>
           ) : (
             <Link href="/login">
-              <a className={getTabClassName('/login')}>
+              <a className={setActiveState(['/login'])}>
                 <User />
                 <span className={styles.label}>Profile</span>
               </a>
