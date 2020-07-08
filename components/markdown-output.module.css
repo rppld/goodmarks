@@ -1,0 +1,12 @@
+.container > * + * {
+  margin-top: var(--space-16);
+}
+
+.container > * + h2 {
+  margin-top: var(--space-32);
+}
+
+.container h2 {
+  font-size: var(--fs-18);
+  line-height: var(--lh-copy);
+}
