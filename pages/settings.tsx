@@ -6,7 +6,7 @@ import { SmallText } from 'components/text'
 import PageTitle from 'components/page-title'
 import Link from 'next/link'
 import NavList from 'components/nav-list'
-import { VStack } from 'components/stack'
+import { HStack, VStack } from 'components/stack'
 
 const Settings: NextPage = () => {
   return (
@@ -53,9 +53,11 @@ const Settings: NextPage = () => {
           </Link>
         </NavList>
 
-        <SmallText meta as="p">
-          © 2020 Goodmarks
-        </SmallText>
+        <HStack>
+          <SmallText meta as="p">
+            Copyright &copy; {new Date().getFullYear()} Goodmarks.
+          </SmallText>
+        </HStack>
       </VStack>
     </Layout>
   )

@@ -96,3 +96,10 @@ export interface ListsData {
 export interface ViewerData {
   viewer: User
 }
+
+export interface Story {
+  name: string
+  content: {
+    body: string
+  }
+}
