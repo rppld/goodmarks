@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import Button from './button'
 import Avatar from './avatar'
@@ -15,7 +15,7 @@ const TabBar: React.FC = () => {
 
   function setActiveState(hrefArray: string[]) {
     if (hrefArray.includes(router.pathname)) {
-      return classNames(styles.tabItem, styles.active)
+      return clsx(styles.tabItem, styles.active)
     } else {
       return styles.tabItem
     }
@@ -23,7 +23,7 @@ const TabBar: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <ul className={classNames(styles.tabBar)}>
+      <ul className={clsx(styles.tabBar)}>
         <li>
           <Link href="/">
             <a className={setActiveState(['/', '/popular', '/latest'])}>

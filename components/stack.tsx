@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './stack.module.css'
 
 interface Props {
@@ -14,7 +14,7 @@ export const HStack: React.FC<Props> = ({
   ...props
 }) => (
   <div
-    className={classNames(
+    className={clsx(
       styles.hstack,
       styles[alignment],
       styles[`spacing-${spacing}`]
@@ -32,7 +32,7 @@ export const VStack: React.FC<Props> = ({
   ...props
 }) => (
   <div
-    className={classNames(
+    className={clsx(
       styles.vstack,
       styles[alignment],
       styles[`spacing-${spacing}`]

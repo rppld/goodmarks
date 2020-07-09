@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './embed.module.css'
 import { Text, Caption } from '../text'
 import { Bookmark } from 'lib/types'
@@ -16,7 +16,7 @@ interface Props {
 
 const getCategoryPlaceholder = (category) => {
   return (
-    <span className={classNames(styles.placeholder, styles[category])}>
+    <span className={clsx(styles.placeholder, styles[category])}>
       {category === 'tv-shows' ? (
         <TV />
       ) : category === 'movies' ? (
@@ -53,9 +53,9 @@ const Embed: React.FC<Props> = ({
   return (
     <Component
       href={Component === 'a' ? url : undefined}
-      className={classNames('action', styles.link)}
+      className={clsx('action', styles.link)}
     >
-      <div className={classNames(styles.container, styles[category])}>
+      <div className={clsx(styles.container, styles[category])}>
         <div className={styles.icon}>
           {image ? (
             <Image

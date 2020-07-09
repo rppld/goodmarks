@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './page-title.module.css'
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const PageTitle: React.FC<Props> = ({ children, center = false, ...props }) => {
-  const className = classNames(styles.container, center && styles.center)
+  const className = clsx(styles.container, center && styles.center)
 
   return (
     <header className={className} {...props}>

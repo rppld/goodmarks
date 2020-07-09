@@ -1,6 +1,6 @@
 import React from 'react'
 import VisuallyHidden from '@reach/visually-hidden'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { Error, CheckCircle } from 'components/icon'
 import styles from './input.module.css'
 
@@ -32,7 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
     ref: React.Ref<HTMLInputElement>
   ) => (
     <span
-      className={classNames(
+      className={clsx(
         typeof validate === 'function'
           ? validate()
             ? styles.valid

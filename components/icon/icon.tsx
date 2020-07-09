@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './icon.module.css'
 
 export interface IconProps {
@@ -16,7 +16,7 @@ const Icon: React.FC<Props> = ({
   a11yTitle,
   ...props
 }) => {
-  const className = classNames('icon', styles.wrapper, styles[size])
+  const className = clsx('icon', styles.wrapper, styles[size])
 
   return (
     <span className={className} {...props}>

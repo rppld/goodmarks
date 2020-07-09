@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './index.module.css'
 import { HStack } from '../stack'
 import Router from 'next/router'
@@ -122,7 +122,7 @@ const BookmarkNode: React.FC<Props> = ({
 
   return (
     <div
-      className={classNames(
+      className={clsx(
         styles.container,
         linkToBookmarkDetail && styles.link,
         preview && styles.preview

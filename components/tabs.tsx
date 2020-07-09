@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './tabs.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import classNames from 'classnames'
+import clsx from 'clsx'
 
 interface Tab {
   linkHref: string
@@ -22,7 +22,7 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
       {tabs.map((tab) => (
         <Link href={tab.linkHref} as={tab.linkAs} key={tab.linkAs}>
           <a
-            className={classNames(
+            className={clsx(
               styles.tab,
               router.asPath === tab.linkAs ? styles.active : null
             )}

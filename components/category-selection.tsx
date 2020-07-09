@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import styles from './category-selection.module.css'
 import { Movie, Link as LinkIcon, TV } from './icon'
@@ -24,7 +24,7 @@ const CategoryTile: React.FC<props> = ({
     <li>
       <Link href={linkHref} as={linkAs}>
         <a>
-          <div className={classNames(styles.category, className)}>
+          <div className={clsx(styles.category, className)}>
             <div className={styles['icon-container']}>{icon}</div>
             <div className={styles.label}>{label}</div>
           </div>

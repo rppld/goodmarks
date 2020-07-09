@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './text.module.css'
 
 interface Props {
@@ -17,7 +17,7 @@ export const Text: React.FC<Props> = ({
 }) => {
   return (
     <Component
-      className={classNames(className, styles.text, meta && styles.meta)}
+      className={clsx(className, styles.text, meta && styles.meta)}
       {...props}
     >
       {children}
@@ -31,7 +31,7 @@ export const SmallText: React.FC<Props> = ({
   children,
   ...props
 }) => {
-  const className = classNames(styles.hstack, styles.small, meta && styles.meta)
+  const className = clsx(styles.hstack, styles.small, meta && styles.meta)
 
   return (
     <Component className={className} {...props}>
@@ -46,7 +46,7 @@ export const Caption: React.FC<Props> = ({
   children,
   ...props
 }) => {
-  const className = classNames(styles.caption, meta && styles.meta)
+  const className = clsx(styles.caption, meta && styles.meta)
 
   return (
     <Component className={className} {...props}>

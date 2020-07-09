@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './avatar.module.css'
 import Image from './image'
 
@@ -16,7 +16,7 @@ const Avatar: React.FC<Props> = ({
   ...props
 }) => {
   return (
-    <span className={classNames(styles.wrapper, styles[size])} {...props}>
+    <span className={clsx(styles.wrapper, styles[size])} {...props}>
       {src && <Image className={styles.image} src={src} alt={alt} />}
     </span>
   )

@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './button.module.css'
 
 interface Props extends React.ComponentPropsWithoutRef<'button'> {
@@ -26,7 +26,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
     }: Props,
     ref: React.Ref<HTMLButtonElement>
   ) => {
-    const className = classNames(
+    const className = clsx(
       styles.base,
       styles[size],
       variant && styles[variant],

@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './author-info.module.css'
 import Link from 'next/link'
 import Avatar from './avatar'
@@ -20,7 +20,7 @@ const AuthorInfo: React.FC<Props> = ({ user, createdAt, subtitle }) => {
     <HStack alignment="leading">
       <Link href="/[user]" as={`/${user.handle}`}>
         <a>
-          <div className={classNames('action', styles.action)}>
+          <div className={clsx('action', styles.action)}>
             <Avatar
               src={user.picture && getImageUrl(user.picture, 'avatarLg')}
             />
@@ -31,7 +31,7 @@ const AuthorInfo: React.FC<Props> = ({ user, createdAt, subtitle }) => {
       <div className={styles.authorInfo}>
         <Link href="/[user]" as={`/${user.handle}`}>
           <a>
-            <div className={classNames('action', styles.action)}>
+            <div className={clsx('action', styles.action)}>
               <SmallText>@{user.handle}</SmallText>
             </div>
           </a>

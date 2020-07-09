@@ -1,5 +1,5 @@
 import React from 'react'
-import classNames from 'classnames'
+import clsx from 'clsx'
 import styles from './action.module.css'
 
 interface Props extends React.ComponentProps<'button'> {
@@ -18,7 +18,7 @@ const Action: React.FC<Props> = ({
   className: passedClassName,
   ...props
 }) => {
-  const className = classNames(
+  const className = clsx(
     passedClassName,
     styles.action,
     active && styles.active,
