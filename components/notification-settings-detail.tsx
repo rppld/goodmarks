@@ -9,7 +9,7 @@ const NotificationSettingsDetail: React.FC = () => {
     <>
       <VStack spacing="md">
         <VStack>
-          <H5>Notification types</H5>
+          <H5>How do you want to get notified?</H5>
           <Checkbox
             name="global"
             labelText="Email notifications"
@@ -19,7 +19,7 @@ const NotificationSettingsDetail: React.FC = () => {
           <Checkbox
             name="global"
             labelText="Push notifications"
-            help="Disable this if you don't want to receive any emails."
+            help="Disable this if you don't want to receive any push notifications."
             checked={true}
           />
         </VStack>
