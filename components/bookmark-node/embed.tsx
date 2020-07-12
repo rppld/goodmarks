@@ -75,21 +75,21 @@ const Embed: React.FC<Props> = ({
 
           <div className={styles.meta}>
             {releaseYear ? (
-              <Caption>
+              <>
                 <span className={styles.metaIcon}>
                   <Calendar size="xs" />
                 </span>{' '}
-                {releaseYear}
-              </Caption>
+                <Caption>{releaseYear}</Caption>
+              </>
             ) : null}
 
             {bookmark.details['vote_average'] ? (
-              <Caption>
+              <>
                 <span className={styles.metaIcon}>
                   <Star size="xs" />
                 </span>
-                {bookmark.details['vote_average']}
-              </Caption>
+                <Caption>{bookmark.details['vote_average']}</Caption>
+              </>
             ) : null}
 
             {bookmark.details.url ? (
