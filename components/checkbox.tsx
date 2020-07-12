@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './checkbox.module.css'
 import inputStyles from './input.module.css'
 import { CustomCheckboxContainer, CustomCheckboxInput } from '@reach/checkbox'
+import { SmallText, Caption } from './text'
 
 interface Props extends React.ComponentPropsWithoutRef<'input'> {
   labelText: string
@@ -44,9 +45,15 @@ const Checkbox: React.FC<Props> = ({ labelText, help, ...props }) => {
             className={styles.check}
           />
         </CustomCheckboxContainer>
-        <span className={styles.label}>{labelText}</span>
+        <div className={styles.text}>
+          <span className={styles.label}>{labelText}</span>
+          {help ? (
+            <div className={styles.help}>
+              <Caption meta>{help}</Caption>
+            </div>
+          ) : null}
+        </div>
       </label>
-      {help ? <span className={inputStyles.help}>{help}</span> : null}
     </div>
   )
 }
