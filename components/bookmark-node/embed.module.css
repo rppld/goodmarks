@@ -44,14 +44,21 @@
   }
 }
 
-.meta > *:not(:first-child) {
-  margin-left: var(--space-8);
+.meta {
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+}
+
+.metaIcon:first-child {
+  margin-left: 0;
 }
 
 .metaIcon {
   display: inline-block;
+  margin-left: var(--space-8);
+  margin-right: var(--space-4);
   transform: translateY(-1px);
-  margin-right: var(--space-2);
 }
 
 .movies {
