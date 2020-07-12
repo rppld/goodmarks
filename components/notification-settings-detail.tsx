@@ -14,14 +14,12 @@ const NotificationSettingsDetail: React.FC = () => {
             name="global"
             labelText="Email notifications"
             help="Disable this if you don't want to receive any emails."
-            // onChange={formik.handleChange}
             checked={true}
           />
           <Checkbox
             name="global"
             labelText="Push notifications"
             help="Disable this if you don't want to receive any emails."
-            // onChange={formik.handleChange}
             checked={true}
           />
         </VStack>
@@ -32,21 +30,18 @@ const NotificationSettingsDetail: React.FC = () => {
             name="comment-on-user-bookmark"
             labelText="My bookmarks"
             help="When you have a new comment on one of your bookmarks."
-            // onChange={formik.handleChange}
             checked={true}
           />
           <Checkbox
             name="new-comment"
             labelText="My lists"
             help="When someone comments on one of your lists."
-            // onChange={formik.handleChange}
             checked={true}
           />
           <Checkbox
             name="new-comment"
             labelText="Bookmarks you commented on"
             help="When someone comments on the same bookmark as you."
-            // onChange={formik.handleChange}
             checked={true}
           />
         </VStack>
@@ -57,21 +52,18 @@ const NotificationSettingsDetail: React.FC = () => {
             name="new-like"
             labelText="My bookmarks"
             help="When someone likes one of your bookmarks."
-            // onChange={formik.handleChange}
             checked={true}
           />
           <Checkbox
             name="new-like"
             labelText="My lists"
             help="When someone likes one of your lists."
-            // onChange={formik.handleChange}
             checked={true}
           />
           <Checkbox
             name="new-like"
             labelText="My comments"
             help="When someone likes your comment."
-            // onChange={formik.handleChange}
             checked={true}
           />
         </VStack>
@@ -82,7 +74,6 @@ const NotificationSettingsDetail: React.FC = () => {
             name="new-like"
             labelText="New follower"
             help="When someone started following you."
-            // onChange={formik.handleChange}
             checked={true}
           />
         </VStack>

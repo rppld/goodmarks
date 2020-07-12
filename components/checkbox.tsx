@@ -45,12 +45,6 @@ const Checkbox: React.FC<Props> = ({ labelText, help, ...props }) => {
               <Checkmark size="xs" />
             </span>
           )}
-
-          {/* <span
-            aria-hidden
-            style={getCheckStyle(checked)}
-            className={styles.check}
-          /> */}
         </CustomCheckboxContainer>
         <div className={styles.text}>
           <span className={styles.label}>{labelText}</span>
