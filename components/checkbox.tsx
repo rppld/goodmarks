@@ -41,7 +41,7 @@ const Checkbox: React.FC<Props> = ({ labelText, help, ...props }) => {
         >
           <CustomCheckboxInput {...props} />
           {checked && (
-            <span aria-hidden className={styles.checkmark}>
+            <span aria-hidden className={styles['checkmark-container']}>
               <Checkmark size="xs" />
             </span>
           )}

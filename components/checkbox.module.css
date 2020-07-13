@@ -45,7 +45,7 @@
   box-shadow: 0 0 0 2px var(--color-input-outline-hover) inset;
 }
 
-.checkmark {
+.checkmark-container {
   display: flex;
   justify-content: center;
   align-items: center;
