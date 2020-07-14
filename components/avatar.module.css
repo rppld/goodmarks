@@ -9,6 +9,10 @@
   background-color: var(--color-button);
 }
 
+.wrapper svg {
+  fill: var(--color-button-hover);
+}
+
 .wrapper.sm {
   width: 24px;
   height: 24px;
