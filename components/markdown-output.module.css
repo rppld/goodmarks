@@ -10,3 +10,20 @@
   font-size: var(--fs-18);
   line-height: var(--lh-copy);
 }
+
+.container ul {
+  padding-left: 1.125rem; /* 18px to align the default list styling with the conatiner */
+}
+
+.container li {
+  margin-top: var(--space-4);
+}
+
+.container a {
+  text-decoration: underline;
+}
+
+.container a:hover,
+.container a:active {
+  opacity: 0.8;
+}
