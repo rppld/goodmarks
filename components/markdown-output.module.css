@@ -12,11 +12,12 @@
 }
 
 .container ul {
-  padding-left: 1.125rem; /* 18px to align the default list styling with the conatiner */
+  padding-left: var(--space-32);
 }
 
 .container li {
   margin-top: var(--space-4);
+  padding-left: var(--space-8);
 }
 
 .container a {
