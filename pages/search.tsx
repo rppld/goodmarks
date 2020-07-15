@@ -11,7 +11,7 @@ const Search: NextPage = () => {
     <Layout>
       <PageTitle>
         <H4 as="h1">Search</H4>
-        <Text meta>Search hashtags or users.</Text>
+        <Text meta>Search people or hashtags.</Text>
       </PageTitle>
       <SiteSearch />
     </Layout>
