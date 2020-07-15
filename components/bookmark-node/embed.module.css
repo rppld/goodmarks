@@ -61,6 +61,12 @@
   transform: translateY(-1px);
 }
 
+.category-indicator {
+  margin-left: auto;
+  margin-bottom: auto;
+  margin-right: var(--space-8);
+}
+
 .movies {
   border-bottom-color: var(--color-bookmark-embed-movies-outline);
   background-color: var(--color-bookmark-embed-movies);
@@ -71,6 +77,10 @@
 }
 
 .movies .meta {
+  color: var(--color-bookmark-embed-movies-meta);
+}
+
+.movies .category-indicator {
   color: var(--color-bookmark-embed-movies-meta);
 }
 
@@ -87,6 +97,10 @@
   color: var(--color-bookmark-embed-tv-shows-meta);
 }
 
+.tv-shows .category-indicator {
+  color: var(--color-bookmark-embed-tv-shows-meta);
+}
+
 .links {
   border-bottom-color: var(--color-bookmark-embed-links-outline);
   background-color: var(--color-bookmark-embed-links);
@@ -97,6 +111,10 @@
 }
 
 .links .meta {
+  color: var(--color-bookmark-embed-links-meta);
+}
+
+.links .category-indicator {
   color: var(--color-bookmark-embed-links-meta);
 }
 
