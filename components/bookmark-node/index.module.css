@@ -38,6 +38,7 @@
 
 .link {
   cursor: pointer;
+  transition: transform 0.05s ease-in-out;
 }
 
 .link:hover {
@@ -46,6 +47,7 @@
 
 .link:active {
   box-shadow: 0 0 0 2px var(--color-bookmark-border-active);
+  transform: scale(0.99);
 }
 
 .preview {
