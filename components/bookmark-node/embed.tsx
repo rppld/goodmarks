@@ -7,6 +7,7 @@ import Image from '../image'
 import { Movie, Link, TV, Calendar, Star } from '../icon'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
+import { HStack } from 'components/stack'
 
 interface Props {
   as?: React.ElementType | string
@@ -14,17 +15,21 @@ interface Props {
   category?: any
 }
 
-const getCategoryPlaceholder = (category) => {
+const getCategoryIcon = (category, size?: 'xs' | 'sm' | 'md' | 'lg') => {
+  if (!size) {
+    size = 'sm'
+  }
+
   return (
-    <span className={clsx(styles.placeholder, styles[category])}>
+    <>
       {category === 'tv-shows' ? (
-        <TV />
+        <TV size={size} />
       ) : category === 'movies' ? (
-        <Movie />
+        <Movie size={size} />
       ) : (
-        <Link />
+        <Link size={size} />
       )}
-    </span>
+    </>
   )
 }
 
@@ -66,7 +71,9 @@ const Embed: React.FC<Props> = ({
               className={styles.poster}
             />
           ) : (
-            getCategoryPlaceholder(category)
+            <span className={clsx(styles.placeholder, styles[category])}>
+              {getCategoryIcon(category)}
+            </span>
           )}
         </div>
 
@@ -96,6 +103,9 @@ const Embed: React.FC<Props> = ({
               <Caption>{bookmark.details.url}</Caption>
             ) : null}
           </div>
+        </div>
+        <div className={styles['category-indicator']}>
+          {getCategoryIcon(category, 'xs')}
         </div>
       </div>
     </Component>
