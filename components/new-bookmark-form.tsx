@@ -4,7 +4,7 @@ import PageTitle from './page-title'
 import parseHashtags from 'utils/parse-hashtags'
 import { H4 } from './heading'
 import * as Yup from 'yup'
-import { Text } from './text'
+import { Text, SmallText } from './text'
 import MovieSearch from './movie-search'
 import Input from './input'
 import BookmarkNode from './bookmark-node'
@@ -138,24 +138,28 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
       {selection ? (
         <Form onSubmit={formik.handleSubmit}>
-          <BookmarkNode preview {...getMockedBookmarkProps(selection)} />
-
-          <Input
-            labelText="Text"
-            name="text"
-            placeholder="Lives up to the hype!"
-            as="textarea"
-            rows="6"
-            help={
-              formik.values.text
-                ? String(textMaxLength - formik.values.text.length)
-                : String(textMaxLength)
-            }
-            onChange={formik.handleChange}
-          />
+          <BookmarkNode preview {...getMockedBookmarkProps(selection)}>
+            <Input
+              name="text"
+              labelText="What did you like about this movie?"
+              hideLabel
+              placeholder="What did you like about this movie?"
+              help={
+                formik.values.text
+                  ? String(textMaxLength - formik.values.text.length)
+                  : String(textMaxLength) + ' characters left'
+              }
+              as="textarea"
+              rows="3"
+              // autoFocus
+              onChange={formik.handleChange}
+            />
+          </BookmarkNode>
 
           <HStack alignment="trailing">
             <Button
+              size="lg"
+              fullWidth
               variant="primary"
               type="submit"
               disabled={formik.isSubmitting}
@@ -199,6 +203,8 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
           <HStack alignment="trailing">
             <Button
+              size="lg"
+              fullWidth
               type="submit"
               variant="primary"
               disabled={formik.isSubmitting}

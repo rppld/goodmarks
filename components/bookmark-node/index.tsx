@@ -51,6 +51,7 @@ const BookmarkNode: React.FC<Props> = ({
   listItemId,
   linkToBookmarkDetail,
   preview,
+  children,
   ...props
 }) => {
   const [likeBookmark, { loading: liking }] = useLikeBookmark()
@@ -199,7 +200,11 @@ const BookmarkNode: React.FC<Props> = ({
         )}
       </header>
 
-      {bookmark.text && <Text as="p">{bookmark.text}</Text>}
+      {preview ? (
+        <>{children}</>
+      ) : (
+        bookmark.text && <Text as="p">{bookmark.text}</Text>
+      )}
 
       <Embed bookmark={bookmark} category={category.slug} />
 
