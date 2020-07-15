@@ -74,7 +74,7 @@ const TabBar: React.FC = () => {
                   src={getImageUrl(viewer.picture, 'avatarSm')}
                   size="sm"
                 />
-                <span className={styles.label}>Profile</span>
+                <span className={styles.label}>Me</span>
               </a>
             </Link>
           ) : (
