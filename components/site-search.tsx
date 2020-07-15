@@ -19,6 +19,14 @@ const SiteSearch: React.FC = () => {
   const min = 3
 
   const handleChange = debounce((value) => {
+    if (value.includes('@')) {
+      value = value.replace('@', '')
+    }
+
+    if (value.includes('#')) {
+      value = value.replace('#', '')
+    }
+
     value.length >= min && setSearchTerm(value)
   }, 250)
 
@@ -63,7 +71,7 @@ const SiteSearch: React.FC = () => {
         labelText="Search"
         hideLabel
         onChange={(e) => handleChange(e.target.value)}
-        placeholder="#covid19"
+        placeholder="@johndoe, John Doe, or #tarantino"
         as={ComboboxInput}
       />
 
