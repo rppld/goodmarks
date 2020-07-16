@@ -1,5 +1,6 @@
 import faunadb, { query as q } from 'faunadb'
 import cookie from 'cookie'
+import { sendCommentNotification } from './ses'
 
 export const FAUNA_SECRET_COOKIE = 'faunaSecret'
 
@@ -72,7 +73,42 @@ const {
   Match,
   Index,
   If,
+  Now,
 } = q
+
+interface NotificationPayload {
+  type: 'NEW_COMMENT' | 'NEW_LIKE'
+  sender: any
+  recipient: any
+  recipientEmail?: string
+  object: any
+  objectType: 'BOOKMARK' | 'LIST'
+  objectUrl: string
+}
+
+export async function createNotification(
+  faunaSecret,
+  { recipientEmail, ...payload }: NotificationPayload
+) {
+  await faunaClient(faunaSecret).query(
+    Create(Collection('Notifications'), {
+      data: {
+        ...payload,
+        created: Now(),
+        read: false,
+      },
+    })
+  )
+
+  if (typeof recipientEmail !== 'undefined') {
+    // If `recipientEmail` is defined, send an email notification.
+    if (payload.type === 'NEW_COMMENT') {
+      sendCommentNotification(recipientEmail, payload.objectUrl)
+    }
+  }
+}
+
+export async function markNotificationAsRead(notificationId) {}
 
 export async function createHashtags(items) {
   // items is an array that looks like:

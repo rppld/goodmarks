@@ -6,13 +6,13 @@ import {
   flattenDataKeys,
   createHashtags,
   getBookmarksWithUsersMapGetGeneric,
+  createNotification,
 } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
 import { parseJSON } from 'faunadb/src/_json'
 import atob from 'atob'
 import btoa from 'btoa'
-import { sendCommentNotification } from 'lib/ses'
 import absoluteUrl from 'utils/absolute-url'
 
 const serialize = (value) => {
@@ -467,12 +467,12 @@ async function createComment(req, res) {
       Let(
         {
           account: Get(Identity()),
-          userRef: Select(['data', 'user'], Var('account')),
-          userId: Select(['id'], Var('userRef')),
+          currentUserRef: Select(['data', 'user'], Var('account')),
+          currentUserId: Select(['id'], Var('currentUserRef')),
           bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
           bookmarkStatsRef: Match(
             Index('bookmark_stats_by_user_and_bookmark'),
-            Var('userRef'),
+            Var('currentUserRef'),
             Var('bookmarkRef')
           ),
           bookmarkStats: If(
@@ -484,7 +484,7 @@ async function createComment(req, res) {
             }),
             Create(Collection('BookmarkStats'), {
               data: {
-                user: Var('userRef'),
+                user: Var('currentUserRef'),
                 bookmark: Var('bookmarkRef'),
                 like: false,
                 repost: false,
@@ -501,6 +501,7 @@ async function createComment(req, res) {
             },
           }),
           bookmark: Get(Var('bookmarkRef')),
+          bookmarkAuthorRef: Select(['data', 'author'], Var('bookmark')),
           updateOriginal: Update(Var('bookmarkRef'), {
             data: {
               comments: Add(1, Select(['data', 'comments'], Var('bookmark'))),
@@ -515,20 +516,42 @@ async function createComment(req, res) {
         },
         {
           comment: Var('comment'),
-          userId: Var('userId'),
+          currentUserId: Var('currentUserId'),
+          currentUserRef: Var('currentUserRef'),
+          bookmarkRef: Var('bookmarkRef'),
+          bookmarkAuthorRef: Var('bookmarkAuthorRef'),
+          bookmark: Var('bookmark'),
           bookmarkWithUserAndAccount: Var('bookmarkWithUserAndAccount'),
         }
       )
     )
 
     const { origin } = absoluteUrl(req)
-    const bookmark = data.bookmarkWithUserAndAccount[0]
+    const {
+      bookmarkRef,
+      currentUserRef,
+      bookmarkAuthorRef,
+      bookmarkWithUserAndAccount,
+    } = data
+    const bookmark = bookmarkWithUserAndAccount[0]
     const { author, authorEmail } = bookmark
 
-    if (author.ref.id !== data.userId) {
+    if (author.ref.id !== data.currentUserId) {
       // Send email notification if the viewer comments on a bookmark
       // that’s not their own.
-      sendCommentNotification(authorEmail, `${origin}/b/${bookmarkId}`)
+      try {
+        await createNotification(faunaSecret, {
+          type: 'NEW_COMMENT',
+          sender: currentUserRef,
+          recipient: bookmarkAuthorRef,
+          recipientEmail: authorEmail,
+          object: bookmarkRef,
+          objectType: 'BOOKMARK',
+          objectUrl: `${origin}/b/${bookmarkId}`,
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
 
     return res.status(200).json(
