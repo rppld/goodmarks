@@ -18,7 +18,6 @@ const {
   Subtract,
   Let,
   Divide,
-  Pow,
   NGram,
   LowerCase,
   Filter,
