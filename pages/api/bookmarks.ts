@@ -400,7 +400,7 @@ async function deleteComment(req, res) {
         userRef: Select(['data', 'user'], Var('account')),
         commentRef: Ref(Collection('Comments'), commentId),
         comment: Get(Var('commentRef')),
-        bookmarkRef: Select(['data', 'bookmark'], Var('comment')),
+        bookmarkRef: Select(['data', 'object'], Var('comment')),
         bookmarkStatsRef: Match(
           Index('bookmark_stats_by_user_and_bookmark'),
           Var('userRef'),
@@ -410,7 +410,7 @@ async function deleteComment(req, res) {
         // are others.
         commentCount: Count(
           Match(
-            Index('comments_by_bookmark_and_author_ordered'),
+            Index('comments_by_object_and_author_ordered'),
             Var('bookmarkRef'),
             Var('userRef')
           )
@@ -496,7 +496,7 @@ async function createComment(req, res) {
             data: {
               text: text,
               author: Select(['data', 'user'], Get(Identity())),
-              bookmark: Var('bookmarkRef'),
+              object: Var('bookmarkRef'),
               created: Now(),
             },
           }),
@@ -567,10 +567,7 @@ async function deleteBookmark(req, res) {
             // Remove all the comments on the bookmark.
             q.Map(
               Paginate(
-                Match(
-                  Index('comments_by_bookmark_ordered'),
-                  Var('bookmarkRef')
-                ),
+                Match(Index('comments_by_object_ordered'), Var('bookmarkRef')),
                 {
                   size: 100000,
                 }

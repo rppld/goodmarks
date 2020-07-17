@@ -409,11 +409,11 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
 // Used when deleting an individual comment to find out how many
 // comments a user made on a particular entity.
 const createCommentsByBookmarkAndAuthorOrderedIndex = CreateIndex({
-  name: 'comments_by_bookmark_and_author_ordered',
+  name: 'comments_by_object_and_author_ordered',
   source: Collection('Comments'),
   terms: [
     {
-      field: ['data', 'bookmark'],
+      field: ['data', 'object'],
     },
     {
       field: ['data', 'author'],

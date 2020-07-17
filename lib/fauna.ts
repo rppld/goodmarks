@@ -206,7 +206,7 @@ export function getBookmarksWithUsersMapGetGeneric(
           ),
           // Get comments, index has two values so lambda has two values
           comments: q.Map(
-            Paginate(Match(Index('comments_by_bookmark_ordered'), Var('ref'))),
+            Paginate(Match(Index('comments_by_object_ordered'), Var('ref'))),
             Lambda(
               ['ts', 'commentRef'],
               Let(
