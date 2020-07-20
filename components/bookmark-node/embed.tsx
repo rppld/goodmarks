@@ -7,7 +7,6 @@ import Image from '../image'
 import { Movie, Link, TV, Calendar, Star } from '../icon'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
-import { HStack } from 'components/stack'
 
 interface Props {
   as?: React.ElementType | string
@@ -105,9 +104,6 @@ const Embed: React.FC<Props> = ({
             ) : null}
           </div>
         </div>
-        {/* <div className={styles['category-indicator']}>
-          {getCategoryIcon(category, 'xs')}
-        </div> */}
       </div>
     </Component>
   )
