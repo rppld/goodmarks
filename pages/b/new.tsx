@@ -61,9 +61,11 @@ const New: NextPage = () => {
             </Button>
           </Link>
         ) : (
-          <Button fullWidth size="lg" disabled={true}>
-            Skip ({count})
-          </Button>
+          onboarding && (
+            <Button fullWidth size="lg" disabled={true}>
+              Skip ({count})
+            </Button>
+          )
         )}
       </VStack>
     </Layout>

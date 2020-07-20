@@ -39,7 +39,6 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   })
 
   function getHeading() {
-    if (selection) return 'Description'
     if (category === 'movie') return 'Bookmark a Movie'
     if (category === 'tv-show') return 'Bookmark a TV Show'
     if (category === 'link') return 'Bookmark a Link'
@@ -47,21 +46,11 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   }
 
   function getSubheading() {
-    if (selection) {
-      switch (category) {
-        case 'movie':
-          return 'What did you like about this movie?'
-        case 'tv-show':
-          return 'What did you like about this TV show?'
-        default:
-          return ''
-      }
-    }
     switch (category) {
       case 'movie':
-        return 'Select the movie you want to bookmark.'
+        return "Select the movie you want to bookmark and let people know why it's great."
       case 'tv-show':
-        return 'Select the show you want to bookmark.'
+        return "Select the show you want to bookmark and let people know why it's great."
       case 'link':
         return 'Provide the link details.'
       default:
@@ -141,11 +130,11 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
           <BookmarkNode preview {...getMockedBookmarkProps(selection)} />
 
           <Input
-            labelText="Text"
+            labelText="Why should people check this out?"
             name="text"
             placeholder="Lives up to the hype!"
             as="textarea"
-            rows="6"
+            rows="4"
             help={
               formik.values.text
                 ? String(textMaxLength - formik.values.text.length)
@@ -158,6 +147,8 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             <Button
               variant="primary"
               type="submit"
+              size="lg"
+              fullWidth
               disabled={formik.isSubmitting}
             >
               {formik.isSubmitting ? 'Creating bookmark' : 'Create bookmark'}
@@ -186,9 +177,9 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
 
           <Input
             as="textarea"
-            rows="6"
+            rows="4"
             name="text"
-            labelText="Text"
+            labelText="Why should people check this out?"
             onChange={formik.handleChange}
             help={
               formik.values.text
@@ -201,6 +192,8 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             <Button
               type="submit"
               variant="primary"
+              size="lg"
+              fullWidth
               disabled={formik.isSubmitting}
             >
               {formik.isSubmitting ? 'Creating bookmark' : 'Create bookmark'}
@@ -212,7 +205,9 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
       ) : (
         <MovieSearch
           onSelect={setSelection}
-          label={getHeading()}
+          label={
+            category === 'movie' ? 'Search for movies' : 'Search for TV shows'
+          }
           placeholder={category === 'movie' ? 'The Gentlemen' : 'The Sopranos'}
           context={category === 'movie' ? 'movie' : 'tv'}
         />
