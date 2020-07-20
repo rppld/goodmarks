@@ -143,6 +143,12 @@
   color: var(--color-white);
 }
 
+@media (min-width: 620px) {
+  .placeholder {
+    border-radius: var(--space-4);
+  }
+}
+
 .movies.placeholder,
 .link:hover .movies.placeholder,
 .link:focus .movies.placeholder {
