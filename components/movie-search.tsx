@@ -55,8 +55,7 @@ const MovieSearch: React.FC<Props> = ({
     >
       <Input
         name="Search TMDb"
-        labelText="Search"
-        hideLabel
+        labelText={label}
         onChange={(e) => handleChange(e.target.value)}
         placeholder={placeholder}
         as={ComboboxInput}
