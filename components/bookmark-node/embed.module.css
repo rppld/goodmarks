@@ -62,9 +62,10 @@
 }
 
 .category-indicator {
-  margin-left: auto;
-  margin-bottom: auto;
-  margin-right: var(--space-8);
+  font-size: var(--fs-10);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  margin-top: var(--space-2);
 }
 
 .movies {
