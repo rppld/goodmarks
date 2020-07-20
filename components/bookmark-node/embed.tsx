@@ -78,6 +78,7 @@ const Embed: React.FC<Props> = ({
         </div>
 
         <div className={styles.details}>
+          <div className={styles['category-indicator']}>{category}</div>
           <Text as="h4">{bookmark.details.title || bookmark.details.name}</Text>
 
           <div className={styles.meta}>
@@ -104,9 +105,9 @@ const Embed: React.FC<Props> = ({
             ) : null}
           </div>
         </div>
-        <div className={styles['category-indicator']}>
+        {/* <div className={styles['category-indicator']}>
           {getCategoryIcon(category, 'xs')}
-        </div>
+        </div> */}
       </div>
     </Component>
   )
