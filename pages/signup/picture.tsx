@@ -27,7 +27,12 @@ const Picture: NextPage = () => {
         </HStack>
         <div>
           <Link href="/b/new?onboarding=true" passHref>
-            <Button as="a" variant="primary" size="lg" fullWidth>
+            <Button
+              as="a"
+              variant={hasPicture ? 'primary' : null}
+              size="lg"
+              fullWidth
+            >
               {hasPicture ? 'Continue' : 'Skip for now'}
             </Button>
           </Link>

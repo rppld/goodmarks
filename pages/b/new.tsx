@@ -12,6 +12,7 @@ import PageTitle from 'components/page-title'
 import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import useInterval from 'utils/use-interval'
+import { VStack } from 'components/stack'
 
 const New: NextPage = () => {
   const router = useRouter()
@@ -29,7 +30,7 @@ const New: NextPage = () => {
   useInterval(handleInterval, isRunning ? delay : null)
 
   function getTitle() {
-    if (onboarding) return 'Done!'
+    if (onboarding) return 'Create your first bookmark'
     return 'New Bookmark'
   }
 
@@ -50,15 +51,21 @@ const New: NextPage = () => {
         <Text meta>{getDescription()}</Text>
       </PageTitle>
 
-      <CategorySelection />
+      <VStack spacing="md">
+        <CategorySelection />
 
-      {onboarding && (
-        <Link href="/" passHref>
-          <Button as="a" variant="danger" disabled={count === 0 ? false : true}>
-            {count === 0 ? 'Skip' : `Skip (${count})`}
+        {onboarding && count === 0 ? (
+          <Link href="/" passHref>
+            <Button as="a" fullWidth size="lg">
+              Skip
+            </Button>
+          </Link>
+        ) : (
+          <Button fullWidth size="lg" disabled={true}>
+            Skip ({count})
           </Button>
-        </Link>
-      )}
+        )}
+      </VStack>
     </Layout>
   )
 }
