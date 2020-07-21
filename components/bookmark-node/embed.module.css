@@ -63,8 +63,10 @@
 
 .category-indicator {
   font-size: var(--fs-10);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-medium);
   text-transform: uppercase;
+  margin-bottom: var(--space-2);
+  transform: translateX(1px); /* Visual adjustment */
 }
 
 .movies {
@@ -133,9 +135,15 @@
   background-color: var(--color-bookmark-embed-links-outline);
 }
 
+.placeholder,
+.poster {
+  width: 46px;
+  height: 64px;
+  border-radius: var(--space-4);
+  margin-right: var(--space-12);
+}
+
 .placeholder {
-  width: 40px;
-  height: 56px;
   display: flex;
   border-radius: var(--space-8);
   justify-content: center;
@@ -165,15 +173,4 @@
 .link:hover .links.placeholder,
 .link:focus .links.placeholder {
   background-color: var(--color-bookmark-links);
-}
-
-.placeholder,
-.poster {
-  margin-right: var(--space-12);
-}
-
-.poster {
-  border-radius: var(--space-4);
-  width: 40px;
-  height: 56px;
 }

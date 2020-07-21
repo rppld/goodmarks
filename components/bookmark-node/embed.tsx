@@ -77,7 +77,13 @@ const Embed: React.FC<Props> = ({
         </div>
 
         <div className={styles.details}>
-          <div className={styles['category-indicator']}>{category}</div>
+          <div className={styles['category-indicator']}>
+            {category === 'movies'
+              ? 'Movie'
+              : category === 'tv-shows'
+              ? 'TV Show'
+              : 'Link'}
+          </div>
           <Text as="h4">{bookmark.details.title || bookmark.details.name}</Text>
 
           <div className={styles.meta}>
