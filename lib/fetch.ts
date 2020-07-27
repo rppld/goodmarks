@@ -1,4 +1,4 @@
-export default async function <JSON = any>(
+export default async function fetcher<JSON = any>(
   input: RequestInfo,
   init?: RequestInit
 ): Promise<JSON> {

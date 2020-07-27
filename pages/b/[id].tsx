@@ -1,8 +1,6 @@
 import React from 'react'
 import { NextPage } from 'next'
-import cookie from 'cookie'
 import Error from 'next/error'
-import { FAUNA_SECRET_COOKIE } from 'lib/fauna'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
 import { H4 } from 'components/heading'
@@ -16,7 +14,7 @@ interface Props {
 }
 
 const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
-  if (initialData.edges.length === 0) {
+  if (initialData?.edges?.length === 0) {
     return <Error statusCode={404} title="Not found" />
   }
 
@@ -30,14 +28,28 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   )
 }
 
-export async function getServerSideProps({ req, params }) {
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: true,
+  }
+}
+
+export async function getStaticProps({ params }) {
   const { id } = params
-  const cookies = cookie.parse(req.headers.cookie ?? '')
-  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
   try {
-    const initialData = await bookmarkApi(id, faunaSecret)
-    return { props: { initialData, bookmarkId: id } }
+    const initialData = await bookmarkApi(id)
+    return {
+      props: {
+        initialData,
+        bookmarkId: id,
+        // We will attempt to re-generate the page:
+        // - When a request comes in
+        // - At most once every second
+        revalidate: 1,
+      },
+    }
   } catch (error) {
     console.log(error)
   }
