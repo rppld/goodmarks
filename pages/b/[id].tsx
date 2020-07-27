@@ -1,5 +1,5 @@
 import React from 'react'
-import { NextPage } from 'next'
+import { NextPage, GetStaticPaths, GetStaticProps } from 'next'
 import Error from 'next/error'
 import PageTitle from 'components/page-title'
 import Layout from 'components/layout'
@@ -28,18 +28,18 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   )
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
     fallback: true,
   }
 }
 
-export async function getStaticProps({ params }) {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { id } = params
 
   try {
-    const initialData = await bookmarkApi(id)
+    const initialData = await bookmarkApi(id as string)
     return {
       props: {
         initialData,
