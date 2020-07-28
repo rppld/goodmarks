@@ -294,23 +294,25 @@ async function likeBookmark(req, res) {
       throw new Error('Bookmark ID must be provided.')
     }
 
-    const data = await faunaClient(faunaSecret).query(
+    const data: any = await faunaClient(faunaSecret).query(
       Let(
         {
           account: Get(Identity()),
-          userRef: Select(['data', 'user'], Var('account')),
+          currentUserRef: Select(['data', 'user'], Var('account')),
+          currentUserId: Select(['id'], Var('currentUserRef')),
           bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
           bookmarkStatsRef: Match(
             Index('bookmark_stats_by_user_and_bookmark'),
-            Var('userRef'),
+            Var('currentUserRef'),
             Var('bookmarkRef')
           ),
           bookmark: Get(Var('bookmarkRef')),
           authorRef: Select(['data', 'author'], Var('bookmark')),
+          authorId: Select(['id'], Var('authorRef')),
           followerStatsRef: Match(
             Index('follower_stats_by_author_and_follower'),
             Var('authorRef'),
-            Var('userRef')
+            Var('currentUserRef')
           ),
           newLikeStatus: If(
             Exists(Var('bookmarkStatsRef')),
@@ -346,7 +348,7 @@ async function likeBookmark(req, res) {
             }),
             Create(Collection('BookmarkStats'), {
               data: {
-                user: Var('userRef'),
+                user: Var('currentUserRef'),
                 bookmark: Var('bookmarkRef'),
                 like: Var('newLikeStatus'),
                 repost: false,
@@ -376,10 +378,33 @@ async function likeBookmark(req, res) {
           ),
           {
             edges: getBookmarksWithUsersMapGetGeneric([Var('bookmarkRef')]),
+            currentUserRef: Var('currentUserRef'),
+            currentUserId: Var('currentUserId'),
+            authorRef: Var('authorRef'),
+            authorId: Var('authorId'),
+            bookmarkRef: Var('bookmarkRef'),
+            newLikeStatus: Var('newLikeStatus'),
           }
         )
       )
     )
+
+    if (data.newLikeStatus === true && data.authorId !== data.currentUserId) {
+      const { origin } = absoluteUrl(req)
+
+      try {
+        await createNotification(faunaSecret, {
+          type: 'NEW_LIKE',
+          sender: data.currentUserRef,
+          recipient: data.authorRef,
+          object: data.bookmarkRef,
+          objectType: 'BOOKMARK',
+          objectUrl: `${origin}/b/${bookmarkId}`,
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
     return res.status(200).json(flattenDataKeys(data))
   } catch (error) {
@@ -537,8 +562,6 @@ async function createComment(req, res) {
     const { author, authorEmail } = bookmark
 
     if (author.ref.id !== data.currentUserId) {
-      // Send email notification if the viewer comments on a bookmark
-      // that’s not their own.
       try {
         await createNotification(faunaSecret, {
           type: 'NEW_COMMENT',
