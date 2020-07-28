@@ -108,8 +108,6 @@ export async function createNotification(
   }
 }
 
-export async function markNotificationAsRead(notificationId) {}
-
 export async function createHashtags(items) {
   // items is an array that looks like:
   // [{ name: 'hash' }, { name: 'tag' }]
