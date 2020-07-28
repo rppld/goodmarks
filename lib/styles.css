@@ -51,25 +51,44 @@
   --fw-black: 800;
 
   /* Colors */
+
+  --color-mint: hsl(176, 89%, 52%);
+  --color-mint-dark: hsl(176, 88%, 42%);
+  --color-mint-darker: hsl(176, 88%, 38%);
+  --color-mint-light: hsl(176, 88%, 71%);
+  --color-mint-lighter: hsl(177, 88%, 90%);
+  --color-mint-lightest: hsla(176, 89%, 52%, 0.1);
+  --color-mint-text: var(--color-mint-darker);
+  --color-mint-text-meta: var(--color-mint-dark);
+
+  --color-cyan: hsl(190, 92%, 56%);
+  --color-cyan-dark: hsl(190, 92%, 44%);
+  --color-cyan-darker: hsl(190, 92%, 39%);
+  --color-cyan-light: hsl(191, 93%, 74%);
+  --color-cyan-lighter: hsl(190, 91%, 90%);
+  --color-cyan-lightest: hsl(190, 92%, 56%, 0.1);
+  --color-cyan-text: var(--color-cyan-darker);
+  --color-cyan-text-meta: var(--color-cyan-dark);
+
+  --color-blue: hsl(231, 92%, 58%);
+  --color-blue-dark: hsl(231, 95%, 50%);
+  --color-blue-darker: hsl(231, 94%, 40%);
+  --color-blue-light: hsl(231, 94%, 70%);
+  --color-blue-lighter: hsl(231, 95%, 92%);
+  --color-blue-lightest: hsl(231, 92%, 58%, 0.1);
+  --color-blue-text: var(--color-blue);
+  --color-blue-text-meta: var(--color-blue-light);
+
+  --color-pink: hsl(311, 96%, 62%);
+  --color-pink-dark: hsl(311, 96%, 60%);
+  --color-pink-darker: hsl(311, 96%, 62%);
+  --color-pink-light: hsl(311, 96%, 77%);
+  --color-pink-lighter: hsl(311, 96%, 95%);
+  --color-pink-lightest: hsl(311, 96%, 62%, 0.1);
+  --color-pink-text: var(--color-pink);
+  --color-pink-text-meta: var(--color-pink-light);
+
   --color-yellow: #ffdd00;
-  --color-blue: hsla(231, 92%, 58%, 1);
-  --color-blue-5: hsla(231, 92%, 58%, 0.05);
-  --color-blue-15: hsla(231, 92%, 58%, 0.15);
-  --color-blue-25: hsla(231, 92%, 58%, 0.25);
-  --color-blue-60: hsla(231, 92%, 58%, 0.6);
-  --color-blue-dark: hsla(231, 92%, 48%, 1);
-  --color-green: hsla(114, 87%, 33%, 1);
-  --color-green-5: hsla(114, 87%, 33%, 0.05);
-  --color-green-15: hsla(114, 87%, 33%, 0.15);
-  --color-green-25: hsla(114, 87%, 33%, 0.25);
-  --color-green-60: hsla(114, 87%, 33%, 0.6);
-  --color-green-dark: hsla(114, 87%, 33%, 1);
-  --color-crimson: hsl(349, 82%, 49%);
-  --color-crimson-5: hsla(349, 82%, 49%, 0.05);
-  --color-crimson-15: hsla(349, 82%, 49%, 0.15);
-  --color-crimson-25: hsla(349, 82%, 49%, 0.25);
-  --color-crimson-60: hsla(349, 82%, 49%, 0.6);
-  --color-crimson-dark: hsla(349, 82%, 19%, 1);
   --color-red: hsla(1, 80%, 58%, 1);
   --color-red-dark: hsla(1, 80%, 48%, 1);
 
@@ -100,18 +119,24 @@
   --color-white-90: hsla(0, 0%, 100%, 0.9);
 
   /* Bookmark colors */
-  --color-bookmark-movies: var(--color-blue);
-  --color-bookmark-tv-shows: var(--color-green);
-  --color-bookmark-links: var(--color-crimson);
-  --color-bookmark-embed-movies: var(--color-blue-5);
-  --color-bookmark-embed-movies-outline: var(--color-blue-15);
-  --color-bookmark-embed-movies-meta: var(--color-blue-60);
-  --color-bookmark-embed-tv-shows: var(--color-green-5);
-  --color-bookmark-embed-tv-shows-outline: var(--color-green-15);
-  --color-bookmark-embed-tv-shows-meta: var(--color-green-60);
-  --color-bookmark-embed-links: var(--color-crimson-5);
-  --color-bookmark-embed-links-outline: var(--color-crimson-15);
-  --color-bookmark-embed-links-meta: var(--color-crimson-60);
+  --color-bookmark-movies: var(--color-mint);
+  --color-bookmark-tv-shows: var(--color-cyan);
+  --color-bookmark-links: var(--color-blue);
+
+  --color-bookmark-embed-movies: var(--color-mint-lightest);
+  --color-bookmark-embed-movies-hover: var(--color-mint-lighter);
+  --color-bookmark-embed-movies-meta: var(--color-mint-text-meta);
+  --color-bookmark-embed-movies-text: var(--color-mint-text);
+
+  --color-bookmark-embed-tv-shows: var(--color-cyan-lightest);
+  --color-bookmark-embed-tv-shows-hover: var(--color-cyan-lighter);
+  --color-bookmark-embed-tv-shows-meta: var(--color-cyan-text-meta);
+  --color-bookmark-embed-tv-shows-text: var(--color-cyan-text);
+
+  --color-bookmark-embed-links: var(--color-blue-lightest);
+  --color-bookmark-embed-links-hover: var(--color-blue-lighter);
+  --color-bookmark-embed-links-meta: var(--color-blue-text-meta);
+  --color-bookmark-embed-links-text: var(--color-blue-text);
 
   /* System colors */
   --color-body: hsl(216, 22%, 96%);
@@ -154,6 +179,18 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --color-mint-text: var(--color-mint);
+    --color-mint-text-meta: var(--color-mint-dark);
+
+    --color-cyan-text: var(--color-cyan);
+    --color-cyan-text-meta: var(--color-cyan-dark);
+
+    --color-blue-text: var(--color-blue-light);
+    --color-blue-text-meta: var(--color-blue);
+
+    --color-pink-text: var(--color-pink-light);
+    --color-pink-text-meta: var(--color-pink);
+
     --color-body: hsl(0, 0%, 5%);
     --color-text: var(--color-white);
     --color-text-light: var(--color-white-80);
@@ -171,12 +208,6 @@
     --color-bookmark: var(--color-black);
     --color-bookmark-border-hover: var(--color-white-5);
     --color-bookmark-border-active: var(--color-white-15);
-    --color-bookmark-embed-movies: var(--color-blue-15);
-    --color-bookmark-embed-movies-outline: var(--color-blue-25);
-    --color-bookmark-embed-tv-shows: var(--color-green-15);
-    --color-bookmark-embed-tv-shows-outline: var(--color-green-25);
-    --color-bookmark-embed-links: var(--color-crimson-15);
-    --color-bookmark-embed-links-outline: var(--color-crimson-25);
   }
 }
 
