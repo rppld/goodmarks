@@ -1,12 +1,23 @@
 import faunadb, { query as q } from 'faunadb'
+import { parseJSON } from 'faunadb/src/_json'
 import cookie from 'cookie'
 import { sendCommentNotification } from './ses'
+import atob from 'atob'
+import btoa from 'btoa'
 
 export const FAUNA_SECRET_COOKIE = 'faunaSecret'
 
 export const serverClient = new faunadb.Client({
   secret: process.env.FAUNA_SERVER_KEY,
 })
+
+export const serialize = (value) => {
+  return btoa(JSON.stringify(value))
+}
+
+export const parseValue = (value) => {
+  return parseJSON(atob(value))
+}
 
 // Used for any authed requests.
 export const faunaClient = (secret) =>
@@ -265,6 +276,22 @@ export function getBookmarksWithUsersMapGetGeneric(
           bookmark: Var('bookmark'),
           bookmarkStats: Var('bookmarkStats'),
           comments: Var('comments'),
+        }
+      )
+    )
+  )
+}
+
+export function transformNotificationsResponse(setRefOrArray) {
+  return q.Map(
+    setRefOrArray,
+    Lambda((ref) =>
+      Let(
+        {
+          notification: If(Exists(Var('ref')), Get(Var('ref')), false),
+        },
+        {
+          notification: Var('notification'),
         }
       )
     )

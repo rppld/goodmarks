@@ -38,6 +38,14 @@ export interface Comment {
   created: any
 }
 
+export interface Notification {
+  id: string
+  type: string
+  objectType: string
+  objectUrl: string
+  read: boolean
+}
+
 export interface User {
   id: string
   handle: string
