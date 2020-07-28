@@ -70,12 +70,11 @@
 }
 
 .movies {
-  border-bottom-color: var(--color-bookmark-embed-movies-outline);
   background-color: var(--color-bookmark-embed-movies);
 }
 
 .movies h4 {
-  color: var(--color-bookmark-movies);
+  color: var(--color-bookmark-embed-movies-text);
 }
 
 .movies .meta {
@@ -87,12 +86,11 @@
 }
 
 .tv-shows {
-  border-bottom-color: var(--color-bookmark-embed-tv-shows-outline);
   background-color: var(--color-bookmark-embed-tv-shows);
 }
 
 .tv-shows h4 {
-  color: var(--color-bookmark-tv-shows);
+  color: var(--color-bookmark-embed-tv-shows-text);
 }
 
 .tv-shows .meta {
@@ -104,12 +102,11 @@
 }
 
 .links {
-  border-bottom-color: var(--color-bookmark-embed-links-outline);
   background-color: var(--color-bookmark-embed-links);
 }
 
 .links h4 {
-  color: var(--color-bookmark-links);
+  color: var(--color-bookmark-embed-links-text);
 }
 
 .links .meta {
@@ -122,17 +119,17 @@
 
 .link:focus .movies,
 .link:hover .movies {
-  background-color: var(--color-bookmark-embed-movies-outline);
+  background-color: var(--color-bookmark-embed-movies-hover);
 }
 
 .link:focus .tv-shows,
 .link:hover .tv-shows {
-  background-color: var(--color-bookmark-embed-tv-shows-outline);
+  background-color: var(--color-bookmark-embed-tv-shows-hover);
 }
 
 .link:focus .links,
 .link:hover .links {
-  background-color: var(--color-bookmark-embed-links-outline);
+  background-color: var(--color-bookmark-embed-links-hover);
 }
 
 .placeholder,
