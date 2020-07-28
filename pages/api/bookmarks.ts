@@ -7,20 +7,12 @@ import {
   createHashtags,
   getBookmarksWithUsersMapGetGeneric,
   createNotification,
+  serialize,
+  parseValue,
 } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
-import { parseJSON } from 'faunadb/src/_json'
-import atob from 'atob'
-import btoa from 'btoa'
 import absoluteUrl from 'utils/absolute-url'
-
-const serialize = (value) => {
-  return btoa(JSON.stringify(value))
-}
-const parseValue = (value) => {
-  return parseJSON(atob(value))
-}
 
 const {
   Create,
