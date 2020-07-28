@@ -405,6 +405,51 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
   ],
 })
 
+const createNotificationsByRecipientIndex = CreateIndex({
+  name: 'notifications_by_recipient',
+  source: Collection('Notifications'),
+  terms: [
+    {
+      field: ['data', 'recipient'],
+    },
+  ],
+  values: [
+    {
+      // We want the results to be sorted on creation time
+      field: ['data', 'created'],
+      reverse: true,
+    },
+    {
+      field: ['ref'], // return the fweet reference
+    },
+  ],
+  serialized: true,
+})
+
+const createNotificationsByRecipientAndReadStatusIndex = CreateIndex({
+  name: 'notifications_by_recipient_and_read_status',
+  source: Collection('Notifications'),
+  terms: [
+    {
+      field: ['data', 'recipient'],
+    },
+    {
+      field: ['data', 'read'],
+    },
+  ],
+  values: [
+    {
+      // We want the results to be sorted on creation time
+      field: ['data', 'created'],
+      reverse: true,
+    },
+    {
+      field: ['ref'], // return the fweet reference
+    },
+  ],
+  serialized: true,
+})
+
 // Used when deleting an individual comment to find out how many
 // comments a user made on a particular entity.
 const createCommentsByBookmarkAndAuthorOrderedIndex = CreateIndex({
