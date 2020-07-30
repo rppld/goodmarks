@@ -1,4 +1,6 @@
 import React from 'react'
+import Link from 'next/link'
+import { VStack } from 'components/stack'
 import useSWR, { useSWRPages } from 'swr'
 import NotificationNode from './notification-node'
 import { SmallText } from './text'
@@ -36,9 +38,22 @@ const NotificationsFeed: React.FC<Props> = ({ postsPerPage }) => {
         return null
       }
 
-      return data.edges.map(({ notification }) => (
-        <NotificationNode key={notification.id} notification={notification} />
-      ))
+      return (
+        <VStack spacing="md">
+          {data?.edges?.map(({ notification }) => (
+            <div key={notification.id}>
+              <Link href="/b/[id]" as={`/b/${notification.object['@ref'].id}`}>
+                <a>
+                  <NotificationNode
+                    key={notification.id}
+                    notification={notification}
+                  />
+                </a>
+              </Link>
+            </div>
+          ))}
+        </VStack>
+      )
     },
 
     // one page's SWR => offset of next page
