@@ -10,7 +10,19 @@ import {
   transformNotificationsResponse,
 } from 'lib/fauna'
 
-const { Identity, Select, Get, Let, Var, Paginate, Match, Index, Lambda } = q
+const {
+  Identity,
+  Select,
+  Get,
+  Let,
+  Var,
+  Paginate,
+  Match,
+  Index,
+  Lambda,
+  If,
+  Equals,
+} = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { read, first, after: cursor = 'null' } = req.query
@@ -22,6 +34,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).send('Unauthorized')
   }
 
+  // Query for all notifications.
+  let match = Match(Index('notifications_by_recipient'), Var('currentUserRef'))
+
+  // If `read` is defined, query for either unread or read
+  // notifications.
+  if (typeof read !== 'undefined') {
+    match = Match(
+      Index('notifications_by_recipient_and_read_status'),
+      Var('currentUserRef'),
+      If(Equals(read, 'true'), true, false)
+    )
+  }
+
   const data: any = await faunaClient(faunaSecret).query(
     Let(
       {
@@ -29,13 +54,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         currentUserRef: Select(['data', 'user'], Var('account')),
         notifications: transformNotificationsResponse(
           q.Map(
-            Paginate(
-              Match(Index('notifications_by_recipient'), Var('currentUserRef')),
-              {
-                size,
-                after: cursor === 'null' ? undefined : parseValue(cursor),
-              }
-            ),
+            Paginate(match, {
+              size,
+              after: cursor === 'null' ? undefined : parseValue(cursor),
+            }),
             Lambda(['createdTime', 'ref'], Var('ref'))
           )
         ),
@@ -55,27 +77,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       endCursor: Boolean(after) ? serialize(after) : null,
     },
   })
-}
-
-export const profileApi = async (faunaSecret) => {
-  const { user, email }: any = await faunaClient(faunaSecret).query(
-    Let(
-      {
-        user: Get(Select(['data', 'user'], Get(Identity()))),
-        email: Select(['data', 'email'], Get(Identity())),
-      },
-      {
-        user: Var('user'),
-        email: Var('email'),
-      }
-    )
-  )
-  const viewer = {
-    id: user.ref.id,
-    email,
-    ...user.data,
-  }
-  return {
-    viewer,
-  }
 }
