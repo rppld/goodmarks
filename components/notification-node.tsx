@@ -14,7 +14,7 @@ const ListNode: React.FC<Props> = ({ notification, ...props }) => {
     <div className={styles.container} {...props}>
       <VStack>
         <H4>{notification.type}</H4>
-        <Text as="p">{notification.objectUrl}</Text>
+        <Text as="p">Description</Text>
       </VStack>
     </div>
   )
