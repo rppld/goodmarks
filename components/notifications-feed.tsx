@@ -22,6 +22,7 @@ const NotificationsFeed: React.FC<Props> = ({ postsPerPage }) => {
       const params = qs.stringify({
         first: postsPerPage,
         after: offset || 'null',
+        read: false,
       })
 
       const { data } = withSWR(
