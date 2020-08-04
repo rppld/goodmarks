@@ -40,6 +40,7 @@ export interface Comment {
 
 export interface Notification {
   id: string
+  created: any
   type: string
   objectType: string
   objectUrl: string
