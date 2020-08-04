@@ -1,0 +1,7 @@
+.badge {
+  width: var(--space-8);
+  height: var(--space-8);
+  margin-left: var(--space-12);
+  border-radius: 50%;
+  background-color: var(--color-red);
+}
