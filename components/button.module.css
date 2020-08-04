@@ -5,10 +5,15 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--space-32);
-  height: var(--space-40);
+  height: var(--space-32);
   padding-left: var(--space-16);
   padding-right: var(--space-16);
   font-weight: var(--fw-medium);
+  font-size: var(--fs-14);
+}
+
+.base.md {
+  height: var(--space-40);
   font-size: inherit;
 }
 

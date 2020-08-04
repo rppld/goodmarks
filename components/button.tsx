@@ -7,7 +7,7 @@ interface Props extends React.ComponentPropsWithoutRef<'button'> {
   href?: string // When used as `a`
   variant?: string
   fullWidth?: boolean
-  size?: 'sm' | 'lg'
+  size?: 'sm' | 'md' | 'lg'
   disabled?: boolean
   leftAdornment?: React.ReactElement
 }
@@ -19,7 +19,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
       children,
       variant,
       fullWidth = false,
-      size = 'sm',
+      size = 'md',
       disabled = false,
       leftAdornment,
       ...props
