@@ -1,11 +1,15 @@
 .container {
+  position: relative;
   margin-bottom: var(--space-16);
 }
 
-.container > * {
+.container * {
   display: block;
 }
 
-.container * + * {
-  margin-top: var(--space-4);
+.adornment {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
