@@ -18,9 +18,9 @@ const Popular: NextPage = () => {
         adornment={
           viewer ? (
             <Link href="/notifications" passHref>
-              <NotificationButton read={false} />
+              <NotificationButton />
             </Link>
-          ) : null
+          ) : undefined
         }
       >
         <H4 as="h1">Bookmarks</H4>

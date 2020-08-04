@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { User, ViewerData } from 'lib/types'
+import { Viewer, ViewerData } from 'lib/types'
 import useSWR from 'swr'
 
 interface ContextProps {
-  viewer: User
-  setViewer: (viewer: User) => void
+  viewer: Viewer
+  setViewer: (viewer: Viewer) => void
   resetViewer: () => void
 }
 
