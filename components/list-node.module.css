@@ -13,6 +13,7 @@
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
+  transition: transform 0.05s ease-in-out;
 }
 
 a .container {
@@ -25,6 +26,7 @@ a .container:hover {
 
 a .container:active {
   box-shadow: 0 0 0 2px var(--color-bookmark-border-active);
+  transform: scale(0.99);
 }
 
 @media (min-width: 620px) {
