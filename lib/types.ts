@@ -1,3 +1,5 @@
+import { Boolean } from 'aws-sdk/clients/codedeploy'
+
 export interface Bookmark {
   id: string
   created: any
@@ -45,6 +47,12 @@ export interface Notification {
   objectType: string
   objectUrl: string
   read: boolean
+}
+
+export interface NotificationsData {
+  edges: {
+    notification: Notification
+  }[]
 }
 
 export interface User {
@@ -102,8 +110,12 @@ export interface ListsData {
   }[]
 }
 
+export interface Viewer extends User {
+  hasUnreadNotifications: boolean
+}
+
 export interface ViewerData {
-  viewer: User
+  viewer: Viewer
 }
 
 export interface Story {

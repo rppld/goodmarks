@@ -22,10 +22,13 @@ const {
   Lambda,
   If,
   Equals,
+  Update,
+  Ref,
+  Collection,
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { read, first, after: cursor = 'null' } = req.query
+  const { read, first, after: cursor = 'null', action } = req.query
   const size = parseInt(first as string) || 10
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
@@ -34,17 +37,62 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).send('Unauthorized')
   }
 
-  // Query for all notifications.
-  let match = Match(Index('notifications_by_recipient'), Var('currentUserRef'))
+  const allNotifications = Match(
+    Index('notifications_by_recipient'),
+    Var('currentUserRef')
+  )
+  const notificationsByReadStatus = Match(
+    Index('notifications_by_recipient_and_read_status'),
+    Var('currentUserRef'),
+    If(Equals(read, 'true'), true, false)
+  )
 
-  // If `read` is defined, query for either unread or read
+  let match = allNotifications
+
+  // If `read` is defined, match for either unread or read
   // notifications.
   if (typeof read !== 'undefined') {
-    match = Match(
-      Index('notifications_by_recipient_and_read_status'),
-      Var('currentUserRef'),
-      If(Equals(read, 'true'), true, false)
+    match = notificationsByReadStatus
+  }
+
+  if (action === 'mark_as_read') {
+    // Mark single notification as read
+    if (req.body.id) {
+      await faunaClient(faunaSecret).query(
+        Update(Ref(Collection('Notifications'), req.body.id), {
+          data: {
+            read: true,
+          },
+        })
+      )
+
+      return res.status(200).send('Notification marked as read.')
+    }
+
+    // Mark all unread notifications as read
+    await faunaClient(faunaSecret).query(
+      Let(
+        {
+          account: Get(Identity()),
+          currentUserRef: Select(['data', 'user'], Var('account')),
+        },
+        q.Map(
+          Paginate(notificationsByReadStatus, {
+            size: 10000,
+          }),
+          Lambda(
+            ['createdTime', 'ref'],
+            Update(Var('ref'), {
+              data: {
+                read: true,
+              },
+            })
+          )
+        )
+      )
     )
+
+    return res.status(200).send('Notifications marked as read.')
   }
 
   const data: any = await faunaClient(faunaSecret).query(

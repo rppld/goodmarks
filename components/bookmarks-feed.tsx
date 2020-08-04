@@ -1,9 +1,8 @@
 import React from 'react'
-import useSWR, { useSWRPages } from 'swr'
+import { useSWRInfinite } from 'swr'
 import BookmarkNode from './bookmark-node'
 import { SmallText } from './text'
 import InfiniteScrollTrigger from './infinite-scroll-trigger'
-import { BookmarksData } from 'lib/types'
 import qs from 'querystringify'
 
 interface Props {
@@ -20,29 +19,36 @@ const BookmarksFeed: React.FC<Props> = ({
   ...props
 }) => {
   const query = props // Rest of the props are passed as query params.
-  const { pages, isLoadingMore, isReachingEnd, loadMore } = useSWRPages(
-    // page key
-    `${cacheKey}?${qs.stringify(query)}`,
 
-    // page component
-    ({ offset, withSWR }) => {
-      const params = qs.stringify({
-        ...query,
-        first: postsPerPage,
-        after: offset || 'null',
-      })
+  const getKey = (pageIndex, previousPageData) => {
+    const params = qs.stringify({
+      ...query,
+      first: postsPerPage,
+      after: previousPageData?.pageInfo?.hasNextPage
+        ? previousPageData.pageInfo.endCursor
+        : 'null',
+    })
 
-      const { data, mutate } = withSWR(
-        // use the wrapper to wrap the *pagination API SWR*
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useSWR<BookmarksData>(`${cacheKey}?${params}`)
-      )
-      // you can still use other SWRs outside
+    // SWR key
+    return `${cacheKey}?${params}`
+  }
 
-      function handleLike(bookmarkId) {
-        const newData = {
-          ...data,
-          edges: data.edges.map((item) => {
+  const { data, error, size, setSize, mutate } = useSWRInfinite(getKey)
+  const pages = data ? [].concat(...data) : []
+  const isLoadingInitialData = !data && !error
+  const isLoadingMore =
+    isLoadingInitialData ||
+    (size > 0 && data && typeof data[size - 1] === 'undefined')
+  const isEmpty = data?.[0]?.edges?.length === 0
+  const isReachingEnd =
+    isEmpty || (data && data[data.length - 1]?.edges?.length < postsPerPage)
+
+  function handleLike(pageIndex, bookmarkId) {
+    const newData = pages.map((page, index) => {
+      if (index === pageIndex) {
+        return {
+          ...page,
+          edges: page.edges.map((item) => {
             if (item.bookmark.id === bookmarkId) {
               const isLiked = item.bookmarkStats.like
               return {
@@ -62,51 +68,46 @@ const BookmarksFeed: React.FC<Props> = ({
             return item
           }),
         }
-
-        mutate(newData, false)
       }
+      return page
+    })
 
-      function handleDelete(bookmarkId) {
-        const newData = {
-          ...data,
-          edges: data.edges.filter((item) => {
+    mutate(newData, false)
+  }
+
+  function handleDelete(pageIndex, bookmarkId) {
+    const newData = pages.map((page, index) => {
+      if (index === pageIndex) {
+        return {
+          ...page,
+          edges: page.edges.filter((item) => {
             return item.bookmark.id !== bookmarkId
           }),
         }
-
-        mutate(newData, false)
       }
+      return page
+    })
 
-      if (!data) {
-        return null
-      }
-
-      return data.edges.map((node) => (
-        <BookmarkNode
-          {...node}
-          key={node.bookmark.id}
-          onLike={() => handleLike(node.bookmark.id)}
-          onDelete={() => handleDelete(node.bookmark.id)}
-          linkToBookmarkDetail
-        />
-      ))
-    },
-
-    // one page's SWR => offset of next page
-    ({ data }) => {
-      return data?.pageInfo?.hasNextPage ? data.pageInfo.endCursor : null
-    },
-
-    // deps of the page component
-    [query]
-  )
+    mutate(newData, false)
+  }
 
   return (
     <>
-      {pages}
+      {pages?.length > 0 &&
+        pages.map((page, pageIndex) =>
+          page.edges.map((node) => (
+            <BookmarkNode
+              {...node}
+              key={node.bookmark.id}
+              onLike={() => handleLike(pageIndex, node.bookmark.id)}
+              onDelete={() => handleDelete(pageIndex, node.bookmark.id)}
+              linkToBookmarkDetail
+            />
+          ))
+        )}
 
       <InfiniteScrollTrigger
-        onIntersect={loadMore}
+        onIntersect={() => setSize(size + 1)}
         disabled={isReachingEnd || isLoadingMore}
       >
         {isLoadingMore ? (
