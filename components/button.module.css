@@ -10,6 +10,7 @@
   padding-right: var(--space-16);
   font-weight: var(--fw-medium);
   font-size: var(--fs-14);
+  line-height: var(--lh-solid);
 }
 
 .base.md {
@@ -112,15 +113,20 @@
 .danger.disabled:hover {
   background-color: var(--color-danger);
 }
-
 .adornment {
   position: relative;
-  width: var(--space-40);
-  height: var(--space-40);
+  width: var(--space-32);
+  height: var(--space-32);
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  margin-left: calc(var(--space-12) * -1);
+}
+
+.base.md .adornment {
   margin-left: calc(var(--space-16) * -1);
+  width: var(--space-40);
+  height: var(--space-40);
 }
 
 .no-children .adornment {
