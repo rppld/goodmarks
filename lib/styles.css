@@ -51,22 +51,12 @@
   --fw-black: 800;
 
   /* Colors */
-  /* 
-  --color-mint: hsl(166, 89%, 52%);
-  --color-mint-dark: hsl(166, 88%, 42%);
-  --color-mint-darker: hsl(166, 88%, 38%);
-  --color-mint-light: hsl(166, 88%, 71%);
-  --color-mint-lighter: hsl(166, 88%, 90%);
-  --color-mint-lightest: hsla(166, 89%, 52%, 0.1);
-  --color-mint-text: var(--color-mint-darker);
-  --color-mint-text-meta: var(--color-mint-dark); */
-
   --color-cyan: hsl(190, 92%, 56%);
   --color-cyan-dark: hsl(190, 92%, 44%);
   --color-cyan-darker: hsl(190, 92%, 39%);
   --color-cyan-light: hsl(191, 93%, 74%);
-  --color-cyan-lighter: hsl(190, 91%, 90%);
-  --color-cyan-lightest: hsl(190, 92%, 56%, 0.1);
+  --color-cyan-lighter: hsla(190, 92%, 56%, 0.18);
+  --color-cyan-lightest: hsla(190, 92%, 56%, 0.1);
   --color-cyan-text: var(--color-cyan-darker);
   --color-cyan-text-meta: var(--color-cyan-dark);
 
@@ -74,8 +64,8 @@
   --color-blue-dark: hsl(231, 95%, 50%);
   --color-blue-darker: hsl(231, 94%, 40%);
   --color-blue-light: hsl(231, 94%, 70%);
-  --color-blue-lighter: hsl(231, 95%, 92%);
-  --color-blue-lightest: hsl(231, 92%, 58%, 0.1);
+  --color-blue-lighter: hsla(231, 92%, 58%, 0.18);
+  --color-blue-lightest: hsla(231, 92%, 58%, 0.1);
   --color-blue-text: var(--color-blue);
   --color-blue-text-meta: var(--color-blue-light);
 
@@ -83,8 +73,8 @@
   --color-pink-dark: hsl(292, 96%, 60%);
   --color-pink-darker: hsl(292, 96%, 62%);
   --color-pink-light: hsl(292, 96%, 77%);
-  --color-pink-lighter: hsl(292, 96%, 95%);
-  --color-pink-lightest: hsl(292, 96%, 77%, 0.1);
+  --color-pink-lighter: hsla(292, 96%, 77%, 0.18);
+  --color-pink-lightest: hsla(292, 96%, 77%, 0.1);
   --color-pink-text: var(--color-pink);
   --color-pink-text-meta: var(--color-pink-light);
 
@@ -179,18 +169,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-mint-text: var(--color-mint);
-    --color-mint-text-meta: var(--color-mint-dark);
-
-    --color-cyan-text: var(--color-cyan);
-    --color-cyan-text-meta: var(--color-cyan-dark);
-
-    --color-blue-text: var(--color-blue-light);
-    --color-blue-text-meta: var(--color-blue);
-
-    --color-pink-text: var(--color-pink-light);
-    --color-pink-text-meta: var(--color-pink);
-
     --color-body: hsl(0, 0%, 5%);
     --color-text: var(--color-white);
     --color-text-light: var(--color-white-80);
@@ -208,6 +186,13 @@
     --color-bookmark: var(--color-black);
     --color-bookmark-border-hover: var(--color-white-5);
     --color-bookmark-border-active: var(--color-white-15);
+
+    --color-cyan-text: var(--color-cyan);
+    --color-cyan-text-meta: var(--color-cyan-dark);
+    --color-blue-text: var(--color-blue-light);
+    --color-blue-text-meta: var(--color-blue);
+    --color-pink-text: var(--color-pink-light);
+    --color-pink-text-meta: var(--color-pink);
   }
 }
 
