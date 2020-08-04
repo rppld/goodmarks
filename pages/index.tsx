@@ -6,9 +6,8 @@ import { H4 } from 'components/heading'
 import BookmarksTabs from 'components/bookmarks-tabs'
 import BookmarksFeed from 'components/bookmarks-feed'
 import JoinGoodmarks from 'components/join-goodmarks'
-import { Notifications } from 'components/icon'
-import Button from 'components/button'
 import Link from 'next/link'
+import NotificationButton from 'components/notification-button'
 
 const Home: NextPage = () => {
   return (
@@ -16,13 +15,7 @@ const Home: NextPage = () => {
       <PageTitle
         adornment={
           <Link href="/notifications" passHref>
-            <Button
-              as="a"
-              size="sm"
-              leftAdornment={<Notifications size="xs" />}
-            >
-              Notifications
-            </Button>
+            <NotificationButton read={false} />
           </Link>
         }
       >
