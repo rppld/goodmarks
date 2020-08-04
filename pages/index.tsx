@@ -8,15 +8,20 @@ import BookmarksFeed from 'components/bookmarks-feed'
 import JoinGoodmarks from 'components/join-goodmarks'
 import Link from 'next/link'
 import NotificationButton from 'components/notification-button'
+import { useViewer } from 'components/viewer-context'
 
 const Home: NextPage = () => {
+  const { viewer } = useViewer()
+
   return (
     <Layout>
       <PageTitle
         adornment={
-          <Link href="/notifications" passHref>
-            <NotificationButton read={false} />
-          </Link>
+          viewer ? (
+            <Link href="/notifications" passHref>
+              <NotificationButton read={false} />
+            </Link>
+          ) : null
         }
       >
         <H4 as="h1">Bookmarks</H4>
