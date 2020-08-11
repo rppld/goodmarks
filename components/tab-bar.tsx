@@ -50,21 +50,12 @@ const TabBar: React.FC = () => {
           </Link>
         </li>
         <li>
-          {viewer ? (
-            <Link href="/lists">
-              <a className={setActiveState(['/lists'])}>
-                <Article />
-                <span className={styles.label}>Lists</span>
-              </a>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <a className={setActiveState(['/lists'])}>
-                <Article />
-                <span className={styles.label}>Lists</span>
-              </a>
-            </Link>
-          )}
+          <Link href="/lists">
+            <a className={setActiveState(['/lists'])}>
+              <Article />
+              <span className={styles.label}>Lists</span>
+            </a>
+          </Link>
         </li>
         <li>
           {viewer ? (
