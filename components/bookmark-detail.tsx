@@ -7,6 +7,7 @@ import Button from './button'
 import Form from './form'
 import BookmarkNode from './bookmark-node'
 import { HStack, VStack } from './stack'
+import { SmallText } from './text'
 import { useViewer } from './viewer-context'
 import { H5 } from './heading'
 import { BookmarksData } from 'lib/types'
@@ -14,6 +15,7 @@ import { useFormik } from 'formik'
 import useDeleteComment from 'utils/use-delete-comment'
 import useCreateComment from 'utils/use-create-comment'
 import CommentNode from './comment-node'
+import Link from 'next/link'
 
 interface Props {
   initialData: BookmarksData
@@ -140,13 +142,13 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
             </>
           )}
 
-          {viewer && (
+          {viewer ? (
             <>
               <H5>Add a comment</H5>
               <Form onSubmit={formik.handleSubmit}>
                 <Input
                   as="textarea"
-                  rows="6"
+                  rows="4"
                   labelText="Comment"
                   hideLabel
                   name="comment"
@@ -166,6 +168,15 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
                   </HStack>
                 </footer>
               </Form>
+            </>
+          ) : (
+            <>
+              <H5>Add a comment</H5>
+              <SmallText meta>
+                {' '}
+                <Link href="/login">Login</Link> or{' '}
+                <Link href="/signup">create an account</Link> to add a comment
+              </SmallText>
             </>
           )}
         </VStack>
