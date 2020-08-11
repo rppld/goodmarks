@@ -4,6 +4,7 @@ import BookmarkNode from './bookmark-node'
 import { SmallText } from './text'
 import InfiniteScrollTrigger from './infinite-scroll-trigger'
 import qs from 'querystringify'
+import InviteFriends from './invite-friends'
 
 interface Props {
   cacheKey?: string
@@ -91,33 +92,37 @@ const BookmarksFeed: React.FC<Props> = ({
     mutate(newData, false)
   }
 
-  return (
-    <>
-      {pages?.length > 0 &&
-        pages.map((page, pageIndex) =>
-          page.edges.map((node) => (
-            <BookmarkNode
-              {...node}
-              key={node.bookmark.id}
-              onLike={() => handleLike(pageIndex, node.bookmark.id)}
-              onDelete={() => handleDelete(pageIndex, node.bookmark.id)}
-              linkToBookmarkDetail
-            />
-          ))
-        )}
+  if (pages && !error) {
+    return (
+      <>
+        {pages?.length > 0 &&
+          pages.map((page, pageIndex) =>
+            page.edges.map((node) => (
+              <BookmarkNode
+                {...node}
+                key={node.bookmark.id}
+                onLike={() => handleLike(pageIndex, node.bookmark.id)}
+                onDelete={() => handleDelete(pageIndex, node.bookmark.id)}
+                linkToBookmarkDetail
+              />
+            ))
+          )}
 
-      <InfiniteScrollTrigger
-        onIntersect={() => setSize(size + 1)}
-        disabled={isReachingEnd || isLoadingMore}
-      >
-        {isLoadingMore ? (
-          <SmallText meta>Loading...</SmallText>
-        ) : isReachingEnd ? (
-          <SmallText meta>You’ve reached the end.</SmallText>
-        ) : null}
-      </InfiniteScrollTrigger>
-    </>
-  )
+        <InfiniteScrollTrigger
+          onIntersect={() => setSize(size + 1)}
+          disabled={isReachingEnd || isLoadingMore}
+        >
+          {isLoadingMore ? (
+            <SmallText meta>Loading...</SmallText>
+          ) : isReachingEnd ? (
+            <SmallText meta>You’ve reached the end.</SmallText>
+          ) : null}
+        </InfiniteScrollTrigger>
+      </>
+    )
+  } else {
+    return <InviteFriends />
+  }
 }
 
 export default BookmarksFeed

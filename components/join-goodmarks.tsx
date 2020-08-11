@@ -13,7 +13,7 @@ const JoinGoodmarks: React.FC = () => {
   if (viewer === null) {
     return (
       <div className={bookmarkNodeStyles.container}>
-        <VStack>
+        <VStack spacing="md">
           <header className={styles.header}>
             <Text as="p">
               Goodmarks is a community to share favorites with friends. No
