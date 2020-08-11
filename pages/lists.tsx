@@ -17,18 +17,26 @@ const Lists: NextPage = () => {
     <Layout>
       <PageTitle>
         <H4 as="h1">Lists</H4>
-        <Text meta>Use lists to create collections of bookmarks.</Text>
+        {viewer?.handle ? (
+          <Text meta>Use lists to collect your favorite bookmarks.</Text>
+        ) : (
+          <Text meta>
+            You have to <Link href="/login">login</Link> or{' '}
+            <Link href="/signup">create an account</Link> to make a list and
+            collect your favorite bookmarks.
+          </Text>
+        )}
       </PageTitle>
 
-      <VStack spacing="md">
-        {viewer?.handle ? (
+      {viewer?.handle ? (
+        <VStack spacing="md">
           <Link href="/lists/new" passHref>
             <Button fullWidth>Create a list</Button>
           </Link>
-        ) : null}
 
-        <ListsOverview handle={viewer?.handle} />
-      </VStack>
+          <ListsOverview handle={viewer?.handle} />
+        </VStack>
+      ) : null}
     </Layout>
   )
 }

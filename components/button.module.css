@@ -15,11 +15,13 @@
 
 .base.md {
   height: var(--space-40);
+  font-size: var(--fs-16);
   font-size: inherit;
 }
 
 .base.lg {
   height: var(--space-56);
+  font-size: var(--fs-16);
   border-radius: var(--space-16);
 }
 
