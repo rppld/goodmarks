@@ -23,6 +23,7 @@
   height: var(--space-56);
   font-size: var(--fs-16);
   border-radius: var(--space-16);
+  font-size: var(--fs-16);
 }
 
 .base:focus,

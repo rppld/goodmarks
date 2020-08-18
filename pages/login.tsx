@@ -7,7 +7,7 @@ import Input from 'components/input'
 import Button from 'components/button'
 import Form from 'components/form'
 import { H4 } from 'components/heading'
-import { Text } from 'components/text'
+import { Text, SmallText } from 'components/text'
 import PageTitle from 'components/page-title'
 import GoogleG from 'components/google-g'
 import { mutate } from 'swr'
@@ -92,6 +92,11 @@ const Login: NextPage = () => {
           Log in
         </Button>
         {error && <p>Error: {error}</p>}
+        {
+          <SmallText>
+            <Link href="/forgot-password">Forgot your password?</Link>
+          </SmallText>
+        }
       </Form>
     </Layout>
   )
