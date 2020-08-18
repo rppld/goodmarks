@@ -1546,6 +1546,13 @@ abort-controller@3.0.0:
   dependencies:
     event-target-shim "^5.0.0"
 
+ackee-tracker@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ackee-tracker/-/ackee-tracker-4.0.0.tgz#b83a1def05cb0243163a8f03e80eca923df74451"
+  integrity sha512-HA1LAnci8WMv1Dtrl4L3JyFJaOzajxFhfVI856zIPceKVtPdKpJSEQxU1hFOzG5iFH7O6HfeZPPgtJZrkzCJFA==
+  dependencies:
+    platform "^1.3.6"
+
 acorn-jsx@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/acorn-jsx/-/acorn-jsx-5.2.0.tgz#4c66069173d6fdd68ed85239fc256226182b2ebe"
@@ -5208,6 +5215,11 @@ platform@1.3.3:
   resolved "https://registry.yarnpkg.com/platform/-/platform-1.3.3.tgz#646c77011899870b6a0903e75e997e8e51da7461"
   integrity sha1-ZGx3ARiZhwtqCQPnXpl+jlHadGE=
 
+platform@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/platform/-/platform-1.3.6.tgz#48b4ce983164b209c2d45a107adb31f473a6e7a7"
+  integrity sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg==
+
 pnp-webpack-plugin@1.6.4:
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/pnp-webpack-plugin/-/pnp-webpack-plugin-1.6.4.tgz#c9711ac4dc48a685dabafc86f8b6dd9f8df84149"
@@ -7039,6 +7051,13 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-ackee@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/use-ackee/-/use-ackee-1.0.0.tgz#a250522bf23f19b1d7682cb6649c61e0830fe7f2"
+  integrity sha512-Sn6EQewy8bD/pgCG9XsixjGyi+WbvtbiutDNLqbdo/j4+2UrgOYX1vSsSpX7gZAiIlwc4jYEHBdj5FuHMd80pA==
+  dependencies:
+    ackee-tracker "^4.0.0"
 
 use-callback-ref@^1.2.1, use-callback-ref@^1.2.3:
   version "1.2.4"
