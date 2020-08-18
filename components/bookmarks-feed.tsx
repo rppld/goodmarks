@@ -92,37 +92,35 @@ const BookmarksFeed: React.FC<Props> = ({
     mutate(newData, false)
   }
 
-  if (pages && !error) {
-    return (
-      <>
-        {pages?.length > 0 &&
-          pages.map((page, pageIndex) =>
-            page.edges.map((node) => (
-              <BookmarkNode
-                {...node}
-                key={node.bookmark.id}
-                onLike={() => handleLike(pageIndex, node.bookmark.id)}
-                onDelete={() => handleDelete(pageIndex, node.bookmark.id)}
-                linkToBookmarkDetail
-              />
-            ))
-          )}
+  return (
+    <>
+      {pages?.length > 0 &&
+        pages.map((page, pageIndex) =>
+          page.edges.map((node) => (
+            <BookmarkNode
+              {...node}
+              key={node.bookmark.id}
+              onLike={() => handleLike(pageIndex, node.bookmark.id)}
+              onDelete={() => handleDelete(pageIndex, node.bookmark.id)}
+              linkToBookmarkDetail
+            />
+          ))
+        )}
 
-        <InfiniteScrollTrigger
-          onIntersect={() => setSize(size + 1)}
-          disabled={isReachingEnd || isLoadingMore}
-        >
-          {isLoadingMore ? (
-            <SmallText meta>Loading...</SmallText>
-          ) : isReachingEnd ? (
-            <SmallText meta>You’ve reached the end.</SmallText>
-          ) : null}
-        </InfiniteScrollTrigger>
-      </>
-    )
-  } else {
-    return <InviteFriends />
-  }
+      <InfiniteScrollTrigger
+        onIntersect={() => setSize(size + 1)}
+        disabled={isReachingEnd || isLoadingMore}
+      >
+        {isEmpty ? (
+          <InviteFriends />
+        ) : isLoadingMore ? (
+          <SmallText meta>Loading...</SmallText>
+        ) : isReachingEnd ? (
+          <SmallText meta>You’ve reached the end.</SmallText>
+        ) : null}
+      </InfiniteScrollTrigger>
+    </>
+  )
 }
 
 export default BookmarksFeed

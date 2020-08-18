@@ -1,5 +1,6 @@
 .header p {
   font-size: var(--fs-20);
+  text-align: left;
 }
 
 @media (min-width: 620px) {

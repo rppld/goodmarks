@@ -173,7 +173,6 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
             <>
               <H5>Add a comment</H5>
               <SmallText meta>
-                {' '}
                 <Link href="/login">Login</Link> or{' '}
                 <Link href="/signup">create an account</Link> to add a comment
               </SmallText>
