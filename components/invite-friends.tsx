@@ -2,7 +2,6 @@ import React from 'react'
 import Link from 'next/link'
 import { Text } from './text'
 import { HStack, VStack } from './stack'
-
 import Button from './button'
 import bookmarkNodeStyles from './bookmark-node/index.module.css'
 import styles from './invite-friends.module.css'
