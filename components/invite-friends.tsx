@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Text } from './text'
 import { HStack, VStack } from './stack'
+
 import Button from './button'
 import bookmarkNodeStyles from './bookmark-node/index.module.css'
 import styles from './invite-friends.module.css'
@@ -12,8 +13,8 @@ const InviteFriends: React.FC = () => {
   const { viewer } = useViewer()
 
   const shareText =
-    "I've just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:"
-  const shareUrl = 'https://goodmarks.vercel.app/' + viewer.handle
+    'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:'
+  const shareUrl = window.location.origin + '/' + viewer.handle
 
   return (
     <div className={bookmarkNodeStyles.container}>
