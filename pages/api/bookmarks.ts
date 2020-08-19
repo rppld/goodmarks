@@ -16,6 +16,7 @@ import absoluteUrl from 'utils/absolute-url'
 
 const {
   Create,
+  IsNonEmpty,
   HasIdentity,
   Ref,
   Count,
@@ -170,34 +171,46 @@ async function getFollowingBookmarks(req, res) {
       // don't need afterwards, we can use join here!)
       q.Map(
         Paginate(
-          // Merge my own bookmarks with those of the people I’m
-          // following.
-          Union(
-            // Fetch the bookmarks of the people I’m following.
-            Let(
-              {
-                userSet: Paginate(
-                  Match(
-                    Index('follower_stats_by_user_popularity'),
-                    Select(['data', 'user'], Get(Identity()))
-                  )
-                ),
-                users: q.Map(
-                  Select(['data'], Var('userSet')),
-                  Lambda(['score', 'ref'], Var('ref'))
-                ),
-                peopleBookmarks: q.Map(
-                  Var('users'),
-                  Lambda('x', Match(Index('bookmarks_by_author'), Var('x')))
-                ),
-              },
-              Union(Var('peopleBookmarks'))
-            ),
-            // Fetch my own bookmarks.
-            Match(
-              Index('bookmarks_by_author'),
-              Select(['data', 'user'], Get(Identity()))
-            )
+          Let(
+            {
+              userSet: Paginate(
+                Match(
+                  Index('follower_stats_by_user_popularity'),
+                  Select(['data', 'user'], Get(Identity()))
+                )
+              ),
+              users: q.Map(
+                Select(['data'], Var('userSet')),
+                Lambda(['score', 'ref'], Var('ref'))
+              ),
+              // Fetch the bookmarks of the people I’m following.
+              peopleBookmarks: q.Map(
+                Var('users'),
+                Lambda('x', Match(Index('bookmarks_by_author'), Var('x')))
+              ),
+              // Union can’t handle empty arrays, so gotta check for that.
+              flattenedPeopleBookmarks: If(
+                IsNonEmpty(Var('peopleBookmarks')),
+                Union(Var('peopleBookmarks')),
+                false
+              ),
+              // Fetch my own bookmarks.
+              myOwnBookmarks: Match(
+                Index('bookmarks_by_author'),
+                Select(['data', 'user'], Get(Identity()))
+              ),
+              // Merge my own bookmarks with those of the people I’m
+              // following. Check if it’s empty first, as Union can’t
+              // handle empty arrays. Would throw an error for example
+              // if you’re not following anyone yet because
+              // `peopleBookmarks` would be empty then.
+              mergedBookmarks: If(
+                IsNonEmpty(Var('peopleBookmarks')),
+                Union(Var('flattenedPeopleBookmarks'), Var('myOwnBookmarks')),
+                Var('myOwnBookmarks')
+              ),
+            },
+            Var('mergedBookmarks')
           ),
           {
             size,
@@ -209,6 +222,7 @@ async function getFollowingBookmarks(req, res) {
       )
     )
   )
+
   const { before, after, ...edges } = data
 
   return res.status(200).json({
