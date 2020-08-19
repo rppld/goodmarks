@@ -7,7 +7,7 @@ interface Props {
   title?: string
 }
 
-const Layout: React.FC<Props> = ({ title, ...props }) => (
+const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => (
   <div className={styles.container} {...props}>
     <Head>
       <title>{title}</title>
@@ -50,9 +50,5 @@ const Layout: React.FC<Props> = ({ title, ...props }) => (
     <main className={styles.main}>{props.children}</main>
   </div>
 )
-
-Layout.defaultProps = {
-  title: 'Goodmarks',
-}
 
 export default Layout

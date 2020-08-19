@@ -14,7 +14,7 @@ import InfiniteScrollTrigger from 'components/infinite-scroll-trigger'
 import qs from 'querystringify'
 
 const CACHE_KEY = '/api/notifications'
-const PAGE_SIZE = 2
+const PAGE_SIZE = 10 // Needs to be greater than 2
 
 const getKey = (pageIndex, previousPageData) => {
   const params = qs.stringify({
