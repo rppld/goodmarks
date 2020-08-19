@@ -22,8 +22,8 @@ const Lists: NextPage = () => {
         ) : (
           <Text meta>
             <Link href="/login">Login</Link> or{' '}
-            <Link href="/signup">create an account</Link> to make a list and
-            collect your favorite bookmarks.
+            <Link href="/signup">create an account</Link> to create lists of
+            your favorite bookmarks.
           </Text>
         )}
       </PageTitle>
