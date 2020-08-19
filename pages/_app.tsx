@@ -18,8 +18,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   useAckee(
     router.pathname,
     {
-      server: 'http://178.62.216.91',
-      domainId: '97d5ad07-d9b7-4f62-870d-d1fcd2d248f6',
+      server: 'http://vps.goodmarks.app',
+      domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
     },
     {
       ignoreLocalhost: true,
