@@ -3,6 +3,13 @@
   line-height: var(--lh-copy);
 }
 
+/* Only added the underline here because it breaks a lot of other components if this underline is applied globally */
+.text a,
+.small a,
+.caption a {
+  text-decoration: underline;
+}
+
 @media (min-width: 620px) {
   .text {
     font-size: var(--fs-18);
