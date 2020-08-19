@@ -14,8 +14,8 @@ interface Props {
 }
 
 const BookmarksFeed: React.FC<Props> = ({
-  cacheKey,
-  postsPerPage,
+  cacheKey = '/api/bookmarks',
+  postsPerPage = 10, // Needs to be greater than 2
   ...props
 }) => {
   const query = props // Rest of the props are passed as query params.
@@ -118,11 +118,6 @@ const BookmarksFeed: React.FC<Props> = ({
       </InfiniteScrollTrigger>
     </>
   )
-}
-
-BookmarksFeed.defaultProps = {
-  cacheKey: '/api/bookmarks',
-  postsPerPage: 10,
 }
 
 export default BookmarksFeed

@@ -28,9 +28,4 @@ const Avatar: React.FC<Props> = ({
   )
 }
 
-Avatar.defaultProps = {
-  size: 'md',
-  alt: 'Avatar',
-}
-
 export default Avatar
