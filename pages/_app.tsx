@@ -18,7 +18,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   useAckee(
     router.pathname,
     {
-      server: 'http://vps.goodmarks.app',
+      server: 'https://vps.goodmarks.app',
       domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
     },
     {
