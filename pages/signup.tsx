@@ -135,8 +135,8 @@ const Signup: NextPage = () => {
             typeof hasValidUsername !== 'undefined'
               ? formik.errors.username
                 ? String(formik.errors.username)
-                : 'This username is available'
-              : 'A unique username that will be used throughout the platform'
+                : 'This display name is available'
+              : 'A unique display name that will be used throughout the platform'
           }
           validate={
             formik.values.username.length > 0 &&
