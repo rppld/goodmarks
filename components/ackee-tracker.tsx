@@ -1,12 +1,11 @@
 import React from 'react'
 import * as ackeeTracker from 'ackee-tracker'
-import { useRouter } from 'next/router'
 
 const AckeeTracker: React.FC = () => {
-  const router = useRouter()
+  let instance = null
 
-  React.useEffect(() => {
-    const instance = ackeeTracker
+  if (typeof window !== 'undefined') {
+    instance = ackeeTracker
       .create(
         {
           server: 'https://analytics.goodmarks.app',
@@ -17,13 +16,10 @@ const AckeeTracker: React.FC = () => {
           detailed: true,
         }
       )
-      .record({
-        siteLocation: router.pathname,
-        siteReferrer: document.referrer,
-      })
-  })
+      .record()
+  }
 
-  return <></>
+  return null
 }
 
 export default AckeeTracker
