@@ -9,23 +9,23 @@ import '@reach/menu-button/styles.css'
 import '@reach/checkbox/styles.css'
 import '@reach/dialog/styles.css'
 import 'lib/styles.css'
-import { useRouter } from 'next/router'
-import useAckee from 'use-ackee'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter()
+  // const router = useRouter()
 
-  useAckee(
-    router.pathname,
-    {
-      server: 'https://vps.goodmarks.app',
-      domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
-    },
-    {
-      ignoreLocalhost: true,
-      detailed: false,
-    }
-  )
+  // console.log(router.pathname)
+
+  // useAckee(
+  //   router.pathname,
+  //   {
+  //     server: 'https://vps.goodmarks.app',
+  //     domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
+  //   },
+  //   {
+  //     ignoreLocalhost: true,
+  //     detailed: false,
+  //   }
+  // )
 
   return (
     <SWRConfig value={{ fetcher: fetch }}>
