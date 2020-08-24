@@ -2,30 +2,12 @@ import React from 'react'
 import Head from 'next/head'
 import styles from './layout.module.css'
 import TabBar from './tab-bar'
-import { useRouter } from 'next/router'
-import useAckee from 'use-ackee'
 
 interface Props {
   title?: string
 }
 
 const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => {
-  const router = useRouter()
-
-  console.log(router)
-
-  useAckee(
-    router.route,
-    {
-      server: 'https://analytics.goodmarks.app',
-      domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
-    },
-    {
-      ignoreLocalhost: true,
-      detailed: true,
-    }
-  )
-
   return (
     <div className={styles.container} {...props}>
       <Head>
