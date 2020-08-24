@@ -11,22 +11,6 @@ import '@reach/dialog/styles.css'
 import 'lib/styles.css'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  // const router = useRouter()
-
-  // console.log(router.pathname)
-
-  // useAckee(
-  //   router.pathname,
-  //   {
-  //     server: 'https://vps.goodmarks.app',
-  //     domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
-  //   },
-  //   {
-  //     ignoreLocalhost: true,
-  //     detailed: false,
-  //   }
-  // )
-
   return (
     <SWRConfig value={{ fetcher: fetch }}>
       <ViewerProvider>

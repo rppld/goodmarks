@@ -17,7 +17,7 @@ const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => {
   useAckee(
     router.route,
     {
-      server: 'https://vps.goodmarks.app',
+      server: 'https://analytics.goodmarks.app',
       domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
     },
     {
