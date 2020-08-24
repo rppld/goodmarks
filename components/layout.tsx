@@ -2,12 +2,34 @@ import React from 'react'
 import Head from 'next/head'
 import styles from './layout.module.css'
 import TabBar from './tab-bar'
+import * as ackeeTracker from 'ackee-tracker'
+import { useRouter } from 'next/router'
 
 interface Props {
   title?: string
 }
 
 const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => {
+  const router = useRouter()
+
+  React.useEffect(() => {
+    const instance = ackeeTracker
+      .create(
+        {
+          server: 'https://analytics.goodmarks.app',
+          domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
+        },
+        {
+          ignoreLocalhost: true,
+          detailed: true,
+        }
+      )
+      .record({
+        siteLocation: router.pathname,
+        siteReferrer: document.referrer,
+      })
+  })
+
   return (
     <div className={styles.container} {...props}>
       <Head>
