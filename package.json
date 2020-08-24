@@ -13,6 +13,7 @@
     "@reach/listbox": "^0.10.5",
     "@reach/menu-button": "^0.10.5",
     "@reach/visually-hidden": "^0.10.4",
+    "ackee-tracker": "^4.0.0",
     "atob": "^2.1.2",
     "aws-sdk": "^2.726.0",
     "btoa": "^1.2.1",
@@ -32,7 +33,6 @@
     "simple-oauth2": "^3.4.0",
     "swr": "^0.3.0",
     "timeago-react": "^3.0.0",
-    "use-ackee": "^1.0.0",
     "yup": "^0.29.3"
   },
   "devDependencies": {
