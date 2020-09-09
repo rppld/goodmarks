@@ -18,11 +18,26 @@ const InviteFriends: React.FC = () => {
     'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:'
   const shareUrl = window.location.origin + '/' + viewer.handle
 
+  const nativeShareData = {
+    title: 'Goodmarks',
+    text: shareText,
+    url: shareUrl,
+  }
+
   const copyToClipboard = (event) => {
     inputEl.current.select()
     document.execCommand('copy')
     event.target.focus()
     setCopied(true)
+  }
+
+  const openNativeShare = async () => {
+    try {
+      await navigator.share(nativeShareData)
+      console.log('MDN shared successfully')
+    } catch (err) {
+      console.log('Error: ' + err)
+    }
   }
 
   return (
@@ -46,6 +61,8 @@ const InviteFriends: React.FC = () => {
               <Button as="a" onClick={() => setShareActions(true)}>
                 Share with friends
               </Button>
+
+              <Button onClick={openNativeShare}>Native Share Test</Button>
             </>
           )}
           {shareActions && (
