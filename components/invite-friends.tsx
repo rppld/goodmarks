@@ -91,7 +91,7 @@ const InviteFriends: React.FC = () => {
                 value={shareData.text + ' ' + shareData.url}
                 className={styles.hiddenInput}
                 ref={inputEl}
-              ></input>
+              />
             </HStack>
           )}
         </HStack>

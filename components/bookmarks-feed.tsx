@@ -118,13 +118,11 @@ const BookmarksFeed: React.FC<Props> = ({
     mutate(newData, false)
   }
 
+  const showInviteFriendsBanner = data?.[0]?.edges?.length <= 5 || hasOnlyOwnBookmarks()
+
   return (
     <>
-      {data?.[0]?.edges?.length <= 5 ? (
-        <InviteFriends />
-      ) : hasOnlyOwnBookmarks() ? (
-        <InviteFriends />
-      ) : null}
+      {showInviteFriendsBanner ? <InviteFriends /> : null}
 
       {pages?.length > 0 &&
         pages.map((page, pageIndex) =>
