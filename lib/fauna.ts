@@ -75,7 +75,7 @@ const {
   Select,
   Get,
   Identity,
-  Contains,
+  ContainsPath,
   Paginate,
   Let,
   Lambda,
@@ -165,7 +165,7 @@ export function getBookmarksWithUsersMapGetGeneric(
           bookmark: If(Exists(Var('ref')), Get(Var('ref')), false),
           // Get the original bookmark
           original: If(
-            Contains(['data', 'original'], Var('bookmark')),
+            ContainsPath(['data', 'original'], Var('bookmark')),
             // Reposted bookmark. Get original bookmark's data. We
             // want to get the original as well in the same structure,
             // let's just use recursion to construct that query, we
@@ -311,7 +311,7 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
           list: If(Exists(Var('ref')), Get(Var('ref')), false),
           // Get the original list
           original: If(
-            Contains(['data', 'original'], Var('list')),
+            ContainsPath(['data', 'original'], Var('list')),
             // Reposted list. Get original list's data. We
             // want to get the original as well in the same structure,
             // let's just use recursion to construct that query, we
