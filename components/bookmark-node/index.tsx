@@ -30,12 +30,11 @@ interface Props {
   bookmarkStats: BookmarkStats
   comments: CommentNode[]
   original?: Bookmark
-  list?: List
-  listItemId?: string
+  listId?: string
   author: User
   onLike?: () => void
   onDelete?: () => void
-  onRemoveFromList?: (listItemId: string) => void
+  onRemoveFromList?: () => void
   linkToBookmarkDetail?: boolean
   preview?: boolean
 }
@@ -47,8 +46,7 @@ const BookmarkNode: React.FC<Props> = ({
   comments,
   original,
   author,
-  list,
-  listItemId,
+  listId,
   linkToBookmarkDetail,
   preview,
   ...props
@@ -76,8 +74,8 @@ const BookmarkNode: React.FC<Props> = ({
   }
 
   const handleRemoveFromList = async () => {
-    const res = await removeFromList(listItemId, list.id)
-    props.onRemoveFromList(listItemId)
+    const res = await removeFromList(bookmark.id, listId)
+    props.onRemoveFromList()
     console.log(res)
   }
 
@@ -97,7 +95,7 @@ const BookmarkNode: React.FC<Props> = ({
           <Text as="p" meta>
             This item is no longer available.
           </Text>
-          {viewer && list ? (
+          {viewer && listId ? (
             <Menu>
               <Action
                 as={MenuButton}
@@ -173,7 +171,7 @@ const BookmarkNode: React.FC<Props> = ({
                     Add to list
                   </MenuItem>
 
-                  {list && (
+                  {listId && (
                     <MenuItem
                       onSelect={handleRemoveFromList}
                       disabled={removingFromList}
@@ -183,7 +181,7 @@ const BookmarkNode: React.FC<Props> = ({
                     </MenuItem>
                   )}
 
-                  {isOwnedByViewer && !list && (
+                  {isOwnedByViewer && !listId && (
                     <MenuItem
                       onSelect={handleDelete}
                       disabled={deleting}

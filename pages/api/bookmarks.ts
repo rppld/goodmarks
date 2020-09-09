@@ -20,6 +20,7 @@ const {
   HasIdentity,
   Ref,
   Count,
+  Reverse,
   Update,
   Add,
   Not,
@@ -45,7 +46,7 @@ const {
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id, hashtag, handle, action, sort } = req.query
+  const { id, hashtag, list, handle, action, sort } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -75,6 +76,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (hashtag) {
     return getBookmarksByHashtag(req, res)
+  }
+
+  if (list) {
+    return getBookmarksByList(req, res)
   }
 
   if (handle) {
@@ -224,6 +229,59 @@ async function getFollowingBookmarks(req, res) {
   )
 
   const { before, after, ...edges } = data
+
+  return res.status(200).json({
+    edges: flattenDataKeys(edges),
+    pageInfo: {
+      hasNextPage: Boolean(after),
+      endCursor: Boolean(after) ? serialize(after) : null,
+    },
+  })
+}
+
+async function getBookmarksByList(req, res) {
+  const { list, first, after: cursor = 'null' } = req.query
+  const size = parseInt(first) || 10
+  const cookies = cookie.parse(req.headers.cookie ?? '')
+  const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
+  const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
+
+  const data: any = await client.query(
+    Let(
+      {
+        listRef: Ref(Collection('Lists'), list),
+        list: Get(Match(Index('lists_by_reference'), Var('listRef'))),
+        listItems: Select(['data', 'items'], Var('list')),
+        bookmarks: getBookmarksWithUsersMapGetGeneric(
+          q.Map(
+            Paginate(
+              Reverse(
+                Union(
+                  q.Map(
+                    Var('listItems'),
+                    Lambda(
+                      ['ref'],
+                      Match(Index('bookmarks_by_reference'), Var('ref'))
+                    )
+                  )
+                )
+              ),
+              {
+                size,
+                after: cursor === 'null' ? undefined : parseValue(cursor),
+              }
+            ),
+            Lambda(['ref', 'title', 'author'], Var('ref'))
+          )
+        ),
+      },
+      {
+        bookmarks: Var('bookmarks'),
+      }
+    )
+  )
+  const { bookmarks } = data
+  const { before, after, ...edges } = bookmarks
 
   return res.status(200).json({
     edges: flattenDataKeys(edges),

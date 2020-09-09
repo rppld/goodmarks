@@ -332,18 +332,6 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
             // Normal list, there is no original.
             false
           ),
-          items: q.Map(
-            Select(['data', 'items'], Var('list')),
-            q.Lambda('item', {
-              id: Select(['id'], Var('item')),
-              bookmark: Select(
-                0,
-                getBookmarksWithUsersMapGetGeneric([
-                  Select(['ref'], Var('item')),
-                ])
-              ),
-            })
-          ),
           // Get the user that wrote the list.
           author: Get(Select(['data', 'author'], Var('list'))),
           // Get the account via identity.
@@ -393,7 +381,6 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
           author: Var('author'),
           original: Var('original'),
           list: Var('list'),
-          items: Var('items'),
           listStats: Var('listStats'),
           comments: Var('comments'),
         }
