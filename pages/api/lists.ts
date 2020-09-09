@@ -341,7 +341,8 @@ async function getListsByUserHandle(req, res) {
 
 export const listApi = async (listId: string, faunaSecret?: string) => {
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
-  const { edges, isPrivate, viewerIsAuthor } = await client.query(
+  // @todo: Type `data`
+  const data: any = await client.query(
     Let(
       {
         listRef: Ref(Collection('Lists'), listId),
@@ -381,6 +382,7 @@ export const listApi = async (listId: string, faunaSecret?: string) => {
       }
     )
   )
+  const { edges, isPrivate, viewerIsAuthor } = data
 
   if (isPrivate && !viewerIsAuthor) {
     throw new Error('Unauthorized: Private list')

@@ -170,11 +170,13 @@ async function handleSignup(req, res) {
       throw new Error('No ref present in create query response.')
     }
 
-    const { secret } = await serverClient.query(
+    // @todo: Type `data`
+    const data: any = await serverClient.query(
       q.Login(signupRes.account, {
         password,
       })
     )
+    const { secret } = data
 
     if (!secret) {
       throw new Error('No secret present in login query response.')
@@ -196,7 +198,8 @@ async function handleLogin(req, res) {
       throw new Error('Email and password must be provided.')
     }
 
-    const { secret } = await serverClient.query(
+    // @todo: Type `data`
+    const data: any = await serverClient.query(
       Let(
         {
           // Login will return a token if the password matches the
@@ -213,6 +216,7 @@ async function handleLogin(req, res) {
         { account: Var('account'), user: Var('user'), secret: Var('secret') }
       )
     )
+    const { secret } = data
 
     if (!secret) {
       throw new Error('No secret present in login query response.')
