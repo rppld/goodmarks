@@ -107,18 +107,20 @@ const BookmarksFeed: React.FC<Props> = ({
           ))
         )}
 
-      <InfiniteScrollTrigger
-        onIntersect={() => setSize(size + 1)}
-        disabled={isReachingEnd || isLoadingMore}
-      >
-        {isEmpty ? (
-          <InviteFriends />
-        ) : isLoadingMore ? (
-          <SmallText meta>Loading...</SmallText>
-        ) : isReachingEnd ? (
-          <SmallText meta>You’ve reached the end.</SmallText>
-        ) : null}
-      </InfiniteScrollTrigger>
+      {isEmpty ? (
+        <InviteFriends />
+      ) : (
+        <InfiniteScrollTrigger
+          onIntersect={() => setSize(size + 1)}
+          disabled={isReachingEnd || isLoadingMore}
+        >
+          {isLoadingMore ? (
+            <SmallText meta>Loading...</SmallText>
+          ) : isReachingEnd ? (
+            <SmallText meta>You’ve reached the end.</SmallText>
+          ) : null}
+        </InfiniteScrollTrigger>
+      )}
     </>
   )
 }
