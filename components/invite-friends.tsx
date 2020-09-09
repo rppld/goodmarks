@@ -18,7 +18,9 @@ const InviteFriends: React.FC = () => {
     title: 'Goodmarks',
     text:
       'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:',
-    url: window.location.origin + '/' + viewer.handle,
+    url: viewer
+      ? window.location.origin + '/' + viewer.handle
+      : window.location.origin,
   }
 
   const copyToClipboard = (event) => {
