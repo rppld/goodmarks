@@ -5,6 +5,7 @@ import { SmallText } from './text'
 import InfiniteScrollTrigger from './infinite-scroll-trigger'
 import qs from 'querystringify'
 import InviteFriends from './invite-friends'
+import { useViewer } from './viewer-context'
 
 interface Props {
   cacheKey?: string
@@ -19,6 +20,7 @@ const BookmarksFeed: React.FC<Props> = ({
   postsPerPage = 10, // Needs to be greater than 2
   ...props
 }) => {
+  const { viewer } = useViewer()
   const query = props // Rest of the props are passed as query params.
 
   const getKey = (pageIndex, previousPageData) => {
@@ -40,7 +42,31 @@ const BookmarksFeed: React.FC<Props> = ({
   const isLoadingMore =
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === 'undefined')
+
+  const hasOnlyOwnBookmarks = () => {
+    let onlyOwnBookmarks = false
+
+    if (viewer) {
+      if (data?.[0]?.edges?.length > 0) {
+        const filteredData = data?.[0]?.edges.filter((obj) => {
+          if (obj.author.handle === viewer.handle) {
+            return true
+          } else {
+            return false
+          }
+        })
+
+        filteredData.length === data?.[0]?.edges?.length
+          ? (onlyOwnBookmarks = true)
+          : (onlyOwnBookmarks = false)
+      }
+    }
+
+    return onlyOwnBookmarks
+  }
+
   const isEmpty = data?.[0]?.edges?.length === 0
+
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.edges?.length < postsPerPage)
 
@@ -94,6 +120,12 @@ const BookmarksFeed: React.FC<Props> = ({
 
   return (
     <>
+      {data?.[0]?.edges?.length <= 5 ? (
+        <InviteFriends />
+      ) : hasOnlyOwnBookmarks() ? (
+        <InviteFriends />
+      ) : null}
+
       {pages?.length > 0 &&
         pages.map((page, pageIndex) =>
           page.edges.map((node) => (
@@ -107,9 +139,7 @@ const BookmarksFeed: React.FC<Props> = ({
           ))
         )}
 
-      {isEmpty ? (
-        <InviteFriends />
-      ) : (
+      {!isEmpty ? (
         <InfiniteScrollTrigger
           onIntersect={() => setSize(size + 1)}
           disabled={isReachingEnd || isLoadingMore}
@@ -120,7 +150,7 @@ const BookmarksFeed: React.FC<Props> = ({
             <SmallText meta>You’ve reached the end.</SmallText>
           ) : null}
         </InfiniteScrollTrigger>
-      )}
+      ) : null}
     </>
   )
 }

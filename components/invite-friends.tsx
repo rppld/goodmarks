@@ -14,13 +14,16 @@ const InviteFriends: React.FC = () => {
 
   const { viewer } = useViewer()
 
+  let shareUrl = '//goodmarks.app'
+  if (viewer && window) {
+    shareUrl = window.location.origin + '/' + viewer.handle
+  }
+
   const shareData = {
     title: 'Goodmarks',
     text:
       'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:',
-    url: viewer
-      ? window.location.origin + '/' + viewer.handle
-      : window.location.origin,
+    url: shareUrl,
   }
 
   const copyToClipboard = (event) => {
