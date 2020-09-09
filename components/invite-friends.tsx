@@ -14,14 +14,11 @@ const InviteFriends: React.FC = () => {
 
   const { viewer } = useViewer()
 
-  const shareText =
-    'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:'
-  const shareUrl = window.location.origin + '/' + viewer.handle
-
-  const nativeShareData = {
+  const shareData = {
     title: 'Goodmarks',
-    text: shareText,
-    url: shareUrl,
+    text:
+      'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:',
+    url: window.location.origin + '/' + viewer.handle,
   }
 
   const copyToClipboard = (event) => {
@@ -31,12 +28,13 @@ const InviteFriends: React.FC = () => {
     setCopied(true)
   }
 
-  const openNativeShare = async () => {
+  const share = async () => {
     try {
-      await navigator.share(nativeShareData)
-      console.log('MDN shared successfully')
+      // Try to use a native share dialog
+      await navigator.share(shareData)
     } catch (err) {
-      console.log('Error: ' + err)
+      // Show custom share options if native share options didn't work
+      setShareActions(true)
     }
   }
 
@@ -58,11 +56,7 @@ const InviteFriends: React.FC = () => {
                   Search
                 </Button>
               </Link>
-              <Button as="a" onClick={() => setShareActions(true)}>
-                Share with friends
-              </Button>
-
-              <Button onClick={openNativeShare}>Native Share Test</Button>
+              <Button onClick={share}>Share Goodmarks</Button>
             </>
           )}
           {shareActions && (
@@ -73,14 +67,14 @@ const InviteFriends: React.FC = () => {
 
               <Button
                 as="a"
-                href={`whatsapp://send?text=${shareText} ${shareUrl}`}
+                href={`whatsapp://send?text=${shareData.text} ${shareData.url}`}
                 data-action="share/whatsapp/share"
               >
                 WhatsApp
               </Button>
               <Button
                 as="a"
-                href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+                href={`https://twitter.com/intent/tweet?text=${shareData.text}&url=${shareData.url}`}
               >
                 Twitter
               </Button>
@@ -89,7 +83,7 @@ const InviteFriends: React.FC = () => {
               <input
                 readOnly
                 type="text"
-                value={shareText + ' ' + shareUrl}
+                value={shareData.text + ' ' + shareData.url}
                 className={styles.hiddenInput}
                 ref={inputEl}
               ></input>
