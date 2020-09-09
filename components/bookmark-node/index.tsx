@@ -17,7 +17,6 @@ import AddToListDialog from '../add-to-list-dialog'
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
 import {
   Bookmark,
-  List,
   BookmarkStats,
   BookmarkCategory,
   User,

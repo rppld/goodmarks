@@ -77,7 +77,8 @@ async function get(req, res) {
 async function handleUpdate(req, res) {
   const { userId, payload } = req.body
 
-  const { oldUser, newUser } = await serverClient.query(
+  // @todo: Type `data`
+  const data: any = await serverClient.query(
     Let(
       {
         userRef: Ref(Collection('Users'), userId),
@@ -94,6 +95,7 @@ async function handleUpdate(req, res) {
       }
     )
   )
+  const { oldUser, newUser } = data
 
   // Delete old picture from S3 if updates contained a new one.
   if (oldUser.data.picture !== newUser.data.picture) {
