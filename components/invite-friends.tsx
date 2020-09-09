@@ -9,11 +9,21 @@ import { useViewer } from './viewer-context'
 
 const InviteFriends: React.FC = () => {
   const [shareActions, setShareActions] = React.useState(false)
+  const [copied, setCopied] = React.useState(false)
+  const inputEl: any = React.useRef(null)
+
   const { viewer } = useViewer()
 
   const shareText =
     'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:'
   const shareUrl = window.location.origin + '/' + viewer.handle
+
+  const copyToClipboard = (event) => {
+    inputEl.current.select()
+    document.execCommand('copy')
+    event.target.focus()
+    setCopied(true)
+  }
 
   return (
     <div className={bookmarkNodeStyles.container}>
@@ -40,6 +50,10 @@ const InviteFriends: React.FC = () => {
           )}
           {shareActions && (
             <HStack>
+              <Button onClick={copyToClipboard}>
+                {!copied ? 'Copy link' : 'Copied!'}
+              </Button>
+
               <Button
                 as="a"
                 href={`whatsapp://send?text=${shareText} ${shareUrl}`}
@@ -53,6 +67,15 @@ const InviteFriends: React.FC = () => {
               >
                 Twitter
               </Button>
+
+              {/* Hidden inputElement to allow copying something to the clipboard without permission */}
+              <input
+                readOnly
+                type="text"
+                value={shareText + ' ' + shareUrl}
+                className={styles.hiddenInput}
+                ref={inputEl}
+              ></input>
             </HStack>
           )}
         </HStack>
