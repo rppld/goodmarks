@@ -10,6 +10,7 @@ interface Props {
   cacheKey?: string
   postsPerPage?: number
   handle?: string
+  list?: string
   sort?: string
   hashtag?: string
 }
@@ -102,6 +103,8 @@ const BookmarksFeed: React.FC<Props> = ({
               key={node.bookmark.id}
               onLike={() => handleLike(pageIndex, node.bookmark.id)}
               onDelete={() => handleDelete(pageIndex, node.bookmark.id)}
+              onRemoveFromList={() => handleDelete(pageIndex, node.bookmark.id)}
+              listId={props.list}
               linkToBookmarkDetail
             />
           ))

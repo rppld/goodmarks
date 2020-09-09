@@ -6,13 +6,13 @@ import Button from 'components/button'
 import { ListsData } from 'lib/types'
 import { VStack } from 'components/stack'
 import useSWR from 'swr'
-import BookmarkNode from 'components/bookmark-node'
 import useDeleteList from 'utils/use-delete-list'
 import PageTitle from 'components/page-title'
 import { H4 } from './heading'
 import { Text } from './text'
 import Toolbar from 'components/toolbar'
 import TimeAgo from 'timeago-react'
+import BookmarksFeed from 'components/bookmarks-feed'
 
 interface Props {
   initialData: ListsData
@@ -22,7 +22,7 @@ interface Props {
 const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
   const { viewer } = useViewer()
   const { query } = useRouter()
-  const { data, error, mutate } = useSWR<ListsData>(
+  const { data, error } = useSWR<ListsData>(
     () => listId && `/api/lists?id=${listId}`,
     { initialData }
   )
@@ -34,21 +34,6 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
     const href = '/[user]/lists'
     const as = `/${query.user}/lists`
     Router.push(href, as)
-  }
-
-  const handleRemoveFromList = async (listItemId) => {
-    // Remove item from cached data.
-    mutate(
-      {
-        edges: [
-          {
-            ...edge,
-            items: edge.items.filter((item) => item.id !== listItemId),
-          },
-        ],
-      },
-      false
-    )
   }
 
   return (
@@ -93,18 +78,7 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
             </Toolbar>
           ) : null}
 
-          <VStack spacing="sm">
-            {edge.items.map((item) => (
-              <BookmarkNode
-                {...item.bookmark}
-                key={item.id}
-                list={edge.list}
-                listItemId={item.id}
-                onRemoveFromList={handleRemoveFromList}
-                linkToBookmarkDetail
-              />
-            ))}
-          </VStack>
+          <BookmarksFeed list={listId} />
         </VStack>
       )}
     </div>

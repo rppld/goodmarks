@@ -2,7 +2,7 @@ import React from 'react'
 import { BookmarksData } from 'lib/types'
 
 const useRemoveBookmarkFromList = (): [
-  (itemId: string, listId: string) => Promise<BookmarksData>,
+  (objectId: string, listId: string) => Promise<BookmarksData>,
   {
     loading: boolean
     error: string | null
@@ -11,7 +11,7 @@ const useRemoveBookmarkFromList = (): [
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState(null)
 
-  async function handler(itemId, listId) {
+  async function handler(objectId, listId) {
     try {
       setLoading(true)
       setError(null)
@@ -20,7 +20,7 @@ const useRemoveBookmarkFromList = (): [
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          itemId,
+          objectId,
           listId,
         }),
       })
