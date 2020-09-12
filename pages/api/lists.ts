@@ -16,7 +16,7 @@ const {
   Not,
   HasIdentity,
   Ref,
-  Distinct,
+  Intersection,
   Append,
   Update,
   Collection,
@@ -34,6 +34,8 @@ const {
   Delete,
   Equals,
   Abort,
+  Count,
+  GT,
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -144,11 +146,16 @@ async function addItemToList(req, res) {
         If(
           // Check if user is allowed to update this list.
           Equals(Var('viewerRef'), Var('authorRef')),
-          Update(Var('listRef'), {
-            data: {
-              items: Distinct(Append(Var('currentItems'), [Var('itemRef')])),
-            },
-          }),
+          If(
+            // Check if the list already contains this item.
+            GT(Count(Intersection(Var('currentItems'), [Var('itemRef')])), 0),
+            Abort('Item is already in this list'),
+            Update(Var('listRef'), {
+              data: {
+                items: Append(Var('currentItems'), [Var('itemRef')]),
+              },
+            })
+          ),
           Abort('Not allowed')
         )
       )
