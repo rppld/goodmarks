@@ -11,13 +11,11 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
 
 const {
-  Filter,
+  Foreach,
+  Map,
   Create,
-  Not,
   HasIdentity,
   Ref,
-  Intersection,
-  Append,
   Update,
   Collection,
   Select,
@@ -26,6 +24,7 @@ const {
   Now,
   Paginate,
   Let,
+  Do,
   Lambda,
   Var,
   Match,
@@ -54,11 +53,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (action === 'add-item') {
-    return addItemToList(req, res)
+    return addObjectToList(req, res)
   }
 
   if (action === 'remove-item') {
-    return removeItemFromList(req, res)
+    return removeObjectFromList(req, res)
   }
 
   if (action === 'comment') {
@@ -82,7 +81,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-async function removeItemFromList(req, res) {
+async function removeObjectFromList(req, res) {
   const { objectId, listId } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
@@ -97,21 +96,21 @@ async function removeItemFromList(req, res) {
           listRef: Ref(Collection('Lists'), listId),
           list: Get(Var('listRef')),
           objectRef: Ref(Collection('Bookmarks'), objectId),
-          currentItems: Select(['data', 'items'], Var('list'), []),
           viewerRef: Select(['data', 'user'], Get(Identity())),
           authorRef: Select(['data', 'author'], Var('list')),
+          listItemsByListAndObject: Match(
+            Index('list_items_by_list_and_object'),
+            Var('listRef'),
+            Var('objectRef')
+          ),
         },
         If(
           // Check if user is allowed to update this list.
           Equals(Var('viewerRef'), Var('authorRef')),
-          Update(Var('listRef'), {
-            data: {
-              items: Filter(
-                Var('currentItems'),
-                Lambda('i', Not(Equals(Var('i'), Var('objectRef'))))
-              ),
-            },
-          }),
+          Foreach(
+            Paginate(Var('listItemsByListAndObject')),
+            Lambda(['created', 'object', 'itemRef'], Delete(Var('itemRef')))
+          ),
           Abort('Not allowed')
         )
       )
@@ -124,7 +123,7 @@ async function removeItemFromList(req, res) {
   }
 }
 
-async function addItemToList(req, res) {
+async function addObjectToList(req, res) {
   const { itemId, listId } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
@@ -139,20 +138,28 @@ async function addItemToList(req, res) {
           itemRef: Ref(Collection('Bookmarks'), itemId),
           listRef: Ref(Collection('Lists'), listId),
           list: Get(Var('listRef')),
-          currentItems: Select(['data', 'items'], Var('list'), []),
           viewerRef: Select(['data', 'user'], Get(Identity())),
-          authorRef: Select(['data', 'author'], Var('list')),
+          listAuthorRef: Select(['data', 'author'], Var('list')),
+          listItemsByListAndObject: Match(
+            Index('list_items_by_list_and_object'),
+            Var('listRef'),
+            Var('itemRef')
+          ),
+          isAlreadyInList: GT(Count(Var('listItemsByListAndObject')), 0),
         },
         If(
           // Check if user is allowed to update this list.
-          Equals(Var('viewerRef'), Var('authorRef')),
+          Equals(Var('viewerRef'), Var('listAuthorRef')),
           If(
-            // Check if the list already contains this item.
-            GT(Count(Intersection(Var('currentItems'), [Var('itemRef')])), 0),
-            Abort('Item is already in this list'),
-            Update(Var('listRef'), {
+            // Check if item is lready in list
+            Var('isAlreadyInList'),
+            Abort('Item is already in list'),
+            Create(Collection('ListItems'), {
               data: {
-                items: Append(Var('currentItems'), [Var('itemRef')]),
+                list: Var('listRef'),
+                object: Var('itemRef'),
+                user: Var('listAuthorRef'),
+                created: Now(),
               },
             })
           ),
@@ -266,12 +273,12 @@ async function deleteList(req, res) {
           list: Get(Var('listRef')),
           author: Select(['data', 'author'], Var('list')),
         },
-        q.If(
+        If(
           // Check if user is allowed to delete this list.
           Equals(Var('viewer'), Var('author')),
-          q.Do(
+          Do(
             // Remove all the comments on the list.
-            q.Map(
+            Foreach(
               Paginate(
                 Match(Index('comments_by_list_ordered'), Var('listRef')),
                 {
@@ -281,11 +288,21 @@ async function deleteList(req, res) {
               Lambda(['ts', 'commentRef'], Delete(Var('commentRef')))
             ),
             // Remove all stats related to the list.
-            q.Map(
+            Foreach(
               Paginate(Match(Index('list_stats_by_list'), Var('listRef')), {
                 size: 100000,
               }),
               Lambda(['listStatsRef'], Delete(Var('listStatsRef')))
+            ),
+            // Remove all list-items associated with the list
+            Foreach(
+              Paginate(Match(Index('list_items_by_list'), Var('listRef')), {
+                size: 100000,
+              }),
+              Lambda(
+                ['created', 'object', 'listItemRef'],
+                Delete(Var('listItemRef'))
+              )
             ),
             // Remove list itself.
             Delete(Var('listRef'))
@@ -329,7 +346,7 @@ async function getListsByUserHandle(req, res) {
           Match(Index('lists_by_author_and_private'), Var('authorRef'), false)
         ),
         edges: getListsWithUsersMapGetGeneric(
-          q.Map(
+          Map(
             Paginate(Var('match')),
             // The index contains two values so our lambda also takes
             // two values.
@@ -367,7 +384,7 @@ export const listApi = async (listId: string, faunaSecret?: string) => {
           If(
             Var('viewerIsAuthor'),
             getListsWithUsersMapGetGeneric(
-              q.Map(
+              Map(
                 Paginate(Match(Index('lists_by_reference'), Var('listRef'))),
                 Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
               )
@@ -375,7 +392,7 @@ export const listApi = async (listId: string, faunaSecret?: string) => {
             []
           ),
           getListsWithUsersMapGetGeneric(
-            q.Map(
+            Map(
               Paginate(Match(Index('lists_by_reference'), Var('listRef'))),
               Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
             )

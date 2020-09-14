@@ -2,6 +2,7 @@ const faunadb = require('faunadb')
 const q = faunadb.query
 
 const {
+  Map,
   CreateIndex,
   Collection,
   Now,
@@ -28,7 +29,7 @@ const {
 function getWordParts(wordVar) {
   return Let(
     {
-      indexes: q.Map(
+      indexes: Map(
         // Reduce this array if you want less ngrams per word. Setting
         // it to [0] would only create the word itself. Setting it to
         // [0, 1] would result in the word itself and all ngrams that
@@ -41,7 +42,7 @@ function getWordParts(wordVar) {
         // filter out the ones below 0
         Lambda('l', GT(Var('l'), 0))
       ),
-      ngramsArray: q.Map(
+      ngramsArray: Map(
         Var('indexesFiltered'),
         Lambda('l', NGram(LowerCase(wordVar), Var('l'), Var('l')))
       ),
