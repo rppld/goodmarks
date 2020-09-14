@@ -172,7 +172,7 @@ async function handleSignup(req, res) {
 
     // @todo: Type `data`
     const data: any = await serverClient.query(
-      q.Login(signupRes.account, {
+      Login(signupRes.account, {
         password,
       })
     )

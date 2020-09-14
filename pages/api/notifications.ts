@@ -11,6 +11,7 @@ import {
 } from 'lib/fauna'
 
 const {
+  Map,
   Identity,
   Select,
   Get,
@@ -76,7 +77,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           account: Get(Identity()),
           currentUserRef: Select(['data', 'user'], Var('account')),
         },
-        q.Map(
+        Map(
           Paginate(notificationsByReadStatus, {
             size: 10000,
           }),
@@ -101,7 +102,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         account: Get(Identity()),
         currentUserRef: Select(['data', 'user'], Var('account')),
         notifications: transformNotificationsResponse(
-          q.Map(
+          Map(
             Paginate(match, {
               size,
               after: cursor === 'null' ? undefined : parseValue(cursor),

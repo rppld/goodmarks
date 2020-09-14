@@ -69,6 +69,7 @@ export function flattenDataKeys(obj) {
 }
 
 const {
+  Map,
   Create,
   Collection,
   HasIdentity,
@@ -122,7 +123,7 @@ export async function createNotification(
 export async function createHashtags(items) {
   // items is an array that looks like:
   // [{ name: 'hash' }, { name: 'tag' }]
-  return q.Map(
+  return Map(
     items,
     Lambda(
       ['hashtag'],
@@ -154,7 +155,7 @@ export function getBookmarksWithUsersMapGetGeneric(
   depth = 1
 ) {
   // Let's do this with a let to clearly show the separate steps.
-  return q.Map(
+  return Map(
     // For all bookmarks this is just
     // Paginate(Documents(Collection('Bookmarks'))), else it's a match
     // on an index.
@@ -250,7 +251,7 @@ export function getBookmarksWithUsersMapGetGeneric(
             false
           ),
           // Get comments, index has two values so lambda has two values
-          comments: q.Map(
+          comments: Map(
             Paginate(Match(Index('comments_by_object_ordered'), Var('ref'))),
             Lambda(
               ['ts', 'commentRef'],
@@ -283,7 +284,7 @@ export function getBookmarksWithUsersMapGetGeneric(
 }
 
 export function transformNotificationsResponse(setRefOrArray) {
-  return q.Map(
+  return Map(
     setRefOrArray,
     Lambda((ref) =>
       Let(
@@ -300,7 +301,7 @@ export function transformNotificationsResponse(setRefOrArray) {
 
 export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
   // Let's do this with a let to clearly show the separate steps.
-  return q.Map(
+  return Map(
     // For all lists this is just
     // Paginate(Documents(Collection('Lists'))), else it's a match
     // on an index.
@@ -359,7 +360,7 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
             {}
           ),
           // Get comments, index has two values so lambda has two values
-          comments: q.Map(
+          comments: Map(
             Paginate(Match(Index('comments_by_list_ordered'), Var('ref'))),
             Lambda(
               ['ts', 'commentRef'],

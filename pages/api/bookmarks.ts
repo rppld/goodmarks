@@ -15,6 +15,9 @@ import cookie from 'cookie'
 import absoluteUrl from 'utils/absolute-url'
 
 const {
+  If,
+  Foreach,
+  Map,
   Create,
   IsNonEmpty,
   HasIdentity,
@@ -39,7 +42,6 @@ const {
   Exists,
   Match,
   Index,
-  If,
   Delete,
   Equals,
   Abort,
@@ -110,7 +112,7 @@ async function getPopularBookmarks(req, res) {
 
   const data: any = await client.query(
     getBookmarksWithUsersMapGetGeneric(
-      q.Map(
+      Map(
         Paginate(Match(Index('bookmarks_by_ranking')), {
           size,
           after: cursor === 'null' ? undefined : parseValue(cursor),
@@ -139,7 +141,7 @@ async function getLatestBookmarks(req, res) {
 
   const data: any = await client.query(
     getBookmarksWithUsersMapGetGeneric(
-      q.Map(
+      Map(
         Paginate(Match(Index('all_bookmarks')), {
           size,
           after: cursor === 'null' ? undefined : parseValue(cursor),
@@ -174,7 +176,7 @@ async function getFollowingBookmarks(req, res) {
     getBookmarksWithUsersMapGetGeneric(
       // Since we start of here with follower_stats index (a ref we
       // don't need afterwards, we can use join here!)
-      q.Map(
+      Map(
         Paginate(
           Let(
             {
@@ -184,12 +186,12 @@ async function getFollowingBookmarks(req, res) {
                   Select(['data', 'user'], Get(Identity()))
                 )
               ),
-              users: q.Map(
+              users: Map(
                 Select(['data'], Var('userSet')),
                 Lambda(['score', 'ref'], Var('ref'))
               ),
               // Fetch the bookmarks of the people I’m following.
-              peopleBookmarks: q.Map(
+              peopleBookmarks: Map(
                 Var('users'),
                 Lambda('x', Match(Index('bookmarks_by_author'), Var('x')))
               ),
@@ -250,28 +252,15 @@ async function getBookmarksByList(req, res) {
     Let(
       {
         listRef: Ref(Collection('Lists'), list),
-        list: Get(Match(Index('lists_by_reference'), Var('listRef'))),
-        listItems: Select(['data', 'items'], Var('list')),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
-          q.Map(
-            Paginate(
-              Reverse(
-                Union(
-                  q.Map(
-                    Var('listItems'),
-                    Lambda(
-                      ['ref'],
-                      Match(Index('bookmarks_by_reference'), Var('ref'))
-                    )
-                  )
-                )
-              ),
-              {
+          Reverse(
+            Map(
+              Paginate(Match(Index('list_items_by_list'), Var('listRef')), {
                 size,
                 after: cursor === 'null' ? undefined : parseValue(cursor),
-              }
-            ),
-            Lambda(['ref', 'title', 'author'], Var('ref'))
+              }),
+              Lambda(['createdAt', 'object', 'itemRef'], Var('object'))
+            )
           )
         ),
       },
@@ -306,7 +295,7 @@ async function getBookmarksByUserHandle(req, res) {
         userRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
         user: Get(Var('userRef')),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
-          q.Map(
+          Map(
             Paginate(Match(Index('bookmarks_by_author'), Var('userRef')), {
               size,
               after: cursor === 'null' ? undefined : parseValue(cursor),
@@ -670,12 +659,12 @@ async function deleteBookmark(req, res) {
           bookmark: Get(Var('bookmarkRef')),
           author: Select(['data', 'author'], Var('bookmark')),
         },
-        q.If(
+        If(
           // Check if user is allowed to delete this bookmark.
           Equals(Var('viewer'), Var('author')),
-          q.Do(
+          Do(
             // Remove all the comments on the bookmark.
-            q.Map(
+            Foreach(
               Paginate(
                 Match(Index('comments_by_object_ordered'), Var('bookmarkRef')),
                 {
@@ -685,7 +674,7 @@ async function deleteBookmark(req, res) {
               Lambda(['ts', 'commentRef'], Delete(Var('commentRef')))
             ),
             // Remove all stats related to the bookmark.
-            q.Map(
+            Foreach(
               Paginate(
                 Match(Index('bookmark_stats_by_bookmark'), Var('bookmarkRef')),
                 {
@@ -759,7 +748,7 @@ export const bookmarkApi = async (bookmarkId: string, faunaSecret?: string) => {
       {
         bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
-          q.Map(
+          Map(
             Paginate(
               Match(Index('bookmarks_by_reference'), Var('bookmarkRef'))
             ),
@@ -801,7 +790,7 @@ async function getBookmarksByHashtag(req, res) {
           Paginate(Match(Index('hashtags_by_name'), hashtag))
         ),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
-          q.Map(
+          Map(
             Paginate(Match(Index('bookmarks_by_hashtag'), Var('hashtagRef'))),
             Lambda(['bookmarkScore', 'bookmarkRef'], Var('bookmarkRef'))
           )

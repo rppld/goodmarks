@@ -3,7 +3,7 @@ import { serverClient, flattenDataKeys } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import qs from 'querystringify'
 
-const { Match, Paginate, Index, Lambda, Let, Var, Get } = q
+const { Map, Match, Paginate, Index, Lambda, Let, Var, Get } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { context } = req.query
@@ -58,11 +58,11 @@ async function searchTagsAndUsers(req, res) {
         // values for each match, the length and the reference.
         // Example: [[10, <user or tag ref>], [8,<user or tag ref>], ...]
         // Let's fetch the references
-        references: q.Map(Var('pages'), Lambda(['user', 'ref'], Var('ref'))),
+        references: Map(Var('pages'), Lambda(['user', 'ref'], Var('ref'))),
       },
       // Finally we can get get data that is associated with these
       // references via Get!
-      q.Map(Var('references'), Lambda(['ref'], Get(Var('ref'))))
+      Map(Var('references'), Lambda(['ref'], Get(Var('ref'))))
     )
   )
 
