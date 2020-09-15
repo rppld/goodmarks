@@ -2,12 +2,22 @@ import React from 'react'
 import Head from 'next/head'
 import styles from './layout.module.css'
 import TabBar from './tab-bar'
+import { useRouter } from 'next/router'
 
 interface Props {
   title?: string | string[]
+  description?: string
 }
 
-const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => {
+const Layout: React.FC<Props> = ({
+  title = 'Goodmarks',
+  description = 'Goodmarks is a community to share favorites with friends. No algorithm. No AI. 100% human.',
+  ...props
+}) => {
+  const router = useRouter()
+
+  console.log(router, router.asPath)
+
   if (title !== 'Goodmarks') {
     title = title + ' | Goodmarks'
   }
@@ -68,10 +78,6 @@ const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => {
         <meta name="msapplication-TileColor" content="#FFFFFF" />
         <meta name="msapplication-TileImage" content="/favicon-144.png" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
-        <meta
-          name="twitter:card"
-          content="Goodmarks is a community to share favorites with friends. No algorithm. No AI. 100% human."
-        />
         <meta name="twitter:site" content="@goodmarks" />
         <meta
           name="twitter:url"
@@ -79,16 +85,13 @@ const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => {
           content={'https://goodmarks.app'}
         />
         <meta name="twitter:title" property="og:title" content={title} />
+        <meta name="twitter:card" content={description} />
+        <meta name="description" content={description} />
         <meta
           name="twitter:description"
           property="og:description"
-          content="Goodmarks is a community to share favorites with friends. No algorithm. No AI. 100% human.        "
+          content={description}
         />
-        <meta
-          name="twitter:image"
-          property="og:image"
-          content="/favicon-180.png"
-        ></meta>
       </Head>
       <header role="banner" className={styles.sidebar}>
         <TabBar />
