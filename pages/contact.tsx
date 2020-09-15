@@ -14,7 +14,7 @@ interface Props {
 
 const Contact: NextPage<Props> = ({ page }) => {
   return (
-    <Layout>
+    <Layout title="Contact">
       <PageTitle>
         <H4 as="h1">{page?.name}</H4>
       </PageTitle>

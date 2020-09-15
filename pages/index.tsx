@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const { viewer } = useViewer()
 
   return (
-    <Layout>
+    <Layout title={!viewer ? 'Popular' : 'Following'}>
       <PageTitle
         adornment={
           viewer ? (

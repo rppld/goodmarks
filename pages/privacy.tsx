@@ -14,7 +14,7 @@ interface Props {
 
 const Privacy: NextPage<Props> = ({ page }) => {
   return (
-    <Layout>
+    <Layout title="Privacy">
       <PageTitle>
         <H4 as="h1">{page?.name}</H4>
       </PageTitle>

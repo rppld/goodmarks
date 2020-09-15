@@ -8,7 +8,7 @@ import PageTitle from 'components/page-title'
 
 const Search: NextPage = () => {
   return (
-    <Layout>
+    <Layout title="Search">
       <PageTitle>
         <H4 as="h1">Search</H4>
         <Text meta>Search people or hashtags.</Text>
