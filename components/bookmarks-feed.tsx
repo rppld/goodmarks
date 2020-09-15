@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSWRInfinite } from 'swr'
+import { useRouter } from 'next/router'
 import BookmarkNode from './bookmark-node'
 import { SmallText } from './text'
 import InfiniteScrollTrigger from './infinite-scroll-trigger'
@@ -22,6 +23,7 @@ const BookmarksFeed: React.FC<Props> = ({
   ...props
 }) => {
   const { viewer } = useViewer()
+  const router = useRouter()
   const query = props // Rest of the props are passed as query params.
 
   const getKey = (pageIndex, previousPageData) => {
@@ -44,7 +46,7 @@ const BookmarksFeed: React.FC<Props> = ({
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === 'undefined')
 
-  const hasOnlyOwnBookmarks = () => {
+  function hasOnlyOwnBookmarks() {
     let onlyOwnBookmarks = false
 
     if (viewer) {
@@ -119,7 +121,23 @@ const BookmarksFeed: React.FC<Props> = ({
     mutate(newData, false)
   }
 
-  const showInviteFriendsBanner = data?.[0]?.edges?.length <= 5 || hasOnlyOwnBookmarks()
+  function isHome() {
+    if (
+      router.route === '/' ||
+      router.route === '/latest' ||
+      router.route === '/popular'
+    ) {
+      return true
+    }
+
+    return false
+  }
+
+  console.log(router)
+
+  const showInviteFriendsBanner =
+    (data?.[0]?.edges?.length <= 5 && isHome()) ||
+    (hasOnlyOwnBookmarks() && isHome())
 
   return (
     <>
