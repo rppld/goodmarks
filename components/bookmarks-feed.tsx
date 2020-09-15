@@ -46,8 +46,8 @@ const BookmarksFeed: React.FC<Props> = ({
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === 'undefined')
 
-  function hasOnlyOwnBookmarks() {
-    let onlyOwnBookmarks = false
+  function containsBookmarksFromOthers() {
+    let bookmarksFromOthers = true
 
     if (viewer) {
       if (data?.[0]?.edges?.length > 0) {
@@ -60,12 +60,12 @@ const BookmarksFeed: React.FC<Props> = ({
         })
 
         filteredData.length === data?.[0]?.edges?.length
-          ? (onlyOwnBookmarks = true)
-          : (onlyOwnBookmarks = false)
+          ? (bookmarksFromOthers = false)
+          : (bookmarksFromOthers = true)
       }
     }
 
-    return onlyOwnBookmarks
+    return bookmarksFromOthers
   }
 
   const isEmpty = data?.[0]?.edges?.length === 0
@@ -133,7 +133,7 @@ const BookmarksFeed: React.FC<Props> = ({
 
   const showInviteFriendsBanner =
     (data?.[0]?.edges?.length <= 5 && isHome()) ||
-    (hasOnlyOwnBookmarks() && isHome())
+    (!containsBookmarksFromOthers() && isHome())
 
   return (
     <>
