@@ -129,11 +129,7 @@ const BookmarksFeed: React.FC<Props> = ({
     ) {
       return true
     }
-
-    return false
   }
-
-  console.log(router)
 
   const showInviteFriendsBanner =
     (data?.[0]?.edges?.length <= 5 && isHome()) ||
