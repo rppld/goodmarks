@@ -13,7 +13,7 @@ import { useViewer } from 'components/viewer-context'
 const Latest: NextPage = () => {
   const { viewer } = useViewer()
   return (
-    <Layout title="Latest">
+    <Layout>
       <PageTitle
         adornment={
           viewer ? (
