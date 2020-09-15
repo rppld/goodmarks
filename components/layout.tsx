@@ -4,7 +4,7 @@ import styles from './layout.module.css'
 import TabBar from './tab-bar'
 
 interface Props {
-  title?: string
+  title?: string | string[]
 }
 
 const Layout: React.FC<Props> = ({ title = 'Goodmarks', ...props }) => {
