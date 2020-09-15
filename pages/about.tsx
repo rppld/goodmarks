@@ -14,7 +14,7 @@ interface Props {
 
 const About: NextPage<Props> = ({ page }) => {
   return (
-    <Layout>
+    <Layout title="About">
       <PageTitle>
         <H4 as="h1">{page?.name}</H4>
       </PageTitle>

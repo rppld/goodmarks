@@ -13,7 +13,7 @@ const Login: NextPage = () => {
   const [submitted, setSubmitted] = React.useState(false)
 
   return (
-    <Layout>
+    <Layout title="Reset password">
       {!submitted && (
         <>
           <PageTitle>

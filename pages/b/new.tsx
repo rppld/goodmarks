@@ -45,7 +45,7 @@ const New: NextPage = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="New Bookmark">
       <PageTitle>
         <H4 as="h1">{getTitle()}</H4>
         <Text meta>{getDescription()}</Text>

@@ -69,7 +69,7 @@ const Notifications: NextPage = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="Notifications">
       <PageTitle
         adornment={
           !isEmpty ? (

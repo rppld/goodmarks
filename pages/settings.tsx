@@ -10,7 +10,7 @@ import { HStack, VStack } from 'components/stack'
 
 const Settings: NextPage = () => {
   return (
-    <Layout>
+    <Layout title="Settings">
       <PageTitle>
         <H4 as="h1">Settings</H4>
       </PageTitle>

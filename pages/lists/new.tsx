@@ -7,7 +7,7 @@ import EditListForm from 'components/edit-list-form'
 
 const NewList: NextPage = () => {
   return (
-    <Layout>
+    <Layout title="New List">
       <PageTitle>
         <H4 as="h1">New List</H4>
       </PageTitle>

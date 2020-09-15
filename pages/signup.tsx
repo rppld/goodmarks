@@ -96,7 +96,7 @@ const Signup: NextPage = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="Sign up">
       <PageTitle>
         <H4 as="h1">Create An Account</H4>
         <Text meta>

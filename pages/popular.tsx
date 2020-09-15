@@ -13,7 +13,7 @@ import { useViewer } from 'components/viewer-context'
 const Popular: NextPage = () => {
   const { viewer } = useViewer()
   return (
-    <Layout>
+    <Layout title="Popular">
       <PageTitle
         adornment={
           viewer ? (

@@ -14,7 +14,7 @@ const Lists: NextPage = () => {
   const { viewer } = useViewer()
 
   return (
-    <Layout>
+    <Layout title="Lists">
       <PageTitle>
         <H4 as="h1">Lists</H4>
         {viewer?.handle ? (

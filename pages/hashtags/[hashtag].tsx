@@ -11,7 +11,7 @@ const User: NextPage = () => {
   const { hashtag } = router.query
 
   return (
-    <Layout>
+    <Layout title={'#' + hashtag}>
       <PageTitle>
         <H4 as="h1">#{hashtag}</H4>
       </PageTitle>
