@@ -23,105 +23,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return handleSignup(req, res)
     case 'oauth2':
       return handleOauth2(req, res)
+    case 'reset-password':
+      return handleResetPassword(req, res)
     case 'logout':
     default:
       return handleLogout(req, res)
   }
 }
 
-async function handleOauth2(req, res) {
-  const { callback } = req.query
-  const { origin } = absoluteUrl(req)
-  const redirectUrl = `${origin}/api/auth?action=oauth2&provider=google&callback=true`
-
-  // If this is `/api/auth?action=oauth2&provider=google`, redirect to
-  // the auth screen.
-  if (typeof callback === 'undefined') {
-    const authorizationUri = googleOauth2.authorizationCode.authorizeURL({
-      redirect_uri: redirectUrl,
-      scope: 'profile email',
-    })
-    res.writeHead(302, { Location: authorizationUri })
-    return res.end()
-  }
-
-  // If we’re on the callback URL, handle authentication.
-  const { login_referrer: referrer = '/' } = req.cookies
-  const { query } = parse(req.url, true)
-  const options = {
-    code: query.code,
-    // Pass `redirect_uri` again here for Google to validate.
-    redirect_uri: redirectUrl,
-  }
+async function handleResetPassword(req, res) {
+  const { email } = await req.body
 
   try {
-    const result = await googleOauth2.authorizationCode.getToken(options)
-    const { token } = googleOauth2.accessToken.create(result)
-    const { access_token: accessToken } = token
-    const config = {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    if (!email) {
+      throw new Error('Email must be provided.')
     }
-
-    // Get user details.
-    const url = 'https://www.googleapis.com/oauth2/v3/userinfo'
-    const response = await fetch(url, config)
-    const { name, email, picture } = await response.json()
-
-    let signupRes
-    let loginRes
-
-    try {
-      signupRes = await serverClient.query(
-        Let(
-          {
-            user: Create(Collection('Users'), {
-              data: {
-                firstName: name,
-                picture,
-              },
-            }),
-            account: Select(
-              ['ref'],
-              Create(Collection('Accounts'), {
-                credentials: { password: '' },
-                data: {
-                  email,
-                  user: Select(['ref'], Var('user')),
-                },
-              })
-            ),
-          },
-          { user: Var('user'), account: Var('account') }
-        )
-      )
-
-      if (!signupRes.account) {
-        throw new Error('No ref present in create query response.')
-      }
-
-      loginRes = await serverClient.query(
-        Login(signupRes.account, { password: '' })
-      )
-    } catch (error) {
-      // The `Create()` call will error when a user already exists,
-      // so if we end up in here we can log the user in.
-      loginRes = await serverClient.query(
-        Login(Match(Index('accounts_by_email'), email), {
-          password: '',
-        })
-      )
-    }
-
-    if (!loginRes.secret) {
-      throw new Error('No secret present in login query response.')
-    }
-
-    const serializedCookie = serializeFaunaCookie(loginRes.secret)
-    res.setHeader('Set-Cookie', serializedCookie)
-    res.writeHead(302, { Location: referrer })
-    res.end()
+    console.log(`email: ${email} trying to reset password.`)
+    res.status(200).end()
   } catch (error) {
     res.status(400).send(error.message)
   }
@@ -249,4 +167,102 @@ async function handleLogout(req, res) {
   })
   res.setHeader('Set-Cookie', serializedCookie)
   res.status(200).end()
+}
+
+async function handleOauth2(req, res) {
+  const { callback } = req.query
+  const { origin } = absoluteUrl(req)
+  const redirectUrl = `${origin}/api/auth?action=oauth2&provider=google&callback=true`
+
+  // If this is `/api/auth?action=oauth2&provider=google`, redirect to
+  // the auth screen.
+  if (typeof callback === 'undefined') {
+    const authorizationUri = googleOauth2.authorizationCode.authorizeURL({
+      redirect_uri: redirectUrl,
+      scope: 'profile email',
+    })
+    res.writeHead(302, { Location: authorizationUri })
+    return res.end()
+  }
+
+  // If we’re on the callback URL, handle authentication.
+  const { login_referrer: referrer = '/' } = req.cookies
+  const { query } = parse(req.url, true)
+  const options = {
+    code: query.code,
+    // Pass `redirect_uri` again here for Google to validate.
+    redirect_uri: redirectUrl,
+  }
+
+  try {
+    const result = await googleOauth2.authorizationCode.getToken(options)
+    const { token } = googleOauth2.accessToken.create(result)
+    const { access_token: accessToken } = token
+    const config = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+
+    // Get user details.
+    const url = 'https://www.googleapis.com/oauth2/v3/userinfo'
+    const response = await fetch(url, config)
+    const { name, email, picture } = await response.json()
+
+    let signupRes
+    let loginRes
+
+    try {
+      signupRes = await serverClient.query(
+        Let(
+          {
+            user: Create(Collection('Users'), {
+              data: {
+                firstName: name,
+                picture,
+              },
+            }),
+            account: Select(
+              ['ref'],
+              Create(Collection('Accounts'), {
+                credentials: { password: '' },
+                data: {
+                  email,
+                  user: Select(['ref'], Var('user')),
+                },
+              })
+            ),
+          },
+          { user: Var('user'), account: Var('account') }
+        )
+      )
+
+      if (!signupRes.account) {
+        throw new Error('No ref present in create query response.')
+      }
+
+      loginRes = await serverClient.query(
+        Login(signupRes.account, { password: '' })
+      )
+    } catch (error) {
+      // The `Create()` call will error when a user already exists,
+      // so if we end up in here we can log the user in.
+      loginRes = await serverClient.query(
+        Login(Match(Index('accounts_by_email'), email), {
+          password: '',
+        })
+      )
+    }
+
+    if (!loginRes.secret) {
+      throw new Error('No secret present in login query response.')
+    }
+
+    const serializedCookie = serializeFaunaCookie(loginRes.secret)
+    res.setHeader('Set-Cookie', serializedCookie)
+    res.writeHead(302, { Location: referrer })
+    res.end()
+  } catch (error) {
+    res.status(400).send(error.message)
+  }
 }

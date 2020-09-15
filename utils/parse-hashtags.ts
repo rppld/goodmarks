@@ -1,4 +1,4 @@
-export default function (str) {
+export default function parseHashtags(str) {
   if (typeof str !== 'string') {
     throw new Error('Expected a string')
   }

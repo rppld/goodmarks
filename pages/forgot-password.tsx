@@ -7,48 +7,68 @@ import Form from 'components/form'
 import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
-import Link from 'next/link'
+import { useFormik } from 'formik'
+import { HStack, VStack } from 'components/stack'
+import useResetPassword from 'utils/use-reset-password'
 
-const Login: NextPage = () => {
-  const [submitted, setSubmitted] = React.useState(false)
+const ForgotPassword: NextPage = () => {
+  const [submitted, setSubmitted] = React.useState<string>(null)
+  const [resetEmail] = useResetPassword()
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    onSubmit: handleSubmit,
+  })
+
+  async function handleSubmit() {
+    await resetEmail(formik.values.email)
+    setSubmitted(formik.values.email)
+    formik.resetForm()
+  }
 
   return (
     <Layout title="Forgot password">
-      {!submitted && (
-        <>
-          <PageTitle>
-            <H4 as="h1">Forgot your password?</H4>
-            <Text meta>
-              Enter your email and we will help you reset your password.
-            </Text>
-          </PageTitle>
-          <Form>
-            <Input
-              type="email"
-              name="email"
-              labelText="Email"
-              hideLabel
-              placeholder="Email"
-            />
-            <Button type="submit" variant="primary" size="lg">
-              Reset password
-            </Button>
-            {/* {error && <p>Error: {error}</p>} */}
-          </Form>{' '}
-        </>
-      )}
+      <PageTitle>
+        <H4 as="h1">Forgot your password?</H4>
+        <Text meta>Enter your email and we will help you reset it.</Text>
+      </PageTitle>
 
-      {submitted && (
-        <PageTitle>
-          <H4 as="h1">We've sent an email to email@example.com</H4>
-          <Text meta>
-            Click the link inside the email to set a new password.
-          </Text>
-          <Link href="/forgot-password">Go back</Link>
-        </PageTitle>
-      )}
+      <Form onSubmit={formik.handleSubmit}>
+        <Input
+          type="email"
+          name="email"
+          labelText="Email"
+          hideLabel
+          placeholder="Email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+        />
+
+        <footer>
+          <VStack spacing="md">
+            {submitted && (
+              <Text>
+                We've sent an email to {submitted}. Click the link inside the
+                email to set a new password.
+              </Text>
+            )}
+
+            <HStack alignment="trailing">
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={formik.isSubmitting}
+              >
+                {formik.isSubmitting ? 'Loading' : 'Reset password'}
+              </Button>
+            </HStack>
+          </VStack>
+        </footer>
+      </Form>
     </Layout>
   )
 }
 
-export default Login
+export default ForgotPassword
