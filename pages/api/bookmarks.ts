@@ -251,7 +251,7 @@ async function getBookmarksByList(req, res) {
   const data: any = await client.query(
     Let(
       {
-        listRef: Ref(Collection('Lists'), list),
+        listRef: Ref(Collection('lists'), list),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
           Reverse(
             Map(

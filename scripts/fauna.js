@@ -498,7 +498,7 @@ const createCommentsByBookmarkAndAuthorOrderedIndex = CreateIndex({
 
 const createListsByAuthorAndPrivateIndex = CreateIndex({
   name: 'lists_by_author_and_private',
-  source: Collection('Lists'),
+  source: Collection('lists'),
   terms: [
     {
       field: ['data', 'author'],
