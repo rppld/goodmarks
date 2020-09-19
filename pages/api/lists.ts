@@ -154,7 +154,7 @@ async function addObjectToList(req, res) {
             // Check if item is lready in list
             Var('isAlreadyInList'),
             Abort('Item is already in list'),
-            Create(Collection('ListItems'), {
+            Create(Collection('list_items'), {
               data: {
                 list: Var('listRef'),
                 object: Var('itemRef'),
