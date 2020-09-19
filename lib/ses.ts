@@ -9,7 +9,7 @@ aws.config.update({
 // New S3 class
 const ses = new aws.SES()
 
-export const sendCommentNotification = (toEmail, bookmarkUrl) => {
+export const sendPasswordResetEmail = (toEmail, resetUrl) => {
   const params = {
     Source: 'Goodmarks <support@goodmarks.app>',
     Destination: {
@@ -19,12 +19,24 @@ export const sendCommentNotification = (toEmail, bookmarkUrl) => {
       Body: {
         Html: {
           Charset: 'UTF-8',
-          Data: `Someone left a comment on <a href="${bookmarkUrl}">your bookmark</a>.`,
+          Data: `
+          <style>
+            form   { background-color: #F3F4F8; }
+            span   { display:inline-block; border-radius:4px; background-color:#485C80;}
+            a      { min-width:196px; border-top:13px solid; border-bottom:13px solid; border-right:24px solid; border-left:24px solid; border-color:#2ea664; border-radius:4px; background-color:#2ea664; color:#ffffff; font-size:18px; line-height:18px; word-break:break-word; display:inline-block; text-align:center; font-weight:900; text-decoration:none !important }
+          </style>
+          <div> 
+            <h1>We have received a request to reset the password for your Goodmarks account.</h1>
+            <span><a 
+              href="${resetUrl}" 
+              target="_blank">Reset</a></span>
+          </div>
+          `,
         },
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: 'New comment on your bookmark',
+        Data: 'Password reset request',
       },
     },
   }

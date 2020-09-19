@@ -1,6 +1,6 @@
 import React from 'react'
 
-const useResetPassword = (): [
+const useRequestPasswordReset = (): [
   (email: string) => Promise<void>,
   {
     loading: boolean
@@ -15,7 +15,7 @@ const useResetPassword = (): [
       setLoading(true)
       setError(null)
 
-      const response = await fetch('/api/auth?action=reset-password', {
+      const response = await fetch('/api/auth?action=request-password-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
@@ -34,4 +34,4 @@ const useResetPassword = (): [
   return [handler, { loading, error }]
 }
 
-export default useResetPassword
+export default useRequestPasswordReset

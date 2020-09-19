@@ -1,9 +1,12 @@
 import faunadb, { query as q } from 'faunadb'
 import { parseJSON } from 'faunadb/src/_json'
 import cookie from 'cookie'
-import { sendCommentNotification } from './ses'
 import atob from 'atob'
 import btoa from 'btoa'
+
+const ACCESS_TOKEN_LIFETIME_SECONDS = 600 // 10 minutes
+const RESET_TOKEN_LIFETIME_SECONDS = 1800 // 30 minutes
+const REFRESH_TOKEN_LIFETIME_SECONDS = 28800 // 8 hours
 
 export const FAUNA_SECRET_COOKIE = 'faunaSecret'
 
@@ -33,6 +36,81 @@ export const serializeFaunaCookie = (userSecret) => {
     httpOnly: true,
     path: '/',
   })
+}
+
+const {
+  Map,
+  Create,
+  Collection,
+  HasIdentity,
+  Do,
+  Delete,
+  Select,
+  Get,
+  Identity,
+  ContainsPath,
+  Paginate,
+  Let,
+  Lambda,
+  Var,
+  Exists,
+  Match,
+  Index,
+  If,
+  Now,
+  Tokens,
+  TimeAdd,
+} = q
+
+export function CreatePasswordResetToken(accountRef) {
+  return Let(
+    {
+      // If we create a token in a specific collection, we can more
+      // easily control with roles what the token can do.
+      reset_request: Create(Collection('PasswordResetRequests'), {
+        data: {
+          account: accountRef,
+        },
+      }),
+    },
+    // Create a token that will provide the permissions of the
+    // accounts_verification_request document. The account is linked
+    // to it in the document which will be used in the roles to verify
+    // the acount.
+    Create(Tokens(), {
+      instance: Select(['ref'], Var('reset_request')),
+      ttl: TimeAdd(Now(), RESET_TOKEN_LIFETIME_SECONDS, 'seconds'),
+    })
+  )
+}
+
+export function InvalidateResetTokens(accountRef) {
+  return Let(
+    {
+      resetRequests: Paginate(
+        Match(Index('password_reset_requests_by_account'), accountRef)
+      ),
+      resetTokens: q.Map(
+        Var('resetRequests'),
+        // there should always only be one, hence we can do the
+        // Select([0], ...) to get the first reference
+        Lambda(
+          ['req'],
+          Select([0], Paginate(Match(Index('tokens_by_instance'), Var('req'))))
+        )
+      ),
+    },
+    // We'll delete both the documents and the tokens in this case to
+    // make sure we don't end up going through a larger list if
+    // someone resets a lot.
+    Do(
+      q.Map(Var('resetTokens'), Lambda(['tokenRef'], Delete(Var('tokenRef')))),
+      q.Map(
+        Var('resetRequests'),
+        Lambda(['resetRequestRef'], Delete(Var('resetRequestRef')))
+      )
+    )
+  )
 }
 
 export function flattenDataKeys(obj) {
@@ -68,26 +146,6 @@ export function flattenDataKeys(obj) {
   }
 }
 
-const {
-  Map,
-  Create,
-  Collection,
-  HasIdentity,
-  Select,
-  Get,
-  Identity,
-  ContainsPath,
-  Paginate,
-  Let,
-  Lambda,
-  Var,
-  Exists,
-  Match,
-  Index,
-  If,
-  Now,
-} = q
-
 interface NotificationPayload {
   type: 'NEW_COMMENT' | 'NEW_LIKE'
   sender: any
@@ -111,13 +169,6 @@ export async function createNotification(
       },
     })
   )
-
-  if (typeof recipientEmail !== 'undefined') {
-    // If `recipientEmail` is defined, send an email notification.
-    if (payload.type === 'NEW_COMMENT') {
-      sendCommentNotification(recipientEmail, payload.objectUrl)
-    }
-  }
 }
 
 export async function createHashtags(items) {
