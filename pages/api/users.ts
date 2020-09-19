@@ -81,7 +81,7 @@ async function handleUpdate(req, res) {
   const data: any = await serverClient.query(
     Let(
       {
-        userRef: Ref(Collection('Users'), userId),
+        userRef: Ref(Collection('users'), userId),
         user: Get(Var('userRef')),
         updateUser: Update(Var('userRef'), {
           data: {
@@ -117,7 +117,7 @@ async function handleFollow(req, res) {
           HasIdentity(),
           Match(
             Index('follower_stats_by_author_and_follower'),
-            Ref(Collection('Users'), authorId),
+            Ref(Collection('users'), authorId),
             Select(['data', 'user'], Get(Identity()))
           ),
           false
@@ -135,7 +135,7 @@ async function handleFollow(req, res) {
             data: {
               postLikes: 0,
               postReposts: 0,
-              author: Ref(Collection('Users'), authorId),
+              author: Ref(Collection('users'), authorId),
               follower: Select(['data', 'user'], Get(Identity())),
             },
           })
