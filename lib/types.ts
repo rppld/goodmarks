@@ -83,7 +83,6 @@ export interface ListStats {
 
 export interface BookmarkNode {
   author: User
-  authorEmail: string
   category: BookmarkCategory
   original: any
   bookmark: Bookmark

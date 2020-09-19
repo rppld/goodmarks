@@ -612,7 +612,7 @@ async function createComment(req, res) {
       bookmarkWithUserAndAccount,
     } = data
     const bookmark = bookmarkWithUserAndAccount[0]
-    const { author, authorEmail } = bookmark
+    const { author } = bookmark
 
     if (author.ref.id !== data.currentUserId) {
       try {
@@ -620,7 +620,6 @@ async function createComment(req, res) {
           type: 'NEW_COMMENT',
           sender: currentUserRef,
           recipient: bookmarkAuthorRef,
-          recipientEmail: authorEmail,
           object: bookmarkRef,
           objectType: 'BOOKMARK',
           objectUrl: `${origin}/b/${bookmarkId}`,
@@ -671,7 +670,7 @@ async function deleteBookmark(req, res) {
                   size: 100000,
                 }
               ),
-              Lambda(['ts', 'commentRef'], Delete(Var('commentRef')))
+              Lambda(['createdTime', 'commentRef'], Delete(Var('commentRef')))
             ),
             // Remove all stats related to the bookmark.
             Foreach(
