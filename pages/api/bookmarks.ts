@@ -399,7 +399,7 @@ async function likeBookmark(req, res) {
                 like: Var('newLikeStatus'),
               },
             }),
-            Create(Collection('BookmarkStats'), {
+            Create(Collection('bookmark_stats'), {
               data: {
                 user: Var('currentUserRef'),
                 bookmark: Var('bookmarkRef'),
@@ -560,7 +560,7 @@ async function createComment(req, res) {
                 comment: true,
               },
             }),
-            Create(Collection('BookmarkStats'), {
+            Create(Collection('bookmark_stats'), {
               data: {
                 user: Var('currentUserRef'),
                 bookmark: Var('bookmarkRef'),
