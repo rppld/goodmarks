@@ -9,11 +9,11 @@ import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 import { useFormik } from 'formik'
 import { HStack, VStack } from 'components/stack'
-import useResetPassword from 'utils/use-reset-password'
+import useRequestPasswordReset from 'utils/use-request-password-reset'
 
 const ForgotPassword: NextPage = () => {
   const [submitted, setSubmitted] = React.useState<string>(null)
-  const [resetEmail] = useResetPassword()
+  const [requestPasswordReset] = useRequestPasswordReset()
 
   const formik = useFormik({
     initialValues: {
@@ -23,7 +23,7 @@ const ForgotPassword: NextPage = () => {
   })
 
   async function handleSubmit() {
-    await resetEmail(formik.values.email)
+    await requestPasswordReset(formik.values.email)
     setSubmitted(formik.values.email)
     formik.resetForm()
   }

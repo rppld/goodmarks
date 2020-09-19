@@ -7,51 +7,60 @@ import Form from 'components/form'
 import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
-import Link from 'next/link'
+import { useFormik } from 'formik'
+import { useRouter } from 'next/router'
+import useChangePassword from 'utils/use-change-password'
 
 const Login: NextPage = () => {
-  const [submitted, setSubmitted] = React.useState(false)
+  const { query } = useRouter()
+  const [changePassword] = useChangePassword()
+
+  const formik = useFormik({
+    initialValues: {
+      password: '',
+      passwordConfirm: '',
+    },
+    onSubmit: handleSubmit,
+  })
+
+  async function handleSubmit() {
+    if (formik.values.password === formik.values.passwordConfirm) {
+      await changePassword(formik.values.password, query.token as string)
+      return formik.resetForm()
+    }
+
+    console.log('Passwords don’t match.')
+  }
 
   return (
     <Layout title="Reset password">
-      {!submitted && (
-        <>
-          <PageTitle>
-            <H4 as="h1">Reset your password</H4>
-            <Text meta>Enter a new password for email@example.com</Text>
-          </PageTitle>
-          <Form>
-            <Input
-              type="password"
-              name="password"
-              labelText="New password"
-              hideLabel
-              placeholder="New password"
-            />
-            <Input
-              type="password"
-              name="confirm-password"
-              labelText="Confirm password"
-              hideLabel
-              placeholder="Confirm password"
-            />
-            <Button type="submit" variant="primary" size="lg">
-              Set new password
-            </Button>
-            {/* {error && <p>Error: {error}</p>} */}
-          </Form>{' '}
-        </>
-      )}
-
-      {submitted && (
-        <PageTitle>
-          <H4 as="h1">We've sent an email to email@example.com</H4>
-          <Text meta>
-            Click the link inside the email to set a new password.
-          </Text>
-          <Link href="/reset-password">Go back</Link>
-        </PageTitle>
-      )}
+      <PageTitle>
+        <H4 as="h1">Reset your password</H4>
+        <Text meta>Enter a new password for email@example.com</Text>
+      </PageTitle>
+      <Form onSubmit={formik.handleSubmit}>
+        <Input
+          type="password"
+          name="password"
+          labelText="New password"
+          hideLabel
+          placeholder="New password"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+        />
+        <Input
+          type="password"
+          name="passwordConfirm"
+          labelText="Confirm password"
+          hideLabel
+          placeholder="Confirm password"
+          value={formik.values.passwordConfirm}
+          onChange={formik.handleChange}
+        />
+        <Button type="submit" variant="primary" size="lg">
+          Set new password
+        </Button>
+      </Form>
     </Layout>
   )
 }
