@@ -598,7 +598,7 @@ const CreateChangePasswordRequestRole = CreateOrUpdateRole({
       },
     },
     {
-      resource: Collection('Accounts'),
+      resource: Collection('accounts'),
       actions: {
         // Can only read accounts that the verification is created for.
         read: Query(

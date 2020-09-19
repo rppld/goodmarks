@@ -153,7 +153,7 @@ async function handleSignup(req, res) {
             }),
             account: Select(
               ['ref'],
-              Create(Collection('Accounts'), {
+              Create(Collection('accounts'), {
                 credentials: { password },
                 data: {
                   email,
@@ -310,7 +310,7 @@ async function handleOauth2(req, res) {
             }),
             account: Select(
               ['ref'],
-              Create(Collection('Accounts'), {
+              Create(Collection('accounts'), {
                 credentials: { password: '' },
                 data: {
                   email,
