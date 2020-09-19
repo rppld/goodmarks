@@ -10,7 +10,7 @@ const User: NextPage = () => {
   const handle = router.query.user
 
   return (
-    <Layout title={handle}>
+    <Layout title={handle as string}>
       <ProfileHeader />
       {handle && <BookmarksFeed handle={String(handle)} />}
     </Layout>
