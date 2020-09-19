@@ -134,7 +134,7 @@ const createHashTagsAndUsersByWordpartsIndex = CreateIndex({
 
 const createBookmarksByHashtagRefIndex = CreateIndex({
   name: 'bookmarks_by_hashtag_ref',
-  source: Collection('Bookmarks'),
+  source: Collection('bookmarks'),
   terms: [
     {
       field: ['data', 'hashtags'],
@@ -151,7 +151,7 @@ const createBookmarksByHashtagRefIndex = CreateIndex({
 const createBookmarksByHashtagIndex = CreateIndex({
   name: 'bookmarks_by_hashtag',
   source: {
-    collection: Collection('Bookmarks'),
+    collection: Collection('bookmarks'),
     fields: {
       bookmarkScore: Query(
         Lambda(
@@ -217,7 +217,7 @@ const createBookmarksByHashtagIndex = CreateIndex({
 const createBookmarksByRankingIndex = CreateIndex({
   name: 'bookmarks_by_ranking',
   source: {
-    collection: Collection('Bookmarks'),
+    collection: Collection('bookmarks'),
     fields: {
       bookmarkRanking: Query(
         Lambda(
@@ -269,7 +269,7 @@ const createBookmarksByRankingIndex = CreateIndex({
 const createBookmarksByPopularityIndex = CreateIndex({
   name: 'bookmarks_by_popularity',
   source: {
-    collection: Collection('Bookmarks'),
+    collection: Collection('bookmarks'),
     fields: {
       bookmarkRanking: Query(
         Lambda(

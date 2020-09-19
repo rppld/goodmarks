@@ -208,7 +208,7 @@ export function getBookmarksWithUsersMapGetGeneric(
   // Let's do this with a let to clearly show the separate steps.
   return Map(
     // For all bookmarks this is just
-    // Paginate(Documents(Collection('Bookmarks'))), else it's a match
+    // Paginate(Documents(Collection('bookmarks'))), else it's a match
     // on an index.
     bookmarksSetRefOrArray,
     Lambda((ref) =>
