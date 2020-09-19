@@ -423,7 +423,7 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
 
 const createNotificationsByRecipientIndex = CreateIndex({
   name: 'notifications_by_recipient',
-  source: Collection('Notifications'),
+  source: Collection('notifications'),
   terms: [
     {
       field: ['data', 'recipient'],
@@ -444,7 +444,7 @@ const createNotificationsByRecipientIndex = CreateIndex({
 
 const createNotificationsByRecipientAndReadStatusIndex = CreateIndex({
   name: 'notifications_by_recipient_and_read_status',
-  source: Collection('Notifications'),
+  source: Collection('notifications'),
   terms: [
     {
       field: ['data', 'recipient'],

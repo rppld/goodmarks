@@ -161,7 +161,7 @@ export async function createNotification(
   { recipientEmail, ...payload }: NotificationPayload
 ) {
   await faunaClient(faunaSecret).query(
-    Create(Collection('Notifications'), {
+    Create(Collection('notifications'), {
       data: {
         ...payload,
         created: Now(),

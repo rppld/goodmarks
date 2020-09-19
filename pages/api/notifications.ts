@@ -60,7 +60,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // Mark single notification as read
     if (req.body.id) {
       await faunaClient(faunaSecret).query(
-        Update(Ref(Collection('Notifications'), req.body.id), {
+        Update(Ref(Collection('notifications'), req.body.id), {
           data: {
             read: true,
           },
