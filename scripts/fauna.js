@@ -72,7 +72,7 @@ const createHashTagsAndUsersByWordpartsIndex = CreateIndex({
   // first.
   source: [
     {
-      collection: Collection('Hashtags'),
+      collection: Collection('hashtags'),
       fields: {
         length: Query(
           Lambda('hashtag', Length(Select(['data', 'name'], Var('hashtag'))))
