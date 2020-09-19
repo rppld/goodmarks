@@ -354,7 +354,7 @@ const createCommentsByListOrderedIndex = CreateIndex({
 // order to delete the stats as well.
 const createBookmarkStatsByBookmarkIndex = CreateIndex({
   name: 'bookmark_stats_by_bookmark',
-  source: Collection('BookmarkStats'),
+  source: Collection('bookmark_stats'),
   terms: [
     {
       field: ['data', 'bookmark'],
