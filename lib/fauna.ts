@@ -354,7 +354,7 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
   // Let's do this with a let to clearly show the separate steps.
   return Map(
     // For all lists this is just
-    // Paginate(Documents(Collection('Lists'))), else it's a match
+    // Paginate(Documents(Collection('lists'))), else it's a match
     // on an index.
     listsSetRefOrArray,
     Lambda((ref) =>

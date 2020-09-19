@@ -93,7 +93,7 @@ async function removeObjectFromList(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          listRef: Ref(Collection('Lists'), listId),
+          listRef: Ref(Collection('lists'), listId),
           list: Get(Var('listRef')),
           objectRef: Ref(Collection('bookmarks'), objectId),
           viewerRef: Select(['data', 'user'], Get(Identity())),
@@ -136,7 +136,7 @@ async function addObjectToList(req, res) {
       Let(
         {
           itemRef: Ref(Collection('bookmarks'), itemId),
-          listRef: Ref(Collection('Lists'), listId),
+          listRef: Ref(Collection('lists'), listId),
           list: Get(Var('listRef')),
           viewerRef: Select(['data', 'user'], Get(Identity())),
           listAuthorRef: Select(['data', 'author'], Var('list')),
@@ -186,7 +186,7 @@ async function updateList(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          listRef: Ref(Collection('Lists'), listId),
+          listRef: Ref(Collection('lists'), listId),
           list: Get(Var('listRef')),
           viewerRef: Select(['data', 'user'], Get(Identity())),
           authorRef: Select(['data', 'author'], Var('list')),
@@ -231,7 +231,7 @@ async function createList(req, res) {
           hashtagRefs: await createHashtags(hashtags),
           author: Select(['data', 'user'], Get(Identity())),
         },
-        Create(Collection('Lists'), {
+        Create(Collection('lists'), {
           data: {
             name,
             description,
@@ -269,7 +269,7 @@ async function deleteList(req, res) {
       Let(
         {
           viewer: Select(['data', 'user'], Get(Identity())),
-          listRef: Ref(Collection('Lists'), id),
+          listRef: Ref(Collection('lists'), id),
           list: Get(Var('listRef')),
           author: Select(['data', 'author'], Var('list')),
         },
@@ -369,7 +369,7 @@ export const listApi = async (listId: string, faunaSecret?: string) => {
   const data: any = await client.query(
     Let(
       {
-        listRef: Ref(Collection('Lists'), listId),
+        listRef: Ref(Collection('lists'), listId),
         isPrivate: Select(['data', 'private'], Get(Var('listRef'))),
         authorRef: Select(['data', 'author'], Get(Var('listRef'))),
         account: If(HasIdentity(), Get(Identity()), false),
