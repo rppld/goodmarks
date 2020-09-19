@@ -581,10 +581,10 @@ function CreateOrUpdateRole(obj) {
 
 const CreateChangePasswordRequestRole = CreateOrUpdateRole({
   name: 'membershiprole_passwordreset',
-  membership: [{ resource: Collection('PasswordResetRequests') }],
+  membership: [{ resource: Collection('password_reset_requests') }],
   privileges: [
     {
-      resource: Collection('PasswordResetRequests'),
+      resource: Collection('password_reset_requests'),
       actions: {
         // Can only read itself.
         read: Query(Lambda(['ref'], Equals(Identity(), Var('ref')))),
