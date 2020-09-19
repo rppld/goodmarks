@@ -146,7 +146,7 @@ async function handleSignup(req, res) {
       signupRes = await serverClient.query(
         Let(
           {
-            user: Create(Collection('Users'), {
+            user: Create(Collection('users'), {
               data: {
                 handle: username,
               },
@@ -302,7 +302,7 @@ async function handleOauth2(req, res) {
       signupRes = await serverClient.query(
         Let(
           {
-            user: Create(Collection('Users'), {
+            user: Create(Collection('users'), {
               data: {
                 firstName: name,
                 picture,
