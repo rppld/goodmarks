@@ -250,21 +250,6 @@ export function getBookmarksWithUsersMapGetGeneric(
             Get(Select(['data', 'author'], Var('bookmark'))),
             false
           ),
-          authorAccount: If(
-            Exists(Var('ref')),
-            Get(
-              Match(
-                Index('accounts_by_user'),
-                Select(['data', 'author'], Var('bookmark'))
-              )
-            ),
-            false
-          ),
-          authorEmail: If(
-            Exists(Var('ref')),
-            Select(['data', 'email'], Var('authorAccount')),
-            false
-          ),
           // Get the account via identity.
           currentUserAccount: If(HasIdentity(), Get(Identity()), false),
           // Get the user that is currently logged in.
@@ -305,7 +290,7 @@ export function getBookmarksWithUsersMapGetGeneric(
           comments: Map(
             Paginate(Match(Index('comments_by_object_ordered'), Var('ref'))),
             Lambda(
-              ['ts', 'commentRef'],
+              ['createdTime', 'commentRef'],
               Let(
                 {
                   comment: Get(Var('commentRef')),
@@ -322,7 +307,6 @@ export function getBookmarksWithUsersMapGetGeneric(
         // Return our elements
         {
           author: Var('author'),
-          authorEmail: Var('authorEmail'),
           category: Var('category'),
           original: Var('original'),
           bookmark: Var('bookmark'),

@@ -8,7 +8,7 @@ interface ContextProps {
   resetViewer: () => void
 }
 
-// TODO: Read up on this kinda syntax
+// @todo: Read up on this kinda syntax
 const ViewerContext = React.createContext<Partial<ContextProps>>({})
 
 const ViewerProvider: React.FC = (props) => {
