@@ -353,7 +353,7 @@ async function likeBookmark(req, res) {
           account: Get(Identity()),
           currentUserRef: Select(['data', 'user'], Var('account')),
           currentUserId: Select(['id'], Var('currentUserRef')),
-          bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
+          bookmarkRef: Ref(Collection('bookmarks'), bookmarkId),
           bookmarkStatsRef: Match(
             Index('bookmark_stats_by_user_and_bookmark'),
             Var('currentUserRef'),
@@ -547,7 +547,7 @@ async function createComment(req, res) {
           account: Get(Identity()),
           currentUserRef: Select(['data', 'user'], Var('account')),
           currentUserId: Select(['id'], Var('currentUserRef')),
-          bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
+          bookmarkRef: Ref(Collection('bookmarks'), bookmarkId),
           bookmarkStatsRef: Match(
             Index('bookmark_stats_by_user_and_bookmark'),
             Var('currentUserRef'),
@@ -655,7 +655,7 @@ async function deleteBookmark(req, res) {
       Let(
         {
           viewer: Select(['data', 'user'], Get(Identity())),
-          bookmarkRef: Ref(Collection('Bookmarks'), id),
+          bookmarkRef: Ref(Collection('bookmarks'), id),
           bookmark: Get(Var('bookmarkRef')),
           author: Select(['data', 'author'], Var('bookmark')),
         },
@@ -718,7 +718,7 @@ async function createBookmark(req, res) {
           ),
           author: Select(['data', 'user'], Get(Identity())),
         },
-        Create(Collection('Bookmarks'), {
+        Create(Collection('bookmarks'), {
           data: {
             text,
             likes: 0,
@@ -746,7 +746,7 @@ export const bookmarkApi = async (bookmarkId: string, faunaSecret?: string) => {
   const data = await client.query(
     Let(
       {
-        bookmarkRef: Ref(Collection('Bookmarks'), bookmarkId),
+        bookmarkRef: Ref(Collection('bookmarks'), bookmarkId),
         bookmarks: getBookmarksWithUsersMapGetGeneric(
           Map(
             Paginate(

@@ -95,7 +95,7 @@ async function removeObjectFromList(req, res) {
         {
           listRef: Ref(Collection('Lists'), listId),
           list: Get(Var('listRef')),
-          objectRef: Ref(Collection('Bookmarks'), objectId),
+          objectRef: Ref(Collection('bookmarks'), objectId),
           viewerRef: Select(['data', 'user'], Get(Identity())),
           authorRef: Select(['data', 'author'], Var('list')),
           listItemsByListAndObject: Match(
@@ -135,7 +135,7 @@ async function addObjectToList(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          itemRef: Ref(Collection('Bookmarks'), itemId),
+          itemRef: Ref(Collection('bookmarks'), itemId),
           listRef: Ref(Collection('Lists'), listId),
           list: Get(Var('listRef')),
           viewerRef: Select(['data', 'user'], Get(Identity())),
