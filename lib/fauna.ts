@@ -67,7 +67,7 @@ export function CreatePasswordResetToken(accountRef) {
     {
       // If we create a token in a specific collection, we can more
       // easily control with roles what the token can do.
-      reset_request: Create(Collection('PasswordResetRequests'), {
+      reset_request: Create(Collection('password_reset_requests'), {
         data: {
           account: accountRef,
         },
