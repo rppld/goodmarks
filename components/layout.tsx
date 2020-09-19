@@ -2,30 +2,31 @@ import React from 'react'
 import Head from 'next/head'
 import styles from './layout.module.css'
 import TabBar from './tab-bar'
-import { useRouter } from 'next/router'
 
 interface Props {
-  title?: string | string[]
+  title?: string
   description?: string
 }
 
+const SITE_NAME = 'Goodmarks'
+const SITE_DESCRIPTION =
+  'Goodmarks is a community to share favorites with friends. No algorithm. No AI. 100% human.'
+
 const Layout: React.FC<Props> = ({
-  title = 'Goodmarks',
-  description = 'Goodmarks is a community to share favorites with friends. No algorithm. No AI. 100% human.',
+  title,
+  description = SITE_DESCRIPTION,
   ...props
 }) => {
-  const router = useRouter()
+  let pageTitle = SITE_NAME
 
-  console.log(router, router.asPath)
-
-  if (title !== 'Goodmarks') {
-    title = title + ' | Goodmarks'
+  if (typeof title !== 'undefined') {
+    pageTitle = `${title} / ${SITE_NAME}`
   }
 
   return (
     <div className={styles.container} {...props}>
       <Head>
-        <title>{title}</title>
+        <title>{pageTitle}</title>
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" sizes="16x16 32x32 64x64" href="/favicon.ico" />
         <link
@@ -84,7 +85,7 @@ const Layout: React.FC<Props> = ({
           property="og:url"
           content={'https://goodmarks.app'}
         />
-        <meta name="twitter:title" property="og:title" content={title} />
+        <meta name="twitter:title" property="og:title" content={pageTitle} />
         <meta name="twitter:card" content={description} />
         <meta name="description" content={description} />
         <meta
