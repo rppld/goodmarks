@@ -476,7 +476,7 @@ async function deleteComment(req, res) {
       {
         account: Get(Identity()),
         userRef: Select(['data', 'user'], Var('account')),
-        commentRef: Ref(Collection('Comments'), commentId),
+        commentRef: Ref(Collection('comments'), commentId),
         comment: Get(Var('commentRef')),
         bookmarkRef: Select(['data', 'object'], Var('comment')),
         bookmarkStatsRef: Match(
@@ -570,7 +570,7 @@ async function createComment(req, res) {
               },
             })
           ),
-          comment: Create(Collection('Comments'), {
+          comment: Create(Collection('comments'), {
             data: {
               text: text,
               author: Select(['data', 'user'], Get(Identity())),

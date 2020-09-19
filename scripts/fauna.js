@@ -327,7 +327,7 @@ const createBookmarksByPopularityIndex = CreateIndex({
 
 const createCommentsByListOrderedIndex = CreateIndex({
   name: 'comments_by_list_ordered',
-  source: Collection('Comments'),
+  source: Collection('comments'),
   terms: [
     {
       field: ['data', 'list'],
@@ -470,7 +470,7 @@ const createNotificationsByRecipientAndReadStatusIndex = CreateIndex({
 // comments a user made on a particular entity.
 const createCommentsByBookmarkAndAuthorOrderedIndex = CreateIndex({
   name: 'comments_by_object_and_author_ordered',
-  source: Collection('Comments'),
+  source: Collection('comments'),
   terms: [
     {
       field: ['data', 'object'],
