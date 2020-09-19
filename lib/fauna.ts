@@ -191,7 +191,7 @@ export async function createHashtags(items) {
           // If it doesn't exist we create it and return the reference.
           Select(
             ['ref'],
-            Create(Collection('Hashtags'), {
+            Create(Collection('hashtags'), {
               data: { name: Var('hashtag') },
             })
           )
