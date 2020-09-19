@@ -131,7 +131,7 @@ async function handleFollow(req, res) {
           // delete it to unfollow the author.
           Delete(Select('ref', Get(Var('followerStatsMatch')), null)),
           // If not, create a connection to follow the author.
-          Create(Collection('FollowerStats'), {
+          Create(Collection('follower_stats'), {
             data: {
               postLikes: 0,
               postReposts: 0,

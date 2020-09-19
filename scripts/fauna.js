@@ -367,7 +367,7 @@ const createFollowerStatsByUserPopularityIndex = CreateIndex({
   name: 'follower_stats_by_user_popularity',
   source: [
     {
-      collection: Collection('FollowerStats'),
+      collection: Collection('follower_stats'),
       fields: {
         bookmarkScore: Query(
           Lambda(
