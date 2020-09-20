@@ -33,7 +33,7 @@ const Login: NextPage = () => {
       return formik.resetForm()
     }
 
-    toast.warning('Passwords don’t match.')
+    console.log('Passwords don’t match.')
   }
 
   return (
