@@ -16,6 +16,8 @@ interface Props {
 }
 
 const AuthorInfo: React.FC<Props> = ({ user, createdAt, subtitle }) => {
+  if (!user) return null
+
   return (
     <HStack alignment="leading">
       <Link href="/[user]" as={`/${user.handle}`}>

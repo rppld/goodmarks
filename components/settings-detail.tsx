@@ -38,7 +38,8 @@ const SettingsDetail: React.FC = () => {
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(5, 'Must be 5 characters or more')
-      .max(40, 'Must be 40 characters or less'),
+      .max(40, 'Must be 40 characters or less')
+      .required('Required'),
     bio: Yup.string()
       .min(5, 'Must be 5 characters or more')
       .max(bioMaxLength, `Must be ${bioMaxLength} characters or less`),
@@ -51,6 +52,7 @@ const SettingsDetail: React.FC = () => {
     },
     validationSchema,
     onSubmit: handleUpdateUser,
+    validateOnChange: false,
   })
 
   React.useEffect(() => {
@@ -69,6 +71,13 @@ const SettingsDetail: React.FC = () => {
           name="name"
           defaultValue={formik.values.name}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          help={
+            formik.errors.name && formik.touched.name
+              ? String(formik.errors.name)
+              : undefined
+          }
+          validate={formik.errors.name ? () => false : undefined}
         />
 
         <Input
@@ -77,12 +86,16 @@ const SettingsDetail: React.FC = () => {
           labelText="Bio"
           name="bio"
           help={
-            formik.values.bio
+            formik.errors.bio && formik.touched.bio
+              ? String(formik.errors.bio)
+              : formik.values.bio
               ? String(bioMaxLength - formik.values.bio.length)
               : String(bioMaxLength)
           }
+          validate={formik.errors.bio ? () => false : undefined}
           defaultValue={formik.values.bio}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
 
         <footer>

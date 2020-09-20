@@ -20,6 +20,7 @@ const ForgotPassword: NextPage = () => {
       email: '',
     },
     onSubmit: handleSubmit,
+    validateOnChange: false,
   })
 
   async function handleSubmit() {
@@ -44,6 +45,7 @@ const ForgotPassword: NextPage = () => {
           placeholder="Email"
           value={formik.values.email}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
 
         <footer>

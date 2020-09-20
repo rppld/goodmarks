@@ -276,17 +276,9 @@ async function deleteList(req, res) {
         If(
           // Check if user is allowed to delete this list.
           Equals(Var('viewer'), Var('author')),
+          // @todo: Once comments are implemented, remove all the
+          // comments on the list here.
           Do(
-            // Remove all the comments on the list.
-            Foreach(
-              Paginate(
-                Match(Index('comments_by_list_ordered'), Var('listRef')),
-                {
-                  size: 100000,
-                }
-              ),
-              Lambda(['ts', 'commentRef'], Delete(Var('commentRef')))
-            ),
             // Remove all stats related to the list.
             Foreach(
               Paginate(Match(Index('list_stats_by_list'), Var('listRef')), {

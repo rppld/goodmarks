@@ -14,6 +14,7 @@ interface Props extends React.ComponentPropsWithoutRef<'input'> {
   type?: string
   rows?: string
   validate?: () => boolean
+  showValidationIndicator?: boolean
 }
 
 const Input = React.forwardRef<HTMLInputElement, Props>(
@@ -27,6 +28,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       placeholder,
       type = 'text',
       validate,
+      showValidationIndicator = false,
       ...props
     },
     ref: React.Ref<HTMLInputElement>
@@ -63,11 +65,11 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           {...props}
         />
 
-        {typeof validate === 'function' && (
+        {typeof validate === 'function' && showValidationIndicator ? (
           <span className={styles.rightAdornment}>
             {validate() ? <CheckCircle /> : <Error />}
           </span>
-        )}
+        ) : null}
       </span>
 
       {help ? <span className={styles.help}>{help}</span> : null}

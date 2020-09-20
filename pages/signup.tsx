@@ -48,7 +48,9 @@ const Signup: NextPage = () => {
       .test('unique-username', 'This username is already taken', checkUsername)
       .required('Required'),
     email: Yup.string().email('Invalid email address').required('Required'),
-    password: Yup.string().required('Required'),
+    password: Yup.string()
+      .min(8, 'Must be 8 characters or more')
+      .required('Required'),
   })
 
   const formik = useFormik({
@@ -146,6 +148,7 @@ const Signup: NextPage = () => {
                 }
               : undefined
           }
+          showValidationIndicator
         />
 
         <Input
@@ -162,6 +165,7 @@ const Signup: NextPage = () => {
               ? String(formik.errors.email)
               : null
           }
+          validate={formik.errors.email ? () => false : undefined}
         />
 
         <Input
@@ -180,6 +184,7 @@ const Signup: NextPage = () => {
               ? String(formik.errors.password)
               : null
           }
+          validate={formik.errors.password ? () => false : undefined}
         />
 
         <Button type="submit" size="lg" variant="primary">
