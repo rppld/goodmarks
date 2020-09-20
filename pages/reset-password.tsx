@@ -10,30 +10,34 @@ import PageTitle from 'components/page-title'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import useChangePassword from 'utils/use-change-password'
-import { toast } from 'react-toastify'
+import * as Yup from 'yup'
 
 const Login: NextPage = () => {
   const { query } = useRouter()
   const [changePassword] = useChangePassword()
-
+  const validationSchema = Yup.object({
+    password: Yup.string()
+      .min(8, 'Must be 8 characters or more')
+      .required('Required'),
+    passwordConfirm: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords don’t match')
+      .required('Required'),
+  })
   const formik = useFormik({
     initialValues: {
       password: '',
       passwordConfirm: '',
     },
     onSubmit: handleSubmit,
+    validationSchema,
+    validateOnChange: false,
   })
 
   async function handleSubmit() {
-    if (
-      formik.values.password.length > 0 &&
-      formik.values.password === formik.values.passwordConfirm
-    ) {
+    if (formik.isValid) {
       await changePassword(formik.values.password, query.token as string)
       return formik.resetForm()
     }
-
-    console.log('Passwords don’t match.')
   }
 
   return (
@@ -51,6 +55,13 @@ const Login: NextPage = () => {
           placeholder="New password"
           value={formik.values.password}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          help={
+            formik.errors.password && formik.touched.password
+              ? String(formik.errors.password)
+              : undefined
+          }
+          validate={formik.errors.password ? () => false : undefined}
         />
         <Input
           type="password"
@@ -60,6 +71,13 @@ const Login: NextPage = () => {
           placeholder="Confirm password"
           value={formik.values.passwordConfirm}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          help={
+            formik.errors.passwordConfirm && formik.touched.passwordConfirm
+              ? String(formik.errors.passwordConfirm)
+              : undefined
+          }
+          validate={formik.errors.passwordConfirm ? () => false : undefined}
         />
         <Button type="submit" variant="primary" size="lg">
           Set new password

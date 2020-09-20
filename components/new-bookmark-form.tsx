@@ -19,6 +19,14 @@ interface Props {
   category: string
 }
 
+interface FormValues {
+  text: string
+  details: {
+    title?: string
+    url?: string
+  }
+}
+
 const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   const textMaxLength = 140
   const { viewer } = useViewer()
@@ -28,14 +36,22 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
     text: Yup.string()
       .min(3, 'Must be 3 characters or more')
       .max(textMaxLength, `Must be ${textMaxLength} characters or less`),
+    details: Yup.object({
+      title: Yup.string()
+        .min(3, 'Must be 3 characters or more')
+        .max(44, `Must be 44 characters or less`),
+      url: Yup.string().min(3, 'Must be 3 characters or more'),
+    }),
   })
+  const initialValues: FormValues = {
+    text: '',
+    details: {},
+  }
   const formik = useFormik({
-    initialValues: {
-      text: '',
-      details: {},
-    },
+    initialValues,
     validationSchema,
     onSubmit: handleSubmit,
+    validateOnChange: false,
   })
 
   function getHeading() {
@@ -135,12 +151,16 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             placeholder="Lives up to the hype!"
             as="textarea"
             rows="4"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             help={
-              formik.values.text
+              formik.errors.text && formik.touched.text
+                ? String(formik.errors.text)
+                : formik.values.text
                 ? String(textMaxLength - formik.values.text.length)
                 : String(textMaxLength)
             }
-            onChange={formik.handleChange}
+            validate={formik.errors.text ? () => false : undefined}
           />
 
           <HStack alignment="trailing">
@@ -166,6 +186,21 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             name="details.title"
             labelText="Title"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            help={
+              formik.errors.details &&
+              formik.errors.details['title'] &&
+              formik.touched.details &&
+              formik.touched.details['title']
+                ? formik.errors.details['title'] &&
+                  String(formik.errors.details['title'])
+                : undefined
+            }
+            validate={
+              formik.errors.details && formik.errors.details['title']
+                ? () => false
+                : undefined
+            }
           />
 
           <Input
@@ -173,6 +208,21 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             labelText="URL"
             placeholder="https://"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            help={
+              formik.errors.details &&
+              formik.errors.details['url'] &&
+              formik.touched.details &&
+              formik.touched.details['url']
+                ? formik.errors.details['url'] &&
+                  String(formik.errors.details['url'])
+                : undefined
+            }
+            validate={
+              formik.errors.details && formik.errors.details['url']
+                ? () => false
+                : undefined
+            }
           />
 
           <Input
@@ -181,11 +231,15 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             name="text"
             labelText="Why should people check this out?"
             onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
             help={
-              formik.values.text
+              formik.errors.text && formik.touched.text
+                ? String(formik.errors.text)
+                : formik.values.text
                 ? String(textMaxLength - formik.values.text.length)
                 : String(textMaxLength)
             }
+            validate={formik.errors.text ? () => false : undefined}
           />
 
           <HStack alignment="trailing">

@@ -12,15 +12,22 @@ import PageTitle from 'components/page-title'
 import GoogleG from 'components/google-g'
 import { mutate } from 'swr'
 import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 const Login: NextPage = () => {
   const [error, setError] = React.useState(null)
+  const validationSchema = Yup.object({
+    email: Yup.string().email('Invalid email address').required('Required'),
+    password: Yup.string().required('Required'),
+  })
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     onSubmit: handleSubmit,
+    validateOnChange: false,
+    validationSchema,
   })
 
   async function handleSubmit({ email, password }) {
@@ -72,6 +79,7 @@ const Login: NextPage = () => {
             <span>or log in using your email address</span>
           </>
         )}
+
         <Input
           type="email"
           name="email"
@@ -79,7 +87,9 @@ const Login: NextPage = () => {
           hideLabel
           placeholder="Email"
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
+
         <Input
           type="password"
           name="password"
@@ -87,16 +97,18 @@ const Login: NextPage = () => {
           hideLabel
           placeholder="Password"
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
         />
+
         <Button type="submit" variant="primary" size="lg">
           Log in
         </Button>
+
         {error && <p>Error: {error}</p>}
-        {
-          <SmallText>
-            <Link href="/forgot-password">Forgot your password?</Link>
-          </SmallText>
-        }
+
+        <SmallText>
+          <Link href="/forgot-password">Forgot your password?</Link>
+        </SmallText>
       </Form>
     </Layout>
   )

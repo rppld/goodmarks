@@ -460,23 +460,6 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
             Get(Var('listStatsMatch')),
             {}
           ),
-          // Get comments, index has two values so lambda has two values
-          comments: Map(
-            Paginate(Match(Index('comments_by_list_ordered'), Var('ref'))),
-            Lambda(
-              ['ts', 'commentRef'],
-              Let(
-                {
-                  comment: Get(Var('commentRef')),
-                  author: Get(Select(['data', 'author'], Var('comment'))),
-                },
-                {
-                  comment: Var('comment'),
-                  author: Var('author'),
-                }
-              )
-            )
-          ),
         },
         // Return our elements
         {
@@ -484,7 +467,6 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
           original: Var('original'),
           list: Var('list'),
           listStats: Var('listStats'),
-          comments: Var('comments'),
         }
       )
     )

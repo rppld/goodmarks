@@ -9,11 +9,22 @@ import Button from './button'
 import Form from './form'
 import Checkbox from './checkbox'
 import { useViewer } from './viewer-context'
+import * as Yup from 'yup'
 
 const EditListForm: React.FC = () => {
+  const textMaxLength = 140
   const { query } = useRouter()
   const { viewer } = useViewer()
   const [error, setError] = React.useState(null)
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .min(3, 'Must be at least 3 characters')
+      .max(44, 'Can be maximum 44 characters')
+      .required('Required'),
+    description: Yup.string()
+      .min(3, 'Must be 3 characters or more')
+      .max(textMaxLength, `Must be ${textMaxLength} characters or less`),
+  })
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -21,6 +32,8 @@ const EditListForm: React.FC = () => {
       private: false,
     },
     onSubmit: handleSubmit,
+    validationSchema,
+    validateOnChange: false,
   })
 
   useSWR(query?.id ? `/api/lists?id=${query.id}` : null, {
@@ -33,33 +46,37 @@ const EditListForm: React.FC = () => {
   })
 
   async function update(values) {
-    const res = await fetch('/api/lists?action=update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        listId: query.id,
-        name: values.name,
-        description: values.description,
-        private: values.private,
-        hashtags: parseHashtags(values.description),
-      }),
-    })
-    mutate(`/api/lists?id=${query.id}`)
-    return res
+    if (formik.isValid) {
+      const res = await fetch('/api/lists?action=update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listId: query.id,
+          name: values.name,
+          description: values.description,
+          private: values.private,
+          hashtags: parseHashtags(values.description),
+        }),
+      })
+      mutate(`/api/lists?id=${query.id}`)
+      return res
+    }
   }
 
   async function create(values) {
-    return await fetch('/api/lists?action=create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: values.name,
-        description: values.description,
-        private: values.private,
-        hashtags: parseHashtags(values.description),
-        items: [],
-      }),
-    })
+    if (formik.isValid) {
+      return await fetch('/api/lists?action=create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: values.name,
+          description: values.description,
+          private: values.private,
+          hashtags: parseHashtags(values.description),
+          items: [],
+        }),
+      })
+    }
   }
 
   async function handleSubmit(values) {
@@ -90,9 +107,15 @@ const EditListForm: React.FC = () => {
         type="text"
         name="name"
         labelText="Name"
-        help="The name for your list"
+        help={
+          formik.errors.name && formik.touched.name
+            ? String(formik.errors.name)
+            : 'The name of your list'
+        }
         defaultValue={formik.values.name}
         onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        validate={formik.errors.name ? () => false : undefined}
       />
 
       <Input
@@ -100,9 +123,15 @@ const EditListForm: React.FC = () => {
         rows="6"
         name="description"
         labelText="Description"
-        help="Describe what your list is about"
+        help={
+          formik.errors.description && formik.touched.description
+            ? String(formik.errors.description)
+            : 'Describe what your list is about'
+        }
         defaultValue={formik.values.description}
         onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        validate={formik.errors.description ? () => false : undefined}
       />
 
       <Checkbox

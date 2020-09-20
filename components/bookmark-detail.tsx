@@ -1,6 +1,7 @@
 import React from 'react'
 import useSWR from 'swr'
 import Router from 'next/router'
+import * as Yup from 'yup'
 import styles from './bookmark-detail.module.css'
 import Input from './input'
 import Button from './button'
@@ -30,14 +31,19 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
   const item = data?.edges?.length > 0 && data.edges[0]
   const { comments } = item
   const { viewer } = useViewer()
+  const [createComment] = useCreateComment()
+  const [deleteComment] = useDeleteComment()
+  const validationSchema = Yup.object({
+    comment: Yup.string().min(3, 'Your comment must be at least 3 characters'),
+  })
   const formik = useFormik({
     initialValues: {
       comment: '',
     },
     onSubmit: handleCreateComment,
+    validationSchema,
+    validateOnChange: false,
   })
-  const [createComment] = useCreateComment()
-  const [deleteComment] = useDeleteComment()
 
   async function handleLike() {
     const item = data.edges[0]
@@ -154,6 +160,13 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
                   name="comment"
                   value={formik.values.comment}
                   onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  help={
+                    formik.errors.comment && formik.touched.comment
+                      ? String(formik.errors.comment)
+                      : undefined
+                  }
+                  validate={formik.errors.comment ? () => false : undefined}
                 />
 
                 <footer>
