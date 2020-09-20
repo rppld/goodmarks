@@ -3,7 +3,7 @@ import { query as q } from 'faunadb'
 const { CreateCollection, Collection, CreateIndex, Tokens } = q
 const COLLECTION_NAME = 'accounts'
 
-async function createAccountCollection(client) {
+async function createAccountsCollection(client) {
   return await client.query(CreateCollection({ name: COLLECTION_NAME }))
 }
 
@@ -57,7 +57,7 @@ async function createTokensByInstanceIndex(client) {
 }
 
 export {
-  createAccountCollection,
+  createAccountsCollection,
   createAllAccountsIndex,
   createAccountsByEmailIndex,
   createTokensByInstanceIndex,

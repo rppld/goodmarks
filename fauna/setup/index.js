@@ -1,6 +1,7 @@
 import { handleSetupError } from '../helpers/errors'
+import { createAccountVerificationRequestsCollection } from './account-verification-requests'
 import {
-  createAccountCollection,
+  createAccountsCollection,
   createAllAccountsIndex,
   createAccountsByEmailIndex,
   createTokensByInstanceIndex,
@@ -64,12 +65,19 @@ import {
   createUsersByAccountIndex,
   createUsersByHandleIndex,
 } from './users'
-import { createPasswordResetRequestRole } from './roles'
+import {
+  createPasswordResetRequestRole,
+  createAccountVerificationRole,
+} from './roles'
 
 async function setupDatabase(client) {
   await handleSetupError(
-    createAccountCollection(client),
+    createAccountsCollection(client),
     'Collection: accounts'
+  )
+  await handleSetupError(
+    createAccountVerificationRequestsCollection(client),
+    'Collection: account_verification_requests'
   )
   await handleSetupError(
     createBookmarkStatsCollection(client),
@@ -229,6 +237,10 @@ async function setupDatabase(client) {
   await handleSetupError(
     createPasswordResetRequestRole(client),
     'Role: membershiprole_passwordreset'
+  )
+  await handleSetupError(
+    createAccountVerificationRole(client),
+    'Role: membershiprole_verification'
   )
 }
 

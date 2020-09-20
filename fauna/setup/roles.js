@@ -92,6 +92,79 @@ async function createPasswordResetRequestRole(client) {
   )
 }
 
+async function createAccountVerificationRole(client) {
+  return await client.query(
+    CreateOrUpdateRole({
+      name: 'membershiprole_verification',
+      membership: [{ resource: Collection('account_verification_requests') }],
+      privileges: [
+        {
+          resource: Collection('account_verification_requests'),
+          actions: {
+            // Can only read itself.
+            read: Query(Lambda(['ref'], Equals(Identity(), Var('ref')))),
+          },
+        },
+        {
+          resource: Collection('accounts'),
+          actions: {
+            // Can only read accounts that the verification is created for.
+            read: Query(
+              Lambda(
+                ['ref'],
+                Let(
+                  {
+                    // Identity is in this case a document of the accounts_verification_request collection
+                    // since we are using a token generated for such a document.
+                    // The document has an account reference stored in it
+                    account: Select(['data', 'account'], Get(Identity())),
+                  },
+                  Equals(Var('account'), Var('ref'))
+                )
+              )
+            ),
+            // And it can only change an account that the verification is created for
+            write: Query(
+              Lambda(
+                ['oldData', 'newData', 'ref'],
+                Let(
+                  {
+                    verification_request: Get(Identity()),
+                    account: Select(['data', 'account'], Get(Identity())),
+                  },
+                  // Verify whether the account we write to is the same account that
+                  // the token was issued for. The account we attempt to write to is the 'ref' we receive
+                  // as a parameter for the write permission lambda.
+                  And(
+                    Equals(Var('account'), Var('ref')),
+                    // Then verify that nothing else is written to the account except the
+                    // verification key.
+                    // Top level attributes should only contain a changed data field.
+                    Not(
+                      AttributesChanged(Var('oldData'), Var('newData'), [
+                        'data',
+                      ])
+                    ),
+                    // and data should only have a changed verified field
+                    Not(
+                      AttributesChanged(
+                        Var('oldData'),
+                        Var('newData'),
+                        ['verified'],
+                        ['data']
+                      )
+                    )
+                  )
+                )
+              )
+            ),
+          },
+        },
+      ],
+    })
+  )
+}
+
 // A helper function inspired by the excellent community-driven
 // library: https://github.com/shiftx/faunadb-fql-lib
 function ObjectKeys(object) {
@@ -140,4 +213,4 @@ function AttributesChanged(obj1, obj2, whitelist, prefix) {
   )
 }
 
-export { createPasswordResetRequestRole }
+export { createPasswordResetRequestRole, createAccountVerificationRole }

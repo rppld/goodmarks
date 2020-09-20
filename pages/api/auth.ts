@@ -11,8 +11,10 @@ import {
   serializeFaunaCookie,
   CreatePasswordResetToken,
   InvalidateResetTokens,
+  CreateEmailVerificationToken,
+  VerifyRegisteredAccount,
 } from 'lib/fauna'
-import { sendPasswordResetEmail } from 'lib/ses'
+import { sendPasswordResetEmail, sendAccountVerificationEmail } from 'lib/ses'
 
 const {
   Create,
@@ -39,6 +41,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       return handleLogin(req, res)
     case 'signup':
       return handleSignup(req, res)
+    case 'confirm-account':
+      return handleConfirmAccount(req, res)
     case 'oauth2':
       return handleOauth2(req, res)
     case 'request-password-reset':
@@ -130,6 +134,7 @@ async function handleChangePassword(req, res) {
 
 async function handleSignup(req, res) {
   const { username, email, password } = await req.body
+  const { origin } = absoluteUrl(req)
 
   try {
     if (!username || !email || !password) {
@@ -155,11 +160,17 @@ async function handleSignup(req, res) {
                 data: {
                   email,
                   user: Select(['ref'], Var('user')),
+                  verified: false,
                 },
               })
             ),
+            verifyToken: CreateEmailVerificationToken(Var('account')),
           },
-          { user: Var('user'), account: Var('account') }
+          {
+            user: Var('user'),
+            account: Var('account'),
+            verifyToken: Var('verifyToken'),
+          }
         )
       )
     } catch (error) {
@@ -183,11 +194,32 @@ async function handleSignup(req, res) {
       throw new Error('No secret present in login query response.')
     }
 
+    // Send out account verification email
+    const confirmUrl = `${origin}/api/auth?action=confirm-account&token=${signupRes.verifyToken.secret}`
+    sendAccountVerificationEmail(email, confirmUrl)
+
     const serializedCookie = serializeFaunaCookie(secret)
     res.setHeader('Set-Cookie', serializedCookie)
     res.status(200).end()
   } catch (error) {
     res.status(400).send(error.message)
+  }
+}
+
+async function handleConfirmAccount(req, res) {
+  const { token } = req.query
+  // This token and therefore this client can only access an account
+  // to which this token belongs and the only thing it can do is
+  // verify it.
+  const client = faunaClient(token)
+
+  try {
+    await client.query(VerifyRegisteredAccount())
+    res.status(200)
+    res.redirect('/?verified=true')
+  } catch (error) {
+    console.error(error)
+    res.redirect('/?verified=error')
   }
 }
 
