@@ -56,6 +56,7 @@ const {
   Exists,
   Match,
   Index,
+  IsNull,
   If,
   Now,
   Tokens,
@@ -96,7 +97,11 @@ export function InvalidateResetTokens(accountRef) {
         // Select([0], ...) to get the first reference
         Lambda(
           ['req'],
-          Select([0], Paginate(Match(Index('tokens_by_instance'), Var('req'))))
+          Select(
+            [0],
+            Paginate(Match(Index('tokens_by_instance'), Var('req'))),
+            null // Return null if token is expired.
+          )
         )
       ),
     },
@@ -104,10 +109,13 @@ export function InvalidateResetTokens(accountRef) {
     // make sure we don't end up going through a larger list if
     // someone resets a lot.
     Do(
-      q.Map(Var('resetTokens'), Lambda(['tokenRef'], Delete(Var('tokenRef')))),
+      q.Map(
+        Var('resetTokens'),
+        Lambda(['token'], If(IsNull(Var('token')), false, Delete(Var('token'))))
+      ),
       q.Map(
         Var('resetRequests'),
-        Lambda(['resetRequestRef'], Delete(Var('resetRequestRef')))
+        Lambda(['resetRequest'], Delete(Var('resetRequest')))
       )
     )
   )

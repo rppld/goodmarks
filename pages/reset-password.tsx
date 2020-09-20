@@ -10,6 +10,7 @@ import PageTitle from 'components/page-title'
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import useChangePassword from 'utils/use-change-password'
+import { toast } from 'react-toastify'
 
 const Login: NextPage = () => {
   const { query } = useRouter()
@@ -24,12 +25,15 @@ const Login: NextPage = () => {
   })
 
   async function handleSubmit() {
-    if (formik.values.password === formik.values.passwordConfirm) {
+    if (
+      formik.values.password.length > 0 &&
+      formik.values.password === formik.values.passwordConfirm
+    ) {
       await changePassword(formik.values.password, query.token as string)
       return formik.resetForm()
     }
 
-    console.log('Passwords don’t match.')
+    toast.warning('Passwords don’t match.')
   }
 
   return (

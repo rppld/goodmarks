@@ -113,17 +113,14 @@ function ChangePassword(password) {
 
 async function handleChangePassword(req, res) {
   const { password, token } = await req.body
-  const { origin } = absoluteUrl(req)
-  const redirectUrl = `${origin}/login`
-  // we will use the token here which is the password reset token. the
+  // We will use the token here which is the password reset token. the
   // only thing it can do is reset a password (we defined that in the
-  // FaunaDB roles)
+  // FaunaDB roles).
   const client = faunaClient(token)
 
   try {
     await client.query(ChangePassword(password))
-    res.writeHead(302, { Location: redirectUrl })
-    res.end()
+    res.status(200).send('Password changed successfully.')
   } catch (error) {
     console.error(error)
     // return res.json({ error: 'could not reset password' })

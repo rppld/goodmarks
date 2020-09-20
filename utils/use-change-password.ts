@@ -1,4 +1,5 @@
 import React from 'react'
+import { toast } from 'react-toastify'
 
 const useChangePassword = (): [
   (password: string, token: string) => Promise<void>,
@@ -23,6 +24,7 @@ const useChangePassword = (): [
 
       if (response.ok) {
         setLoading(false)
+        toast.success(await response.text())
       }
     } catch (error) {
       console.log(error)
