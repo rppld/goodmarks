@@ -8,7 +8,7 @@ const ACCESS_TOKEN_LIFETIME_SECONDS = 600 // 10 minutes
 const RESET_TOKEN_LIFETIME_SECONDS = 1800 // 30 minutes
 const REFRESH_TOKEN_LIFETIME_SECONDS = 28800 // 8 hours
 
-export const FAUNA_SECRET_COOKIE = 'faunaSecret'
+export const FAUNA_SECRET_COOKIE = 'goodmarks_app_secret'
 
 export const serverClient = new faunadb.Client({
   secret: process.env.FAUNA_SERVER_KEY,
@@ -61,6 +61,8 @@ const {
   Now,
   Tokens,
   TimeAdd,
+  Update,
+  Logout,
 } = q
 
 export function CreatePasswordResetToken(accountRef) {
@@ -119,6 +121,62 @@ export function InvalidateResetTokens(accountRef) {
       )
     )
   )
+}
+
+export function CreateEmailVerificationToken(accountRef) {
+  return Let(
+    {
+      // First create a document in a collection specifically provided
+      // for email verification tokens. If we create a token in a
+      // specific collection, we can more easily control with roles
+      // what the token can do.
+      verification_request: Create(
+        Collection('account_verification_requests'),
+        {
+          data: {
+            account: accountRef,
+          },
+        }
+      ),
+    },
+    // Create a token that will provide the permissions of the
+    // account_verification_requests document. The account is linked
+    // to it in the document which will be used in the roles to verify
+    // the account.
+    Create(Tokens(), {
+      instance: Select(['ref'], Var('verification_request')),
+    })
+  )
+}
+
+// The verification will be called using the verifyToken that was
+// created in the previous function. That token has the rights to
+// set an account's verified boolean to true.
+export function VerifyRegisteredAccount() {
+  return Let(
+    {
+      // Identity is a document from the 'account_verification_requests' collection
+      accountRef: Select(['data', 'account'], Get(Identity())),
+      account: Update(Var('accountRef'), {
+        data: {
+          verified: true,
+        },
+      }),
+      // Remove the verification token! Without passing 'true' to Logout
+      // only this specific token will be removed.
+      logout: Logout(false),
+      // We could opt here to delete the verification request as well.
+      // however we keep it around for logging purposes.
+    },
+    Var('account')
+  )
+
+  // And of course we want to add rate-limiting first. The rate
+  // limiting config for login contains calls: 3 and perSeconds: 0
+  // (see './rate-limiting.js) 0 means that there is no decay, no
+  // matter how long you wait you can do maximum 3 calls. But on
+  // successful login we clean up the rate-limiting so they only
+  // remain on failed logins.
 }
 
 export function flattenDataKeys(obj) {
