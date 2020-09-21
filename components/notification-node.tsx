@@ -10,24 +10,23 @@ interface Props {
   notification: Notification
 }
 
-const ListNode: React.FC<Props> = ({ notification, ...props }) => {
-  const getNotificationTitle = function (): String {
-    let title = 'Unknown notification'
-    let sender = 'Someone'
+const getNotificationTitle = function (notification: Notification): String {
+  let title = 'Unknown notification'
 
-    if (notification.type === 'NEW_LIKE') {
-      title = `${sender} liked your bookmark.`
-    } else if (notification.type === 'NEW_COMMENT') {
-      title = `${sender} commented on your bookmark.`
-    }
-
-    return title
+  if (notification.type === 'NEW_LIKE') {
+    title = 'Your bookmark has a new like'
+  } else if (notification.type === 'NEW_COMMENT') {
+    title = 'Your bookmark has a new comment'
   }
 
+  return title
+}
+
+const NotificationNode: React.FC<Props> = ({ notification, ...props }) => {
   return (
     <div className={styles.container} {...props}>
       <VStack>
-        <H5>{getNotificationTitle()}</H5>
+        <H5>{getNotificationTitle(notification)}</H5>
         <SmallText as="p" meta>
           <TimeAgo datetime={notification.created['@ts']} />
         </SmallText>
@@ -36,4 +35,4 @@ const ListNode: React.FC<Props> = ({ notification, ...props }) => {
   )
 }
 
-export default ListNode
+export default NotificationNode
