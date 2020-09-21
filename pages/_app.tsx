@@ -19,9 +19,9 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   React.useEffect(() => {
     if (verified === 'true') {
-      toast.success('Your account has been activated.')
+      toast.success('Your account has been activated')
     } else if (verified === 'error') {
-      toast.error('There was an error activating your account.')
+      toast.error('There was an error activating your account')
     }
   }, [verified])
 
@@ -31,11 +31,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </ViewerProvider>
       <ToastContainer
-        position="bottom-center"
-        newestOnTop={true}
+        position="top-center"
         hideProgressBar={true}
         transition={Slide}
         draggable={false}
+        closeButton={false}
       />
     </SWRConfig>
   )
