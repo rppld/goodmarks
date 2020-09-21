@@ -51,13 +51,24 @@ const Signup: NextPage = () => {
     password: Yup.string()
       .min(8, 'Must be 8 characters or more')
       .required('Required'),
+    passwordConfirm: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords don’t match')
+      .required('Required'),
   })
 
-  const formik = useFormik({
+  interface FormValues {
+    username: string
+    email: string
+    password: string
+    passwordConfirm: string
+  }
+
+  const formik = useFormik<FormValues>({
     initialValues: {
       username: '',
       email: '',
       password: '',
+      passwordConfirm: '',
     },
     onSubmit: handleSubmit,
     validationSchema,
@@ -66,7 +77,7 @@ const Signup: NextPage = () => {
 
   const debouncedValidateForm = debounce(formik.validateForm, 1000)
 
-  const handleChange = (e) => {
+  const handleUsernameChange = (e) => {
     formik.handleChange(e)
     debouncedValidateForm()
   }
@@ -130,7 +141,7 @@ const Signup: NextPage = () => {
           hideLabel
           placeholder="Display name"
           value={formik.values.username}
-          onChange={handleChange}
+          onChange={handleUsernameChange}
           onBlur={formik.handleBlur}
           help={
             formik.values.username.length > 0 &&
@@ -158,7 +169,7 @@ const Signup: NextPage = () => {
           hideLabel
           placeholder="Email"
           value={formik.values.email}
-          onChange={handleChange}
+          onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           help={
             formik.values.email && formik.errors.email && formik.touched.email
@@ -175,7 +186,7 @@ const Signup: NextPage = () => {
           hideLabel
           placeholder="Password"
           value={formik.values.password}
-          onChange={handleChange}
+          onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           help={
             formik.values.password &&
@@ -187,8 +198,27 @@ const Signup: NextPage = () => {
           validate={formik.errors.password ? () => false : undefined}
         />
 
+        <Input
+          type="password"
+          name="passwordConfirm"
+          labelText="Confirm password"
+          hideLabel
+          placeholder="Confirm password"
+          value={formik.values.passwordConfirm}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          help={
+            formik.values.passwordConfirm &&
+            formik.errors.passwordConfirm &&
+            formik.touched.passwordConfirm
+              ? String(formik.errors.passwordConfirm)
+              : undefined
+          }
+          validate={formik.errors.passwordConfirm ? () => false : undefined}
+        />
+
         <Button type="submit" size="lg" variant="primary">
-          Sign up
+          {formik.isSubmitting ? 'Loading' : 'Sign up'}
         </Button>
 
         {error && <p>Error: {error}</p>}
