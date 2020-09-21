@@ -10,7 +10,7 @@ interface Props {
 
 const SITE_NAME = 'Goodmarks'
 const SITE_DESCRIPTION =
-  'Goodmarks is a community to share favorites with friends. No algorithm. No AI. 100% human.'
+  'A community to share favorites with friends. No algorithm. No AI. 100% human.'
 
 const Layout: React.FC<Props> = ({
   title,
