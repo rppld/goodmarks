@@ -7,6 +7,7 @@ import {
   createHashtags,
   getListsWithUsersMapGetGeneric,
 } from 'lib/fauna'
+import { User, List } from 'lib/types'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
 
@@ -216,7 +217,7 @@ async function updateList(req, res) {
 }
 
 async function createList(req, res) {
-  const { name, description, private: isPrivate, hashtags, items } = req.body
+  const { name, description, private: isPrivate, hashtags } = req.body
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -236,7 +237,6 @@ async function createList(req, res) {
             name,
             description,
             private: isPrivate,
-            items,
             likes: 0,
             comments: 0,
             reposts: 0,
@@ -355,10 +355,29 @@ async function getListsByUserHandle(req, res) {
   return res.status(200).json(flattenDataKeys(data))
 }
 
+interface ListEdge {
+  author: {
+    data: Omit<User, 'id'>
+  }
+  original: boolean
+  list: {
+    data: Omit<List, 'id' | 'ts'>
+  }
+  listStats: any
+}
+
+interface ListResponse {
+  edges: {
+    data: ListEdge[]
+  }
+  isPrivate: boolean
+  viewerIsAuthor: boolean
+}
+
 export const listApi = async (listId: string, faunaSecret?: string) => {
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
-  // @todo: Type `data`
-  const data: any = await client.query(
+
+  const data: ListResponse = await client.query(
     Let(
       {
         listRef: Ref(Collection('lists'), listId),

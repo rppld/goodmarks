@@ -14,6 +14,7 @@ const SettingsDetail: React.FC = () => {
 
   const handleUpdateUser = (values) => {
     const { id: userId, ...viewerData } = viewer
+    const { handle, picture, bio, name } = viewerData
     formik.setSubmitting(true)
 
     fetch('/api/users?action=update', {
@@ -22,7 +23,10 @@ const SettingsDetail: React.FC = () => {
       body: JSON.stringify({
         userId,
         payload: {
-          ...viewerData,
+          handle,
+          picture,
+          bio,
+          name,
           ...values,
         },
       }),

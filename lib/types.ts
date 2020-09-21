@@ -1,3 +1,9 @@
+export interface Account {
+  email: string
+  user: any
+  verified: boolean
+}
+
 export interface Bookmark {
   id: string
   created: any
@@ -6,19 +12,6 @@ export interface Bookmark {
   likes: number
   reposts: number
   details: any
-}
-
-export interface List {
-  id: string
-  created: any
-  name: string
-  description: string
-  comments: number
-  likes: number
-  reposts: number
-  items: Bookmark[]
-  hashtags: any
-  ts: number
 }
 
 export interface BookmarkCategory {
@@ -59,9 +52,9 @@ export interface NotificationsData {
 export interface User {
   id: string
   handle: string
-  name: string
   picture: string
   bio: string
+  name: string
 }
 
 export interface BookmarkStats {
@@ -95,6 +88,24 @@ export interface BookmarksData {
   edges: BookmarkNode[]
 }
 
+export interface Hashtag {
+  name: string
+}
+
+export interface List {
+  id: string
+  name: string
+  description: string
+  private: boolean
+  likes: number
+  comments: number
+  reposts: number
+  hashtags: Hashtag[]
+  author: any
+  created: any
+  ts: any
+}
+
 export interface ListItem {
   id: string
   bookmark: BookmarkNode
@@ -103,7 +114,6 @@ export interface ListItem {
 export interface ListsData {
   edges: {
     list: List
-    items: ListItem[]
     listStats: ListStats
     author: User
     comments: CommentNode[]
@@ -111,6 +121,7 @@ export interface ListsData {
 }
 
 export interface Viewer extends User {
+  email: string
   hasUnreadNotifications: boolean
 }
 

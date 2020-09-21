@@ -8,6 +8,7 @@ import {
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
 } from 'lib/fauna'
+import { User } from 'lib/types'
 
 const {
   Let,
@@ -74,11 +75,19 @@ async function get(req, res) {
   return res.status(200).json(flattenDataKeys(data))
 }
 
+interface UpdateUserResponse {
+  oldUser: {
+    data: User
+  }
+  newUser: {
+    data: User
+  }
+}
+
 async function handleUpdate(req, res) {
   const { userId, payload } = req.body
 
-  // @todo: Type `data`
-  const data: any = await serverClient.query(
+  const data: UpdateUserResponse = await serverClient.query(
     Let(
       {
         userRef: Ref(Collection('users'), userId),

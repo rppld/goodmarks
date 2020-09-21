@@ -15,6 +15,8 @@ import {
   VerifyRegisteredAccount,
 } from 'lib/fauna'
 import { sendPasswordResetEmail, sendAccountVerificationEmail } from 'lib/ses'
+import { Account, User } from 'lib/types'
+import { String } from 'aws-sdk/clients/cloudsearchdomain'
 
 const {
   Create,
@@ -132,6 +134,14 @@ async function handleChangePassword(req, res) {
   }
 }
 
+interface SignupResponse {
+  account: any
+  user: any
+  verifyToken: {
+    secret: string
+  }
+}
+
 async function handleSignup(req, res) {
   const { username, email, password } = await req.body
   const { origin } = absoluteUrl(req)
@@ -142,7 +152,7 @@ async function handleSignup(req, res) {
     }
     console.log(`email: ${email} trying to create user.`)
 
-    let signupRes
+    let signupRes: SignupResponse
 
     try {
       signupRes = await serverClient.query(
@@ -182,8 +192,9 @@ async function handleSignup(req, res) {
       throw new Error('No ref present in create query response.')
     }
 
-    // @todo: Type `data`
-    const data: any = await serverClient.query(
+    const data: {
+      secret: String
+    } = await serverClient.query(
       Login(signupRes.account, {
         password,
       })
@@ -223,6 +234,16 @@ async function handleConfirmAccount(req, res) {
   }
 }
 
+interface LoginResponse {
+  account: {
+    data: Account
+  }
+  user: {
+    data: Omit<User, 'id'>
+  }
+  secret: string
+}
+
 async function handleLogin(req, res) {
   const { email, password } = await req.body
 
@@ -231,8 +252,7 @@ async function handleLogin(req, res) {
       throw new Error('Email and password must be provided.')
     }
 
-    // @todo: Type `data`
-    const data: any = await serverClient.query(
+    const data: LoginResponse = await serverClient.query(
       Let(
         {
           // Login will return a token if the password matches the

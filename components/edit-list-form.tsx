@@ -73,7 +73,6 @@ const EditListForm: React.FC = () => {
           description: values.description,
           private: values.private,
           hashtags: parseHashtags(values.description),
-          items: [],
         }),
       })
     }
