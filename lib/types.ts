@@ -1,5 +1,3 @@
-import { Boolean } from 'aws-sdk/clients/codedeploy'
-
 export interface Bookmark {
   id: string
   created: any
@@ -42,10 +40,13 @@ export interface Comment {
 
 export interface Notification {
   id: string
-  created: any
-  type: string
-  objectType: string
+  type: 'NEW_COMMENT' | 'NEW_LIKE'
+  sender: any
+  recipient: any
+  object: any
+  objectType: 'BOOKMARK' | 'LIST'
   objectUrl: string
+  created: any
   read: boolean
 }
 

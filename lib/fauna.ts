@@ -3,6 +3,7 @@ import { parseJSON } from 'faunadb/src/_json'
 import cookie from 'cookie'
 import atob from 'atob'
 import btoa from 'btoa'
+import { Notification } from './types'
 
 const ACCESS_TOKEN_LIFETIME_SECONDS = 600 // 10 minutes
 const RESET_TOKEN_LIFETIME_SECONDS = 1800 // 30 minutes
@@ -212,19 +213,13 @@ export function flattenDataKeys(obj) {
   }
 }
 
-interface NotificationPayload {
-  type: 'NEW_COMMENT' | 'NEW_LIKE'
-  sender: any
-  recipient: any
+interface Payload extends Omit<Notification, 'id' | 'created' | 'read'> {
   recipientEmail?: string
-  object: any
-  objectType: 'BOOKMARK' | 'LIST'
-  objectUrl: string
 }
 
 export async function createNotification(
   faunaSecret,
-  { recipientEmail, ...payload }: NotificationPayload
+  { recipientEmail, ...payload }: Payload
 ) {
   await faunaClient(faunaSecret).query(
     Create(Collection('notifications'), {
