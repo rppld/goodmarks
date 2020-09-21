@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import styles from './index.module.css'
 import { HStack } from '../stack'
 import Router from 'next/router'
+import { toast } from 'react-toastify'
 import Embed from './embed'
 import { Heart, ChatBubble, More } from '../icon'
 import useLikeBookmark from 'utils/use-like-bookmark'
@@ -204,7 +205,10 @@ const BookmarkNode: React.FC<Props> = ({
         isOpen={showDialog}
         onDismiss={closeDialog}
         bookmarkId={bookmark.id}
-        onSuccess={closeDialog}
+        onSuccess={() => {
+          closeDialog()
+          toast.success('Bookmark was added to your list')
+        }}
       />
     </div>
   )

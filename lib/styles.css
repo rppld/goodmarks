@@ -405,19 +405,29 @@ to capture the parent as the click target. */
 }
 
 .Toastify__toast-container {
-  width: 500px;
-  max-width: 100%;
+  width: 100%;
+  padding: var(--space-16);
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .Toastify__toast {
-  border-radius: var(--space-16);
-  display: flex;
-  align-items: center;
+  width: auto;
+  max-width: 480px;
+  border-radius: var(--space-32);
+  min-height: 0;
 }
 
 .Toastify__toast-body {
   margin: 0;
-  padding: 0 var(--space-16);
+  padding: var(--space-4) var(--space-16);
+  text-align: center;
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-18);
+  line-height: var(--lh-title);
 }
 
 .Toastify__toast--success {
