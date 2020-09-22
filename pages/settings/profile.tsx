@@ -8,9 +8,9 @@ import SettingsDetail from 'components/settings-detail'
 
 const Settings: NextPage = () => {
   return (
-    <Layout title="Profile Settings">
+    <Layout title="Profile">
       <PageTitle>
-        <H4 as="h1">Profile Settings</H4>
+        <H4 as="h1">Profile</H4>
         <Text meta>Update your profile.</Text>
       </PageTitle>
       <SettingsDetail />

@@ -19,23 +19,23 @@ const Settings: NextPage = () => {
         <NavList>
           <Link href="/settings/profile">
             <a>
-              <li>Profile settings</li>
+              <li>Profile</li>
             </a>
           </Link>
 
-          <Link href="/settings/notifications">
+          {/* <Link href="/settings/notifications">
             <a>
               <li>Notification settings</li>
             </a>
-          </Link>
+          </Link> */}
         </NavList>
 
         <NavList>
-          <Link href="/about">
+          {/* <Link href="/about">
             <a>
               <li>About</li>
             </a>
-          </Link>
+          </Link> */}
           <Link href="/contact">
             <a>
               <li>Contact</li>
