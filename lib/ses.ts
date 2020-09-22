@@ -20,17 +20,33 @@ export const sendPasswordResetEmail = (toEmail, resetUrl) => {
         Html: {
           Charset: 'UTF-8',
           Data: `
-          <style>
-            form   { background-color: #F3F4F8; }
-            span   { display:inline-block; border-radius:4px; background-color:#485C80;}
-            a      { min-width:196px; border-top:13px solid; border-bottom:13px solid; border-right:24px solid; border-left:24px solid; border-color:#2ea664; border-radius:4px; background-color:#2ea664; color:#ffffff; font-size:18px; line-height:18px; word-break:break-word; display:inline-block; text-align:center; font-weight:900; text-decoration:none !important }
-          </style>
-          <div> 
-            <h1>We have received a request to reset the password for your Goodmarks account.</h1>
-            <span><a 
-              href="${resetUrl}" 
-              target="_blank">Reset</a></span>
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto">
+          <div style="padding: 24px 0; border-bottom: 1px solid #e5e5e5">
+            <img src="https://goodmarks.app/logo-h48.png" height="24" />
           </div>
+          <h1 style="font-size: 28px; color: #000;">Reset password</h1>
+          <p style="font-size: 18px; line-height: 1.4; color: #666">
+            We have received a request to reset the password of your Goodmarks account.
+          </p>
+          <a
+            href="${resetUrl}"
+            style="
+              width: 100%;
+              background-color: #000000;
+              color: #ffffff;
+              border-radius: 8px;
+              margin-top: 16px;
+              display: block;
+              text-decoration: none;
+              font-size: 18px;
+              padding: 16px 0;
+              text-align: center;
+            "
+            target="_blank"
+            >Reset password</a
+          >
+        </div>
+             
           `,
         },
       },
@@ -59,17 +75,32 @@ export const sendAccountVerificationEmail = (toEmail, confirmUrl) => {
         Html: {
           Charset: 'UTF-8',
           Data: `
-          <style>
-            form   { background-color: #F3F4F8; }
-            span   { display:inline-block; border-radius:4px; background-color:#485C80;}
-            a      { min-width:196px; border-top:13px solid; border-bottom:13px solid; border-right:24px solid; border-left:24px solid; border-color:#2ea664; border-radius:4px; background-color:#2ea664; color:#ffffff; font-size:18px; line-height:18px; word-break:break-word; display:inline-block; text-align:center; font-weight:900; text-decoration:none !important }
-          </style>
-          <div> 
-            <h1>Verify your email address to activate your Goodmarks account.</h1>
-            <span><a 
-              href="${confirmUrl}" 
-              target="_blank">Verify email</a></span>
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto">
+          <div style="padding: 24px 0; border-bottom: 1px solid #e5e5e5">
+            <img src="https://goodmarks.app/logo-h48.png" height="24" />
           </div>
+          <h1 style="font-size: 28px; color: #000;">Verify your email</h1>
+          <p style="font-size: 18px; line-height: 1.4; color: #666">
+            Verify your email address to activate your Goodmarks account.
+          </p>
+          <a
+            href="${confirmUrl}"
+            style="
+              width: 100%;
+              background-color: #000000;
+              color: #ffffff;
+              border-radius: 8px;
+              margin-top: 16px;
+              display: block;
+              text-decoration: none;
+              font-size: 18px;
+              padding: 16px 0;
+              text-align: center;
+            "
+            target="_blank"
+            >Verify email</a
+          >
+        </div>
           `,
         },
       },
