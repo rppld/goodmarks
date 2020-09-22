@@ -24,7 +24,7 @@ export const sendPasswordResetEmail = (toEmail, resetUrl) => {
           <div style="padding: 24px 0; border-bottom: 1px solid #e5e5e5">
             <img src="https://goodmarks.app/logo-h48.png" height="24" />
           </div>
-          <p style="font-size: 18px; line-height: 1.4;">
+          <p style="font-size: 18px; line-height: 1.4; color: #666666">
             We have received a request to reset the password of your Goodmarks account.
           </p>
           <a
@@ -33,7 +33,7 @@ export const sendPasswordResetEmail = (toEmail, resetUrl) => {
               width: 100%;
               background-color: #000000;
               color: #ffffff;
-              border-radius: 8px;
+              border-radius: 16px;
               margin-top: 16px;
               display: block;
               text-decoration: none;
@@ -77,7 +77,7 @@ export const sendAccountVerificationEmail = (toEmail, confirmUrl) => {
           <div style="padding: 24px 0; border-bottom: 1px solid #e5e5e5">
             <img src="https://goodmarks.app/logo-h48.png" height="24" />
           </div>
-          <p style="font-size: 18px; line-height: 1.4;">
+          <p style="font-size: 18px; line-height: 1.4; color: #666666">
             Verify your email address to activate your Goodmarks account.
           </p>
           <a
@@ -86,7 +86,7 @@ export const sendAccountVerificationEmail = (toEmail, confirmUrl) => {
               width: 100%;
               background-color: #000000;
               color: #ffffff;
-              border-radius: 8px;
+              border-radius: 16px;
               margin-top: 16px;
               display: block;
               text-decoration: none;
