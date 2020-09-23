@@ -28,7 +28,7 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   return (
     <Layout
       title={`${title} by @${handle}`}
-      description={`Check out why @${handle} recommends ${title} on Goodmarks.`}
+      description={`@${handle} recommends ${title} on Goodmarks.`}
     >
       <PageTitle>
         <H4 as="h1">Bookmark</H4>
