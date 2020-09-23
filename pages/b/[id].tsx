@@ -23,17 +23,7 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   const bookmarkData = initialData.edges[0]
   const handle = bookmarkData.author.handle
   const categorySlug = bookmarkData.category.slug
-  let title = ''
-
-  if (categorySlug === 'movies') {
-    title = bookmarkData.bookmark.details.title
-  } else if (categorySlug === 'tv-shows') {
-    title = bookmarkData.bookmark.details.name
-  } else if (categorySlug === 'links') {
-    title = bookmarkData.bookmark.details.title
-  } else {
-    title = 'Bookmark'
-  }
+  const title = bookmarkData.bookmark.details.name || bookmarkData.bookmark.details.title
 
   return (
     <Layout
