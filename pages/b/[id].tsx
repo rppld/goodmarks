@@ -22,13 +22,13 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
 
   const bookmarkData = initialData.edges[0]
   const handle = bookmarkData.author.handle
-  const categorySlug = bookmarkData.category.slug
-  const title = bookmarkData.bookmark.details.name || bookmarkData.bookmark.details.title
+  const title =
+    bookmarkData.bookmark.details.name || bookmarkData.bookmark.details.title
 
   return (
     <Layout
-      title={`${title} by @${handle}`}
-      description={`@${handle} recommends ${title} on Goodmarks.`}
+      title={title}
+      description={`A recommendation by @${handle} on Goodmarks.`}
     >
       <PageTitle>
         <H4 as="h1">Bookmark</H4>
