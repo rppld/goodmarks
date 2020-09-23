@@ -25,10 +25,19 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   const title =
     bookmarkData.bookmark.details.name || bookmarkData.bookmark.details.title
 
+  let image = null
+
+  if (bookmarkData.bookmark.details['backdrop_path']) {
+    image = `https://image.tmdb.org/t/p/w1280/${bookmarkData.bookmark.details['backdrop_path']}`
+  }
+
+  console.log(image)
+
   return (
     <Layout
       title={title}
       description={`A recommendation by @${handle} on Goodmarks.`}
+      ogimage={image}
     >
       <PageTitle>
         <H4 as="h1">Bookmark</H4>
