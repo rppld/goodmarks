@@ -6,6 +6,7 @@ import TabBar from './tab-bar'
 interface Props {
   title?: string
   description?: string
+  ogimage?: string
 }
 
 const SITE_NAME = 'Goodmarks'
@@ -15,6 +16,7 @@ const SITE_DESCRIPTION =
 const Layout: React.FC<Props> = ({
   title,
   description = SITE_DESCRIPTION,
+  ogimage,
   ...props
 }) => {
   let pageTitle = SITE_NAME
@@ -93,6 +95,7 @@ const Layout: React.FC<Props> = ({
           property="og:description"
           content={description}
         />
+        {ogimage && <meta property="og:image" content={ogimage} />}
       </Head>
       <header role="banner" className={styles.sidebar}>
         <TabBar />
