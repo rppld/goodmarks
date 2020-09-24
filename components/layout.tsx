@@ -17,17 +17,13 @@ const SITE_IMAGE = 'https://goodmarks.app/meta-image.jpg'
 const Layout: React.FC<Props> = ({
   title,
   description = SITE_DESCRIPTION,
-  image,
+  image = SITE_IMAGE,
   ...props
 }) => {
   let pageTitle = SITE_NAME
 
   if (typeof title !== 'undefined') {
     pageTitle = `${title} / ${SITE_NAME}`
-  }
-
-  if (!image) {
-    image = SITE_IMAGE
   }
 
   return (
