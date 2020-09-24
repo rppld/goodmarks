@@ -37,18 +37,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     )
 
     instance.record()
-
-    // function onRouteChangeComplete() {
-    //   instance.record()
-    // }
-
-    // // Record a pageview when route changes
-    // events.on('routeChangeComplete', onRouteChangeComplete)
-
-    // // Unassign event listener
-    // return () => {
-    //   events.off('routeChangeComplete', onRouteChangeComplete)
-    // }
   }, [verified, events])
 
   return (
