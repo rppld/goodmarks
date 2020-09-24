@@ -29,11 +29,11 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
 
   let image = null
 
+  //  @todo: Create image URL util that queries tmdb for the prefix.
+
   if (bookmarkData.bookmark.details['backdrop_path']) {
     image = `https://image.tmdb.org/t/p/w1280/${bookmarkData.bookmark.details['backdrop_path']}`
   }
-
-  console.log(image)
 
   return (
     <Layout

@@ -6,7 +6,7 @@ import TabBar from './tab-bar'
 interface Props {
   title?: string
   description?: string
-  ogimage?: string
+  image?: string
 }
 
 const SITE_NAME = 'Goodmarks'
@@ -17,13 +17,17 @@ const SITE_IMAGE = 'https://goodmarks.app/meta-image.jpg'
 const Layout: React.FC<Props> = ({
   title,
   description = SITE_DESCRIPTION,
-  ogimage = SITE_IMAGE,
+  image,
   ...props
 }) => {
   let pageTitle = SITE_NAME
 
   if (typeof title !== 'undefined') {
     pageTitle = `${title} / ${SITE_NAME}`
+  }
+
+  if (!image) {
+    image = SITE_IMAGE
   }
 
   return (
@@ -96,7 +100,7 @@ const Layout: React.FC<Props> = ({
           property="og:description"
           content={description}
         />
-        {ogimage && <meta property="og:image" content={ogimage} />}
+        <meta property="og:image" content={image} />
       </Head>
       <header role="banner" className={styles.sidebar}>
         <TabBar />
