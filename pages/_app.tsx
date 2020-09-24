@@ -15,8 +15,7 @@ import 'lib/styles.css'
 import * as ackeeTracker from 'ackee-tracker'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter()
-  const { query } = useRouter()
+  const { query, events } = useRouter()
   const { verified } = query
 
   React.useEffect(() => {
@@ -26,33 +25,29 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       toast.error('There was an error activating your account')
     }
 
-    let instance = null
-
-    instance = ackeeTracker
-      .create(
-        {
-          server: 'https://analytics.goodmarks.app',
-          domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
-        },
-        {
-          ignoreLocalhost: true,
-          detailed: true,
-        }
-      )
-      .record()
+    let instance = ackeeTracker.create(
+      {
+        server: 'https://analytics.goodmarks.app',
+        domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
+      },
+      {
+        ignoreLocalhost: true,
+        detailed: true,
+      }
+    )
 
     function onRouteChangeComplete() {
       instance.record()
     }
 
     // Record a pageview when route changes
-    router.events.on('routeChangeComplete', onRouteChangeComplete)
+    events.on('routeChangeComplete', onRouteChangeComplete)
 
     // Unassign event listener
     return () => {
-      router.events.off('routeChangeComplete', onRouteChangeComplete)
+      events.off('routeChangeComplete', onRouteChangeComplete)
     }
-  }, [verified])
+  }, [verified, events])
 
   return (
     <SWRConfig value={{ fetcher: fetch }}>
