@@ -29,9 +29,8 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
 
   let image = null
 
-  //  @todo: Create image URL util that queries tmdb for the prefix.
-
   if (bookmarkData.bookmark.details['backdrop_path']) {
+    //  @todo: Create image URL util that queries tmdb for the prefix.
     image = `https://image.tmdb.org/t/p/w1280/${bookmarkData.bookmark.details['backdrop_path']}`
   }
 
@@ -39,7 +38,7 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
     <Layout
       title={title}
       description={`A recommendation by @${handle} on Goodmarks.`}
-      ogimage={image}
+      image={image}
     >
       <PageTitle>
         <H4 as="h1">Bookmark</H4>
