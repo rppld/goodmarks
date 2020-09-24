@@ -12,8 +12,10 @@ import '@reach/menu-button/styles.css'
 import '@reach/checkbox/styles.css'
 import '@reach/dialog/styles.css'
 import 'lib/styles.css'
+import * as ackeeTracker from 'ackee-tracker'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter()
   const { query } = useRouter()
   const { verified } = query
 
@@ -22,6 +24,33 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       toast.success('Your account has been activated')
     } else if (verified === 'error') {
       toast.error('There was an error activating your account')
+    }
+
+    let instance = null
+
+    instance = ackeeTracker
+      .create(
+        {
+          server: 'https://analytics.goodmarks.app',
+          domainId: '939c31b9-e4a6-4992-a47f-52190cbf195b',
+        },
+        {
+          ignoreLocalhost: true,
+          detailed: true,
+        }
+      )
+      .record()
+
+    function onRouteChangeComplete() {
+      instance.record()
+    }
+
+    // Record a pageview when route changes
+    router.events.on('routeChangeComplete', onRouteChangeComplete)
+
+    // Unassign event listener
+    return () => {
+      router.events.off('routeChangeComplete', onRouteChangeComplete)
     }
   }, [verified])
 
