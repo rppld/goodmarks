@@ -23,7 +23,9 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   const bookmarkData = initialData.edges[0]
   const handle = bookmarkData.author.handle
   const title =
-    bookmarkData.bookmark.details.name || bookmarkData.bookmark.details.title
+    bookmarkData.bookmark.details.name ||
+    bookmarkData.bookmark.details.title ||
+    `Bookmark`
 
   let image = null
 

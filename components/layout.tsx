@@ -12,11 +12,12 @@ interface Props {
 const SITE_NAME = 'Goodmarks'
 const SITE_DESCRIPTION =
   'A community to share favorites with friends. No algorithm. No AI. 100% human.'
+const SITE_IMAGE = 'https://goodmarks.app/'
 
 const Layout: React.FC<Props> = ({
   title,
   description = SITE_DESCRIPTION,
-  ogimage,
+  ogimage = SITE_IMAGE,
   ...props
 }) => {
   let pageTitle = SITE_NAME
