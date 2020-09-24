@@ -12,7 +12,7 @@ interface Props {
 const SITE_NAME = 'Goodmarks'
 const SITE_DESCRIPTION =
   'A community to share favorites with friends. No algorithm. No AI. 100% human.'
-const SITE_IMAGE = 'https://goodmarks.app/meta-image.jpg'
+const SITE_IMAGE = 'https://goodmarks.app/meta-image-small.jpg'
 
 const Layout: React.FC<Props> = ({
   title,
@@ -89,7 +89,7 @@ const Layout: React.FC<Props> = ({
           content={'https://goodmarks.app'}
         />
         <meta name="twitter:title" property="og:title" content={pageTitle} />
-        <meta name="twitter:card" content={description} />
+        <meta name="twitter:card" content="summary" />
         <meta name="description" content={description} />
         <meta
           name="twitter:description"
