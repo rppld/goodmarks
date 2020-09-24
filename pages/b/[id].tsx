@@ -38,7 +38,7 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
     <Layout
       title={title}
       description={`A recommendation by @${handle} on Goodmarks.`}
-      image={image}
+      image={image ? image : undefined}
     >
       <PageTitle>
         <H4 as="h1">Bookmark</H4>
