@@ -12,7 +12,7 @@ interface Props {
 const SITE_NAME = 'Goodmarks'
 const SITE_DESCRIPTION =
   'A community to share favorites with friends. No algorithm. No AI. 100% human.'
-const SITE_IMAGE = 'https://goodmarks.app/'
+const SITE_IMAGE = 'https://goodmarks.app/meta-image.jpg'
 
 const Layout: React.FC<Props> = ({
   title,
