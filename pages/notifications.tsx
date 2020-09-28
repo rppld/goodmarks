@@ -116,9 +116,7 @@ const Notifications: NextPage = () => {
         {isEmpty ? (
           <SmallText meta>You don’t have any notifications.</SmallText>
         ) : isLoadingMore ? (
-          <SmallText meta>
-            <Spinner />
-          </SmallText>
+          <Spinner />
         ) : isReachingEnd ? (
           <SmallText meta>You’ve reached the end.</SmallText>
         ) : null}
