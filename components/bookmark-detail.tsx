@@ -17,6 +17,7 @@ import useDeleteComment from 'utils/use-delete-comment'
 import useCreateComment from 'utils/use-create-comment'
 import CommentNode from './comment-node'
 import Link from 'next/link'
+import Spinner from './loader'
 
 interface Props {
   initialData: BookmarksData
@@ -122,7 +123,9 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
       {error && <div>failed to load</div>}
 
       {!data ? (
-        <div>loading...</div>
+        <div>
+          <Spinner />
+        </div>
       ) : (
         <VStack spacing="md">
           <BookmarkNode

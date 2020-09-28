@@ -13,6 +13,7 @@ import { Text } from './text'
 import Toolbar from 'components/toolbar'
 import TimeAgo from 'timeago-react'
 import BookmarksFeed from 'components/bookmarks-feed'
+import Spinner from './loader'
 
 interface Props {
   initialData: ListsData
@@ -41,7 +42,9 @@ const ListDetail: React.FC<Props> = ({ initialData, listId }) => {
       {error && <div>failed to load</div>}
 
       {!data ? (
-        <div>loading...</div>
+        <div>
+          <Spinner />
+        </div>
       ) : (
         <VStack spacing="md">
           <PageTitle>

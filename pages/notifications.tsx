@@ -12,6 +12,7 @@ import NotificationNode from 'components/notification-node'
 import { SmallText } from 'components/text'
 import InfiniteScrollTrigger from 'components/infinite-scroll-trigger'
 import qs from 'querystringify'
+import Spinner from 'components/loader'
 
 const CACHE_KEY = '/api/notifications'
 const PAGE_SIZE = 10 // Needs to be greater than 2
@@ -115,7 +116,9 @@ const Notifications: NextPage = () => {
         {isEmpty ? (
           <SmallText meta>You don’t have any notifications.</SmallText>
         ) : isLoadingMore ? (
-          <SmallText meta>Loading...</SmallText>
+          <SmallText meta>
+            <Spinner />
+          </SmallText>
         ) : isReachingEnd ? (
           <SmallText meta>You’ve reached the end.</SmallText>
         ) : null}
