@@ -25,6 +25,19 @@ const Settings: NextPage = () => {
         </NavList>
 
         <NavList>
+          <Link href="/settings/export-data">
+            <a>
+              <li>Export your data</li>
+            </a>
+          </Link>
+          <Link href="/settings/delete-account">
+            <a>
+              <li>Delete account</li>
+            </a>
+          </Link>
+        </NavList>
+
+        <NavList>
           <Link href="/about">
             <a>
               <li>About</li>
