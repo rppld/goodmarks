@@ -5,6 +5,7 @@ import Link from 'next/link'
 import ListNode from './list-node'
 import { VStack } from './stack'
 import { SmallText } from './text'
+import Spinner from './loader'
 
 interface Props {
   handle: string | string[]
@@ -16,7 +17,7 @@ const ListsOverview: React.FC<Props> = ({ handle }) => {
   if (!data) {
     return (
       <div className={styles['empty-state']}>
-        <SmallText meta>Loading...</SmallText>
+        <Spinner />
       </div>
     )
   }

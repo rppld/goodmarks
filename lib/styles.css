@@ -189,7 +189,7 @@
     --color-bookmark-border-hover: var(--color-white-5);
     --color-bookmark-border-active: var(--color-white-15);
 
-    \--color-cyan-text: var(--color-cyan);
+    --color-cyan-text: var(--color-cyan);
     --color-cyan-text-meta: var(--color-cyan-dark);
     --color-blue-text: var(--color-blue-light);
     --color-blue-text-meta: var(--color-blue);

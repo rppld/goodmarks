@@ -7,6 +7,7 @@ import InfiniteScrollTrigger from './infinite-scroll-trigger'
 import qs from 'querystringify'
 import InviteFriends from './invite-friends'
 import { useViewer } from './viewer-context'
+import Spinner from './loader'
 
 interface Props {
   cacheKey?: string
@@ -160,7 +161,9 @@ const BookmarksFeed: React.FC<Props> = ({
           disabled={isReachingEnd || isLoadingMore}
         >
           {isLoadingMore ? (
-            <SmallText meta>Loading...</SmallText>
+            <SmallText meta>
+              <Spinner />
+            </SmallText>
           ) : isReachingEnd ? (
             <SmallText meta>You’ve reached the end.</SmallText>
           ) : null}
