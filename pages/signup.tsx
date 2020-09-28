@@ -6,7 +6,7 @@ import Layout from 'components/layout'
 import Input from 'components/input'
 import Form from 'components/form'
 import { H4 } from 'components/heading'
-import { Text } from 'components/text'
+import { Text, SmallText } from 'components/text'
 import PageTitle from 'components/page-title'
 import Button from 'components/button'
 import debounce from 'lodash/debounce'
@@ -50,9 +50,6 @@ const Signup: NextPage = () => {
     email: Yup.string().email('Invalid email address').required('Required'),
     password: Yup.string()
       .min(8, 'Must be at least 8 characters')
-      .required('Required'),
-    passwordConfirm: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords don’t match')
       .required('Required'),
   })
 
@@ -198,30 +195,16 @@ const Signup: NextPage = () => {
           validate={formik.errors.password ? () => false : undefined}
         />
 
-        <Input
-          type="password"
-          name="passwordConfirm"
-          labelText="Confirm password"
-          hideLabel
-          placeholder="Confirm password"
-          value={formik.values.passwordConfirm}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          help={
-            formik.values.passwordConfirm &&
-            formik.errors.passwordConfirm &&
-            formik.touched.passwordConfirm
-              ? String(formik.errors.passwordConfirm)
-              : undefined
-          }
-          validate={formik.errors.passwordConfirm ? () => false : undefined}
-        />
+        {error && <p>Error: {error}</p>}
 
         <Button type="submit" size="lg" variant="primary">
           {formik.isSubmitting ? 'Loading' : 'Sign up'}
         </Button>
 
-        {error && <p>Error: {error}</p>}
+        <SmallText meta>
+          By signing up you agree to our <Link href="/terms">terms</Link> and{' '}
+          <Link href="/privacy">privacy policy</Link>.
+        </SmallText>
       </Form>
     </Layout>
   )
