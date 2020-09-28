@@ -1,13 +1,18 @@
-.action {
+.action,
+.fauxAction {
   font-weight: var(--fw-medium);
   font-size: var(--fs-14);
 }
 
 .adornment {
-  margin-right: var(--space-4);
   color: var(--color-text-lightest);
   display: inline-block;
   transform: translateY(-1px);
+}
+
+.children {
+  display: inline-block;
+  margin-left: var(--space-4);
 }
 
 .action:hover .adornment,

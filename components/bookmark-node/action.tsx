@@ -15,22 +15,27 @@ const Action: React.FC<Props> = ({
   leftAdornment,
   children,
   isLikeToggle,
-  className: passedClassName,
+  className,
   ...props
 }) => {
-  const className = clsx(
-    passedClassName,
-    styles.action,
-    active && styles.active,
-    isLikeToggle && styles.likeToggle
-  )
+  const isProbablyAButton = Component !== 'span'
+  const hasChildren = React.Children.count(children) > 0
 
   return (
-    <Component className={className} {...props}>
+    <Component
+      className={clsx(
+        className,
+        isProbablyAButton ? styles.action : styles.fauxAction,
+        isProbablyAButton && active && styles.active,
+        isProbablyAButton && isLikeToggle && styles.likeToggle
+      )}
+      {...props}
+    >
       {leftAdornment && (
         <span className={styles.adornment}>{leftAdornment}</span>
       )}
-      {children}
+
+      {hasChildren ? <span className={styles.children}>{children}</span> : null}
     </Component>
   )
 }
