@@ -5,7 +5,7 @@ import Link from 'next/link'
 import ListNode from './list-node'
 import { VStack } from './stack'
 import { SmallText } from './text'
-import Spinner from './loader'
+import Spinner from './spinner'
 
 interface Props {
   handle: string | string[]

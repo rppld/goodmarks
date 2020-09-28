@@ -17,7 +17,7 @@
 }
 
 .spinner circle {
-  stroke: var(--color-text);
+  fill: var(--color-text-light);
 }
 
 .spinner path {
