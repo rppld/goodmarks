@@ -100,11 +100,11 @@ const Login: NextPage = () => {
           onBlur={formik.handleBlur}
         />
 
+        {error && <p>Error: {error}</p>}
+
         <Button type="submit" variant="primary" size="lg">
           Log in
         </Button>
-
-        {error && <p>Error: {error}</p>}
 
         <SmallText>
           <Link href="/forgot-password">Forgot your password?</Link>
