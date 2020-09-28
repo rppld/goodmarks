@@ -12,7 +12,7 @@ import NotificationNode from 'components/notification-node'
 import { SmallText } from 'components/text'
 import InfiniteScrollTrigger from 'components/infinite-scroll-trigger'
 import qs from 'querystringify'
-import Spinner from 'components/loader'
+import Spinner from 'components/spinner'
 
 const CACHE_KEY = '/api/notifications'
 const PAGE_SIZE = 10 // Needs to be greater than 2
