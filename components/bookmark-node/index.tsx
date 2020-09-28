@@ -141,6 +141,7 @@ const BookmarkNode: React.FC<Props> = ({
         ) : (
           <HStack spacing="md">
             <Action
+              as={!viewer ? 'span' : undefined}
               active={bookmarkStats.like}
               leftAdornment={<Heart size="sm" />}
               onClick={viewer && handleLike}
