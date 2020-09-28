@@ -38,7 +38,7 @@ const Signup: NextPage = () => {
 
   const validationSchema = Yup.object({
     username: Yup.string()
-      .min(5, 'Must be 5 characters or more')
+      .min(3, 'Must be at least 3 characters')
       .max(15, 'Must be 15 characters or less')
       .test(
         'whitespace',
@@ -49,7 +49,7 @@ const Signup: NextPage = () => {
       .required('Required'),
     email: Yup.string().email('Invalid email address').required('Required'),
     password: Yup.string()
-      .min(8, 'Must be 8 characters or more')
+      .min(8, 'Must be at least 8 characters')
       .required('Required'),
     passwordConfirm: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords don’t match')
