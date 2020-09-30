@@ -122,6 +122,7 @@ export interface ListsData {
 
 export interface Viewer extends User {
   email: string
+  verified: boolean
   hasUnreadNotifications: boolean
 }
 

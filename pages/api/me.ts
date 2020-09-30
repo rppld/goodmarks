@@ -31,6 +31,7 @@ export const profileApi = async (faunaSecret) => {
             false
           )
         ),
+        verified: Select(['data', 'verified'], Var('account')),
         hasUnreadNotifications: If(
           GT(Var('unreadNotificationsCount'), 0),
           true,
@@ -40,15 +41,17 @@ export const profileApi = async (faunaSecret) => {
       {
         user: Var('user'),
         email: Var('email'),
+        verified: Var('verified'),
         hasUnreadNotifications: Var('hasUnreadNotifications'),
       }
     )
   )
 
-  const { user, email, hasUnreadNotifications } = data
+  const { user, email, verified, hasUnreadNotifications } = data
   const viewer = {
     id: user.ref.id,
     email,
+    verified,
     hasUnreadNotifications,
     ...user.data,
   }

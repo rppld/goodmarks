@@ -18,6 +18,7 @@ import useCreateComment from 'utils/use-create-comment'
 import CommentNode from './comment-node'
 import Link from 'next/link'
 import Spinner from './spinner'
+import UnverifiedAccountDialog from 'components/unverified-account-dialog'
 
 interface Props {
   initialData: BookmarksData
@@ -172,13 +173,18 @@ const BookmarkDetail: React.FC<Props> = ({ initialData, bookmarkId }) => {
 
                 <footer>
                   <HStack alignment="trailing">
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      disabled={formik.isSubmitting}
-                    >
-                      {formik.isSubmitting ? 'Posting' : 'Post'}
-                    </Button>
+                    <UnverifiedAccountDialog>
+                      {(show) => (
+                        <Button
+                          type={viewer.verified ? 'submit' : 'button'}
+                          onClick={!viewer.verified ? show : undefined}
+                          variant="primary"
+                          disabled={formik.isSubmitting}
+                        >
+                          {formik.isSubmitting ? 'Posting' : 'Post'}
+                        </Button>
+                      )}
+                    </UnverifiedAccountDialog>
                   </HStack>
                 </footer>
               </Form>

@@ -30,10 +30,9 @@ const AddToListDialog: React.FC<Props> = ({
   )
 
   const handleAddToList = async () => {
-    const res = await addToList(bookmarkId, value)
+    await addToList(bookmarkId, value)
     mutate(`/api/lists?id=${value}`)
     onSuccess()
-    console.log(res)
   }
 
   return (
