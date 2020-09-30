@@ -73,7 +73,7 @@ const Notifications: NextPage = () => {
     <Layout title="Notifications">
       <PageTitle
         adornment={
-          !isEmpty ? (
+          !isEmpty && !isLoadingInitialData ? (
             <Button
               size="sm"
               leftAdornment={<Checkmark size="xs" />}
