@@ -145,8 +145,8 @@ const EditListForm: React.FC = () => {
       <UnverifiedAccountDialog>
         {(show) => (
           <Button
-            type={viewer.verified ? 'submit' : 'button'}
-            onClick={!viewer.verified ? show : undefined}
+            type={viewer?.verified ? 'submit' : 'button'}
+            onClick={!viewer?.verified ? show : undefined}
             variant="primary"
             size="lg"
           >

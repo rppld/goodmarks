@@ -127,7 +127,7 @@ const ProfileHeader: React.FC = () => {
             {(show) => (
               <Button
                 fullWidth
-                onClick={!viewer.verified ? show : toggleFollowUser}
+                onClick={!viewer?.verified ? show : toggleFollowUser}
                 disabled={loading}
                 variant={data?.following ? undefined : 'primary'}
               >
