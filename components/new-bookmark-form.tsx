@@ -14,6 +14,7 @@ import Layout from './layout'
 import Form from './form'
 import { HStack } from './stack'
 import { useViewer } from './viewer-context'
+import UnverifiedAccountDialog from 'components/unverified-account-dialog'
 
 interface Props {
   category: string
@@ -164,15 +165,22 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
           />
 
           <HStack alignment="trailing">
-            <Button
-              variant="primary"
-              type="submit"
-              size="lg"
-              fullWidth
-              disabled={formik.isSubmitting}
-            >
-              {formik.isSubmitting ? 'Creating bookmark' : 'Create bookmark'}
-            </Button>
+            <UnverifiedAccountDialog>
+              {(show) => (
+                <Button
+                  variant="primary"
+                  type={viewer.verified ? 'submit' : 'button'}
+                  onClick={!viewer.verified ? show : undefined}
+                  size="lg"
+                  fullWidth
+                  disabled={formik.isSubmitting}
+                >
+                  {formik.isSubmitting
+                    ? 'Creating bookmark'
+                    : 'Create bookmark'}
+                </Button>
+              )}
+            </UnverifiedAccountDialog>
           </HStack>
         </Form>
       ) : category === 'link' ? (
@@ -243,15 +251,22 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
           />
 
           <HStack alignment="trailing">
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
-              disabled={formik.isSubmitting}
-            >
-              {formik.isSubmitting ? 'Creating bookmark' : 'Create bookmark'}
-            </Button>
+            <UnverifiedAccountDialog>
+              {(show) => (
+                <Button
+                  type={viewer.verified ? 'submit' : 'button'}
+                  onClick={!viewer.verified ? show : undefined}
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  disabled={formik.isSubmitting}
+                >
+                  {formik.isSubmitting
+                    ? 'Creating bookmark'
+                    : 'Create bookmark'}
+                </Button>
+              )}
+            </UnverifiedAccountDialog>
           </HStack>
 
           {error && <p>Error: {error}</p>}

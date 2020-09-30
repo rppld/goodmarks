@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import { useViewer } from 'components/viewer-context'
 import Tabs from 'components/tabs'
 import Toolbar from 'components/toolbar'
+import UnverifiedAccountDialog from 'components/unverified-account-dialog'
 
 const ProfileHeader: React.FC = () => {
   const [loading, setLoading] = React.useState(false)
@@ -122,14 +123,18 @@ const ProfileHeader: React.FC = () => {
             </Button>
           </>
         ) : (
-          <Button
-            fullWidth
-            onClick={toggleFollowUser}
-            disabled={loading}
-            variant={data?.following ? undefined : 'primary'}
-          >
-            {data?.following ? 'Unfollow' : 'Follow'}
-          </Button>
+          <UnverifiedAccountDialog>
+            {(show) => (
+              <Button
+                fullWidth
+                onClick={!viewer.verified ? show : toggleFollowUser}
+                disabled={loading}
+                variant={data?.following ? undefined : 'primary'}
+              >
+                {data?.following ? 'Unfollow' : 'Follow'}
+              </Button>
+            )}
+          </UnverifiedAccountDialog>
         )}
       </Toolbar>
 

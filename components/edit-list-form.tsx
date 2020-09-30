@@ -10,6 +10,7 @@ import Form from './form'
 import Checkbox from './checkbox'
 import { useViewer } from './viewer-context'
 import * as Yup from 'yup'
+import UnverifiedAccountDialog from 'components/unverified-account-dialog'
 
 const EditListForm: React.FC = () => {
   const textMaxLength = 140
@@ -141,9 +142,18 @@ const EditListForm: React.FC = () => {
         checked={formik.values.private}
       />
 
-      <Button type="submit" variant="primary" size="lg">
-        {query?.id ? 'Save Changes' : 'Create List'}
-      </Button>
+      <UnverifiedAccountDialog>
+        {(show) => (
+          <Button
+            type={viewer.verified ? 'submit' : 'button'}
+            onClick={!viewer.verified ? show : undefined}
+            variant="primary"
+            size="lg"
+          >
+            {query?.id ? 'Save Changes' : 'Create List'}
+          </Button>
+        )}
+      </UnverifiedAccountDialog>
 
       {error && <p>Error: {error}</p>}
     </Form>

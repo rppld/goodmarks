@@ -14,6 +14,7 @@ import { Text } from '../text'
 import AuthorInfo from '../author-info'
 import Action from './action'
 import AddToListDialog from '../add-to-list-dialog'
+import UnverifiedAccountDialog from 'components/unverified-account-dialog'
 
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button'
 import {
@@ -140,17 +141,23 @@ const BookmarkNode: React.FC<Props> = ({
           <span className={styles.previewLabel}>Preview</span>
         ) : (
           <HStack spacing="md">
-            <Action
-              as={!viewer ? 'span' : undefined}
-              active={bookmarkStats.like}
-              leftAdornment={<Heart size="sm" />}
-              onClick={viewer && handleLike}
-              disabled={!viewer || liking}
-              className="action"
-              isLikeToggle={true}
-            >
-              {bookmark.likes > 0 ? bookmark.likes : null}
-            </Action>
+            <UnverifiedAccountDialog>
+              {(show) => (
+                <Action
+                  as={!viewer ? 'span' : undefined}
+                  active={bookmarkStats.like}
+                  leftAdornment={<Heart size="sm" />}
+                  onClick={
+                    !viewer ? undefined : viewer.verified ? handleLike : show
+                  }
+                  disabled={!viewer || liking}
+                  className="action"
+                  isLikeToggle={true}
+                >
+                  {bookmark.likes > 0 ? bookmark.likes : null}
+                </Action>
+              )}
+            </UnverifiedAccountDialog>
 
             <Action
               as="span"

@@ -29,6 +29,7 @@
 
 @media (min-width: 620px) {
   .content {
+    margin: 0;
     border-radius: var(--space-16);
     width: 33rem;
   }
