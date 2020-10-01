@@ -227,7 +227,7 @@ async function handleConfirmAccount(req, res) {
   try {
     await client.query(VerifyRegisteredAccount())
     res.status(200)
-    res.redirect('/?verified=true')
+    res.redirect('/b/new?verified=true')
   } catch (error) {
     console.error(error)
     res.redirect('/?verified=error')
