@@ -88,7 +88,7 @@ const InviteFriends: React.FC = () => {
               <input
                 readOnly
                 type="text"
-                value={shareData.text + ' ' + shareData.url}
+                value={shareData.url}
                 className={styles.hiddenInput}
                 ref={inputEl}
               />
