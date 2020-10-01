@@ -4,7 +4,7 @@ import PageTitle from './page-title'
 import parseHashtags from 'utils/parse-hashtags'
 import { H4 } from './heading'
 import * as Yup from 'yup'
-import { Text } from './text'
+import { Text, SmallText } from './text'
 import MovieSearch from './movie-search'
 import Input from './input'
 import BookmarkNode from './bookmark-node'
@@ -12,7 +12,7 @@ import { useFormik } from 'formik'
 import Button from './button'
 import Layout from './layout'
 import Form from './form'
-import { HStack } from './stack'
+import { VStack } from './stack'
 import { useViewer } from './viewer-context'
 import UnverifiedAccountDialog from 'components/unverified-account-dialog'
 
@@ -164,7 +164,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             validate={formik.errors.text ? () => false : undefined}
           />
 
-          <HStack alignment="trailing">
+          <VStack>
             <UnverifiedAccountDialog>
               {(show) => (
                 <Button
@@ -181,7 +181,10 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
                 </Button>
               )}
             </UnverifiedAccountDialog>
-          </HStack>
+            <SmallText as="div" meta>
+              Bookmarks are public and can be viewed by anyone.
+            </SmallText>
+          </VStack>
         </Form>
       ) : category === 'link' ? (
         <Form onSubmit={formik.handleSubmit}>
@@ -250,7 +253,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             validate={formik.errors.text ? () => false : undefined}
           />
 
-          <HStack alignment="trailing">
+          <VStack>
             <UnverifiedAccountDialog>
               {(show) => (
                 <Button
@@ -267,7 +270,10 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
                 </Button>
               )}
             </UnverifiedAccountDialog>
-          </HStack>
+            <SmallText as="div" meta>
+              Bookmarks are public and can be viewed by anyone.
+            </SmallText>
+          </VStack>
 
           {error && <p>Error: {error}</p>}
         </Form>
