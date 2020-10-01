@@ -109,34 +109,36 @@ const ProfileHeader: React.FC = () => {
         ) : null}
       </header>
 
-      <Toolbar>
-        {viewer && handle === viewer.handle ? (
-          <>
-            <Link href="/settings" passHref>
-              <Button as="a" fullWidth>
-                Settings
-              </Button>
-            </Link>
+      {viewer ? (
+        <Toolbar>
+          {handle === viewer.handle ? (
+            <>
+              <Link href="/settings" passHref>
+                <Button as="a" fullWidth>
+                  Settings
+                </Button>
+              </Link>
 
-            <Button onClick={handleLogout} fullWidth>
-              Sign out
-            </Button>
-          </>
-        ) : (
-          <UnverifiedAccountDialog>
-            {(show) => (
-              <Button
-                fullWidth
-                onClick={!viewer?.verified ? show : toggleFollowUser}
-                disabled={loading}
-                variant={data?.following ? undefined : 'primary'}
-              >
-                {data?.following ? 'Unfollow' : 'Follow'}
+              <Button onClick={handleLogout} fullWidth>
+                Sign out
               </Button>
-            )}
-          </UnverifiedAccountDialog>
-        )}
-      </Toolbar>
+            </>
+          ) : (
+            <UnverifiedAccountDialog>
+              {(show) => (
+                <Button
+                  fullWidth
+                  onClick={!viewer?.verified ? show : toggleFollowUser}
+                  disabled={loading}
+                  variant={data?.following ? undefined : 'primary'}
+                >
+                  {data?.following ? 'Unfollow' : 'Follow'}
+                </Button>
+              )}
+            </UnverifiedAccountDialog>
+          )}
+        </Toolbar>
+      ) : null}
 
       <Tabs
         tabs={[
