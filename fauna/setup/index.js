@@ -66,6 +66,7 @@ import {
   createUsersByHandleIndex,
 } from './users'
 import {
+  createLoggedInRole,
   createPasswordResetRequestRole,
   createAccountVerificationRole,
 } from './roles'
@@ -233,6 +234,10 @@ async function setupDatabase(client) {
   await handleSetupError(
     createUsersByHandleIndex(client),
     'Index: users_by_handle'
+  )
+  await handleSetupError(
+    createLoggedInRole(client),
+    'Role: membershiprole_loggedin'
   )
   await handleSetupError(
     createPasswordResetRequestRole(client),

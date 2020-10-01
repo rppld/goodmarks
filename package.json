@@ -4,7 +4,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "setup": "node -r esm ./fauna/scripts/setup.js"
+    "setup": "node -r esm -r dotenv/config ./fauna/scripts/setup.js"
   },
   "dependencies": {
     "@reach/checkbox": "^0.11.2",
