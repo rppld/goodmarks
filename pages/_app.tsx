@@ -37,9 +37,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   React.useEffect(() => {
     if (verified === 'true') {
-      toast.success('Your account has been activated')
+      toast.success(
+        'Your account has been activated! Go ahead and create your first bookmark.'
+      )
+    } else if (verified === 'pending') {
+      toast.warning(
+        'Almost done! We just sent you an email. Click the link in the email to verify your account.'
+      )
     } else if (verified === 'error') {
-      toast.error('There was an error activating your account')
+      toast.error('There was an error activating your account.')
     }
   }, [verified])
 
