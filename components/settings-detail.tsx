@@ -9,7 +9,7 @@ import { useFormik } from 'formik'
 import { useViewer } from './viewer-context'
 
 const SettingsDetail: React.FC = () => {
-  const bioMaxLength = 70
+  const bioMaxLength = 80
   const { viewer, setViewer } = useViewer()
 
   const handleUpdateUser = (values) => {
