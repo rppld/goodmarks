@@ -20,7 +20,7 @@ export const sendPasswordResetEmail = (toEmail, resetUrl) => {
         Html: {
           Charset: 'UTF-8',
           Data: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto">
+          <div style="font-family: sans-serif; max-width: 600px;">
           <div style="padding: 24px 0; border-bottom: 1px solid #e5e5e5">
             <img src="https://goodmarks.app/logo-h48.png" height="24" />
           </div>
@@ -73,7 +73,7 @@ export const sendAccountVerificationEmail = (toEmail, confirmUrl) => {
         Html: {
           Charset: 'UTF-8',
           Data: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto">
+          <div style="font-family: sans-serif; max-width: 600px;">
           <div style="padding: 24px 0; border-bottom: 1px solid #e5e5e5">
             <img src="https://goodmarks.app/logo-h48.png" height="24" />
           </div>
