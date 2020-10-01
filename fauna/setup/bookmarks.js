@@ -29,9 +29,15 @@ async function createAllBookmarksIndex(client) {
     CreateIndex({
       name: 'all_bookmarks',
       source: Collection(COLLECTION_NAME),
-      // This is the default collection index, no terms or values are
-      // provided which means the index will sort by reference and
-      // return only the reference.
+      values: [
+        {
+          field: ['data', 'created'],
+          reverse: true,
+        },
+        {
+          field: ['ref'],
+        },
+      ],
       serialized: true,
     })
   )
