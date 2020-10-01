@@ -75,9 +75,8 @@ const BookmarkNode: React.FC<Props> = ({
   }
 
   const handleRemoveFromList = async () => {
-    const res = await removeFromList(bookmark.id, listId)
+    await removeFromList(bookmark.id, listId)
     props.onRemoveFromList()
-    console.log(res)
   }
 
   const handleClick = (e) => {
