@@ -32,7 +32,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       )
       .record()
 
-    return () => instance.stop() // Returning a function here will run the handler on unmount.
+    return () => instance.stop()
   }, [])
 
   React.useEffect(() => {
