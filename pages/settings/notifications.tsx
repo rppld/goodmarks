@@ -5,8 +5,10 @@ import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 import NotificationSettingsDetail from 'components/notification-settings-detail'
+import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
+import { withAuthSync } from 'lib/auth'
 
-const Settings: NextPage = () => {
+const NotificationSettings: NextPage = () => {
   return (
     <Layout>
       <PageTitle>
@@ -18,4 +20,9 @@ const Settings: NextPage = () => {
   )
 }
 
-export default Settings
+NotificationSettings.getInitialProps = async (ctx) => {
+  const viewer = await getViewerOrRedirect(ctx)
+  return { viewer }
+}
+
+export default withAuthSync(NotificationSettings)

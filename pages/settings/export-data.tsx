@@ -5,8 +5,10 @@ import Layout from 'components/layout'
 import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
+import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
+import { withAuthSync } from 'lib/auth'
 
-const Export: NextPage = () => {
+const ExportData: NextPage = () => {
   return (
     <Layout title="Profile data export">
       <PageTitle>
@@ -20,4 +22,9 @@ const Export: NextPage = () => {
   )
 }
 
-export default Export
+ExportData.getInitialProps = async (ctx) => {
+  const viewer = await getViewerOrRedirect(ctx)
+  return { viewer }
+}
+
+export default withAuthSync(ExportData)
