@@ -3,6 +3,7 @@ import { CreateOrUpdateRole } from '../helpers/fql'
 
 const {
   Collection,
+  Index,
   Query,
   Lambda,
   Not,
@@ -21,6 +22,272 @@ const {
   ToArray,
   Credentials,
 } = q
+
+async function createLoggedInRole(client) {
+  return await client.query(
+    CreateOrUpdateRole({
+      name: 'membershiprole_loggedin',
+      membership: [{ resource: Collection('accounts') }],
+      privileges: [
+        {
+          resource: Collection('bookmarks'),
+          actions: {
+            read: true,
+            write: true,
+            create: true,
+            delete: true,
+          },
+        },
+        {
+          resource: Collection('users'),
+          actions: {
+            read: true,
+            create: false,
+          },
+        },
+        {
+          resource: Collection('accounts'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Collection('comments'),
+          actions: {
+            read: true,
+            write: true,
+            create: true,
+            delete: true,
+          },
+        },
+        {
+          resource: Collection('lists'),
+          actions: {
+            read: true,
+            write: true,
+            create: true,
+            delete: true,
+          },
+        },
+        {
+          resource: Index('all_bookmarks'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('bookmarks_by_author'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('categories_by_slug'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Collection('categories'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Collection('hashtags'),
+          actions: {
+            read: true,
+            write: true,
+            create: true,
+          },
+        },
+        {
+          resource: Index('hashtags_by_name'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('bookmark_stats_by_user_and_bookmark'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('users_by_handle'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('bookmarks_by_reference'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('hashtags_and_users_by_wordparts'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Collection('follower_stats'),
+          actions: {
+            read: true,
+            write: true,
+            create: true,
+            delete: true,
+          },
+        },
+        {
+          resource: Index('follower_stats_by_author_and_follower'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Collection('bookmark_stats'),
+          actions: {
+            read: true,
+            write: true,
+            create: true,
+            delete: true,
+          },
+        },
+        {
+          resource: Collection('list_stats'),
+          actions: {
+            delete: true,
+            create: true,
+            write: true,
+            read: true,
+          },
+        },
+        {
+          resource: Index('bookmark_stats_by_bookmark'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('bookmarks_by_hashtag'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('lists_by_author'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('list_stats_by_user_and_list'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('list_stats_by_list'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('lists_by_reference'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('lists_by_author_and_private'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('follower_stats_by_user_popularity'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('bookmarks_by_ranking'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Collection('notifications'),
+          actions: {
+            read: true,
+            write: true,
+            delete: true,
+            create: true,
+          },
+        },
+        {
+          resource: Index('notifications_by_recipient'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('notifications_by_recipient_and_read_status'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Collection('list_items'),
+          actions: {
+            read: true,
+            write: true,
+            create: true,
+            delete: true,
+          },
+        },
+        {
+          resource: Index('list_items_by_list_and_object'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('list_items_by_list'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('tokens_by_instance'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('comments_by_object_and_author_ordered'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('comments_by_object_ordered'),
+          actions: {
+            read: true,
+          },
+        },
+        {
+          resource: Index('password_reset_requests_by_account'),
+          actions: {
+            read: true,
+          },
+        },
+      ],
+    })
+  )
+}
 
 async function createPasswordResetRequestRole(client) {
   return await client.query(
@@ -213,4 +480,8 @@ function AttributesChanged(obj1, obj2, whitelist, prefix) {
   )
 }
 
-export { createPasswordResetRequestRole, createAccountVerificationRole }
+export {
+  createLoggedInRole,
+  createPasswordResetRequestRole,
+  createAccountVerificationRole,
+}

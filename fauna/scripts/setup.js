@@ -1,8 +1,5 @@
-import * as dotenv from 'dotenv'
 import faunadb from 'faunadb'
 import { setupDatabase } from '../setup'
-
-dotenv.config()
 
 const main = async () => {
   const secret = process.env.FAUNA_ADMIN_KEY
