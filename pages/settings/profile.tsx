@@ -5,8 +5,10 @@ import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
 import SettingsDetail from 'components/settings-detail'
+import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
+import { withAuthSync } from 'lib/auth'
 
-const Settings: NextPage = () => {
+const ProfileSettings: NextPage = () => {
   return (
     <Layout title="Profile">
       <PageTitle>
@@ -18,4 +20,9 @@ const Settings: NextPage = () => {
   )
 }
 
-export default Settings
+ProfileSettings.getInitialProps = async (ctx) => {
+  const viewer = await getViewerOrRedirect(ctx)
+  return { viewer }
+}
+
+export default withAuthSync(ProfileSettings)

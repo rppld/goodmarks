@@ -7,6 +7,8 @@ import PageTitle from 'components/page-title'
 import Link from 'next/link'
 import NavList from 'components/nav-list'
 import { HStack, VStack } from 'components/stack'
+import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
+import { withAuthSync } from 'lib/auth'
 
 const Settings: NextPage = () => {
   return (
@@ -70,4 +72,9 @@ const Settings: NextPage = () => {
   )
 }
 
-export default Settings
+Settings.getInitialProps = async (ctx) => {
+  const viewer = await getViewerOrRedirect(ctx)
+  return { viewer }
+}
+
+export default withAuthSync(Settings)

@@ -4,6 +4,8 @@ import Layout from 'components/layout'
 import { H4 } from 'components/heading'
 import PageTitle from 'components/page-title'
 import EditListForm from 'components/edit-list-form'
+import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
+import { withAuthSync } from 'lib/auth'
 
 const NewList: NextPage = () => {
   return (
@@ -16,4 +18,9 @@ const NewList: NextPage = () => {
   )
 }
 
-export default NewList
+NewList.getInitialProps = async (ctx) => {
+  const viewer = await getViewerOrRedirect(ctx)
+  return { viewer }
+}
+
+export default withAuthSync(NewList)

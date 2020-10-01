@@ -5,8 +5,10 @@ import Layout from 'components/layout'
 import { H4 } from 'components/heading'
 import { Text } from 'components/text'
 import PageTitle from 'components/page-title'
+import getViewerOrRedirect from 'utils/get-viewer-or-redirect'
+import { withAuthSync } from 'lib/auth'
 
-const Delete: NextPage = () => {
+const DeleteAccount: NextPage = () => {
   return (
     <Layout title="Delete account">
       <PageTitle>
@@ -20,4 +22,9 @@ const Delete: NextPage = () => {
   )
 }
 
-export default Delete
+DeleteAccount.getInitialProps = async (ctx) => {
+  const viewer = await getViewerOrRedirect(ctx)
+  return { viewer }
+}
+
+export default withAuthSync(DeleteAccount)
