@@ -15,17 +15,11 @@ import 'lib/styles.css'
 import * as ackeeTracker from 'ackee-tracker'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const { query, events } = useRouter()
+  const { query } = useRouter()
   const { verified } = query
 
   React.useEffect(() => {
-    if (verified === 'true') {
-      toast.success('Your account has been activated')
-    } else if (verified === 'error') {
-      toast.error('There was an error activating your account')
-    }
-
-    ackeeTracker
+    const instance = ackeeTracker
       .create(
         {
           server: 'https://analytics.goodmarks.app',
@@ -37,7 +31,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         }
       )
       .record()
-  }, [verified, events])
+
+    return () => instance.stop() // Returning a function here will run the handler on unmount.
+  }, [])
+
+  React.useEffect(() => {
+    if (verified === 'true') {
+      toast.success('Your account has been activated')
+    } else if (verified === 'error') {
+      toast.error('There was an error activating your account')
+    }
+  }, [verified])
 
   return (
     <SWRConfig value={{ fetcher: fetch }}>
