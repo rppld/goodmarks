@@ -55,18 +55,13 @@ async function get(req, res) {
   const data = await client.query(
     Let(
       {
-        // Check if handle exists the way it has been entered.
-        originalCaseSetRef: Match(Index('users_by_handle'), handle),
-        // Check if lowercase version of entered handle exists.
-        lowerCaseSetRef: Match(Index('users_by_handle'), lowerCaseHandle),
-        setRef: Union(Var('originalCaseSetRef'), Var('lowerCaseSetRef')),
-        resultsCount: Count(Var('setRef')),
+        setRef: Match(Index('users_by_normalized_handle'), lowerCaseHandle),
         userRef: If(
-          GT(Var('resultsCount'), 0),
+          Exists(Var('setRef')),
           Select(0, Paginate(Var('setRef'), { size: 10 })),
           false
         ),
-        user: If(GT(Var('resultsCount'), 0), Get(Var('userRef')), false),
+        user: If(Exists(Var('userRef')), Get(Var('userRef')), false),
       },
       Var('user')
     )

@@ -1,6 +1,16 @@
 import { query as q } from 'faunadb'
 
-const { CreateCollection, CreateIndex, Collection } = q
+const {
+  CreateCollection,
+  CreateIndex,
+  Collection,
+  Query,
+  Lambda,
+  Let,
+  Select,
+  Casefold,
+  Var,
+} = q
 const COLLECTION_NAME = 'users'
 
 async function createUsersCollection(client) {
@@ -49,8 +59,41 @@ async function createUsersByHandleIndex(client) {
   )
 }
 
+async function createUsersByNormalizedHandleIndex(client) {
+  return await client.query(
+    CreateIndex({
+      name: 'users_by_normalized_handle',
+      source: {
+        collection: Collection(COLLECTION_NAME),
+        fields: {
+          normalizedHandle: Query(
+            Lambda(
+              'user',
+              Let(
+                {
+                  handle: Select(['data', 'handle'], Var('user')),
+                  normalized: Casefold(Var('handle')),
+                },
+                Var('normalized')
+              )
+            )
+          ),
+        },
+      },
+      terms: [
+        {
+          binding: 'normalizedHandle',
+        },
+      ],
+      unique: true,
+      serialized: true,
+    })
+  )
+}
+
 export {
   createUsersCollection,
   createUsersByAccountIndex,
   createUsersByHandleIndex,
+  createUsersByNormalizedHandleIndex,
 }

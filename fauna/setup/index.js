@@ -64,6 +64,7 @@ import {
   createUsersCollection,
   createUsersByAccountIndex,
   createUsersByHandleIndex,
+  createUsersByNormalizedHandleIndex,
 } from './users'
 import {
   createLoggedInRole,
@@ -234,6 +235,10 @@ async function setupDatabase(client) {
   await handleSetupError(
     createUsersByHandleIndex(client),
     'Index: users_by_handle'
+  )
+  await handleSetupError(
+    createUsersByNormalizedHandleIndex(client),
+    'Index: users_by_normalized_handle'
   )
   await handleSetupError(
     createLoggedInRole(client),
