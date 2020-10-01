@@ -12,8 +12,6 @@ import { User } from 'lib/types'
 
 const {
   Let,
-  Count,
-  GT,
   Ref,
   Create,
   Paginate,
@@ -29,7 +27,6 @@ const {
   Update,
   Delete,
   Exists,
-  Union,
 } = q
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -61,9 +58,8 @@ async function get(req, res) {
           Select(0, Paginate(Var('setRef'), { size: 10 })),
           false
         ),
-        user: If(Exists(Var('userRef')), Get(Var('userRef')), false),
       },
-      Var('user')
+      Var('userRef')
     )
   )
 
