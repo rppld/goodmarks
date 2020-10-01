@@ -169,7 +169,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
               {(show) => (
                 <Button
                   variant="primary"
-                  type={!viewer.verified ? 'button' : 'submit'}
+                  type={viewer.verified ? 'submit' : 'button'}
                   onClick={!viewer.verified ? show : undefined}
                   size="lg"
                   fullWidth
@@ -257,8 +257,8 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
             <UnverifiedAccountDialog>
               {(show) => (
                 <Button
-                  type={!viewer?.verified ? 'button' : 'submit'}
-                  onClick={!viewer?.verified ? show : undefined}
+                  type={viewer.verified ? 'submit' : 'button'}
+                  onClick={!viewer.verified ? show : undefined}
                   variant="primary"
                   size="lg"
                   fullWidth

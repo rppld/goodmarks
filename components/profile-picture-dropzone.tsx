@@ -18,9 +18,12 @@ const ProfilePictureDropzone: React.FC<Props> = (props) => {
       props.onDrop()
       const fileName = await uploadFile(acceptedFiles[0])
       // Save new picture in database.
-      const { id: viewerId, ...viewerData } = viewer
+      const { id: viewerId, handle, bio, name } = viewer
+      // @todo: Store these default-fields in an array that can be shared.
       handleUpdateUser(viewerId, {
-        ...viewerData,
+        handle,
+        bio,
+        name,
         picture: fileName,
       })
     },
