@@ -1,4 +1,5 @@
 import { handleSetupError } from '../helpers/errors'
+import { executeFQL } from '../helpers/fql'
 import { createAccountVerificationRequestsCollection } from './account-verification-requests'
 import {
   createAccountsCollection,
@@ -22,6 +23,7 @@ import {
 import {
   createCategoriesCollection,
   createCategoriesBySlugIndex,
+  PopulateCategories,
 } from './categories'
 import {
   createCommentsCollection,
@@ -73,6 +75,11 @@ import {
 } from './roles'
 
 async function setupDatabase(client) {
+  const resCategories = await handleSetupError(
+    createCategoriesCollection(client),
+    'Collection: categories'
+  )
+
   await handleSetupError(
     createAccountsCollection(client),
     'Collection: accounts'
@@ -88,10 +95,6 @@ async function setupDatabase(client) {
   await handleSetupError(
     createBookmarksCollection(client),
     'Collection: bookmarks'
-  )
-  await handleSetupError(
-    createCategoriesCollection(client),
-    'Collection: categories'
   )
   await handleSetupError(
     createCommentsCollection(client),
@@ -252,6 +255,12 @@ async function setupDatabase(client) {
     createAccountVerificationRole(client),
     'Role: membershiprole_verification'
   )
+
+  // Populate category collection
+  // (resCategories will contain the collection if it’s newly made, else false)
+  if (resCategories) {
+    await executeFQL(client, PopulateCategories, 'Populate: add category data')
+  }
 }
 
 export { setupDatabase }
