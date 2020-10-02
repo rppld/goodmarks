@@ -1,6 +1,6 @@
 import { query as q } from 'faunadb'
 
-const { CreateCollection, CreateIndex, Collection } = q
+const { CreateCollection, CreateIndex, Collection, Do, Create } = q
 const COLLECTION_NAME = 'categories'
 
 async function createCategoriesCollection(client) {
@@ -27,4 +27,29 @@ async function createCategoriesBySlugIndex(client) {
   )
 }
 
-export { createCategoriesCollection, createCategoriesBySlugIndex }
+const PopulateCategories = Do(
+  Create(Collection(COLLECTION_NAME), {
+    data: {
+      name: 'Movies',
+      slug: 'movies',
+    },
+  }),
+  Create(Collection(COLLECTION_NAME), {
+    data: {
+      name: 'TV shows',
+      slug: 'tv-shows',
+    },
+  }),
+  Create(Collection(COLLECTION_NAME), {
+    data: {
+      name: 'Links',
+      slug: 'links',
+    },
+  })
+)
+
+export {
+  createCategoriesCollection,
+  createCategoriesBySlugIndex,
+  PopulateCategories,
+}
