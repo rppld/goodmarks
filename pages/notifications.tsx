@@ -54,6 +54,7 @@ const Notifications: NextPage = () => {
   const isEmpty = data?.[0]?.edges?.length === 0
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.edges?.length < PAGE_SIZE)
+  const didMarkAllAsRead = React.useRef<boolean>(false)
 
   const handleMarkAsRead = React.useCallback(
     async (id?: string, shouldRevalidate: boolean = false) => {
@@ -85,10 +86,11 @@ const Notifications: NextPage = () => {
 
   React.useEffect(() => {
     // Mark all as read on page load.
-    if (!isEmpty && !isLoadingInitialData) {
+    if (!didMarkAllAsRead.current && !isEmpty && !isLoadingInitialData) {
       handleMarkAsRead(null, true)
+      didMarkAllAsRead.current = true
     }
-  }, [handleMarkAsRead, isEmpty, isLoadingInitialData])
+  }, [handleMarkAsRead, isEmpty, isLoadingInitialData, didMarkAllAsRead])
 
   return (
     <Layout title="Notifications">
