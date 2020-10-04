@@ -384,7 +384,7 @@ export function transformNotificationsResponse(setRefOrArray) {
           sender: Select(['data', 'sender'], Var('notification')),
           senderHandle: Select(['data', 'handle'], Get(Var('sender'))),
           objectRef: Select(['data', 'object'], Var('notification')),
-          object: Get(Var('objectRef')),
+          object: If(Exists(Var('objectRef')), Get(Var('objectRef')), false),
           objectId: Select(['id'], Var('objectRef')),
           objectType: Select(['data', 'objectType'], Var('notification')),
           text: Select(['data', 'text'], Var('object'), false),

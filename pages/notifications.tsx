@@ -1,10 +1,8 @@
 import React from 'react'
 import { NextPage } from 'next'
 import Layout from 'components/layout'
-import Button from 'components/button'
 import { H4 } from 'components/heading'
 import PageTitle from 'components/page-title'
-import { Checkmark } from 'components/icon'
 import Link from 'next/link'
 import { VStack } from 'components/stack'
 import { useSWRInfinite, trigger } from 'swr'
@@ -16,7 +14,7 @@ import Spinner from 'components/spinner'
 import { NotificationEdge } from 'lib/types'
 
 const CACHE_KEY = '/api/notifications'
-const PAGE_SIZE = 10 // Needs to be greater than 2
+const PAGE_SIZE = 11 // Needs to be greater than 2
 
 const getKey = (pageIndex, previousPageData) => {
   const params = qs.stringify({
