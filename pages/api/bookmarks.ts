@@ -4,8 +4,13 @@ import {
   faunaClient,
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
+<<<<<<< HEAD
   createHashtags,
   transformBookmarksResponse,
+=======
+  CreateHashtags,
+  getBookmarksWithUsersMapGetGeneric,
+>>>>>>> Rename CreateHashtags query
   CreateNotification,
   serialize,
   parseValue,
@@ -677,7 +682,7 @@ async function createBookmark(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          hashtagRefs: await createHashtags(hashtags),
+          hashtagRefs: await CreateHashtags(hashtags),
           category: Select(
             0,
             Paginate(Match(Index('categories_by_slug'), category))

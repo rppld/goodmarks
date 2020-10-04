@@ -4,7 +4,7 @@ import {
   faunaClient,
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
-  createHashtags,
+  CreateHashtags,
   transformListsResponse,
 } from 'lib/fauna'
 import { User, List } from 'lib/types'
@@ -191,7 +191,7 @@ async function updateList(req, res) {
           list: Get(Var('listRef')),
           viewerRef: Select(['data', 'user'], Get(Identity())),
           authorRef: Select(['data', 'author'], Var('list')),
-          hashtagRefs: await createHashtags(hashtags),
+          hashtagRefs: await CreateHashtags(hashtags),
         },
         If(
           // Check if user is allowed to update this list.
@@ -229,7 +229,7 @@ async function createList(req, res) {
     const data = await faunaClient(faunaSecret).query(
       Let(
         {
-          hashtagRefs: await createHashtags(hashtags),
+          hashtagRefs: await CreateHashtags(hashtags),
           author: Select(['data', 'user'], Get(Identity())),
         },
         Create(Collection('lists'), {

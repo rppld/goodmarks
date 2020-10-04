@@ -225,7 +225,7 @@ export function CreateNotification(
   })
 }
 
-export async function createHashtags(items) {
+export async function CreateHashtags(items) {
   // items is an array that looks like:
   // [{ name: 'hash' }, { name: 'tag' }]
   return Map(
