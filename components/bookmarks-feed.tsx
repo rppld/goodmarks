@@ -20,7 +20,7 @@ interface Props {
 
 const BookmarksFeed: React.FC<Props> = ({
   cacheKey = '/api/bookmarks',
-  postsPerPage = 10, // Needs to be greater than 2
+  postsPerPage = 11, // Needs to be greater than 2
   ...props
 }) => {
   const { viewer } = useViewer()
