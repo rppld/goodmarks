@@ -31,16 +31,27 @@ export interface Comment {
   created: any
 }
 
+type NotificationType = 'NEW_COMMENT' | 'NEW_LIKE' | 'NEW_FOLLOW'
+type NotificationObjectType = 'BOOKMARK' | 'LIST' | 'USER'
+
 export interface Notification {
   id: string
-  type: 'NEW_COMMENT' | 'NEW_LIKE'
+  type: NotificationType
   sender: any
   recipient: any
   object: any
-  objectType: 'BOOKMARK' | 'LIST'
-  objectUrl: string
+  objectType: NotificationObjectType
   created: any
   read: boolean
+}
+
+export interface NotificationEdge {
+  id: string
+  type: NotificationType
+  senderHandle: any
+  objectId: string
+  objectType: NotificationObjectType
+  text: string
 }
 
 export interface NotificationsData {

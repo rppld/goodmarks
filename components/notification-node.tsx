@@ -3,20 +3,21 @@ import styles from './list-node.module.css'
 import { H5 } from './heading'
 import { SmallText } from './text'
 import { VStack } from './stack'
-import { Notification } from 'lib/types'
-import TimeAgo from 'timeago-react'
+import { NotificationEdge } from 'lib/types'
 
 interface Props {
-  notification: Notification
+  notification: NotificationEdge
 }
 
-const getNotificationTitle = function (notification: Notification): String {
+const getNotificationTitle = function (notification: NotificationEdge): String {
   let title = 'Unknown notification'
 
   if (notification.type === 'NEW_LIKE') {
-    title = 'Your bookmark has a new like'
+    title = `@${notification.senderHandle} liked your bookmark`
   } else if (notification.type === 'NEW_COMMENT') {
-    title = 'Your bookmark has a new comment'
+    title = `@${notification.senderHandle} commented on your bookmark`
+  } else if (notification.type === 'NEW_FOLLOW') {
+    title = `@${notification.senderHandle} started following you`
   }
 
   return title
@@ -27,9 +28,11 @@ const NotificationNode: React.FC<Props> = ({ notification, ...props }) => {
     <div className={styles.container} {...props}>
       <VStack>
         <H5>{getNotificationTitle(notification)}</H5>
-        <SmallText as="p" meta>
-          <TimeAgo datetime={notification.created['@ts']} />
-        </SmallText>
+        {notification.text && (
+          <SmallText as="p" meta>
+            {notification.text}
+          </SmallText>
+        )}
       </VStack>
     </div>
   )

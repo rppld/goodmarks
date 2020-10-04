@@ -7,10 +7,12 @@ import {
   serverClient,
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
+  CreateNotification,
 } from 'lib/fauna'
 import { User } from 'lib/types'
 
 const {
+  Do,
   Let,
   Ref,
   Create,
@@ -110,7 +112,8 @@ async function handleFollow(req, res) {
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
-  const data = await faunaClient(faunaSecret).query(
+  // @todo: Type response
+  const data: any = await faunaClient(faunaSecret).query(
     Let(
       {
         followerStatsMatch: If(
@@ -131,14 +134,23 @@ async function handleFollow(req, res) {
           // delete it to unfollow the author.
           Delete(Select('ref', Get(Var('followerStatsMatch')), null)),
           // If not, create a connection to follow the author.
-          Create(Collection('follower_stats'), {
-            data: {
-              postLikes: 0,
-              postReposts: 0,
-              author: Ref(Collection('users'), authorId),
-              follower: Select(['data', 'user'], Get(Identity())),
-            },
-          })
+          Do(
+            Create(Collection('follower_stats'), {
+              data: {
+                postLikes: 0,
+                postReposts: 0,
+                author: Ref(Collection('users'), authorId),
+                follower: Select(['data', 'user'], Get(Identity())),
+              },
+            }),
+            CreateNotification({
+              type: 'NEW_FOLLOW',
+              sender: Select(['data', 'user'], Get(Identity())),
+              recipient: Ref(Collection('users'), authorId),
+              objectType: 'USER',
+              object: Select(['data', 'user'], Get(Identity())),
+            })
+          )
         ),
       },
       Var('action')
