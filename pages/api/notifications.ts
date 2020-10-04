@@ -7,7 +7,7 @@ import {
   flattenDataKeys,
   serialize,
   parseValue,
-  transformNotificationsResponse,
+  TransformNotificationsData,
 } from 'lib/fauna'
 
 const {
@@ -88,7 +88,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       {
         account: Get(Identity()),
         currentUserRef: Select(['data', 'user'], Var('account')),
-        notifications: transformNotificationsResponse(
+        notifications: TransformNotificationsData(
           Map(
             Paginate(match, {
               size,
