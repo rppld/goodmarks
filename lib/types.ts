@@ -52,6 +52,7 @@ export interface NotificationEdge {
   objectId: string
   objectType: NotificationObjectType
   text: string
+  read: boolean
 }
 
 export interface NotificationsData {

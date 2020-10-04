@@ -12,6 +12,7 @@ import InfiniteScrollTrigger from 'components/infinite-scroll-trigger'
 import qs from 'querystringify'
 import Spinner from 'components/spinner'
 import { NotificationEdge } from 'lib/types'
+import { useViewer } from 'components/viewer-context'
 
 const CACHE_KEY = '/api/notifications'
 const PAGE_SIZE = 11 // Needs to be greater than 2
@@ -42,6 +43,7 @@ function getLinkProps(notification: NotificationEdge) {
   }
 }
 
+const MARK_AS_READ_AFTER_MS = 1000
 const Notifications: NextPage = () => {
   const { data, error, size, setSize, revalidate } = useSWRInfinite(getKey)
   const pages = data ? [].concat(...data) : []
@@ -52,17 +54,16 @@ const Notifications: NextPage = () => {
   const isEmpty = data?.[0]?.edges?.length === 0
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.edges?.length < PAGE_SIZE)
-  const didMarkAllAsRead = React.useRef<boolean>(false)
+  const timer = React.useRef<any>(null)
+  const { viewer } = useViewer()
+  const hasUnreadNotifications = viewer?.hasUnreadNotifications
 
-  const handleMarkAsRead = React.useCallback(
-    async (id?: string, shouldRevalidate: boolean = false) => {
+  React.useEffect(() => {
+    const handleMarkAsRead = async (shouldRevalidate: boolean = false) => {
       try {
         const response = await fetch('/api/notifications?action=mark_as_read', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id,
-          }),
         })
 
         if (response.status !== 200) {
@@ -78,17 +79,16 @@ const Notifications: NextPage = () => {
       } catch (error) {
         console.error(error)
       }
-    },
-    [revalidate]
-  )
-
-  React.useEffect(() => {
-    // Mark all as read on page load.
-    if (!didMarkAllAsRead.current && !isEmpty && !isLoadingInitialData) {
-      handleMarkAsRead(null, true)
-      didMarkAllAsRead.current = true
     }
-  }, [handleMarkAsRead, isEmpty, isLoadingInitialData, didMarkAllAsRead])
+
+    // Mark all as read on page load.
+    if (hasUnreadNotifications && !isEmpty && !isLoadingInitialData) {
+      timer.current = setTimeout(() => {
+        handleMarkAsRead(true)
+      }, MARK_AS_READ_AFTER_MS)
+    }
+    return () => clearTimeout(timer.current)
+  }, [isEmpty, isLoadingInitialData, hasUnreadNotifications, revalidate])
 
   return (
     <Layout title="Notifications">
@@ -102,7 +102,7 @@ const Notifications: NextPage = () => {
             page.edges.map((notification: NotificationEdge) => (
               <div key={notification.id}>
                 <Link {...getLinkProps(notification)}>
-                  <a onClick={() => handleMarkAsRead(notification.id)}>
+                  <a>
                     <NotificationNode
                       key={notification.id}
                       notification={notification}

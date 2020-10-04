@@ -1,9 +1,10 @@
 import React from 'react'
-import styles from './list-node.module.css'
+import listStyles from './list-node.module.css'
 import { H5 } from './heading'
 import { SmallText } from './text'
-import { VStack } from './stack'
+import { HStack, VStack } from './stack'
 import { NotificationEdge } from 'lib/types'
+import styles from './notification-node.module.css'
 
 interface Props {
   notification: NotificationEdge
@@ -25,9 +26,12 @@ const getNotificationTitle = function (notification: NotificationEdge): String {
 
 const NotificationNode: React.FC<Props> = ({ notification, ...props }) => {
   return (
-    <div className={styles.container} {...props}>
+    <div className={listStyles.container} {...props}>
       <VStack>
-        <H5>{getNotificationTitle(notification)}</H5>
+        <HStack alignment="space-between">
+          <H5>{getNotificationTitle(notification)}</H5>
+          {!notification.read && <span className={styles.dot} />}
+        </HStack>
         {notification.text && (
           <SmallText as="p" meta>
             {notification.text}

@@ -57,19 +57,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (action === 'mark_as_read') {
-    // Mark single notification as read
-    if (req.body.id) {
-      await faunaClient(faunaSecret).query(
-        Update(Ref(Collection('notifications'), req.body.id), {
-          data: {
-            read: true,
-          },
-        })
-      )
-
-      return res.status(200).send('Notification marked as read.')
-    }
-
     // Mark all unread notifications as read
     await faunaClient(faunaSecret).query(
       Let(

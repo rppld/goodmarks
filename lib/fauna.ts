@@ -388,6 +388,7 @@ export function transformNotificationsResponse(setRefOrArray) {
           objectId: Select(['id'], Var('objectRef')),
           objectType: Select(['data', 'objectType'], Var('notification')),
           text: Select(['data', 'text'], Var('object'), false),
+          read: Select(['data', 'read'], Var('notification')),
         },
         {
           id: Var('id'),
@@ -397,6 +398,7 @@ export function transformNotificationsResponse(setRefOrArray) {
           objectId: Var('objectId'),
           objectType: Var('objectType'),
           text: Var('text'),
+          read: Var('read'),
         }
       )
     )
