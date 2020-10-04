@@ -31,7 +31,7 @@ export interface Comment {
   created: any
 }
 
-type NotificationType = 'NEW_COMMENT' | 'NEW_LIKE' | 'NEW_FOLLOW'
+type NotificationType = 'NEW_COMMENT' | 'NEW_LIKE' | 'NEW_FOLLOWER'
 type NotificationObjectType = 'BOOKMARK' | 'LIST' | 'USER'
 
 export interface Notification {

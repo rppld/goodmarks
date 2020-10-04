@@ -144,7 +144,7 @@ async function handleFollow(req, res) {
               },
             }),
             CreateNotification({
-              type: 'NEW_FOLLOW',
+              type: 'NEW_FOLLOWER',
               sender: Select(['data', 'user'], Get(Identity())),
               recipient: Ref(Collection('users'), authorId),
               objectType: 'USER',

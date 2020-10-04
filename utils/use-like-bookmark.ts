@@ -1,8 +1,7 @@
 import React from 'react'
-import { BookmarksData } from 'lib/types'
 
 const useLikeBookmark = (): [
-  (id: string) => Promise<BookmarksData>,
+  (id: string) => void,
   {
     loading: boolean
     error: string | null
@@ -16,7 +15,7 @@ const useLikeBookmark = (): [
       setLoading(true)
       setError(null)
 
-      const res = await fetch('/api/bookmarks?action=like', {
+      await fetch('/api/bookmarks?action=like', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -24,9 +23,7 @@ const useLikeBookmark = (): [
         }),
       })
 
-      const json = await res.json()
       setLoading(false)
-      return json
     } catch (error) {
       console.log(error)
       setError(error.message)

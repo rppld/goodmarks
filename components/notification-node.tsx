@@ -17,7 +17,7 @@ const getNotificationTitle = function (notification: NotificationEdge): String {
     title = `@${notification.senderHandle} liked your bookmark`
   } else if (notification.type === 'NEW_COMMENT') {
     title = `@${notification.senderHandle} commented on your bookmark`
-  } else if (notification.type === 'NEW_FOLLOW') {
+  } else if (notification.type === 'NEW_FOLLOWER') {
     title = `@${notification.senderHandle} started following you`
   }
 
