@@ -1,0 +1,7 @@
+.dot {
+  display: block;
+  width: var(--space-8);
+  height: var(--space-8);
+  background-color: var(--color-blue);
+  border-radius: var(--space-4);
+}
