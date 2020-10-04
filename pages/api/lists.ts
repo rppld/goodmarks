@@ -5,7 +5,7 @@ import {
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
   CreateHashtags,
-  transformListsResponse,
+  TransformListsData,
 } from 'lib/fauna'
 import { User, List } from 'lib/types'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -337,7 +337,7 @@ async function getListsByUserHandle(req, res) {
           // Otherwise only return the public ones.
           Match(Index('lists_by_author_and_private'), Var('authorRef'), false)
         ),
-        edges: transformListsResponse(
+        edges: TransformListsData(
           Map(
             Paginate(Var('match')),
             // The index contains two values so our lambda also takes
@@ -394,7 +394,7 @@ export const listApi = async (listId: string, faunaSecret?: string) => {
           Var('isPrivate'),
           If(
             Var('viewerIsAuthor'),
-            transformListsResponse(
+            TransformListsData(
               Map(
                 Paginate(Match(Index('lists_by_reference'), Var('listRef'))),
                 Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
@@ -402,7 +402,7 @@ export const listApi = async (listId: string, faunaSecret?: string) => {
             ),
             []
           ),
-          transformListsResponse(
+          TransformListsData(
             Map(
               Paginate(Match(Index('lists_by_reference'), Var('listRef'))),
               Lambda(['nextRef', 'title', 'author'], Var('nextRef'))
