@@ -6,13 +6,12 @@ import {
   flattenDataKeys,
   createHashtags,
   getBookmarksWithUsersMapGetGeneric,
-  createNotification,
+  CreateNotification,
   serialize,
   parseValue,
 } from 'lib/fauna'
 import { NextApiRequest, NextApiResponse } from 'next'
 import cookie from 'cookie'
-import absoluteUrl from 'utils/absolute-url'
 
 const {
   If,
@@ -399,6 +398,7 @@ async function likeBookmark(req, res) {
                 like: Var('newLikeStatus'),
               },
             }),
+
             Create(Collection('bookmark_stats'), {
               data: {
                 user: Var('currentUserRef'),
@@ -408,6 +408,22 @@ async function likeBookmark(req, res) {
                 comment: false,
               },
             })
+          ),
+          If(
+            Var('newLikeStatus'),
+            If(
+              // Create notification if author ID doesn’t equal current user ID.
+              Equals(Var('authorId'), Var('currentUserId')),
+              false,
+              CreateNotification({
+                type: 'NEW_LIKE',
+                sender: Var('currentUserRef'),
+                recipient: Var('authorRef'),
+                object: Var('bookmarkRef'),
+                objectType: 'BOOKMARK',
+              })
+            ),
+            false
           ),
           // Update the follower stats so we can raise his popularity,
           // this has an impact on the feed that the user will see,
@@ -432,32 +448,12 @@ async function likeBookmark(req, res) {
           {
             edges: getBookmarksWithUsersMapGetGeneric([Var('bookmarkRef')]),
             currentUserRef: Var('currentUserRef'),
-            currentUserId: Var('currentUserId'),
             authorRef: Var('authorRef'),
-            authorId: Var('authorId'),
             bookmarkRef: Var('bookmarkRef'),
-            newLikeStatus: Var('newLikeStatus'),
           }
         )
       )
     )
-
-    if (data.newLikeStatus === true && data.authorId !== data.currentUserId) {
-      const { origin } = absoluteUrl(req)
-
-      try {
-        await createNotification(faunaSecret, {
-          type: 'NEW_LIKE',
-          sender: data.currentUserRef,
-          recipient: data.authorRef,
-          object: data.bookmarkRef,
-          objectType: 'BOOKMARK',
-          objectUrl: `${origin}/b/${bookmarkId}`,
-        })
-      } catch (error) {
-        console.log(error)
-      }
-    }
 
     return res.status(200).json(flattenDataKeys(data))
   } catch (error) {
@@ -580,6 +576,7 @@ async function createComment(req, res) {
           }),
           bookmark: Get(Var('bookmarkRef')),
           bookmarkAuthorRef: Select(['data', 'author'], Var('bookmark')),
+          bookmarkAuthorId: Select('id', Var('bookmarkAuthorRef')),
           updateOriginal: Update(Var('bookmarkRef'), {
             data: {
               comments: Add(1, Select(['data', 'comments'], Var('bookmark'))),
@@ -592,42 +589,30 @@ async function createComment(req, res) {
             Var('bookmarkRef'),
           ]),
         },
-        {
-          comment: Var('comment'),
-          currentUserId: Var('currentUserId'),
-          currentUserRef: Var('currentUserRef'),
-          bookmarkRef: Var('bookmarkRef'),
-          bookmarkAuthorRef: Var('bookmarkAuthorRef'),
-          bookmark: Var('bookmark'),
-          bookmarkWithUserAndAccount: Var('bookmarkWithUserAndAccount'),
-        }
+        Do(
+          If(
+            Equals(Var('bookmarkAuthorId'), Var('currentUserId')),
+            false,
+            CreateNotification({
+              type: 'NEW_COMMENT',
+              sender: Var('currentUserRef'),
+              recipient: Var('bookmarkAuthorRef'),
+              object: Var('bookmarkRef'),
+              objectType: 'BOOKMARK',
+            })
+          ),
+          {
+            comment: Var('comment'),
+            currentUserId: Var('currentUserId'),
+            currentUserRef: Var('currentUserRef'),
+            bookmarkRef: Var('bookmarkRef'),
+            bookmarkAuthorRef: Var('bookmarkAuthorRef'),
+            bookmark: Var('bookmark'),
+            bookmarkWithUserAndAccount: Var('bookmarkWithUserAndAccount'),
+          }
+        )
       )
     )
-
-    const { origin } = absoluteUrl(req)
-    const {
-      bookmarkRef,
-      currentUserRef,
-      bookmarkAuthorRef,
-      bookmarkWithUserAndAccount,
-    } = data
-    const bookmark = bookmarkWithUserAndAccount[0]
-    const { author } = bookmark
-
-    if (author.ref.id !== data.currentUserId) {
-      try {
-        await createNotification(faunaSecret, {
-          type: 'NEW_COMMENT',
-          sender: currentUserRef,
-          recipient: bookmarkAuthorRef,
-          object: bookmarkRef,
-          objectType: 'BOOKMARK',
-          objectUrl: `${origin}/b/${bookmarkId}`,
-        })
-      } catch (error) {
-        console.log(error)
-      }
-    }
 
     return res.status(200).json(
       flattenDataKeys({

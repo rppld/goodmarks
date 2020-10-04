@@ -213,23 +213,16 @@ export function flattenDataKeys(obj) {
   }
 }
 
-interface Payload extends Omit<Notification, 'id' | 'created' | 'read'> {
-  recipientEmail?: string
-}
-
-export async function createNotification(
-  faunaSecret,
-  { recipientEmail, ...payload }: Payload
+export function CreateNotification(
+  payload: Omit<Notification, 'id' | 'created' | 'read'>
 ) {
-  await faunaClient(faunaSecret).query(
-    Create(Collection('notifications'), {
-      data: {
-        ...payload,
-        created: Now(),
-        read: false,
-      },
-    })
-  )
+  return Create(Collection('notifications'), {
+    data: {
+      ...payload,
+      created: Now(),
+      read: false,
+    },
+  })
 }
 
 export async function createHashtags(items) {
@@ -385,10 +378,25 @@ export function transformNotificationsResponse(setRefOrArray) {
     Lambda((ref) =>
       Let(
         {
-          notification: If(Exists(Var('ref')), Get(Var('ref')), false),
+          id: Select(['id'], Var('ref')),
+          notification: Get(Var('ref')),
+          type: Select(['data', 'type'], Var('notification')),
+          sender: Select(['data', 'sender'], Var('notification')),
+          senderHandle: Select(['data', 'handle'], Get(Var('sender'))),
+          objectRef: Select(['data', 'object'], Var('notification')),
+          object: Get(Var('objectRef')),
+          objectId: Select(['id'], Var('objectRef')),
+          objectType: Select(['data', 'objectType'], Var('notification')),
+          text: Select(['data', 'text'], Var('object'), false),
         },
         {
+          id: Var('id'),
           notification: Var('notification'),
+          type: Var('type'),
+          senderHandle: Var('senderHandle'),
+          objectId: Var('objectId'),
+          objectType: Var('objectType'),
+          text: Var('text'),
         }
       )
     )

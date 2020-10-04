@@ -13,6 +13,7 @@ import { SmallText } from 'components/text'
 import InfiniteScrollTrigger from 'components/infinite-scroll-trigger'
 import qs from 'querystringify'
 import Spinner from 'components/spinner'
+import { NotificationEdge } from 'lib/types'
 
 const CACHE_KEY = '/api/notifications'
 const PAGE_SIZE = 10 // Needs to be greater than 2
@@ -23,11 +24,24 @@ const getKey = (pageIndex, previousPageData) => {
     after: previousPageData?.pageInfo?.hasNextPage
       ? previousPageData.pageInfo.endCursor
       : 'null',
-    read: false,
   })
 
   // SWR key
   return `${CACHE_KEY}?${params}`
+}
+
+function getLinkProps(notification: NotificationEdge) {
+  if (notification.objectType === 'USER') {
+    return {
+      href: '/[user]',
+      as: notification.senderHandle,
+    }
+  }
+
+  return {
+    href: '/b/[id]',
+    as: `/b/${notification.objectId}`,
+  }
 }
 
 const Notifications: NextPage = () => {
@@ -41,61 +55,53 @@ const Notifications: NextPage = () => {
   const isReachingEnd =
     isEmpty || (data && data[data.length - 1]?.edges?.length < PAGE_SIZE)
 
-  const handleMarkAsRead = async (
-    id?: string,
-    shouldRevalidate: boolean = false
-  ) => {
-    try {
-      const response = await fetch('/api/notifications?action=mark_as_read', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id,
-        }),
-      })
+  const handleMarkAsRead = React.useCallback(
+    async (id?: string, shouldRevalidate: boolean = false) => {
+      try {
+        const response = await fetch('/api/notifications?action=mark_as_read', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id,
+          }),
+        })
 
-      if (response.status !== 200) {
-        throw new Error(await response.text())
+        if (response.status !== 200) {
+          throw new Error(await response.text())
+        }
+
+        if (shouldRevalidate) {
+          revalidate()
+        }
+
+        // Always revalidate viewer
+        trigger('/api/me')
+      } catch (error) {
+        console.error(error)
       }
+    },
+    [revalidate]
+  )
 
-      if (shouldRevalidate) {
-        revalidate()
-      }
-
-      // Always revalidate viewer
-      trigger('/api/me')
-    } catch (error) {
-      console.error(error)
+  React.useEffect(() => {
+    // Mark all as read on page load.
+    if (!isEmpty && !isLoadingInitialData) {
+      handleMarkAsRead(null, true)
     }
-  }
+  }, [handleMarkAsRead, isEmpty, isLoadingInitialData])
 
   return (
     <Layout title="Notifications">
-      <PageTitle
-        adornment={
-          !isEmpty && !isLoadingInitialData ? (
-            <Button
-              size="sm"
-              leftAdornment={<Checkmark size="xs" />}
-              onClick={() => handleMarkAsRead(null, true)}
-            >
-              Mark all as read
-            </Button>
-          ) : undefined
-        }
-      >
+      <PageTitle>
         <H4 as="h1">Notifications</H4>
       </PageTitle>
 
       {pages?.length > 0 ? (
         <VStack spacing="md">
           {pages.map((page) =>
-            page.edges.map(({ notification }) => (
+            page.edges.map((notification: NotificationEdge) => (
               <div key={notification.id}>
-                <Link
-                  href="/b/[id]"
-                  as={`/b/${notification.object['@ref'].id}`}
-                >
+                <Link {...getLinkProps(notification)}>
                   <a onClick={() => handleMarkAsRead(notification.id)}>
                     <NotificationNode
                       key={notification.id}
