@@ -255,10 +255,7 @@ export async function createHashtags(items) {
   )
 }
 
-export function getBookmarksWithUsersMapGetGeneric(
-  bookmarksSetRefOrArray,
-  depth = 1
-) {
+export function transformBookmarksResponse(bookmarksSetRefOrArray, depth = 1) {
   // Let's do this with a let to clearly show the separate steps.
   return Map(
     // For all bookmarks this is just
@@ -283,7 +280,7 @@ export function getBookmarksWithUsersMapGetGeneric(
             depth > 0
               ? Select(
                   [0],
-                  getBookmarksWithUsersMapGetGeneric(
+                  transformBookmarksResponse(
                     [Select(['data', 'original'], Var('bookmark'))],
                     depth - 1
                   )
@@ -405,7 +402,7 @@ export function transformNotificationsResponse(setRefOrArray) {
   )
 }
 
-export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
+export function transformListsResponse(listsSetRefOrArray, depth = 1) {
   // Let's do this with a let to clearly show the separate steps.
   return Map(
     // For all lists this is just
@@ -430,7 +427,7 @@ export function getListsWithUsersMapGetGeneric(listsSetRefOrArray, depth = 1) {
             depth > 0
               ? Select(
                   [0],
-                  getListsWithUsersMapGetGeneric(
+                  transformListsResponse(
                     [Select(['data', 'original'], Var('list'))],
                     depth - 1
                   )

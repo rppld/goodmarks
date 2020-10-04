@@ -5,7 +5,7 @@ import {
   FAUNA_SECRET_COOKIE,
   flattenDataKeys,
   createHashtags,
-  getBookmarksWithUsersMapGetGeneric,
+  transformBookmarksResponse,
   CreateNotification,
   serialize,
   parseValue,
@@ -110,7 +110,7 @@ async function getPopularBookmarks(req, res) {
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
 
   const data: any = await client.query(
-    getBookmarksWithUsersMapGetGeneric(
+    transformBookmarksResponse(
       Map(
         Paginate(Match(Index('bookmarks_by_ranking')), {
           size,
@@ -139,7 +139,7 @@ async function getLatestBookmarks(req, res) {
   const client = faunaSecret ? faunaClient(faunaSecret) : serverClient
 
   const data: any = await client.query(
-    getBookmarksWithUsersMapGetGeneric(
+    transformBookmarksResponse(
       Map(
         Paginate(Match(Index('all_bookmarks')), {
           size,
@@ -172,7 +172,7 @@ async function getFollowingBookmarks(req, res) {
 
   // For logged-in users we show a feed of people they’re following.
   const data: any = await faunaClient(faunaSecret).query(
-    getBookmarksWithUsersMapGetGeneric(
+    transformBookmarksResponse(
       // Since we start of here with follower_stats index (a ref we
       // don't need afterwards, we can use join here!)
       Map(
@@ -251,7 +251,7 @@ async function getBookmarksByList(req, res) {
     Let(
       {
         listRef: Ref(Collection('lists'), list),
-        bookmarks: getBookmarksWithUsersMapGetGeneric(
+        bookmarks: transformBookmarksResponse(
           Reverse(
             Map(
               Paginate(Match(Index('list_items_by_list'), Var('listRef')), {
@@ -293,7 +293,7 @@ async function getBookmarksByUserHandle(req, res) {
         setRef: Match(Index('users_by_handle'), handle),
         userRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
         user: Get(Var('userRef')),
-        bookmarks: getBookmarksWithUsersMapGetGeneric(
+        bookmarks: transformBookmarksResponse(
           Map(
             Paginate(Match(Index('bookmarks_by_author'), Var('userRef')), {
               size,
@@ -346,7 +346,7 @@ async function likeBookmark(req, res) {
       throw new Error('Bookmark ID must be provided.')
     }
 
-    const data: any = await faunaClient(faunaSecret).query(
+    await faunaClient(faunaSecret).query(
       Let(
         {
           account: Get(Identity()),
@@ -444,18 +444,12 @@ async function likeBookmark(req, res) {
             // We don't keep stats for people we don't follow (we
             // could but opted not to).
             true
-          ),
-          {
-            edges: getBookmarksWithUsersMapGetGeneric([Var('bookmarkRef')]),
-            currentUserRef: Var('currentUserRef'),
-            authorRef: Var('authorRef'),
-            bookmarkRef: Var('bookmarkRef'),
-          }
+          )
         )
       )
     )
 
-    return res.status(200).json(flattenDataKeys(data))
+    return res.status(200).end('Bookmark liked')
   } catch (error) {
     console.log(error)
     res.status(400).send(error.message)
@@ -512,11 +506,6 @@ async function deleteComment(req, res) {
         }),
         // Remove comment itself.
         delete: Delete(Var('commentRef')),
-        // We then get the bookmark in the same format as when we normally get them.
-        // Since FQL is composable we can easily do this.
-        bookmarkWithUserAndAccount: getBookmarksWithUsersMapGetGeneric([
-          Var('bookmarkRef'),
-        ]),
       },
       {
         comment: Var('comment'),
@@ -582,12 +571,6 @@ async function createComment(req, res) {
               comments: Add(1, Select(['data', 'comments'], Var('bookmark'))),
             },
           }),
-          // We then get the bookmark in the same format as when we
-          // normally get them. Since FQL is composable we can easily
-          // do this.
-          bookmarkWithUserAndAccount: getBookmarksWithUsersMapGetGeneric([
-            Var('bookmarkRef'),
-          ]),
         },
         Do(
           If(
@@ -608,7 +591,6 @@ async function createComment(req, res) {
             bookmarkRef: Var('bookmarkRef'),
             bookmarkAuthorRef: Var('bookmarkAuthorRef'),
             bookmark: Var('bookmark'),
-            bookmarkWithUserAndAccount: Var('bookmarkWithUserAndAccount'),
           }
         )
       )
@@ -731,7 +713,7 @@ export const bookmarkApi = async (bookmarkId: string, faunaSecret?: string) => {
     Let(
       {
         bookmarkRef: Ref(Collection('bookmarks'), bookmarkId),
-        bookmarks: getBookmarksWithUsersMapGetGeneric(
+        bookmarks: transformBookmarksResponse(
           Map(
             Paginate(
               Match(Index('bookmarks_by_reference'), Var('bookmarkRef'))
@@ -773,7 +755,7 @@ async function getBookmarksByHashtag(req, res) {
           [0],
           Paginate(Match(Index('hashtags_by_name'), hashtag))
         ),
-        bookmarks: getBookmarksWithUsersMapGetGeneric(
+        bookmarks: transformBookmarksResponse(
           Map(
             Paginate(Match(Index('bookmarks_by_hashtag'), Var('hashtagRef'))),
             Lambda(['bookmarkScore', 'bookmarkRef'], Var('bookmarkRef'))
