@@ -21,7 +21,6 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   }
 
   const bookmarkData = initialData.edges[0]
-  const handle = bookmarkData.author.handle
   const title =
     bookmarkData.bookmark.details.name ||
     bookmarkData.bookmark.details.title ||
@@ -37,7 +36,7 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
   return (
     <Layout
       title={title}
-      description={`A recommendation by @${handle} on Goodmarks.`}
+      description={bookmarkData.bookmark.text}
       image={image ? image : undefined}
     >
       <PageTitle>
