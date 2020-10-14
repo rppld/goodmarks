@@ -2,11 +2,12 @@ import React from 'react'
 import { HStack } from './stack'
 import ProfilePictureDropzone from './profile-picture-dropzone'
 import Input from './input'
-import Button from './button'
 import Form from './form'
+import Button from './button'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useViewer } from './viewer-context'
+import { toast } from 'react-toastify'
 
 const SettingsDetail: React.FC = () => {
   const bioMaxLength = 80
@@ -35,8 +36,12 @@ const SettingsDetail: React.FC = () => {
       .then((data) => {
         setViewer(data)
         formik.setSubmitting(false)
+        toast.success('Profile updated successfully')
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        toast.error('We couldn’t update your profile')
+      })
   }
 
   const validationSchema = Yup.object({
