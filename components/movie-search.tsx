@@ -7,7 +7,7 @@ import {
   ComboboxOption,
   ComboboxOptionText,
 } from '@reach/combobox'
-import Image from './image'
+import Image from 'next/image'
 import Input from './input'
 import { Star } from './icon'
 import debounce from 'lodash/debounce'
@@ -81,6 +81,8 @@ const MovieSearch: React.FC<Props> = ({
                           src={`https://image.tmdb.org/t/p/w220_and_h330_face/${result['poster_path']}`}
                           alt={`Poster for ${result[titleKey]}`}
                           className={styles.image}
+                          width={24}
+                          height={36}
                         />
                       ) : (
                         <PlaceholderImage />

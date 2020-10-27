@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import styles from './embed.module.css'
 import { Text, Caption } from '../text'
 import { Bookmark } from 'lib/types'
-import Image from '../image'
+import Image from 'next/image'
 import { Movie, Link, TV, Calendar, Star } from '../icon'
 import getYear from 'date-fns/getYear'
 import parseISO from 'date-fns/parseISO'
@@ -68,6 +68,8 @@ const Embed: React.FC<Props> = ({
                 bookmark.details.title || bookmark.details.name
               }`}
               className={styles.poster}
+              width={46}
+              height={64}
             />
           ) : (
             <span className={clsx(styles.placeholder, styles[category])}>
