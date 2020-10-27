@@ -1,5 +1,5 @@
 import React from 'react'
-import Image from './image'
+import Image from 'next/image'
 import styles from './profile-picture-dropzone.module.css'
 import getImageUrl from 'utils/get-image-url'
 import { useDropzone } from 'react-dropzone'
@@ -46,6 +46,8 @@ const ProfilePictureDropzone: React.FC<Props> = (props) => {
         <Image
           src={getImageUrl(viewer.picture, 'avatarLg')}
           className={styles.image}
+          width={128}
+          height={128}
         />
       )}
       <input {...getInputProps()} />

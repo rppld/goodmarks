@@ -20,6 +20,7 @@
 
 .icon {
   flex-shrink: 0;
+  margin-right: var(--space-12);
 }
 
 .details {
@@ -137,7 +138,6 @@
   width: 46px;
   height: 64px;
   border-radius: var(--space-4);
-  margin-right: var(--space-12);
 }
 
 .placeholder {
