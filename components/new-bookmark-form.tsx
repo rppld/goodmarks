@@ -15,7 +15,8 @@ import Form from './form'
 import { VStack } from './stack'
 import { useViewer } from './viewer-context'
 import UnverifiedAccountDialog from 'components/unverified-account-dialog'
-
+import { useRouter } from 'next/router'
+import qs from 'querystringify'
 interface Props {
   category: string
 }
@@ -29,6 +30,9 @@ interface FormValues {
 }
 
 const NewBookmarkForm: React.FC<Props> = ({ category }) => {
+  const router = useRouter()
+  const onboarding = qs.parse(router.asPath.split('?')[1]).onboarding ? true : false
+
   const textMaxLength = 140
   const { viewer } = useViewer()
   const [error, setError] = React.useState(null)
@@ -56,22 +60,30 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   })
 
   function getHeading() {
-    if (category === 'movie') return 'Bookmark a Movie'
-    if (category === 'tv-show') return 'Bookmark a TV Show'
-    if (category === 'link') return 'Bookmark a Link'
-    return ''
+    if (onboarding) {
+      if (category === 'movie') return 'Your first bookmark will be a movie'
+      if (category === 'tv-show') return 'Your first bookm ark will be a TV Show'
+      if (category === 'link') return 'Your first bookmark will be a link'
+      return ''
+    } else {
+      if (category === 'movie') return 'Bookmark a Movie'
+      if (category === 'tv-show') return 'Bookmark a TV Show'
+      if (category === 'link') return 'Bookmark a Link'
+      return ''
+    }
   }
 
   function getSubheading() {
-    switch (category) {
-      case 'movie':
-        return "Select the movie you want to bookmark and let people know why it's great."
-      case 'tv-show':
-        return "Select the show you want to bookmark and let people know why it's great."
-      case 'link':
-        return 'Provide the link details.'
-      default:
-        return ''
+    if (onboarding) {
+      if (category === 'movie') return "Great choice! Now choose a movie and let people know why it's great."
+      if (category === 'tv-show') return "Great choice! Now choose a TV Show and let people know why it's great."
+      if (category === 'link') return "Great choice! Provide the link details and let people know why it's great."
+      return ''
+    } else {
+      if (category === 'movie') return "Select the movie you want to bookmark and let people know why it's great."
+      if (category === 'tv-show') return "Select the show you want to bookmark and let people know why it's great."
+      if (category === 'link') return "Provide the link details."
+      return ''
     }
   }
 
@@ -127,7 +139,13 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
       }
 
       const data = await response.json()
-      Router.push('/b/[id]', `/b/${data.id}`)
+
+      if(onboarding) {
+        Router.push('/b/[id]', `/b/${data.id}?onboarding=true`)
+      } else {
+        Router.push('/b/[id]', `/b/${data.id}`)
+      }
+      
     } catch (error) {
       console.error(error)
       formik.setSubmitting(false)
@@ -175,9 +193,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
                   fullWidth
                   disabled={formik.isSubmitting}
                 >
-                  {formik.isSubmitting
-                    ? 'Creating bookmark'
-                    : 'Create bookmark'}
+                  {formik.isSubmitting ? 'Creating' : 'Create'}
                 </Button>
               )}
             </UnverifiedAccountDialog>
@@ -264,9 +280,7 @@ const NewBookmarkForm: React.FC<Props> = ({ category }) => {
                   fullWidth
                   disabled={formik.isSubmitting}
                 >
-                  {formik.isSubmitting
-                    ? 'Creating bookmark'
-                    : 'Create bookmark'}
+                  {formik.isSubmitting ? 'Creating' : 'Create'}
                 </Button>
               )}
             </UnverifiedAccountDialog>
