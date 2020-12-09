@@ -20,16 +20,15 @@ interface Props {
 
 const BookmarksFeed: React.FC<Props> = ({
   cacheKey = '/api/bookmarks',
-  postsPerPage = 11, // Needs to be greater than 2
+  postsPerPage = 10,
   ...props
 }) => {
   const { viewer } = useViewer()
   const router = useRouter()
-  const query = props // Rest of the props are passed as query params.
 
   const getKey = (pageIndex, previousPageData) => {
     const params = qs.stringify({
-      ...query,
+      ...props,
       first: postsPerPage,
       after: previousPageData?.pageInfo?.hasNextPage
         ? previousPageData.pageInfo.endCursor
@@ -46,6 +45,9 @@ const BookmarksFeed: React.FC<Props> = ({
   const isLoadingMore =
     isLoadingInitialData ||
     (size > 0 && data && typeof data[size - 1] === 'undefined')
+  const isEmpty = data?.[0]?.edges?.length === 0
+  const isReachingEnd =
+    isEmpty || (data && !data[data.length - 1]?.pageInfo?.hasNextPage)
 
   function containsBookmarksFromOthers() {
     let bookmarksFromOthers = true
@@ -68,11 +70,6 @@ const BookmarksFeed: React.FC<Props> = ({
 
     return bookmarksFromOthers
   }
-
-  const isEmpty = data?.[0]?.edges?.length === 0
-
-  const isReachingEnd =
-    isEmpty || (data && data[data.length - 1]?.edges?.length < postsPerPage)
 
   function handleLike(pageIndex, bookmarkId) {
     const newData = pages.map((page, index) => {
@@ -158,7 +155,7 @@ const BookmarksFeed: React.FC<Props> = ({
       {!isEmpty ? (
         <InfiniteScrollTrigger
           onIntersect={() => setSize(size + 1)}
-          disabled={isReachingEnd || isLoadingMore}
+          disabled={isLoadingMore || isReachingEnd}
         >
           {isLoadingMore ? (
             <Spinner />
