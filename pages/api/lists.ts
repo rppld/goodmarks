@@ -15,13 +15,13 @@ const {
   Foreach,
   Map,
   Create,
-  HasIdentity,
+  HasCurrentIdentity,
   Ref,
   Update,
   Collection,
   Select,
   Get,
-  Identity,
+  CurrentIdentity,
   Now,
   Paginate,
   Let,
@@ -97,7 +97,7 @@ async function removeObjectFromList(req, res) {
           listRef: Ref(Collection('lists'), listId),
           list: Get(Var('listRef')),
           objectRef: Ref(Collection('bookmarks'), objectId),
-          viewerRef: Select(['data', 'user'], Get(Identity())),
+          viewerRef: Select(['data', 'user'], Get(CurrentIdentity())),
           authorRef: Select(['data', 'author'], Var('list')),
           listItemsByListAndObject: Match(
             Index('list_items_by_list_and_object'),
@@ -139,7 +139,7 @@ async function addObjectToList(req, res) {
           itemRef: Ref(Collection('bookmarks'), itemId),
           listRef: Ref(Collection('lists'), listId),
           list: Get(Var('listRef')),
-          viewerRef: Select(['data', 'user'], Get(Identity())),
+          viewerRef: Select(['data', 'user'], Get(CurrentIdentity())),
           listAuthorRef: Select(['data', 'author'], Var('list')),
           listItemsByListAndObject: Match(
             Index('list_items_by_list_and_object'),
@@ -189,7 +189,7 @@ async function updateList(req, res) {
         {
           listRef: Ref(Collection('lists'), listId),
           list: Get(Var('listRef')),
-          viewerRef: Select(['data', 'user'], Get(Identity())),
+          viewerRef: Select(['data', 'user'], Get(CurrentIdentity())),
           authorRef: Select(['data', 'author'], Var('list')),
           hashtagRefs: await CreateHashtags(hashtags),
         },
@@ -230,7 +230,7 @@ async function createList(req, res) {
       Let(
         {
           hashtagRefs: await CreateHashtags(hashtags),
-          author: Select(['data', 'user'], Get(Identity())),
+          author: Select(['data', 'user'], Get(CurrentIdentity())),
         },
         Create(Collection('lists'), {
           data: {
@@ -268,7 +268,7 @@ async function deleteList(req, res) {
     await faunaClient(faunaSecret).query(
       Let(
         {
-          viewer: Select(['data', 'user'], Get(Identity())),
+          viewer: Select(['data', 'user'], Get(CurrentIdentity())),
           listRef: Ref(Collection('lists'), id),
           list: Get(Var('listRef')),
           author: Select(['data', 'author'], Var('list')),
@@ -323,9 +323,9 @@ async function getListsByUserHandle(req, res) {
         setRef: Match(Index('users_by_handle'), handle),
         authorRef: Select(0, Paginate(Var('setRef'), { size: 10 })),
         author: Get(Var('authorRef')),
-        account: If(HasIdentity(), Get(Identity()), false),
+        account: If(HasCurrentIdentity(), Get(CurrentIdentity()), false),
         currentUserRef: If(
-          HasIdentity(),
+          HasCurrentIdentity(),
           Select(['data', 'user'], Var('account')),
           false
         ),
@@ -383,9 +383,9 @@ export const listApi = async (listId: string, faunaSecret?: string) => {
         listRef: Ref(Collection('lists'), listId),
         isPrivate: Select(['data', 'private'], Get(Var('listRef'))),
         authorRef: Select(['data', 'author'], Get(Var('listRef'))),
-        account: If(HasIdentity(), Get(Identity()), false),
+        account: If(HasCurrentIdentity(), Get(CurrentIdentity()), false),
         currentUserRef: If(
-          HasIdentity(),
+          HasCurrentIdentity(),
           Select(['data', 'user'], Var('account')),
           false
         ),

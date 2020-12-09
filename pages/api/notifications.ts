@@ -12,7 +12,7 @@ import {
 
 const {
   Map,
-  Identity,
+  CurrentIdentity,
   Select,
   Get,
   Let,
@@ -61,7 +61,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await faunaClient(faunaSecret).query(
       Let(
         {
-          account: Get(Identity()),
+          account: Get(CurrentIdentity()),
           currentUserRef: Select(['data', 'user'], Var('account')),
         },
         Map(
@@ -86,7 +86,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const data: any = await faunaClient(faunaSecret).query(
     Let(
       {
-        account: Get(Identity()),
+        account: Get(CurrentIdentity()),
         currentUserRef: Select(['data', 'user'], Var('account')),
         notifications: TransformNotificationsData(
           Map(

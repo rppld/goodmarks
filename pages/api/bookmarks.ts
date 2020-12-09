@@ -19,7 +19,7 @@ const {
   Map,
   Create,
   IsNonEmpty,
-  HasIdentity,
+  HasCurrentIdentity,
   Ref,
   Count,
   Reverse,
@@ -31,7 +31,7 @@ const {
   Collection,
   Select,
   Get,
-  Identity,
+  CurrentIdentity,
   Now,
   Union,
   Paginate,
@@ -182,7 +182,7 @@ async function getFollowingBookmarks(req, res) {
               userSet: Paginate(
                 Match(
                   Index('follower_stats_by_user_popularity'),
-                  Select(['data', 'user'], Get(Identity()))
+                  Select(['data', 'user'], Get(CurrentIdentity()))
                 )
               ),
               users: Map(
@@ -203,7 +203,7 @@ async function getFollowingBookmarks(req, res) {
               // Fetch my own bookmarks.
               myOwnBookmarks: Match(
                 Index('bookmarks_by_author'),
-                Select(['data', 'user'], Get(Identity()))
+                Select(['data', 'user'], Get(CurrentIdentity()))
               ),
               // Merge my own bookmarks with those of the people I’m
               // following. Check if it’s empty first, as Union can’t
@@ -305,15 +305,19 @@ async function getBookmarksByUserHandle(req, res) {
           )
         ),
         followerStatsMatch: If(
-          HasIdentity(),
+          HasCurrentIdentity(),
           Match(
             Index('follower_stats_by_author_and_follower'),
             Var('userRef'),
-            Select(['data', 'user'], Get(Identity()))
+            Select(['data', 'user'], Get(CurrentIdentity()))
           ),
           false
         ),
-        following: If(HasIdentity(), Exists(Var('followerStatsMatch')), false),
+        following: If(
+          HasCurrentIdentity(),
+          Exists(Var('followerStatsMatch')),
+          false
+        ),
       },
       {
         user: Var('user'),
@@ -349,7 +353,7 @@ async function likeBookmark(req, res) {
     await faunaClient(faunaSecret).query(
       Let(
         {
-          account: Get(Identity()),
+          account: Get(CurrentIdentity()),
           currentUserRef: Select(['data', 'user'], Var('account')),
           currentUserId: Select(['id'], Var('currentUserRef')),
           bookmarkRef: Ref(Collection('bookmarks'), bookmarkId),
@@ -464,7 +468,7 @@ async function deleteComment(req, res) {
   const data = await faunaClient(faunaSecret).query(
     Let(
       {
-        account: Get(Identity()),
+        account: Get(CurrentIdentity()),
         userRef: Select(['data', 'user'], Var('account')),
         commentRef: Ref(Collection('comments'), commentId),
         comment: Get(Var('commentRef')),
@@ -529,7 +533,7 @@ async function createComment(req, res) {
     const data: any = await faunaClient(faunaSecret).query(
       Let(
         {
-          account: Get(Identity()),
+          account: Get(CurrentIdentity()),
           currentUserRef: Select(['data', 'user'], Var('account')),
           currentUserId: Select(['id'], Var('currentUserRef')),
           bookmarkRef: Ref(Collection('bookmarks'), bookmarkId),
@@ -558,7 +562,7 @@ async function createComment(req, res) {
           comment: Create(Collection('comments'), {
             data: {
               text: text,
-              author: Select(['data', 'user'], Get(Identity())),
+              author: Select(['data', 'user'], Get(CurrentIdentity())),
               object: Var('bookmarkRef'),
               created: Now(),
             },
@@ -620,7 +624,7 @@ async function deleteBookmark(req, res) {
     await faunaClient(faunaSecret).query(
       Let(
         {
-          viewer: Select(['data', 'user'], Get(Identity())),
+          viewer: Select(['data', 'user'], Get(CurrentIdentity())),
           bookmarkRef: Ref(Collection('bookmarks'), id),
           bookmark: Get(Var('bookmarkRef')),
           author: Select(['data', 'author'], Var('bookmark')),
@@ -682,7 +686,7 @@ async function createBookmark(req, res) {
             0,
             Paginate(Match(Index('categories_by_slug'), category))
           ),
-          author: Select(['data', 'user'], Get(Identity())),
+          author: Select(['data', 'user'], Get(CurrentIdentity())),
         },
         Create(Collection('bookmarks'), {
           data: {
