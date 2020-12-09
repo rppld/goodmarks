@@ -19,13 +19,13 @@ const {
   Paginate,
   Collection,
   Var,
-  HasIdentity,
+  HasCurrentIdentity,
   If,
   Match,
   Index,
   Select,
   Get,
-  Identity,
+  CurrentIdentity,
   Update,
   Delete,
   Exists,
@@ -117,11 +117,11 @@ async function handleFollow(req, res) {
     Let(
       {
         followerStatsMatch: If(
-          HasIdentity(),
+          HasCurrentIdentity(),
           Match(
             Index('follower_stats_by_author_and_follower'),
             Ref(Collection('users'), authorId),
-            Select(['data', 'user'], Get(Identity()))
+            Select(['data', 'user'], Get(CurrentIdentity()))
           ),
           false
         ),
@@ -140,15 +140,15 @@ async function handleFollow(req, res) {
                 postLikes: 0,
                 postReposts: 0,
                 author: Ref(Collection('users'), authorId),
-                follower: Select(['data', 'user'], Get(Identity())),
+                follower: Select(['data', 'user'], Get(CurrentIdentity())),
               },
             }),
             CreateNotification({
               type: 'NEW_FOLLOWER',
-              sender: Select(['data', 'user'], Get(Identity())),
+              sender: Select(['data', 'user'], Get(CurrentIdentity())),
               recipient: Ref(Collection('users'), authorId),
               objectType: 'USER',
-              object: Select(['data', 'user'], Get(Identity())),
+              object: Select(['data', 'user'], Get(CurrentIdentity())),
             })
           )
         ),

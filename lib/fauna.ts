@@ -43,12 +43,12 @@ const {
   Map,
   Create,
   Collection,
-  HasIdentity,
+  HasCurrentIdentity,
   Do,
   Delete,
   Select,
   Get,
-  Identity,
+  CurrentIdentity,
   ContainsPath,
   Paginate,
   Let,
@@ -156,8 +156,8 @@ export function CreateEmailVerificationToken(accountRef) {
 export function VerifyRegisteredAccount() {
   return Let(
     {
-      // Identity is a document from the 'account_verification_requests' collection
-      accountRef: Select(['data', 'account'], Get(Identity())),
+      // CurrentIdentity is a document from the 'account_verification_requests' collection
+      accountRef: Select(['data', 'account'], Get(CurrentIdentity())),
       account: Update(Var('accountRef'), {
         data: {
           verified: true,
@@ -302,10 +302,14 @@ export function TransformBookmarksData(bookmarksSetRefOrArray, depth = 1) {
             false
           ),
           // Get the account via identity.
-          currentUserAccount: If(HasIdentity(), Get(Identity()), false),
+          currentUserAccount: If(
+            HasCurrentIdentity(),
+            Get(CurrentIdentity()),
+            false
+          ),
           // Get the user that is currently logged in.
           currentUserRef: If(
-            HasIdentity(),
+            HasCurrentIdentity(),
             Select(['data', 'user'], Var('currentUserAccount')),
             false
           ),
@@ -439,10 +443,14 @@ export function TransformListsData(listsSetRefOrArray, depth = 1) {
           // Get the user that wrote the list.
           author: Get(Select(['data', 'author'], Var('list'))),
           // Get the account via identity.
-          currentUserAccount: If(HasIdentity(), Get(Identity()), false),
+          currentUserAccount: If(
+            HasCurrentIdentity(),
+            Get(CurrentIdentity()),
+            false
+          ),
           // Get the user that is currently logged in.
           currentUserRef: If(
-            HasIdentity(),
+            HasCurrentIdentity(),
             Select(['data', 'user'], Var('currentUserAccount')),
             false
           ),

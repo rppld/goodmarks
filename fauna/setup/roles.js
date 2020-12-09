@@ -17,7 +17,7 @@ const {
   Filter,
   Any,
   All,
-  Identity,
+  CurrentIdentity,
   If,
   ToArray,
   Credentials,
@@ -299,7 +299,7 @@ async function createPasswordResetRequestRole(client) {
           resource: Collection('password_reset_requests'),
           actions: {
             // Can only read itself.
-            read: Query(Lambda(['ref'], Equals(Identity(), Var('ref')))),
+            read: Query(Lambda(['ref'], Equals(CurrentIdentity(), Var('ref')))),
           },
         },
         {
@@ -318,10 +318,13 @@ async function createPasswordResetRequestRole(client) {
                 ['ref'],
                 Let(
                   {
-                    // Identity is in this case a document of the accounts_verification_request collection
+                    // CurrentIdentity is in this case a document of the accounts_verification_request collection
                     // since we are using a token generated for such a document.
                     // The document has an account reference stored in it
-                    account: Select(['data', 'account'], Get(Identity())),
+                    account: Select(
+                      ['data', 'account'],
+                      Get(CurrentIdentity())
+                    ),
                   },
                   Equals(Var('account'), Var('ref'))
                 )
@@ -333,8 +336,11 @@ async function createPasswordResetRequestRole(client) {
                 ['oldData', 'newData', 'ref'],
                 Let(
                   {
-                    verification_request: Get(Identity()),
-                    account: Select(['data', 'account'], Get(Identity())),
+                    verification_request: Get(CurrentIdentity()),
+                    account: Select(
+                      ['data', 'account'],
+                      Get(CurrentIdentity())
+                    ),
                   },
                   // Verify whether the account we write to is the same account that
                   // the token was issued for. The account we attempt to write to is the 'ref' we receive
@@ -369,7 +375,7 @@ async function createAccountVerificationRole(client) {
           resource: Collection('account_verification_requests'),
           actions: {
             // Can only read itself.
-            read: Query(Lambda(['ref'], Equals(Identity(), Var('ref')))),
+            read: Query(Lambda(['ref'], Equals(CurrentIdentity(), Var('ref')))),
           },
         },
         {
@@ -381,10 +387,13 @@ async function createAccountVerificationRole(client) {
                 ['ref'],
                 Let(
                   {
-                    // Identity is in this case a document of the accounts_verification_request collection
+                    // CurrentIdentity is in this case a document of the accounts_verification_request collection
                     // since we are using a token generated for such a document.
                     // The document has an account reference stored in it
-                    account: Select(['data', 'account'], Get(Identity())),
+                    account: Select(
+                      ['data', 'account'],
+                      Get(CurrentIdentity())
+                    ),
                   },
                   Equals(Var('account'), Var('ref'))
                 )
@@ -396,8 +405,11 @@ async function createAccountVerificationRole(client) {
                 ['oldData', 'newData', 'ref'],
                 Let(
                   {
-                    verification_request: Get(Identity()),
-                    account: Select(['data', 'account'], Get(Identity())),
+                    verification_request: Get(CurrentIdentity()),
+                    account: Select(
+                      ['data', 'account'],
+                      Get(CurrentIdentity())
+                    ),
                   },
                   // Verify whether the account we write to is the same account that
                   // the token was issued for. The account we attempt to write to is the 'ref' we receive
