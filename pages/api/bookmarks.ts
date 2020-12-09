@@ -46,7 +46,7 @@ const {
   Abort,
 } = q
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id, hashtag, list, handle, action, sort } = req.query
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
@@ -774,3 +774,5 @@ async function getBookmarksByHashtag(req, res) {
 
   return res.status(200).json(flattenDataKeys(data))
 }
+
+export default handler

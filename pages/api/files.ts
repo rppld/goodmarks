@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { post } from 'lib/s3'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { name, contentType } = req.body
     const data = await post(name, contentType)
@@ -10,3 +10,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).send(error.message)
   }
 }
+
+export default handler

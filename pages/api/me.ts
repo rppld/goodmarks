@@ -16,7 +16,7 @@ const {
   GT,
 } = q
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const cookies = cookie.parse(req.headers.cookie ?? '')
   const faunaSecret = cookies[FAUNA_SECRET_COOKIE]
 
@@ -70,3 +70,5 @@ export const profileApi = async (faunaSecret) => {
     viewer,
   }
 }
+
+export default handler

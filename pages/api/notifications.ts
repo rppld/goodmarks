@@ -24,11 +24,9 @@ const {
   If,
   Equals,
   Update,
-  Ref,
-  Collection,
 } = q
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { read, first, after: cursor = 'null', action } = req.query
   const size = parseInt(first as string) || 10
   const cookies = cookie.parse(req.headers.cookie ?? '')
@@ -114,3 +112,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
   })
 }
+
+export default handler
