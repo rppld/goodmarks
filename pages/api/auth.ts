@@ -35,7 +35,7 @@ const {
   Update,
 } = q
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { action } = req.query
 
   switch (action) {
@@ -401,3 +401,5 @@ async function handleOauth2(req, res) {
     res.status(400).send(error.message)
   }
 }
+
+export default handler

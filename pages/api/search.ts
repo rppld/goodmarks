@@ -5,7 +5,7 @@ import qs from 'querystringify'
 
 const { Map, Match, Paginate, Index, Lambda, Let, Var, Get } = q
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { context } = req.query
 
   if (context === 'movie' || context === 'tv') {
@@ -68,3 +68,5 @@ async function searchTagsAndUsers(req, res) {
 
   return res.status(200).json(flattenDataKeys(data))
 }
+
+export default handler

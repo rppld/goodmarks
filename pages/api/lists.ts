@@ -38,7 +38,7 @@ const {
   GT,
 } = q
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id, handle, action } = req.query
 
   if (action === 'create') {
@@ -442,3 +442,5 @@ async function getListsByReference(req, res) {
     return res.status(401).send(error.message)
   }
 }
+
+export default handler

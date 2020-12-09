@@ -31,7 +31,7 @@ const {
   Exists,
 } = q
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { action } = req.query
 
   switch (action) {
@@ -159,3 +159,5 @@ async function handleFollow(req, res) {
 
   res.status(200).json(flattenDataKeys(data))
 }
+
+export default handler
