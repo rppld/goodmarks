@@ -5,7 +5,7 @@ import BookmarkNode from './bookmark-node'
 import { SmallText } from './text'
 import InfiniteScrollTrigger from './infinite-scroll-trigger'
 import qs from 'querystringify'
-import InviteFriends from './invite-friends'
+import SearchAndShare from './search-and-share'
 import { useViewer } from './viewer-context'
 import Spinner from './spinner'
 
@@ -132,13 +132,13 @@ const BookmarksFeed: React.FC<Props> = ({
     }
   }
 
-  const showInviteFriendsBanner =
+  const showSearchAndShareBanner =
     (data?.[0]?.edges?.length <= 5 && isHome()) ||
     (!containsBookmarksFromOthers() && isHome())
 
   return (
     <>
-      {showInviteFriendsBanner ? <InviteFriends /> : null}
+      {showSearchAndShareBanner ? <SearchAndShare /> : null}
 
       {pages?.length > 0 &&
         pages.map((page, pageIndex) =>

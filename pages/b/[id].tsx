@@ -9,13 +9,19 @@ import { bookmarkApi } from 'pages/api/bookmarks'
 import BookmarkDetail from 'components/bookmark-detail'
 import cookie from 'cookie'
 import { FAUNA_SECRET_COOKIE } from 'lib/fauna'
+import { useRouter } from 'next/router'
+import InviteFriends from 'components/invite-friends'
 
 interface Props {
   initialData: BookmarksData
   bookmarkId: string
+  host: string
 }
 
-const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
+const Bookmark: NextPage<Props> = ({ initialData, bookmarkId, host }) => {
+  const router = useRouter()
+  const onboarding = router.query.onboarding ? true : false
+
   if (initialData.edges.length === 0) {
     return <Error statusCode={404} title="Not found" />
   }
@@ -42,6 +48,14 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId }) => {
       <PageTitle>
         <H4 as="h1">Bookmark</H4>
       </PageTitle>
+
+      {onboarding && (
+        <InviteFriends
+          siteText="Nice first bookmark! Now let's share it with your friends so they can easily find and follow you."
+          shareText="I just shared my first recommendation on Goodmarks! Check it out here:"
+          shareUrl={host + router.asPath.replace('?onboarding=true', '')}
+        />
+      )}
       <BookmarkDetail initialData={initialData} bookmarkId={bookmarkId} />
     </Layout>
   )
@@ -60,6 +74,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {
         initialData: await bookmarkApi(id as string, faunaSecret),
         bookmarkId: id,
+        host: req.headers.host,
       },
     }
   } catch (error) {

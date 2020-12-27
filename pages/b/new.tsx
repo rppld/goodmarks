@@ -20,7 +20,9 @@ const New: NextPage = () => {
           {!onboarding ? 'New Bookmark' : "Let's create your first bookmark"}
         </H4>
         <Text meta>
-          {!onboarding ? 'Choose a category for your bookmark.' : "Bookmarks are pieces of content that you share with your followers. Before creating one, you will have to select the category."}
+          {!onboarding
+            ? 'Choose a category for your bookmark.'
+            : 'Bookmarks are pieces of content that you share with your followers. Before creating one, you will have to select the category.'}
         </Text>
       </PageTitle>
       <CategorySelection />
