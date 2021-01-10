@@ -11,6 +11,7 @@ import cookie from 'cookie'
 import { FAUNA_SECRET_COOKIE } from 'lib/fauna'
 import { useRouter } from 'next/router'
 import InviteFriends from 'components/invite-friends'
+import qs from 'querystringify'
 
 interface Props {
   initialData: BookmarksData
@@ -20,7 +21,7 @@ interface Props {
 
 const Bookmark: NextPage<Props> = ({ initialData, bookmarkId, host }) => {
   const router = useRouter()
-  const onboarding = router.query.onboarding ? true : false
+  const onboarding = qs.parse(router.asPath.split('?')[1]).onboarding
 
   if (initialData.edges.length === 0) {
     return <Error statusCode={404} title="Not found" />

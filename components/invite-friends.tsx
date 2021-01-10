@@ -76,6 +76,8 @@ const InviteFriends: React.FC<Props> = ({
                 as="a"
                 href={`https://twitter.com/intent/tweet?text=${shareData.text}&url=${shareData.url}`}
                 variant="primary"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 Twitter
               </Button>
