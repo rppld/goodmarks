@@ -49,7 +49,7 @@ const SearchAndShare: React.FC = () => {
         <header className={styles.header}>
           <Text as="p">
             {!shareActions
-              ? 'Search and follow people or invite your friends to get started.'
+              ? 'Search and follow other people or invite your friends to follow you.'
               : 'Where do you want to share Goodmarks?'}
           </Text>
         </header>
@@ -61,7 +61,9 @@ const SearchAndShare: React.FC = () => {
                   Search
                 </Button>
               </Link>
-              <Button onClick={share}>Share Goodmarks</Button>
+              <Button variant="primary" onClick={share}>
+                Invite friends
+              </Button>
             </>
           )}
           {shareActions && (
