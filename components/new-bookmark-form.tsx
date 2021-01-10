@@ -33,8 +33,6 @@ interface FormValues {
 const NewBookmarkForm: React.FC<Props> = ({ category }) => {
   const router = useRouter()
   const onboarding = qs.parse(router.asPath.split('?')[1]).onboarding
-    ? true
-    : false
   const textMaxLength = 140
   const { viewer } = useViewer()
   const [error, setError] = React.useState(null)

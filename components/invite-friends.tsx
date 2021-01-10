@@ -7,14 +7,14 @@ import styles from './invite-friends.module.css'
 import clsx from 'clsx'
 
 interface Props {
-  siteText?: string
+  text?: string
   shareTitle?: string
   shareText?: string
   shareUrl?: string
 }
 
 const InviteFriends: React.FC<Props> = ({
-  siteText,
+  text,
   shareTitle,
   shareText,
   shareUrl,
@@ -50,9 +50,7 @@ const InviteFriends: React.FC<Props> = ({
     <div className={clsx(styles.container, bookmarkNodeStyles.container)}>
       <VStack spacing="md">
         <header className={styles.header}>
-          <Text as="p">
-            {nativeShare ? siteText : 'How do you want to share?'}
-          </Text>
+          <Text as="p">{nativeShare ? text : 'How do you want to share?'}</Text>
         </header>
         <HStack alignment="leading">
           {nativeShare && (
@@ -99,7 +97,7 @@ const InviteFriends: React.FC<Props> = ({
 }
 
 InviteFriends.defaultProps = {
-  siteText: 'siteText',
+  text: '',
   shareTitle: 'Goodmarks',
   shareText:
     'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:',

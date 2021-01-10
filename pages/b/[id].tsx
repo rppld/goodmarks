@@ -51,7 +51,7 @@ const Bookmark: NextPage<Props> = ({ initialData, bookmarkId, host }) => {
 
       {onboarding && (
         <InviteFriends
-          siteText="Nice first bookmark! Now let's share it with your friends so they can easily find and follow you."
+          text="Great job! Now let's share it with your friends so they can easily find and follow you."
           shareText="I just shared my first recommendation on Goodmarks! Check it out here:"
           shareUrl={host + router.asPath.replace('?onboarding=true', '')}
         />
