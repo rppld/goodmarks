@@ -26,7 +26,7 @@ const Picture: NextPage = () => {
           <ProfilePictureDropzone onDrop={() => setHasPicture(true)} />
         </HStack>
         <div>
-          <Link href="/?verified=pending" passHref>
+          <Link href="/b/new?onboarding=true" passHref>
             <Button
               as="a"
               variant={hasPicture ? 'primary' : null}

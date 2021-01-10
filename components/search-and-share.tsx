@@ -1,31 +1,28 @@
 import React from 'react'
+import Link from 'next/link'
 import { Text } from './text'
 import { HStack, VStack } from './stack'
 import Button from './button'
 import bookmarkNodeStyles from './bookmark-node/index.module.css'
-import styles from './invite-friends.module.css'
-import clsx from 'clsx'
+import styles from './search-and-share.module.css'
+import { useViewer } from './viewer-context'
 
-interface Props {
-  text?: string
-  shareTitle?: string
-  shareText?: string
-  shareUrl?: string
-}
-
-const InviteFriends: React.FC<Props> = ({
-  text,
-  shareTitle,
-  shareText,
-  shareUrl,
-}) => {
-  const [nativeShare, setNativeShare] = React.useState(true)
+const SearchAndShare: React.FC = () => {
+  const [shareActions, setShareActions] = React.useState(false)
   const [copied, setCopied] = React.useState(false)
   const inputEl: any = React.useRef(null)
 
+  const { viewer } = useViewer()
+
+  let shareUrl = '//goodmarks.app'
+  if (viewer && window) {
+    shareUrl = window.location.origin + '/' + viewer.handle
+  }
+
   const shareData = {
-    title: shareTitle,
-    text: shareText,
+    title: 'Goodmarks',
+    text:
+      'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:',
     url: shareUrl,
   }
 
@@ -42,25 +39,36 @@ const InviteFriends: React.FC<Props> = ({
       await navigator.share(shareData)
     } catch (err) {
       // Show custom share options if native share options didn't work
-      setNativeShare(false)
+      setShareActions(true)
     }
   }
 
   return (
-    <div className={clsx(styles.container, bookmarkNodeStyles.container)}>
+    <div className={bookmarkNodeStyles.container}>
       <VStack spacing="md">
         <header className={styles.header}>
-          <Text as="p">{nativeShare ? text : 'How do you want to share?'}</Text>
+          <Text as="p">
+            {!shareActions
+              ? 'Search and follow other people or invite your friends to follow you.'
+              : 'Where do you want to share Goodmarks?'}
+          </Text>
         </header>
         <HStack alignment="leading">
-          {nativeShare && (
-            <Button variant="primary" onClick={share}>
-              Share
-            </Button>
+          {!shareActions && (
+            <>
+              <Link href="/search" passHref>
+                <Button as="a" variant="primary">
+                  Search
+                </Button>
+              </Link>
+              <Button variant="primary" onClick={share}>
+                Invite friends
+              </Button>
+            </>
           )}
-          {!nativeShare && (
+          {shareActions && (
             <HStack>
-              <Button onClick={copyToClipboard} variant="primary">
+              <Button onClick={copyToClipboard}>
                 {!copied ? 'Copy link' : 'Copied!'}
               </Button>
 
@@ -68,14 +76,12 @@ const InviteFriends: React.FC<Props> = ({
                 as="a"
                 href={`whatsapp://send?text=${shareData.text} ${shareData.url}`}
                 data-action="share/whatsapp/share"
-                variant="primary"
               >
                 WhatsApp
               </Button>
               <Button
                 as="a"
                 href={`https://twitter.com/intent/tweet?text=${shareData.text}&url=${shareData.url}`}
-                variant="primary"
               >
                 Twitter
               </Button>
@@ -96,12 +102,4 @@ const InviteFriends: React.FC<Props> = ({
   )
 }
 
-InviteFriends.defaultProps = {
-  text: '',
-  shareTitle: 'Goodmarks',
-  shareText:
-    'I’ve just joined Goodmarks, a community to share favorites with friends. Check out my recommendations here:',
-  shareUrl: '//goodmarks.app',
-}
-
-export default InviteFriends
+export default SearchAndShare
